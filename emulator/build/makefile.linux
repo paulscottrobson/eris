@@ -1,0 +1,23 @@
+SOURCES = framework/main.cpp framework/gfx.cpp framework/debugger.cpp src/sys_processor.cpp src/sys_debug_cpu.cpp src/hardware.cpp src/blitter.cpp
+APPNAME = eris
+
+CC = g++
+
+all: $(APPNAME)
+
+clean:
+	rm -f $(APPNAME) *.o
+
+.PHONY: all clean
+
+SDL_CFLAGS := $(shell sdl2-config --cflags)
+SDL_LDFLAGS := $(shell sdl2-config --libs)
+
+CFLAGS := $(SDL_CFLAGS) -O2 -DLINUX -DINCLUDE_DEBUGGING_SUPPORT -I. -I ./include -I./framework -I/usr/include/SDL2 -I./cpu -I./bin
+LDFLAGS := $(SDL_LDFLAGS)
+
+$(APPNAME): $(SOURCES)
+	$(CC) $(SOURCES) $(CFLAGS) $(LDFLAGS) -o $@
+
+
+
