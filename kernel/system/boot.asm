@@ -85,6 +85,26 @@
 		ror 	r1,#1
 ;		jsr 	#OSBeep
 		
+
+		mov 	r0,#64
+		stm 	r0,#blitterX
+		mov 	r0,#16
+		stm 	r0,#blitterY
+		mov 	r0,#demo
+		stm 	r0,#blitterData
+		mov 	r0,#$FF03
+		stm 	r0,#blitterCMask
+		mov 	r0,#$1006
+		stm 	r0,#blitterCmd
+
 .halt 	jmp 	#halt		
 
 	 	jmp 	#kernelEnd 					; enter the ROM.
+
+	 	org 	$0100
+.demo 	word 	$FFFF
+		word 	$C000
+		word 	$FFF0
+		word 	$FF00
+		word 	$F000
+		word 	$C000

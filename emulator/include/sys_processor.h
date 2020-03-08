@@ -29,7 +29,7 @@ void CPUWriteMemory(WORD16 address,WORD16 data);
 typedef struct __CPUSTATUS {
 	int r[16],carry,pc;
 	int cycles;		
-	int blitterX,blitterY,blitterData;	
+	int blitterX,blitterY,blitterData,blitterMask,blitterColour;	
 } CPUSTATUS;
 
 #define CYCLE_RATE 		(1*1000*1000)												// Cycles per second (1Mhz)

@@ -19,7 +19,7 @@ typedef unsigned int   LONG32;														// 32 bit type.
 #define DEFAULT_BUS_VALUE (0xFF)													// What's on the bus if it's not memory.
 
 #define RAM_START 		(0x4000)													// ROM/RAM/HW split
-#define RAM_END 		(0xA000)
+#define RAM_END 		(0x8000)
 
 void CPUReset(void);
 BYTE8 CPUExecuteInstruction(void);
@@ -29,7 +29,7 @@ void CPUWriteMemory(WORD16 address,WORD16 data);
 typedef struct __CPUSTATUS {
 	int r[16],carry,pc;
 	int cycles;		
-	int blitterX,blitterY,blitterData;	
+	int blitterX,blitterY,blitterData,blitterMask,blitterColour;	
 } CPUSTATUS;
 
 #define CYCLE_RATE 		(1*1000*1000)												// Cycles per second (1Mhz)

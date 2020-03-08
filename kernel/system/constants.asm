@@ -29,9 +29,11 @@ CharHeight = 30
 ;
 blitterBase = $FF20
 blitterStatus = blitterBase
-blitterPos  = blitterBase
-blitterData = blitterBase+1
-blitterCmd = blitterBase+2
+blitterX  = blitterBase
+blitterY  = blitterBase+1
+blitterData = blitterBase+2
+blitterCMask = blitterBase+3
+blitterCmd = blitterBase+4
 ;
 ;		Keyboard port
 ;

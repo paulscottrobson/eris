@@ -34,7 +34,7 @@ static const char *opCodes[16] = { "mov","ldm","stm","add","adc","sub","and","xo
 //							This renders the debug screen
 // ****************************************************************************
 
-static const char *labels[] = { "PC","CF","BX","BY","BD","CY","TM","BP", NULL };
+static const char *labels[] = { "PC","Cry","BXc","BYc","BDa","BMa","BCo","Cyc","Clk","Brk", NULL };
 
 void DBGXRender(int *address,int showDisplay) {
 
@@ -45,9 +45,10 @@ void DBGXRender(int *address,int showDisplay) {
 
 	GFXSetCharacterSize(36,24);
 	DBGVerticalLabel(24,0,labels,DBGC_ADDRESS,-1);									// Draw the labels for the register
-	#define DN(v,w) GFXNumber(GRID(27,n++),v,16,w,GRIDSIZE,DBGC_DATA,-1)			// Helper macro
+	#define DN(v,w) GFXNumber(GRID(28,n++),v,16,w,GRIDSIZE,DBGC_DATA,-1)			// Helper macro
 	DN(s->pc,4);DN(s->carry,1);
 	DN(s->blitterX,4);DN(s->blitterY,4);DN(s->blitterData,4);
+	DN(s->blitterMask,2);DN(s->blitterColour,2);
 	DN(s->cycles,4);
 	DN(HWGetSystemClock(),4);
 	DN(address[3],4);
