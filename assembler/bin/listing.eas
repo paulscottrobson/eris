@@ -1,0 +1,28 @@
+0000 :                               highmem = $c000
+0000 :                               .start
+0000 : 0cf0 c000                     mov  sp,#highmem
+0002 : 7ee0                          clr  r14
+0003 : 01ef                          mov  r1,#15
+0004 : 5ce3 20c0 22c1 24c2           push  r0,r2,r4
+0008 : 10c0 12c1 14c2 3ce3           pop  r4,r2,r0
+000c :                               .loop
+000c : adf0 0014                     jsr  #doone
+000e : 51e1                          dec  r1
+000f : e1e0                          skm  r1
+0010 : afec                          jmp  #loop
+0011 : aff0 0011                     .h1  jmp  #h1
+0013 :                               .data
+0013 : ffff                          word  $ffff
+0014 :                               ._label
+0014 :                               .doone
+0014 : 7000                          clr  r0
+0015 : 20f0 ff11                     stm  r0,#$ff11
+0017 : 0010                          mov  r0,r1,#0
+0018 : 90ec                          ror  r0,#12
+0019 : 20f0 ff10                     stm  r0,#$ff10
+001b : 00f0 0013                     mov  r0,#data
+001d : 20f0 ff12                     stm  r0,#$ff12
+001f : 0010                          mov  r0,r1,#0
+0020 : 30f0 4000                     add  r0,#$4000
+0022 : 20f0 ff13                     stm   r0,#$ff13
+0024 : afd0                          ret
