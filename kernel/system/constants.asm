@@ -35,6 +35,10 @@ blitterData = blitterBase+2
 blitterCMask = blitterBase+3
 blitterCmd = blitterBase+4
 ;
+;		Palette update
+;
+paletteRegister = $FF10
+;
 ;		Keyboard port
 ;
 keyboardPort = $FF00

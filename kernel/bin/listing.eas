@@ -11,6 +11,7 @@
 0000 :                               blitterdata = blitterbase+2
 0000 :                               blittercmask = blitterbase+3
 0000 :                               blittercmd = blitterbase+4
+0000 :                               paletteregister = $ff10
 0000 :                               keyboardport = $ff00
 0000 :                               hwtimer = $ff30
 0000 :                               audioclock = 5000000
@@ -106,18 +107,22 @@
 0067 : 01f0 0032                     mov  r1,#50
 0069 : 90e1                          ror  r0,#1
 006a : 91e1                          ror  r1,#1
-006b : 00f0 0040                     mov  r0,#64
-006d : 20f0 ff20                     stm  r0,#blitterx
-006f : 00f0 0010                     mov  r0,#16
-0071 : 20f0 ff21                     stm  r0,#blittery
-0073 : 00f0 0100                     mov  r0,#demo
-0075 : 20f0 ff22                     stm  r0,#blitterdata
-0077 : 00f0 ff03                     mov  r0,#$ff03
-0079 : 20f0 ff23                     stm  r0,#blittercmask
-007b : 00f0 1006                     mov  r0,#$1006
-007d : 20f0 ff24                     stm  r0,#blittercmd
-007f : aff0 007f                     .halt  jmp  #halt
-0081 : aff0 1000                     jmp  #kernelend
+006b : 00f0 0308                     mov  r0,#$0308
+006d : 20f0 ff10                     stm  r0,#paletteregister
+006f : 00f0 0404                     mov  r0,#$0404
+0071 : 20f0 ff10                     stm  r0,#paletteregister
+0073 : 00f0 0040                     mov  r0,#64
+0075 : 20f0 ff20                     stm  r0,#blitterx
+0077 : 00f0 0010                     mov  r0,#16
+0079 : 20f0 ff21                     stm  r0,#blittery
+007b : 00f0 0100                     mov  r0,#demo
+007d : 20f0 ff22                     stm  r0,#blitterdata
+007f : 00f0 ff03                     mov  r0,#$ff03
+0081 : 20f0 ff23                     stm  r0,#blittercmask
+0083 : 00f0 1006                     mov  r0,#$1006
+0085 : 20f0 ff24                     stm  r0,#blittercmd
+0087 : aff0 0087                     .halt  jmp  #halt
+0089 : aff0 1000                     jmp  #kernelend
 0100 : ffff                          .demo  word  $ffff
 0101 : c000                          word  $c000
 0102 : fff0                          word  $fff0

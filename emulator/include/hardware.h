@@ -25,7 +25,7 @@ void HWSetAudio(BYTE8 channel,WORD16 freq);
 #endif
 
 void BlitterInitialise(void);
-void HWWritePalette(BYTE8 port,BYTE8 data);
+void HWWritePalette(BYTE8 port,WORD16 data);
 void BlitterWrite(BYTE8 port,WORD16 data);
 BYTE8 BlitterGetPixel(WORD16 x,WORD16 y);
 void BlitterGetStatus(CPUSTATUS *s);

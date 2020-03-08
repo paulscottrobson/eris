@@ -25,7 +25,7 @@
 
 static int colours[64]; 
 
-static const int colourLevel[4] = { 0,0x4,0x8,0xF };
+static const int colourLevel[4] = { 0,0x6,0xB,0xF };
 
 static const char *opCodes[16] = { "mov","ldm","stm","add","adc","sub","and","xor",
 								   "mult","ror","brl","skeq","skne","skse","sksn","skcm" };

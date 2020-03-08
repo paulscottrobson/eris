@@ -119,7 +119,7 @@ void HWSetAudio(BYTE8 channel,WORD16 freq) {
 	}
 }
 
-#define CONVCOL(n) 	((n) == 3) ? 255 : ((n) * 64)
+#define CONVCOL(n) 	((n) == 3) ? 255 : ((n) * 80)
 
 void setup()
 {

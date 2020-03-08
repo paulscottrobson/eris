@@ -86,6 +86,10 @@
 ;		jsr 	#OSBeep
 		
 
+		mov 	r0,#$0308
+		stm 	r0,#paletteRegister
+		mov 	r0,#$0404
+		stm 	r0,#paletteRegister
 		mov 	r0,#64
 		stm 	r0,#blitterX
 		mov 	r0,#16
