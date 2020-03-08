@@ -8,7 +8,7 @@ popd >/dev/null
 pushd prompt >/dev/null
 python prompt.py
 popd >/dev/null
-python ../assembler/lcas.zip 
+python ../assembler/easm.zip 
 cp bin/a.out ../emulator/bin/kernel.rom
 cp bin/a.prg ../emulator/bin/kernel.prg
 cp bin/_binary.h ../emulator/bin/_kernel.h

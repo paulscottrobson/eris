@@ -3,7 +3,7 @@
 ;
 ;		Name:		utilitytext.asm
 ;		Purpose:	Text Utility Functions
-;		Created:	29th February 2020
+;		Created:	8th March 2020
 ;		Author:		Paul Robson (paul@robsons.org.uk)
 ;
 ; *****************************************************************************

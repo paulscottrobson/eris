@@ -35,7 +35,7 @@ void BlitterInitialise(void) {
 	}
 	for (int x = 0;x < DWIDTH;x++) {
 		for (int y = 0;y < DHEIGHT;y++) {
-			int n = x/7;
+			int n = x/7+y/7;
 			BlitterWritevRAM(x,y,n);
 			HWWritePixel(x,y,paletteMap[n & 0x0F]);
 		}

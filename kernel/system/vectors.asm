@@ -3,7 +3,7 @@
 ;
 ;		Name:		vectors.asm
 ;		Purpose:	Vector Routines
-;		Created:	24th February 2020
+;		Created:	8th March 2020
 ;		Author:		Paul Robson (paul@robsons.org.uk)
 ;
 ; *****************************************************************************
@@ -21,29 +21,11 @@
 .OSPrintString
 		jmp 	#OSXPrintString
 
-.OSDrawLine
-		jmp 	#OSXDrawLine
-
-.OSDrawRectangle
-		jmp 	#OSXDrawRectangle
-		
 .OSGetKeyboard
 		jmp 	#OSXGetKeyboard
 		
-.OSCursorGet		
-		jmp 	#OSXCursorGet
-
-.OSLineInput
-		jmp 	#OSXLineInput		
-
-.OSCheckBreak		
-		jmp 	#OSXCheckBreak
-		
 .OSDrawCharacter		
 		jmp 	#OSXDrawCharacter		
-
-.OSFillScreen
-		jmp 	#OSXFillScreen
 
 .OSUDivide16		
 		jmp 	#OSXUDivide16	

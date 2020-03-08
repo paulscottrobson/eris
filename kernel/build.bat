@@ -8,7 +8,7 @@ popd
 pushd prompt 
 python prompt.py
 popd 
-python ..\assembler\lcas.zip 
+python ..\assembler\easm.zip 
 if errorlevel 1 goto exit
 copy bin\a.out ..\emulator\bin\kernel.rom >NUL
 copy bin\a.prg ..\emulator\bin\kernel.prg >NUL

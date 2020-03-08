@@ -3,7 +3,7 @@
 ;
 ;		Name:		utility.asm
 ;		Purpose:	Assorted functions
-;		Created:	1st March 2020
+;		Created:	8th March 2020
 ;		Author:		Paul Robson (paul@robsons.org.uk)
 ;
 ; *****************************************************************************

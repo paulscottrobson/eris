@@ -3,7 +3,7 @@
 ;
 ;		Name:		constants.asm
 ;		Purpose:	Kernel Constants
-;		Created:	24th February 2020
+;		Created:	8th March 2020
 ;		Author:		Paul Robson (paul@robsons.org.uk)
 ;
 ; *****************************************************************************
@@ -19,20 +19,13 @@ kernelEnd = $1000
 ;
 ;		Display size in pixels
 ;
-PixelWidth = 192
-PixelHeight = 144
+PixelWidth = 320
+PixelHeight = 240
 ;
 ;		Text display size
 ;
-CharWidth = 32
-CharHeight = 18
-;
-;		Font width (total, including spacing)
-;
-CharPixelWidth = 6
-;
-;		Note: if charWidth changes some values in textscreen.asm are dependent on this being a
-;		power of 2. Also assumes that the character pixel height is a power of 2.
+CharWidth = 40
+CharHeight = 30
 ;
 blitterBase = $FF20
 blitterStatus = blitterBase

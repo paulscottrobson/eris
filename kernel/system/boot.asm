@@ -3,7 +3,7 @@
 ;
 ;		Name:		boot.asm
 ;		Purpose:	Boot code
-;		Created:	24th February 2020
+;		Created:	8th March 2020
 ;		Author:		Paul Robson (paul@robsons.org.uk)
 ;
 ; *****************************************************************************
@@ -80,9 +80,11 @@
 
 		mov 	r0,#22726 					; sort of BBC Microish startup beep
 		mov 	r1,#50
-		;jsr 	#OSBeep
+		jsr 	#OSBeep
 		ror 	r0,#1
 		ror 	r1,#1
-		;jsr 	#OSBeep
+		jsr 	#OSBeep
+		
+.halt 	jmp 	#halt		
 
 	 	jmp 	#kernelEnd 					; enter the ROM.

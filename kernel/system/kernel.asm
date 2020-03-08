@@ -3,7 +3,7 @@
 ;
 ;		Name:		kernel.asm
 ;		Purpose:	Kernel Startup.
-;		Created:	24th February 2020
+;		Created:	8th March 2020
 ;		Author:		Paul Robson (paul@robsons.org.uk)
 ;
 ; *****************************************************************************

@@ -3,7 +3,7 @@
 ;
 ;		Name:		tostring.asm
 ;		Purpose:	Convert integer to string
-;		Created:	1st March 2020
+;		Created:	8th March 2020
 ;		Author:		Paul Robson (paul@robsons.org.uk)
 ;
 ; *****************************************************************************
