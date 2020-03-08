@@ -39,7 +39,7 @@ void BlitterInitialise(void) {
 	}
 	for (int x = 0;x < DWIDTH;x++) {
 		for (int y = 0;y < DHEIGHT;y++) {
-			int n = x/7+y/7;
+			int n = (rand() & 0x1F) ? 0 : (rand() & 0x0F);
 			BlitterWritevRAM(x,y,n);
 			HWWritePixel(x,y,paletteMap[n & 0x0F]);
 		}
@@ -134,6 +134,7 @@ void BlitterWrite(BYTE8 port,WORD16 data) {
 			break;
 		case 4:
 			BlitterCommand(data);
+			break;
 	}
 }
 
@@ -180,7 +181,7 @@ static void blitterRow(WORD16 cmd,WORD16 pixels) {
 					HWWritePixel(x,blitterY,newPalette);					
 				}
 			}
-		pixels = (cmd & 0x4000) ? (pixels >> 1) : (pixels << 1);		// Shift pixels
 		}
+		pixels = (cmd & 0x4000) ? (pixels >> 1) : (pixels << 1);		// Shift pixels
 	}
 }

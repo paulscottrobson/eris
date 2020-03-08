@@ -22,6 +22,17 @@
 .textMemory 								; address of 40x30 character text buffer.
 		fill 	1
 
+
+.xGraphic 									; graphic cursor position.
+		fill 	1
+.yGraphic 	
+		fill 	1
+
+.colourMask 								; colour mask
+		fill 	1		
+.colourPaint								; draw colour in MSB.
+		fill 	1		
+
 .currentKey									; character code of current key, 0 if none pressed
 		fill 	1 							
 
@@ -40,5 +51,8 @@
 
 .convBuffer 								; buffer for string conversion. Up to 17 characters
 		fill 	maxIStrSize					; (a sign and 16 digits)
+
+.fontBuffer 								; font data.
+		fill 	8
 
 .freeMemory		

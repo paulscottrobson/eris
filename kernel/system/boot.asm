@@ -86,20 +86,34 @@
 ;		jsr 	#OSBeep
 		
 
-		mov 	r0,#$0308
-		stm 	r0,#paletteRegister
-		mov 	r0,#$0404
-		stm 	r0,#paletteRegister
-		mov 	r0,#64
-		stm 	r0,#blitterX
-		mov 	r0,#16
-		stm 	r0,#blitterY
-		mov 	r0,#demo
-		stm 	r0,#blitterData
-		mov 	r0,#$FF03
-		stm 	r0,#blitterCMask
-		mov 	r0,#$1006
-		stm 	r0,#blitterCmd
+		mov 	r0,#15
+		stm 	r0,#colourMask
+		stm 	r14,#xGraphic
+		stm 	r14,#yGraphic
+		mov 	r5,#$1321
+		clr 	r6
+.drawloop
+		mov 	r0,r5,#0
+		jsr 	#OSDrawSolidCharacter
+		ldm 	r0,#xGraphic
+		add 	r0,#8
+		stm 	r0,#xGraphic
+		sub 	r0,#256
+		skge 	r0
+		jmp 	#drawloop
+		stm 	r14,#xGraphic
+		ldm 	r0,#yGraphic
+		add 	r0,#8
+		stm 	r0,#yGraphic
+		sub 	r0,#192
+		skge 	r0
+		jmp 	#drawloop
+		stm 	r14,#yGraphic
+		inc 	r5
+		and 	r5,#$FF7F
+		inc 	r6
+		stm 	r6,#$6000
+		jmp 	#drawloop
 
 .halt 	jmp 	#halt		
 

@@ -54,7 +54,7 @@ void HWSyncImplementation(LONG32 iCount) {
 	if (keyStatus[0x14] && keyStatus[0x76]) CPUReset();			/* Ctrl+ESC is Reset */
 
 	char buffer[32];
-	int m = CPUReadMemory(0x8000);
+	int m = CPUReadMemory(0x6000);
 	sprintf(buffer,"%5ld %5d %5d ",millis()/1000,m,iCount/1000/1000);
 	int i = 0;
 	while (buffer[i] != 0) {

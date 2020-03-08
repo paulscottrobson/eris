@@ -27,6 +27,9 @@
 .OSDrawCharacter		
 		jmp 	#OSXDrawCharacter		
 
+.OSDrawSolidCharacter
+		jmp 	#OSXDrawSolidCharacter
+		
 .OSUDivide16		
 		jmp 	#OSXUDivide16	
 
