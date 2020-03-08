@@ -3,7 +3,7 @@
 //
 //		Name:		main.cpp
 //		Purpose:	Main Program (esp version)
-//		Created:	1st February 2020
+//		Created:	8th March 2020
 //		Author:		Paul Robson (paul@robsons.org.uk)
 //
 // ****************************************************************************
@@ -54,8 +54,8 @@ fabgl::Keyboard  Keyboard;
 
 #include "character_rom.inc"
 
-static RGB888 pcolours[16];
-static uint8_t rawPixels[16];
+static RGB888 pColours[64];
+static uint8_t rawPixels[64];
 static int fsOpen,size;
 
 void HWWriteCharacter(BYTE8 x,BYTE8 y,BYTE8 ch) {
@@ -87,18 +87,12 @@ void HWLoadFile(const char *fName) {
 }
 
 void HWWritePixelToScreen(WORD16 x,WORD16 y,BYTE8 colour) {
-	RGB888 rgb;
 	if (x >= DWIDTH || y >= DHEIGHT) return;
-	x = (x << 1)+8;
-	y = (y << 1)+6;
-	BYTE8 rp = rawPixels[colour & 0x0F];
-	//Canvas.setPixel(x,y,pcolours[colour & 15]);
+	//Canvas.setPixel(x,y,pColours[colour & 0x3F]);
 	//BYTE8 *pLine = DisplayController.getScanline(y);
 	//pLine[x^2] = x;
+	BYTE8 rp = rawPixels[colour & 0x3F];
 	VGAController.setRawPixel(x,y,rp);
-	VGAController.setRawPixel(x,y+1,rp);
-	VGAController.setRawPixel(x+1,y,rp);
-	VGAController.setRawPixel(x+1,y+1,rp);
 }
 
 int HWGetScanCode(void) {
@@ -125,10 +119,7 @@ void HWSetAudio(BYTE8 channel,WORD16 freq) {
 	}
 }
 
-#define CONVCOL(n) 	((n) == 15) ? 255 : ((n) * 16)
-
-static WORD16 colours[16] = 
-#include "colours.h"
+#define CONVCOL(n) 	((n) == 3) ? 255 : ((n) * 64)
 
 void setup()
 {
@@ -142,18 +133,19 @@ void setup()
 
 	HWLoadFile("/basiccode.prg");
 
-	VGAController.setResolution(VGA_400x300_60Hz);
+	VGAController.setResolution(QVGA_320x240_60Hz);
 	VGAController.enableBackgroundPrimitiveExecution(false);
 	Keyboard.begin(PS2_PORT0_CLK, PS2_PORT0_DAT,false,false);
 
-	for (int i = 0;i < 16;i++) {
-		pcolours[i].B = CONVCOL(colours[i] & 0x0F);
-		pcolours[i].G = CONVCOL((colours[i] >> 4) & 0x0F);
-		pcolours[i].R = CONVCOL((colours[i] >> 8) & 0x0F);
-		BYTE8 r = ((colours[i] >> 8) & 0x0F) >> 2;
-		BYTE8 g = ((colours[i] >> 4) & 0x0F) >> 2;
-		BYTE8 b = ((colours[i] >> 0) & 0x0F) >> 2;
-		rawPixels[i] = VGAController.createRawPixel(RGB222(r,g,b));
+	for (int i = 0;i < 64;i++) {
+		pColours[i].R = CONVCOL((i & 3));
+		pColours[i].G = CONVCOL(((i >> 2) & 3));
+		pColours[i].B = CONVCOL(((i >> 4) & 3));
+
+		//BYTE8 r = ((i & 3)) >> 2;
+		//BYTE8 g = ((colours[i] >> 4) & 0x0F) >> 2;
+		//BYTE8 b = ((colours[i] >> 0) & 0x0F) >> 2;
+		rawPixels[i] = VGAController.createRawPixel(RGB222(pColours[i].R>>6,pColours[i].G>>6,pColours[i].B>>6));
 	}
 	CPUReset();
 

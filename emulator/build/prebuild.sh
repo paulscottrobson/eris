@@ -1,7 +1,7 @@
 set -e
-#pushd ../assembler >/dev/null
-#sh build.sh
-#popd >/dev/null
+pushd ../assembler >/dev/null
+sh build.sh
+popd >/dev/null
 pushd ../processor >/dev/null
 sh build.sh
 popd >/dev/null

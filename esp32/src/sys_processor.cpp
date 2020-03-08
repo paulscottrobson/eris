@@ -68,7 +68,7 @@ static inline WORD16 READ(WORD16 a) {
 		WORD16 d = 0;														// Default includes $FF10 blitter status 
 		if (a >= 0xFF00) {
 			if (a == 0xFF00) d = HWReadKeyboardColumns();					// $FF00 Keyboard state.
-			if (a == 0xFF20) d = HWGetSystemClock();						// $FF20 System clock
+			if (a == 0xFF30) d = HWGetSystemClock();						// $FF20 System clock
 		}
 		return d;
 	}
@@ -88,10 +88,13 @@ static inline void WRITE(WORD16 a,WORD16 d) {
 			case 0x00:														// $FF0x = KeyLatch
 				HWWriteKeyboardLatch(d);
 				break;									
-			case 0x10:														// $FF1x = Blitter
+			case 0x10:														// $FF1x = Palette
+				HWWritePalette(a & 0x0F,d);
+				break;
+			case 0x20:														// $FF2x = Blitter
 				BlitterWrite(a & 0x0F,d);
 				break;
-			case 0x30:														// $FF3x = Audio Hardware
+			case 0x40:														// $FF4x = Audio Hardware
 				HWWriteAudio(a & 0x0F,d);
 				break;
 		}

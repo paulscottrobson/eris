@@ -15,7 +15,7 @@
 #define _DEBUG_SYS_H
 #include "sys_processor.h"
 
-#define WIN_TITLE 		"LC3 Emulator"									// Initial Window stuff
+#define WIN_TITLE 		"Eris Emulator"									// Initial Window stuff
 #define WIN_WIDTH		(46*8*4)
 #define WIN_HEIGHT		(28*8*4)
 #define WIN_BACKCOLOUR	0x004
