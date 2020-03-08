@@ -1,0 +1,122 @@
+BASIC Tokenisation
+==================
+
+0000			End of program line.
+01xx 			String, *overall length* xx length prefixed string
+
+2000-3FFF 		Token
+					Bit 15 			0
+					Bit 14 			0
+					Bit 13 			1
+					Bit 12-9 		Type bits :
+										0-7 	binary operator at given level.
+										8 		unary function
+										12 		syntax marker.
+										13 		command decrements level
+										14 		command no change
+										15 		command increments level
+
+					Bit 8-0 		Token ID.
+
+4000-7FFF		Identifier marker.
+					Bit 15 			0
+					Bit 14 			1
+					Bit 13 			1 if last character pair in identifier (excluding $( )
+					Bit 12 			0 if integer, 1 if string
+					Bit 11 			0 if single value, 1 if array.
+					Bit 10-0 		encoded character as 2nd x 40 + first, encoding follows.
+										0 - 	empty, e.g. 1 character
+										1-26 	A-Z
+										27-36 	0-9
+										37 		.
+
+8000-FFFF		Constant 0-32767
+
+Tokenisation
+============
+If it is a string, output as a string.
+
+If it is a number (0-9) then output it as a constant, with a preceding constant shift if required.
+
+If it is a punctuation marker.
+		If it is followed by a punctuation marker, check the token table for that.
+		Check the token table for the sole marker (encoded in table as 1<char2>0<char1> 7 bit ASCII)
+		Fail if no match of either.
+
+If it is an alphbetic character
+		Extract the character encoding as per an identifier (e.g. A-Z 0-9 .)
+		Mark the terminater bit on the last word.
+		If the next character is a $, set type flag on all
+		If the next character is a (, set array flag on all.
+		If it is in the token table, then write that token out.
+		Write the identifier out.
+
+Line encoding
+=============
+
++0 				Offset to next
++1 				Line number (1-32767)
++2				First token.
+
+
++n 				0000 line end.
+
+Keywords (initial set)
+======================
+
+Unary operators:
+	( 	&	% 
+	len( rnd( asc( chr$( val( str$( left$( mid$( right$( abs( sgn( int( peek( 
+	<constant shift>
+
+Syntax:
+	) 	: 	, 	;
+
+Binary Operators:
+	and	or 	xor 
+	> >= < <= = <>
+	+ - 
+	* / mod
+	!
+
+Cmd (up):
+		if repeat for while
+Cmd (down): 
+		then endif until next wend
+Cmd:
+		to step proc endproc call local run stop end print input let
+		list load save new old poke ' rem sys assert dim
+
+String
+======
+
+----------------------------------------------------------
+	Position Reset at the start of each instruction
+----------------------------------------------------------
+			Reserve 256 words for concreting
+----------------------------------------------------------
+		String temporary allocated down as you go
+
+In expressions all strings are allocated from the top down, once you actually
+want to firm it up it goes in the concreting space.
+		
+Concreted string have the maximum length of the slot in the word before the
+address, which is used to when assigning values ; if the new value fits in the slot
+copy that in rather than re-allocating.		
+
+Variables
+=========
+
+There are four types of variables corresponding to bits 12 and 11 of the identifiers, integer, 
+string, integer arrays and string arrays. Integers and Strings auto declare, arrays do not.
+
+The 26 integers A-Z are in a fixed location in memory and are not reset by RUN/CLEAR
+
+There are 4 arrays of hash links, 16 entries in each hash table, which are zeroed at the start
+
+Each points to a linked list of elements which are allocated bottom up.
+
+Variables 	(String/Integer)
+	+0 		Link to next, or $0000
+	+1 		Link to name. This may be in the program, or have to be allocated seperately.
+	+2 		Data
