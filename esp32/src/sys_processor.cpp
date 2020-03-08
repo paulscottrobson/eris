@@ -65,10 +65,10 @@ static inline WORD16 fetchRead(void) {
 static inline WORD16 READ(WORD16 a) {
 	if (a < RAM_START) return romMemory[a];
 	if (a >= RAM_END) {
-		WORD16 d = 0;														// Default includes $FF10 blitter status 
+		WORD16 d = 0;														// Default includes $FF20 blitter status 
 		if (a >= 0xFF00) {
 			if (a == 0xFF00) d = HWReadKeyboardColumns();					// $FF00 Keyboard state.
-			if (a == 0xFF30) d = HWGetSystemClock();						// $FF20 System clock
+			if (a == 0xFF30) d = HWGetSystemClock();						// $FF30 System clock
 		}
 		return d;
 	}

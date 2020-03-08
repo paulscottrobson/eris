@@ -1,0 +1,28 @@
+Blitter
+
++0 			x position. doesn't increment
++1 			y position. increments
+
++2 			data source can increment depends on bit 15.
+
++3 			high byte : 	
+				pixel bits to write to 		(mask)
+ 			low byte:
+				pixel data to write.		(colour)
+
+				The high byte controls access. The low byte controls what is written there. 
+				This depends on two things ; the pixel data, and the setting of bit 12
+				which determines whether the VRAM is only updated when the pixel is set,
+				or if it is cleared to 0 when the pixel is cleared.
+
++4 			control
+
+				bit 15: 	if set, the data source doesn't increment
+				bit 14:		if set reverse pixels (normally display in 15..0)
+				bit 13:		if set xor the data source address with 15 when reading
+							(vertical flips if on 16 word boundary)
+				bit 12: 	if set, write background when pixel bit is 0
+							(always writes colour when pixel bit is 1)
+				bit 11..8: 	0
+				bit 7..0 	horizontal size, pre decrements until 0.
+							(so 16 counts 15..0 on each line)

@@ -80,10 +80,10 @@
 
 		mov 	r0,#22726 					; sort of BBC Microish startup beep
 		mov 	r1,#50
-		jsr 	#OSBeep
+;		jsr 	#OSBeep
 		ror 	r0,#1
 		ror 	r1,#1
-		jsr 	#OSBeep
+;		jsr 	#OSBeep
 		
 .halt 	jmp 	#halt		
 
