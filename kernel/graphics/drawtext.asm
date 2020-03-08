@@ -20,7 +20,7 @@
 		mov 	r1,r0,#0 					; save 
 		and 	r0,#$F000 					; isolate background
 		ror 	r0,#4 						; put into foreground slot
-		add 	r0,#$A0 					; reverse-space
+		add 	r0,#$7F 					; reverse-space
 		jsr 	#OSDrawCharacter 			; draw background
 		mov 	r0,r1,#0 					; get old back
 		jsr 	#OSDrawCharacter 			; draw foreground
@@ -39,55 +39,33 @@
 ; *****************************************************************************
 
 .OSXDrawCharacter
-		push 	r0,r1,r2,r3,link
+		push 	r0,r1,r2,link
+		mov 	r2,r0,#0 					; save in R2 to get colour out of bits 8..11
+		and 	r0,#$7F 					; mask character code
+		sub 	r0,#33 						; skip if <= 33
+		skp 	r0
+		jmp 	#_OSDCExit
+
 		jsr 	#OSWaitBlitter				; wait for blitter
 		;
-
 		ldm 	r1,#xGraphic 				; set graphic position.
 		stm 	r1,#blitterX
 		ldm 	r1,#yGraphic
 		stm 	r1,#blitterY
 
 		ldm 	r1,#colourMask 				; get the current mask in bits 0..7
-		mov 	r2,r0,#0 					; get colour out of bits 8..11
-		and 	r2,#$0F00 
+		and 	r2,#$0F00  					; mask the colour out.
 		add 	r2,r1,#0 					; compose the two.
 		ror 	r2,#8 						; colour in bits 0..3, mask in bits 8..11
 		stm 	r2,#blitterCMask 			; that's the colour mask
 		;
-		clr 	r2 							; R2 is what we xor the data with.
-		ror 	r0,#8 						; bit 15 is the MSB of the character code.
-		skp 	r0
-		dec 	r2 							; if it is set make R2 = $FFFF
-		;
-		ror 	r0,#8-2 					; put back in position and multiply by 4 
-		and 	r0,#$01FC 					; mask out offset into the font table
-		sub 	r0,#32*4 					; allow for space
-		skp 	r0 							; space if 0..31
-		clr 	r0
-		mov 	r1,#FontData 				; R1 now points to the font data
+		ror 	r0,#13 						; multiply char# - 33 * 8
+		mov 	r1,#FontData+8 				; R1 now points to the font data
 		add 	r1,r0,#0
-		;
-		mov 	r3,#fontBuffer 				; R3 is where it is copied to.
-		stm 	r3,#blitterData 			; which is also the blitter data source.
-._OSDCExpand
-		ldm 	r0,r1,#0 				 	; LSB first
-		xor 	r0,r2,#0
-		and 	r0,#$00FF
-		ror 	r0,#8
-		stm 	r0,r3,#0
-		ldm 	r0,r1,#0 					; then MSB
-		xor 	r0,r2,#0
-		and 	r0,#$FF00
-		stm 	r0,r3,#1
-		;
-		add 	r3,#2 						; bump R3
-		inc 	r1 							; increment source pointer
-		mov 	r0,r3,#0 					; check at end of font buffer
-		xor 	r0,#fontBuffer+8
-		skz		r0
-		jmp 	#_OSDCExpand
+		stm 	r1,#blitterData 			; which is also the blitter data source.
 		mov 	r0,#8 						; and write out 8 bytes, no background
 		stm 	r0,#blitterCmd
-		pop 	r0,r1,r2,r3,link
+._OSDCExit		
+		pop 	r0,r1,r2,link
 		ret
+

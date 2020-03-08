@@ -84,33 +84,34 @@
 		ror 	r0,#1
 		ror 	r1,#1
 ;		jsr 	#OSBeep
-		
 
 		mov 	r0,#15
 		stm 	r0,#colourMask
 		stm 	r14,#xGraphic
 		stm 	r14,#yGraphic
-		mov 	r5,#$1321
+		mov 	r5,#$0121
+		mov 	r7,r5,#0
 		clr 	r6
 .drawloop
+		inc 	r5
 		mov 	r0,r5,#0
 		jsr 	#OSDrawSolidCharacter
 		ldm 	r0,#xGraphic
 		add 	r0,#8
 		stm 	r0,#xGraphic
-		sub 	r0,#256
+		sub 	r0,#320
 		skge 	r0
 		jmp 	#drawloop
 		stm 	r14,#xGraphic
 		ldm 	r0,#yGraphic
 		add 	r0,#8
 		stm 	r0,#yGraphic
-		sub 	r0,#192
+		sub 	r0,#240
 		skge 	r0
 		jmp 	#drawloop
 		stm 	r14,#yGraphic
-		inc 	r5
-		and 	r5,#$FF7F
+		add 	r7,#$40
+		mov 	r5,r7,#0
 		inc 	r6
 		stm 	r6,#$6000
 		jmp 	#drawloop
@@ -119,10 +120,3 @@
 
 	 	jmp 	#kernelEnd 					; enter the ROM.
 
-	 	org 	$0100
-.demo 	word 	$FFFF
-		word 	$C000
-		word 	$FFF0
-		word 	$FF00
-		word 	$F000
-		word 	$C000
