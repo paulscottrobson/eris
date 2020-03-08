@@ -2,8 +2,8 @@
 0000 :                               kernelend = $1000
 0000 :                               pixelwidth = 320
 0000 :                               pixelheight = 240
-0000 :                               charwidth = 40
-0000 :                               charheight = 30
+0000 :                               charwidth = 32
+0000 :                               charheight = 24
 0000 :                               blitterbase = $ff20
 0000 :                               blitterstatus = blitterbase
 0000 :                               blitterx  = blitterbase
@@ -86,7 +86,7 @@
 0040 : aff0 0030                     jmp  #_bccheckmemory
 0042 :                               ._bcfoundend
 0042 : 20f0 4000                     stm  r0,#highmemory
-0044 : 50f0 04b0                     sub  r0,#(charwidth*charheight)
+0044 : 50f0 0300                     sub  r0,#(charwidth*charheight)
 0046 : 20f0 4001                     stm  r0,#textmemory
 0048 : 50e1                          dec  r0
 0049 : 2e00                          stm  r14,r0,#0
@@ -121,14 +121,14 @@
 0079 : 10f0 4002                     ldm  r0,#xgraphic
 007b : 30e8                          add  r0,#8
 007c : 20f0 4002                     stm  r0,#xgraphic
-007e : 50f0 0140                     sub  r0,#320
+007e : 50f0 0100                     sub  r0,#256
 0080 : ffe1                          skge  r0
 0081 : aff0 0077                     jmp  #drawloop
 0083 : 2ef0 4002                     stm  r14,#xgraphic
 0085 : 10f0 4003                     ldm  r0,#ygraphic
 0087 : 30e8                          add  r0,#8
 0088 : 20f0 4003                     stm  r0,#ygraphic
-008a : 50f0 00f0                     sub  r0,#240
+008a : 50f0 00c0                     sub  r0,#192
 008c : ffe1                          skge  r0
 008d : aff0 0077                     jmp  #drawloop
 008f : 2ef0 4003                     stm  r14,#ygraphic
