@@ -25,44 +25,44 @@
 0000 : aff0                          brl  r15,r15,#0
 0001 : 0023                          word  bootcode
 0002 :                               .oswaitblitter
-0002 : aff0 0115                     jmp  #osxwaitblitter
+0002 : aff0 0104                     jmp  #osxwaitblitter
 0004 :                               .osprintcharacter
-0004 : aff0 018f                     jmp  #osxprintcharacter
+0004 : aff0 017e                     jmp  #osxprintcharacter
 0006 :                               .osprintinline
-0006 : aff0 01a9                     jmp  #osxprintinline
+0006 : aff0 0245                     jmp  #osxprintinline
 0008 :                               .osprintstring
-0008 : aff0 01a0                     jmp  #osxprintstring
+0008 : aff0 023c                     jmp  #osxprintstring
 000a :                               .osgetkeyboard
-000a : aff0 0085                     jmp  #osxgetkeyboard
+000a : aff0 0074                     jmp  #osxgetkeyboard
 000c :                               .osdrawcharacter
-000c : aff0 0162                     jmp  #osxdrawcharacter
+000c : aff0 0151                     jmp  #osxdrawcharacter
 000e :                               .osdrawsolidcharacter
-000e : aff0 0150                     jmp  #osxdrawsolidcharacter
+000e : aff0 013f                     jmp  #osxdrawsolidcharacter
 0010 :                               .osudivide16
-0010 : aff0 01df                     jmp  #osxudivide16
+0010 : aff0 027b                     jmp  #osxudivide16
 0012 :                               .ossdivide16
-0012 : aff0 01f9                     jmp  #osxsdivide16
+0012 : aff0 0295                     jmp  #osxsdivide16
 0014 :                               .osrandom16
-0014 : aff0 0212                     jmp  #osxrandom16
+0014 : aff0 02ae                     jmp  #osxrandom16
 0016 :                               .osstrtoint
-0016 : aff0 0222                     jmp  #osxstrtoint
+0016 : aff0 02be                     jmp  #osxstrtoint
 0018 :                               .osinttostr
-0018 : aff0 0262                     jmp  #osxinttostr
+0018 : aff0 02fe                     jmp  #osxinttostr
 001a :                               .osuppercase
-001a : aff0 02a9                     jmp  #osxuppercase
+001a : aff0 0345                     jmp  #osxuppercase
 001c :                               .oslowercase
-001c : aff0 02bb                     jmp  #osxlowercase
+001c : aff0 0357                     jmp  #osxlowercase
 001e :                               .oswordlength
-001e : aff0 02cd                     jmp  #osxwordlength
+001e : aff0 0369                     jmp  #osxwordlength
 0020 :                               .osmanager
 0020 : afd0                          ret
 0021 :                               .osbeep
-0021 : aff0 01cb                     jmp  #osxbeep
+0021 : aff0 0267                     jmp  #osxbeep
 0023 :                               .bootcode
 0023 : 7ee0                          clr  r14
 0024 : 00f0 4000                     mov  r0,#initialisedstart
 0026 : 01f0                          mov  r1,r15,#0
-0027 : 000e                          word  initialisedend-initialisedstart
+0027 : 0010                          word  initialisedend-initialisedstart
 0028 :                               ._bcclear
 0028 : 2e00                          stm  r14,r0,#0
 0029 : 30e1                          inc  r0
@@ -91,469 +91,593 @@
 0048 : 50e1                          dec  r0
 0049 : 2e00                          stm  r14,r0,#0
 004a : 0c00                          mov  sp,r0,#0
-004b : 20f0 400e                     stm  r0,#randomseed
-004d : 00f0 030f                     mov  r0,#bootprompt
-004f : ade8                          jsr  #osprintstring
-0050 : 10f0 4000                     ldm  r0,#highmemory
-0052 : 50f0 4000                     sub  r0,#ramstart
-0054 : 01ea                          mov  r1,#10
-0055 : adf0 0018                     jsr  #osinttostr
-0057 : ade8                          jsr  #osprintstring
-0058 : ade6                          jsr  #osprintinline
-0059 : 000d 7720 726f 7364 5220      string " words ram[0d,0d,12]"
-0061 :                               ._bcsilence
-0061 : 2ef0 ff40                     stm  r14,#sndnoise
-0063 : 2ef0 ff41                     stm  r14,#sndtone1
-0065 : 2ef0 ff42                     stm  r14,#sndtone2
-0067 : 00f0 58c6                     mov  r0,#22726
-0069 : 01f0 0032                     mov  r1,#50
-006b : 90e1                          ror  r0,#1
-006c : 91e1                          ror  r1,#1
-006d : 00ef                          mov  r0,#15
-006e : 20f0 4004                     stm  r0,#colourmask
-0070 : 00e1                          mov  r0,#1
-0071 : 20f0 4006                     stm  r0,#bgrcolour
-0073 : 05e6                          mov  r5,#6
-0074 : 25f0 4005                     stm  r5,#fgrcolour
-0076 : 35e1                          .loop inc  r5
-0077 : 25f0 6000                     stm  r5,#$6000
-0079 : 0050                          mov  r0,r5,#0
-007a : 60ef                          and  r0,#15
-007b : 20f0 4006                     stm  r0,#bgrcolour
-007d : adf0 011f                     jsr  #osiclearscreen
-007f : aff0 0076                     jmp  #loop
-0081 : aff0 0081                     .halt  jmp  #halt
-0083 : aff0 1000                     jmp  #kernelend
-0085 :                               .osxgetkeyboard
-0085 : 5ce6 21c0 22c1 23c2 24c3      push  r1,r2,r3,r4,r5,link
-008c : adf0 0020                     jsr  #osmanager
-008e : 01f0 02f3                     mov  r1,#keyboardmapping+4*8
-0090 : 02f0 400c                     mov  r2,#currentrowstatus+4
-0092 : 03f0 0010                     mov  r3,#$10
-0094 : 7440                          clr  r4
-0095 :                               ._gkscan
-0095 : 23f0 ff00                     stm  r3,#keyboardport
-0097 : 00f0 00c8                     mov  r0,#200
-0099 :                               ._gkdebounce
-0099 : 50e1                          dec  r0
-009a : b0e0                          skz  r0
-009b : aff0 0099                     jmp  #_gkdebounce
-009d : 15f0 ff00                     ldm  r5,#keyboardport
-009f : 65f0 0fff                     and  r5,#$0fff
-00a1 : 3450                          add  r4,r5,#0
-00a2 : 1020                          ldm  r0,r2,#0
-00a3 : 2520                          stm  r5,r2,#0
-00a4 : 70f0 ffff                     xor  r0,#$ffff
-00a6 : 6050                          and  r0,r5,#0
-00a7 : b0e0                          skz  r0
-00a8 : aff0 00cc                     jmp  #_gkkeypressed
-00aa : 51e8                          sub  r1,#8
-00ab : 52e1                          dec  r2
-00ac : 93e1                          ror  r3,#1
-00ad : e3e0                          skm  r3
-00ae : aff0 0095                     jmp  #_gkscan
-00b0 :                               ._gknokeypressed
-00b0 : 7000                          clr  r0
-00b1 : c4e0                          sknz  r4
-00b2 : 2ef0 4007                     stm  r14,#currentkey
-00b4 : c4e0                          sknz r4
-00b5 : aff0 00c4                     jmp  #_gkexitwithr0
-00b7 : 11f0 ff30                     ldm  r1,#hwtimer
-00b9 : 12f0 400d                     ldm  r2,#keyrepeattime
-00bb : 5210                          sub  r2,r1,#0
-00bc : e2e0                          skm  r2
-00bd : aff0 00c4                     jmp  #_gkexitwithr0
-00bf : 31ea                          add  r1,#repeatspeed
-00c0 : 21f0 400d                     stm  r1,#keyrepeattime
-00c2 : 10f0 4007                     ldm  r0,#currentkey
-00c4 :                               ._gkexitwithr0
-00c4 : 11c0 12c1 13c2 14c3 15c4      pop  r1,r2,r3,r4,r5,link
-00cb : afd0                          ret
-00cc :                               ._gkkeypressed
-00cc : 02f0 ffff                     mov  r2,#-1
-00ce :                               ._gkfindbitnumber
-00ce : 32e1                          inc  r2
-00cf : 90e1                          ror  r0,#1
-00d0 : e0e0                          skm   r0
-00d1 : aff0 00ce                     jmp  #_gkfindbitnumber
-00d3 : 92e1                          ror  r2,#1
-00d4 : 0020                          mov  r0,r2,#0
-00d5 : 60ef                          and  r0,#15
-00d6 : 3010                          add  r0,r1,#0
-00d7 : 1000                          ldm  r0,r0,#0
-00d8 : d2e0                          skp  r2
-00d9 : 90e8                          ror  r0,#8
-00da : 60f0 00ff                     and  r0,#$ff
-00dc : c0e0                          sknz  r0
-00dd : aff0 00b0                     jmp  #_gknokeypressed
-00df : 11f0 ff30                     ldm  r1,#hwtimer
-00e1 : 31f0 0050                     add  r1,#repeatdelay
-00e3 : 21f0 400d                     stm  r1,#keyrepeattime
-00e5 : 11f0 400c                     ldm  r1,#currentrowstatus+4
-00e7 : 91e5                          ror  r1,#5
-00e8 : d1e0                          skp  r1
-00e9 : 60f0 001f                     and  r0,#$1f
-00eb : 91e1                          ror  r1,#1
-00ec : d1e0                          skp  r1
-00ed : adf0 00f3                     jsr  #_gkshiftexecute
-00ef : 20f0 4007                     stm  r0,#currentkey
-00f1 : aff0 00c4                     jmp  #_gkexitwithr0
-00f3 :                               ._gkshiftexecute
-00f3 : 0100                          mov  r1,r0,#0
-00f4 : 51f0 0061                     sub  r1,#97
-00f6 : ffe1                          skge
-00f7 : aff0 0101                     jmp  #_gknotalpha
-00f9 : 51f0 001a                     sub  r1,#26
-00fb : ffe0                          sklt
-00fc : aff0 0101                     jmp  #_gknotalpha
-00fe : 50f0 0020                     sub  r0,#32
-0100 : afd0                          ret
-0101 :                               ._gknotalpha
-0101 : 02f0 02fb                     mov  r2,#shifttable
-0103 :                               ._gkshiftloop
-0103 : 1120                          ldm  r1,r2,#0
-0104 : 91e8                          ror  r1,#8
-0105 : 7100                          xor  r1,r0,#0
-0106 : 61f0 00ff                     and  r1,#$00ff
-0108 : c1e0                          sknz  r1
-0109 : aff0 0111                     jmp  #_gkshiftfound
-010b : 32e1                          inc  r2
-010c : 1120                          ldm  r1,r2,#0
-010d : b1e0                          skz  r1
-010e : aff0 0103                     jmp  #_gkshiftloop
-0110 : afd0                          ret
-0111 :                               ._gkshiftfound
-0111 : 1020                          ldm  r0,r2,#0
-0112 : 60f0 00ff                     and  r0,#$00ff
-0114 : afd0                          ret
-0115 :                               .osxwaitblitter
-0115 : 5ce1 20c0                     push  r0
-0117 :                               ._osxwbloop
-0117 : 10f0 ff20                     ldm  r0,#blitterstatus
-0119 : d0e0                          skp  r0
-011a : aff0 0117                     jmp  #_osxwbloop
-011c : 10c0 3ce1                     pop  r0
+004b : 20f0 4010                     stm  r0,#randomseed
+004d : 00ef                          mov  r0,#15
+004e : 20f0 4004                     stm  r0,#colourmask
+0050 : 00f0 03ab                     mov  r0,#bootprompt
+0052 : ade8                          jsr  #osprintstring
+0053 : 10f0 4000                     ldm  r0,#highmemory
+0055 : 50f0 4000                     sub  r0,#ramstart
+0057 : 01ea                          mov  r1,#10
+0058 : adf0 0018                     jsr  #osinttostr
+005a : ade8                          jsr  #osprintstring
+005b : ade6                          jsr  #osprintinline
+005c : 000d 7720 726f 7364 5220      string " words ram[0d,0d,12]"
+0064 :                               ._bcsilence
+0064 : 2ef0 ff40                     stm  r14,#sndnoise
+0066 : 2ef0 ff41                     stm  r14,#sndtone1
+0068 : 2ef0 ff42                     stm  r14,#sndtone2
+006a : 00f0 58c6                     mov  r0,#22726
+006c : 01f0 0032                     mov  r1,#50
+006e : 90e1                          ror  r0,#1
+006f : 91e1                          ror  r1,#1
+0070 : aff0 0070                     .halt  jmp  #halt
+0072 : aff0 1000                     jmp  #kernelend
+0074 :                               .osxgetkeyboard
+0074 : 5ce6 21c0 22c1 23c2 24c3      push  r1,r2,r3,r4,r5,link
+007b : adf0 0020                     jsr  #osmanager
+007d : 01f0 038f                     mov  r1,#keyboardmapping+4*8
+007f : 02f0 400e                     mov  r2,#currentrowstatus+4
+0081 : 03f0 0010                     mov  r3,#$10
+0083 : 7440                          clr  r4
+0084 :                               ._gkscan
+0084 : 23f0 ff00                     stm  r3,#keyboardport
+0086 : 00f0 00c8                     mov  r0,#200
+0088 :                               ._gkdebounce
+0088 : 50e1                          dec  r0
+0089 : b0e0                          skz  r0
+008a : aff0 0088                     jmp  #_gkdebounce
+008c : 15f0 ff00                     ldm  r5,#keyboardport
+008e : 65f0 0fff                     and  r5,#$0fff
+0090 : 3450                          add  r4,r5,#0
+0091 : 1020                          ldm  r0,r2,#0
+0092 : 2520                          stm  r5,r2,#0
+0093 : 70f0 ffff                     xor  r0,#$ffff
+0095 : 6050                          and  r0,r5,#0
+0096 : b0e0                          skz  r0
+0097 : aff0 00bb                     jmp  #_gkkeypressed
+0099 : 51e8                          sub  r1,#8
+009a : 52e1                          dec  r2
+009b : 93e1                          ror  r3,#1
+009c : e3e0                          skm  r3
+009d : aff0 0084                     jmp  #_gkscan
+009f :                               ._gknokeypressed
+009f : 7000                          clr  r0
+00a0 : c4e0                          sknz  r4
+00a1 : 2ef0 4009                     stm  r14,#currentkey
+00a3 : c4e0                          sknz r4
+00a4 : aff0 00b3                     jmp  #_gkexitwithr0
+00a6 : 11f0 ff30                     ldm  r1,#hwtimer
+00a8 : 12f0 400f                     ldm  r2,#keyrepeattime
+00aa : 5210                          sub  r2,r1,#0
+00ab : e2e0                          skm  r2
+00ac : aff0 00b3                     jmp  #_gkexitwithr0
+00ae : 31ea                          add  r1,#repeatspeed
+00af : 21f0 400f                     stm  r1,#keyrepeattime
+00b1 : 10f0 4009                     ldm  r0,#currentkey
+00b3 :                               ._gkexitwithr0
+00b3 : 11c0 12c1 13c2 14c3 15c4      pop  r1,r2,r3,r4,r5,link
+00ba : afd0                          ret
+00bb :                               ._gkkeypressed
+00bb : 02f0 ffff                     mov  r2,#-1
+00bd :                               ._gkfindbitnumber
+00bd : 32e1                          inc  r2
+00be : 90e1                          ror  r0,#1
+00bf : e0e0                          skm   r0
+00c0 : aff0 00bd                     jmp  #_gkfindbitnumber
+00c2 : 92e1                          ror  r2,#1
+00c3 : 0020                          mov  r0,r2,#0
+00c4 : 60ef                          and  r0,#15
+00c5 : 3010                          add  r0,r1,#0
+00c6 : 1000                          ldm  r0,r0,#0
+00c7 : d2e0                          skp  r2
+00c8 : 90e8                          ror  r0,#8
+00c9 : 60f0 00ff                     and  r0,#$ff
+00cb : c0e0                          sknz  r0
+00cc : aff0 009f                     jmp  #_gknokeypressed
+00ce : 11f0 ff30                     ldm  r1,#hwtimer
+00d0 : 31f0 0050                     add  r1,#repeatdelay
+00d2 : 21f0 400f                     stm  r1,#keyrepeattime
+00d4 : 11f0 400e                     ldm  r1,#currentrowstatus+4
+00d6 : 91e5                          ror  r1,#5
+00d7 : d1e0                          skp  r1
+00d8 : 60f0 001f                     and  r0,#$1f
+00da : 91e1                          ror  r1,#1
+00db : d1e0                          skp  r1
+00dc : adf0 00e2                     jsr  #_gkshiftexecute
+00de : 20f0 4009                     stm  r0,#currentkey
+00e0 : aff0 00b3                     jmp  #_gkexitwithr0
+00e2 :                               ._gkshiftexecute
+00e2 : 0100                          mov  r1,r0,#0
+00e3 : 51f0 0061                     sub  r1,#97
+00e5 : ffe1                          skge
+00e6 : aff0 00f0                     jmp  #_gknotalpha
+00e8 : 51f0 001a                     sub  r1,#26
+00ea : ffe0                          sklt
+00eb : aff0 00f0                     jmp  #_gknotalpha
+00ed : 50f0 0020                     sub  r0,#32
+00ef : afd0                          ret
+00f0 :                               ._gknotalpha
+00f0 : 02f0 0397                     mov  r2,#shifttable
+00f2 :                               ._gkshiftloop
+00f2 : 1120                          ldm  r1,r2,#0
+00f3 : 91e8                          ror  r1,#8
+00f4 : 7100                          xor  r1,r0,#0
+00f5 : 61f0 00ff                     and  r1,#$00ff
+00f7 : c1e0                          sknz  r1
+00f8 : aff0 0100                     jmp  #_gkshiftfound
+00fa : 32e1                          inc  r2
+00fb : 1120                          ldm  r1,r2,#0
+00fc : b1e0                          skz  r1
+00fd : aff0 00f2                     jmp  #_gkshiftloop
+00ff : afd0                          ret
+0100 :                               ._gkshiftfound
+0100 : 1020                          ldm  r0,r2,#0
+0101 : 60f0 00ff                     and  r0,#$00ff
+0103 : afd0                          ret
+0104 :                               .osxwaitblitter
+0104 : 5ce1 20c0                     push  r0
+0106 :                               ._osxwbloop
+0106 : 10f0 ff20                     ldm  r0,#blitterstatus
+0108 : d0e0                          skp  r0
+0109 : aff0 0106                     jmp  #_osxwbloop
+010b : 10c0 3ce1                     pop  r0
+010d : afd0                          ret
+010e :                               .osiclearscreen
+010e : 5ce3 20c0 21c1 2dc2           push  r0,r1,link
+0112 : 10f0 4006                     ldm  r0,#bgrcolour
+0114 : 11f0 4004                     ldm  r1,#colourmask
+0116 : 91e8                          ror  r1,#8
+0117 : 3010                          add  r0,r1,#0
+0118 : adf0 011f                     jsr  #osifillscreen
+011a : 10c0 11c1 1dc2 3ce3           pop  r0,r1,link
 011e : afd0                          ret
-011f :                               .osiclearscreen
+011f :                               .osifillscreen
 011f : 5ce3 20c0 21c1 2dc2           push  r0,r1,link
-0123 : 10f0 4006                     ldm  r0,#bgrcolour
-0125 : 11f0 4004                     ldm  r1,#colourmask
-0127 : 91e8                          ror  r1,#8
-0128 : 3010                          add  r0,r1,#0
-0129 : adf0 0130                     jsr  #osifillscreen
-012b : 10c0 11c1 1dc2 3ce3           pop  r0,r1,link
-012f : afd0                          ret
-0130 :                               .osifillscreen
-0130 : 5ce3 20c0 21c1 2dc2           push  r0,r1,link
-0134 : ade2                          jsr  #oswaitblitter
-0135 : 20f0 ff23                     stm  r0,#blittercmask
-0137 : 00f0 014f                     mov  r0,#_osfsbar
-0139 : 20f0 ff22                     stm  r0,#blitterdata
-013b : 01f0 0130                     mov  r1,#pixelwidth-16
-013d :                               ._osifillloop
-013d : 21f0 ff20                     stm  r1,#blitterx
-013f : 2ef0 ff21                     stm  r14,#blittery
-0141 : 00f0 80f0                     mov  r0,#$8000+pixelheight
-0143 : 20f0 ff24                     stm  r0,#blittercmd
-0145 : 51f0 0010                     sub  r1,#16
-0147 : e1e0                          skm  r1
-0148 : aff0 013d                     jmp  #_osifillloop
-014a : 10c0 11c1 1dc2 3ce3           pop  r0,r1,link
-014e : afd0                          ret
-014f :                               ._osfsbar
-014f : ffff                          word  $ffff
-0150 :                               .osxdrawsolidcharacter
-0150 : 5ce3 20c0 21c1 2dc2           push  r0,r1,link
-0154 : 0100                          mov  r1,r0,#0
-0155 : 60f0 f000                     and  r0,#$f000
-0157 : 90e4                          ror  r0,#4
-0158 : 30f0 007f                     add  r0,#$7f
-015a : adec                          jsr  #osdrawcharacter
-015b : 0010                          mov  r0,r1,#0
-015c : adec                          jsr  #osdrawcharacter
-015d : 10c0 11c1 1dc2 3ce3           pop  r0,r1,link
-0161 : afd0                          ret
-0162 :                               .osxdrawcharacter
-0162 : 5ce4 20c0 21c1 22c2 2dc3      push  r0,r1,r2,link
-0167 : 0200                          mov  r2,r0,#0
-0168 : 60f0 007f                     and  r0,#$7f
-016a : 50f0 0021                     sub  r0,#33
-016c : d0e0                          skp  r0
-016d : aff0 0189                     jmp  #_osdcexit
-016f : ade2                          jsr  #oswaitblitter
-0170 : 11f0 4002                     ldm  r1,#xgraphic
-0172 : 21f0 ff20                     stm  r1,#blitterx
-0174 : 11f0 4003                     ldm  r1,#ygraphic
-0176 : 21f0 ff21                     stm  r1,#blittery
-0178 : 11f0 4004                     ldm  r1,#colourmask
-017a : 62f0 0f00                     and  r2,#$0f00
-017c : 3210                          add  r2,r1,#0
-017d : 92e8                          ror  r2,#8
-017e : 22f0 ff23                     stm  r2,#blittercmask
-0180 : 90ed                          ror  r0,#13
-0181 : 01f0 0333                     mov  r1,#fontdata+8
-0183 : 3100                          add  r1,r0,#0
-0184 : 21f0 ff22                     stm  r1,#blitterdata
-0186 : 00e8                          mov  r0,#8
-0187 : 20f0 ff24                     stm  r0,#blittercmd
-0189 :                               ._osdcexit
-0189 : 10c0 11c1 12c2 1dc3 3ce4      pop  r0,r1,r2,link
-018e : afd0                          ret
-018f :                               .osxprintcharacter
-018f : 5ce6 20c0 21c1 22c2 23c3      push  r0,r1,r2,r3,r4,link
-0196 : 60f0 00ff                     and  r0,#$ff
-0198 : 10c0 11c1 12c2 13c3 14c4      pop  r0,r1,r2,r3,r4,link
-019f : afd0                          ret
-01a0 :                               .osxprintstring
-01a0 : 5ce2 20c0 2dc1                push  r0,link
-01a3 : adf0 01b2                     jsr  #_osxpinlineprinter
-01a5 : 10c0 1dc1 3ce2                pop  r0,link
-01a8 : afd0                          ret
-01a9 :                               .osxprintinline
-01a9 : 5ce1 20c0                     push  r0
-01ab : 00d0                          mov  r0,link,#0
-01ac : adf0 01b2                     jsr  #_osxpinlineprinter
-01ae : 0d00                          mov  link,r0,#0
-01af : 10c0 3ce1                     pop  r0
-01b1 : afd0                          ret
-01b2 :                               ._osxpinlineprinter
-01b2 : 5ce3 21c0 22c1 2dc2           push  r1,r2,link
-01b6 : 0101                          mov  r1,r0,#1
-01b7 : adf0 001e                     jsr  #oswordlength
-01b9 : 0200                          mov  r2,r0,#0
-01ba :                               ._osxpiploop
-01ba : c2e0                          sknz  r2
-01bb : aff0 01c5                     jmp  #_osxpipexit
-01bd : 1010                          ldm  r0,r1,#0
-01be : ade4                          jsr  #osprintcharacter
-01bf : 90e8                          ror  r0,#8
-01c0 : ade4                          jsr  #osprintcharacter
-01c1 : 31e1                          inc  r1
-01c2 : 52e1                          dec  r2
-01c3 : aff0 01ba                     jmp  #_osxpiploop
-01c5 :                               ._osxpipexit
-01c5 : 0010                          mov  r0,r1,#0
-01c6 : 11c0 12c1 1dc2 3ce3           pop  r1,r2,link
-01ca : afd0                          ret
-01cb :                               .osxbeep
-01cb : 5ce2 20c0 21c1                push  r0,r1
-01ce : 20f0 ff41                     stm  r0,#sndtone1
-01d0 : 10f0 ff30                     ldm  r0,#hwtimer
-01d2 : 3100                          add  r1,r0,#0
-01d3 :                               ._osbpwait
-01d3 : 10f0 ff30                     ldm  r0,#hwtimer
-01d5 : 5010                          sub  r0,r1,#0
-01d6 : d0e0                          skp  r0
-01d7 : aff0 01d3                     jmp  #_osbpwait
-01d9 : 2ef0 ff41                     stm  r14,#sndtone1
-01db : 10c0 11c1 3ce2                pop  r0,r1
-01de : afd0                          ret
-01df :                               .osxudivide16
-01df : 5ce3 22c0 23c1 24c2           push  r2,r3,r4
-01e3 : 7220                          clr  r2
-01e4 : 03f0 0010                     mov  r3,#16
-01e6 :                               ._osxudloop1
-01e6 : 3220                          add  r2,r2,#0
-01e7 : 3000                          add  r0,r0,#0
-01e8 : 42e0                          adc  r2,#0
-01e9 : 0420                          mov  r4,r2,#0
-01ea : 5410                          sub  r4,r1,#0
-01eb : ffe0                          sklt
-01ec : 0240                          mov  r2,r4,#0
-01ed : ffe0                          sklt
-01ee : 30e1                          inc  r0
-01ef : 53e1                          dec  r3
-01f0 : b3e0                          skz  r3
-01f1 : aff0 01e6                     jmp  #_osxudloop1
-01f3 : 0120                          mov  r1,r2,#0
-01f4 : 12c0 13c1 14c2 3ce3           pop  r2,r3,r4
-01f8 : afd0                          ret
-01f9 :                               .osxsdivide16
-01f9 : 5ce3 22c0 23c1 2dc2           push  r2,r3,link
-01fd : 0300                          mov  r3,r0,#0
-01fe : 7310                          xor  r3,r1,#0
-01ff : 7220                          clr  r2
-0200 : 5200                          sub  r2,r0,#0
-0201 : d0e0                          skp  r0
-0202 : 0020                          mov  r0,r2,#0
-0203 : 7220                          clr  r2
-0204 : 5210                          sub  r2,r1,#0
-0205 : d1e0                          skp  r1
-0206 : 0120                          mov  r1,r2,#0
-0207 : adf0 01df                     jsr  #osxudivide16
-0209 : 7220                          clr  r2
-020a : 5200                          sub  r2,r0,#0
-020b : d3e0                          skp  r3
-020c : 0020                          mov  r0,r2,#0
-020d : 12c0 13c1 1dc2 3ce3           pop  r2,r3,link
-0211 : afd0                          ret
-0212 :                               .osxrandom16
-0212 : 5ce1 21c0                     push  r1
-0214 : 10f0 400e                     ldm  r0,#randomseed
-0216 : 90e1                          ror  r0,#1
-0217 : d0e0                          skp  r0
-0218 : 70f0 3400                     xor  r0,#$3400
-021a : 20f0 400e                     stm  r0,#randomseed
-021c : 11f0 ff30                     ldm  r1,#hwtimer
-021e : 7010                          xor  r0,r1,#0
-021f : 11c0 3ce1                     pop  r1
-0221 : afd0                          ret
-0222 :                               .osxstrtoint
-0222 : 5ce6 22c0 23c1 24c2 25c3      push  r2,r3,r4,r5,r6,link
-0229 : 0200                          mov  r2,r0,#0
-022a : 7330                          clr  r3
-022b : 7440                          clr  r4
-022c : 06e1                          mov  r6,#1
-022d : ad20                          brl  r13,r2,#0
-022e : 60f0 00ff                     and  r0,#$00ff
-0230 : 0500                          mov  r5,r0,#0
-0231 : 75f0 002d                     xor  r5,#'-'
-0233 : b5e0                          skz  r5
-0234 : aff0 0238                     jmp  #_ossiloop
-0236 : 34e1                          inc  r4
-0237 : ad20                          brl  r13,r2,#0
-0238 :                               ._ossiloop
-0238 : adf0 001a                     jsr  #osuppercase
-023a : 50f0 0030                     sub  r0,#'0'
-023c : ffe1                          skge
-023d : aff0 0254                     jmp  #_ossiexit
-023f : 0500                          mov  r5,r0,#0
-0240 : 50ea                          sub  r0,#10
-0241 : ffe1                          skge
-0242 : aff0 0249                     jmp  #_osshavedigit
-0244 : 55e7                          sub  r5,#7
-0245 : 50e7                          sub  r0,#7
-0246 : ffe1                          skge
-0247 : aff0 0254                     jmp  #_ossiexit
-0249 :                               ._osshavedigit
-0249 : 0050                          mov  r0,r5,#0
-024a : 5010                          sub  r0,r1,#0
-024b : ffe0                          sklt
-024c : aff0 0254                     jmp  #_ossiexit
-024e : 8310                          mult  r3,r1,#0
-024f : 3350                          add  r3,r5,#0
-0250 : 7660                          clr  r6
-0251 : ad20                          brl  r13,r2,#0
-0252 : aff0 0238                     jmp  #_ossiloop
-0254 :                               ._ossiexit
-0254 : 7550                          clr  r5
-0255 : 5530                          sub  r5,r3,#0
-0256 : b4e0                          skz  r4
-0257 : 0350                          mov  r3,r5,#0
-0258 : 0030                          mov  r0,r3,#0
-0259 : 0160                          mov  r1,r6,#0
-025a : 12c0 13c1 14c2 15c3 16c4      pop  r2,r3,r4,r5,r6,link
-0261 : afd0                          ret
-0262 :                               .osxinttostr
-0262 : 5ce5 21c0 22c1 23c2 24c3      push  r1,r2,r3,r4,link
-0268 : 02f0 400f                     mov  r2,#convbuffer
-026a : 2e20                          stm  r14,r2,#0
-026b : 2e21                          stm  r14,r2,#1
-026c : e1e0                          skm  r1
-026d : aff0 027a                     jmp  #_osisnotnegative
-026f : e0e0                          skm  r0
-0270 : aff0 027a                     jmp  #_osisnotnegative
-0272 : 03f0 002d                     mov  r3,#'-'
-0274 : 2321                          stm  r3,r2,#1
-0275 : 03e1                          mov  r3,#1
-0276 : 2320                          stm  r3,r2,#0
-0277 : 70f0 ffff                     xor  r0,#$ffff
-0279 : 30e1                          inc  r0
-027a :                               ._osisnotnegative
-027a : 61f0 001f                     and  r1,#$001f
-027c : 0310                          mov  r3,r1,#0
-027d : adf0 0288                     jsr  #_osisrecurse
-027f : 00f0 400f                     mov  r0,#convbuffer
-0281 : 11c0 12c1 13c2 14c3 1dc4      pop  r1,r2,r3,r4,link
-0287 : afd0                          ret
-0288 :                               ._osisrecurse
-0288 : 5ce2 21c0 2dc1                push  r1,link
-028b : 0130                          mov  r1,r3,#0
-028c : adf0 0010                     jsr  #osudivide16
-028e : b0e0                          skz  r0
-028f : adf0 0288                     jsr  #_osisrecurse
-0291 : 51ea                          sub  r1,#10
-0292 : e1e0                          skm  r1
-0293 : 31e7                          add  r1,#7
-0294 : 31f0 003a                     add  r1,#58
-0296 : 1020                          ldm  r0,r2,#0
-0297 : 90e1                          ror  r0,#1
-0298 : d0e0                          skp  r0
-0299 : 91e8                          ror  r1,#8
-029a : 60f0 7fff                     and  r0,#$7fff
-029c : 30f0 4010                     add  r0,#convbuffer+1
-029e : 1400                          ldm  r4,r0,#0
-029f : 3410                          add  r4,r1,#0
-02a0 : 2400                          stm  r4,r0,#0
-02a1 : 2e01                          stm  r14,r0,#1
-02a2 : 1020                          ldm  r0,r2,#0
-02a3 : 30e1                          inc  r0
-02a4 : 2020                          stm  r0,r2,#0
-02a5 : 11c0 1dc1 3ce2                pop  r1,link
-02a8 : afd0                          ret
-02a9 :                               .osxuppercase
-02a9 : 5ce1 21c0                     push  r1
-02ab : 0100                          mov  r1,r0,#0
-02ac : 61f0 00ff                     and  r1,#$00ff
-02ae : 51f0 0061                     sub  r1,#'a'
-02b0 : ffe1                          skge
-02b1 : aff0 02b8                     jmp  #_osucexit
-02b3 : 51f0 001a                     sub  r1,#26
-02b5 : ffe1                          skge
-02b6 : 50f0 0020                     sub  r0,#32
-02b8 :                               ._osucexit
-02b8 : 11c0 3ce1                     pop  r1
-02ba : afd0                          ret
-02bb :                               .osxlowercase
-02bb : 5ce1 21c0                     push  r1
-02bd : 0100                          mov  r1,r0,#0
-02be : 61f0 00ff                     and  r1,#$00ff
-02c0 : 51f0 0041                     sub  r1,#65
-02c2 : ffe1                          skge
-02c3 : aff0 02ca                     jmp  #_oslcexit
-02c5 : 51f0 001a                     sub  r1,#26
-02c7 : ffe1                          skge
-02c8 : 30f0 0020                     add  r0,#32
-02ca :                               ._oslcexit
-02ca : 11c0 3ce1                     pop  r1
-02cc : afd0                          ret
-02cd :                               .osxwordlength
-02cd : 1000                          ldm  r0,r0,#0
-02ce : 30e1                          inc  r0
-02cf : 90e1                          ror  r0,#1
-02d0 : 60f0 7fff                     and  r0,#$7fff
-02d2 : afd0                          ret
-02d3 :                               .keyboardmapping
-02d3 : 3231 3433 3635 3837 3039      byte 49,50,51,52,53,54,55,56,57,48,45,61,8,0,0,0
-02db : 7109 6577 7472 7579 6f69      byte 9,113,119,101,114,116,121,117,105,111,112,91,
-02e3 : 7361 6664 6867 6b6a 3b6c      byte 97,115,100,102,103,104,106,107,108,59,39,35,1
-02eb : 5c20 787a 7663 6e62 2c6d      byte 32,92,122,120,99,118,98,110,109,44,46,47,0,0,
-02f3 : 0201 0403 0000 0000 0000      byte 1,2,3,4,0,0,0,0,0,0,0,0,0,0,0,0
-02fb :                               .shifttable
-02fb : 2740                          byte  64, 39
-02fc : 2c3c                          byte  60, 44
-02fd : 2d5f                          byte  95, 45
-02fe : 2e3e                          byte  62, 46
-02ff : 2f3f                          byte  63, 47
-0300 : 3029                          byte  41, 48
-0301 : 3121                          byte  33, 49
-0302 : 3222                          byte  34, 50
-0303 : 3323                          byte  35, 51
-0304 : 3424                          byte  36, 52
-0305 : 3525                          byte  37, 53
-0306 : 365e                          byte  94, 54
-0307 : 3726                          byte  38, 55
-0308 : 382a                          byte  42, 56
-0309 : 3928                          byte  40, 57
-030a : 3b3a                          byte  58, 59
-030b : 3d2b                          byte  43, 61
-030c : 5b7b                          byte 123, 91
-030d : 5d7d                          byte 125, 93
-030e : 0000                          byte  0,0
-030f :                               .bootprompt
-030f : 0035 0f10 0c16 2a2a 4520      string "[10,0f,16,0c]** eris retrocomputer **[0d,1
-032b :                               .fontdata
-032b : 0000 0000 0000 0000 0000      word 0,0,0,0,0,0,0,0,12288,30720,30720,12288,12288
+0123 : ade2                          jsr  #oswaitblitter
+0124 : 20f0 ff23                     stm  r0,#blittercmask
+0126 : 00f0 013e                     mov  r0,#_osfsbar
+0128 : 20f0 ff22                     stm  r0,#blitterdata
+012a : 01f0 0130                     mov  r1,#pixelwidth-16
+012c :                               ._osifillloop
+012c : 21f0 ff20                     stm  r1,#blitterx
+012e : 2ef0 ff21                     stm  r14,#blittery
+0130 : 00f0 80f0                     mov  r0,#$8000+pixelheight
+0132 : 20f0 ff24                     stm  r0,#blittercmd
+0134 : 51f0 0010                     sub  r1,#16
+0136 : e1e0                          skm  r1
+0137 : aff0 012c                     jmp  #_osifillloop
+0139 : 10c0 11c1 1dc2 3ce3           pop  r0,r1,link
+013d : afd0                          ret
+013e :                               ._osfsbar
+013e : ffff                          word  $ffff
+013f :                               .osxdrawsolidcharacter
+013f : 5ce3 20c0 21c1 2dc2           push  r0,r1,link
+0143 : 0100                          mov  r1,r0,#0
+0144 : 60f0 f000                     and  r0,#$f000
+0146 : 90e4                          ror  r0,#4
+0147 : 30f0 007f                     add  r0,#$7f
+0149 : adec                          jsr  #osdrawcharacter
+014a : 0010                          mov  r0,r1,#0
+014b : adec                          jsr  #osdrawcharacter
+014c : 10c0 11c1 1dc2 3ce3           pop  r0,r1,link
+0150 : afd0                          ret
+0151 :                               .osxdrawcharacter
+0151 : 5ce4 20c0 21c1 22c2 2dc3      push  r0,r1,r2,link
+0156 : 0200                          mov  r2,r0,#0
+0157 : 60f0 007f                     and  r0,#$7f
+0159 : 50f0 0021                     sub  r0,#33
+015b : d0e0                          skp  r0
+015c : aff0 0178                     jmp  #_osdcexit
+015e : ade2                          jsr  #oswaitblitter
+015f : 11f0 4002                     ldm  r1,#xgraphic
+0161 : 21f0 ff20                     stm  r1,#blitterx
+0163 : 11f0 4003                     ldm  r1,#ygraphic
+0165 : 21f0 ff21                     stm  r1,#blittery
+0167 : 11f0 4004                     ldm  r1,#colourmask
+0169 : 62f0 0f00                     and  r2,#$0f00
+016b : 3210                          add  r2,r1,#0
+016c : 92e8                          ror  r2,#8
+016d : 22f0 ff23                     stm  r2,#blittercmask
+016f : 90ed                          ror  r0,#13
+0170 : 01f0 03df                     mov  r1,#fontdata+8
+0172 : 3100                          add  r1,r0,#0
+0173 : 21f0 ff22                     stm  r1,#blitterdata
+0175 : 00e8                          mov  r0,#8
+0176 : 20f0 ff24                     stm  r0,#blittercmd
+0178 :                               ._osdcexit
+0178 : 10c0 11c1 12c2 1dc3 3ce4      pop  r0,r1,r2,link
+017d : afd0                          ret
+017e :                               .osxprintcharacter
+017e : 5ce6 20c0 21c1 22c2 23c3      push  r0,r1,r2,r3,r4,link
+0185 : 60f0 00ff                     and  r0,#$ff
+0187 : 0300                          mov  r3,r0,#0
+0188 : 53f0 0020                     sub  r3,#32
+018a : d3e0                          skp  r3
+018b : aff0 01b1                     jmp  #_ospccontrol
+018d : adf0 0200                     jsr  #_osprintcharacteratxy
+018f : 10f0 4007                     ldm  r0,#xtextpos
+0191 : 30e1                          inc  r0
+0192 : 20f0 4007                     stm  r0,#xtextpos
+0194 :                               ._ospcchecknewline
+0194 : 10f0 4007                     ldm  r0,#xtextpos
+0196 : 70f0 0028                     xor  r0,#charwidth
+0198 : b0e0                          skz  r0
+0199 : aff0 01a9                     jmp  #_ospcexit
+019b :                               ._ospcfreereturn
+019b : 2ef0 4007                     stm  r14,#xtextpos
+019d : 10f0 4008                     ldm  r0,#ytextpos
+019f : 30e1                          inc  r0
+01a0 : 20f0 4008                     stm  r0,#ytextpos
+01a2 :                               ._ospccheckscroll
+01a2 : 13f0 4008                     ldm  r3,#ytextpos
+01a4 : 73f0 001e                     xor  r3,#charheight
+01a6 : c3e0                          sknz  r3
+01a7 : adf0 0228                     jsr  #_ospcscroll
+01a9 :                               ._ospcexit
+01a9 : 10c0 11c1 12c2 13c3 14c4      pop  r0,r1,r2,r3,r4,link
+01b0 : afd0                          ret
+01b1 :                               ._ospccontrol
+01b1 : 33f0 0010                     add  r3,#16
+01b3 : d3e0                          skp  r3
+01b4 : aff0 01ba                     jmp  #_ospcnotcolour
+01b6 : 23f0 4005                     stm  r3,#fgrcolour
+01b8 : aff0 01a9                     jmp  #_ospcexit
+01ba :                               ._ospcnotcolour
+01ba : 30f0 01c0                     add  r0,#_ospcvectors
+01bc : 1000                          ldm  r0,r0,#0
+01bd : ad00                          brl  link,r0,#0
+01be : aff0 01a9                     jmp  #_ospcexit
+01c0 :                               ._ospcvectors
+01c0 : 01a9                          word  _ospcexit
+01c1 : 01f4                          word  _ospcmoveleft
+01c2 : 01f4                          word  _ospcmoveright
+01c3 : 01f4                          word  _ospcmoveup
+01c4 : 01f4                          word  _ospcmovedown
+01c5 : 01a9                          word  _ospcexit
+01c6 : 01a9                          word  _ospcexit
+01c7 : 01a9                          word  _ospcexit
+01c8 : 01f5                          word  _ospcbackspace
+01c9 : 01f2                          word  _ospctab
+01ca : 01a9                          word  _ospcexit
+01cb : 01d0                          word  _ospchome
+01cc : 01d5                          word  _ospcclear
+01cd : 01e9                          word  _ospcreturn
+01ce : 019b                          word  _ospcfreereturn
+01cf : 01f7                          word  _ospcswapcolours
+01d0 :                               ._ospchome
+01d0 : 2ef0 4007                     stm  r14,#xtextpos
+01d2 : 2ef0 4008                     stm  r14,#ytextpos
+01d4 : afd0                          ret
+01d5 :                               ._ospcclear
+01d5 : adf0 010e                     jsr  #osiclearscreen
+01d7 : adf0 01d0                     jsr  #_ospchome
+01d9 : 11f0 4001                     ldm  r1,#textmemory
+01db : 03f0 04b0                     mov  r3,#charwidth*charheight
+01dd : 10f0 4006                     ldm  r0,#bgrcolour
+01df : 90e4                          ror  r0,#4
+01e0 :                               ._ospcerase
+01e0 : 2010                          stm  r0,r1,#0
+01e1 : 31e1                          inc  r1
+01e2 : 53e1                          dec  r3
+01e3 : b3e0                          skz  r3
+01e4 : aff0 01e0                     jmp  #_ospcerase
+01e6 : 7110                          clr  r1
+01e7 : aff0 01a9                     jmp  #_ospcexit
+01e9 :                               ._ospcreturn
+01e9 : 00f0 0020                     mov  r0,#' '
+01eb : adf0 017e                     jsr  #osxprintcharacter
+01ed : 10f0 4007                     ldm  r0,#xtextpos
+01ef : b0e0                          skz  r0
+01f0 : aff0 01e9                     jmp  #_ospcreturn
+01f2 :                               ._ospctab
+01f2 : aff0 01a2                     jmp  #_ospccheckscroll
+01f4 :                               ._ospcmoveup
+01f4 :                               ._ospcmovedown
+01f4 :                               ._ospcmoveleft
+01f4 :                               ._ospcmoveright
+01f4 : afd0                          ret
+01f5 :                               ._ospcbackspace
+01f5 : aff0 01a9                     jmp  #_ospcexit
+01f7 :                               ._ospcswapcolours
+01f7 : 10f0 4005                     ldm  r0,#fgrcolour
+01f9 : 11f0 4006                     ldm  r1,#bgrcolour
+01fb : 21f0 4005                     stm  r1,#fgrcolour
+01fd : 20f0 4006                     stm  r0,#bgrcolour
+01ff : afd0                          ret
+0200 :                               ._osprintcharacteratxy
+0200 : 5ce2 20c0 2dc1                push  r0,link
+0203 : 11f0 4005                     ldm  r1,#fgrcolour
+0205 : 91e8                          ror  r1,#8
+0206 : 3010                          add  r0,r1,#0
+0207 : 11f0 4006                     ldm  r1,#bgrcolour
+0209 : 91e4                          ror  r1,#4
+020a : 3010                          add  r0,r1,#0
+020b : adf0 021d                     jsr  #_ossetchardrawpos
+020d : adee                          jsr  #osdrawsolidcharacter
+020e : 11f0 4007                     ldm  r1,#xtextpos
+0210 : 12f0 4008                     ldm  r2,#ytextpos
+0212 : 82f0 0028                     mult  r2,#charwidth
+0214 : 3120                          add  r1,r2,#0
+0215 : 12f0 4001                     ldm  r2,#textmemory
+0217 : 3120                          add  r1,r2,#0
+0218 : 2020                          stm  r0,r2,#0
+0219 : 10c0 1dc1 3ce2                pop  r0,link
+021c : afd0                          ret
+021d :                               ._ossetchardrawpos
+021d : 11f0 4007                     ldm  r1,#xtextpos
+021f : 91ed                          ror  r1,#13
+0220 : 21f0 4002                     stm  r1,#xgraphic
+0222 : 11f0 4008                     ldm  r1,#ytextpos
+0224 : 91ed                          ror  r1,#13
+0225 : 21f0 4003                     stm  r1,#ygraphic
+0227 : afd0                          ret
+0228 :                               ._ospcscroll
+0228 : 5ce1 2dc0                     push  link
+022a : 13f0 4001                     ldm  r3,#textmemory
+022c : 0430                          mov  r4,r3,#0
+022d : 34f0 0028                     add  r4,#charwidth
+022f : 01f0 0488                     mov  r1,#charwidth*(charheight-1)
+0231 :                               ._ospccopy1
+0231 : 1040                          ldm  r0,r4,#0
+0232 : 2030                          stm  r0,r3,#0
+0233 : 33e1                          inc  r3
+0234 : 34e1                          inc  r4
+0235 : 51e1                          dec  r1
+0236 : b1e0                          skz  r1
+0237 : aff0 0231                     jmp  #_ospccopy1
+0239 : 1dc0 3ce1                     pop  link
+023b : afd0                          ret
+023c :                               .osxprintstring
+023c : 5ce2 20c0 2dc1                push  r0,link
+023f : adf0 024e                     jsr  #_osxpinlineprinter
+0241 : 10c0 1dc1 3ce2                pop  r0,link
+0244 : afd0                          ret
+0245 :                               .osxprintinline
+0245 : 5ce1 20c0                     push  r0
+0247 : 00d0                          mov  r0,link,#0
+0248 : adf0 024e                     jsr  #_osxpinlineprinter
+024a : 0d00                          mov  link,r0,#0
+024b : 10c0 3ce1                     pop  r0
+024d : afd0                          ret
+024e :                               ._osxpinlineprinter
+024e : 5ce3 21c0 22c1 2dc2           push  r1,r2,link
+0252 : 0101                          mov  r1,r0,#1
+0253 : adf0 001e                     jsr  #oswordlength
+0255 : 0200                          mov  r2,r0,#0
+0256 :                               ._osxpiploop
+0256 : c2e0                          sknz  r2
+0257 : aff0 0261                     jmp  #_osxpipexit
+0259 : 1010                          ldm  r0,r1,#0
+025a : ade4                          jsr  #osprintcharacter
+025b : 90e8                          ror  r0,#8
+025c : ade4                          jsr  #osprintcharacter
+025d : 31e1                          inc  r1
+025e : 52e1                          dec  r2
+025f : aff0 0256                     jmp  #_osxpiploop
+0261 :                               ._osxpipexit
+0261 : 0010                          mov  r0,r1,#0
+0262 : 11c0 12c1 1dc2 3ce3           pop  r1,r2,link
+0266 : afd0                          ret
+0267 :                               .osxbeep
+0267 : 5ce2 20c0 21c1                push  r0,r1
+026a : 20f0 ff41                     stm  r0,#sndtone1
+026c : 10f0 ff30                     ldm  r0,#hwtimer
+026e : 3100                          add  r1,r0,#0
+026f :                               ._osbpwait
+026f : 10f0 ff30                     ldm  r0,#hwtimer
+0271 : 5010                          sub  r0,r1,#0
+0272 : d0e0                          skp  r0
+0273 : aff0 026f                     jmp  #_osbpwait
+0275 : 2ef0 ff41                     stm  r14,#sndtone1
+0277 : 10c0 11c1 3ce2                pop  r0,r1
+027a : afd0                          ret
+027b :                               .osxudivide16
+027b : 5ce3 22c0 23c1 24c2           push  r2,r3,r4
+027f : 7220                          clr  r2
+0280 : 03f0 0010                     mov  r3,#16
+0282 :                               ._osxudloop1
+0282 : 3220                          add  r2,r2,#0
+0283 : 3000                          add  r0,r0,#0
+0284 : 42e0                          adc  r2,#0
+0285 : 0420                          mov  r4,r2,#0
+0286 : 5410                          sub  r4,r1,#0
+0287 : ffe0                          sklt
+0288 : 0240                          mov  r2,r4,#0
+0289 : ffe0                          sklt
+028a : 30e1                          inc  r0
+028b : 53e1                          dec  r3
+028c : b3e0                          skz  r3
+028d : aff0 0282                     jmp  #_osxudloop1
+028f : 0120                          mov  r1,r2,#0
+0290 : 12c0 13c1 14c2 3ce3           pop  r2,r3,r4
+0294 : afd0                          ret
+0295 :                               .osxsdivide16
+0295 : 5ce3 22c0 23c1 2dc2           push  r2,r3,link
+0299 : 0300                          mov  r3,r0,#0
+029a : 7310                          xor  r3,r1,#0
+029b : 7220                          clr  r2
+029c : 5200                          sub  r2,r0,#0
+029d : d0e0                          skp  r0
+029e : 0020                          mov  r0,r2,#0
+029f : 7220                          clr  r2
+02a0 : 5210                          sub  r2,r1,#0
+02a1 : d1e0                          skp  r1
+02a2 : 0120                          mov  r1,r2,#0
+02a3 : adf0 027b                     jsr  #osxudivide16
+02a5 : 7220                          clr  r2
+02a6 : 5200                          sub  r2,r0,#0
+02a7 : d3e0                          skp  r3
+02a8 : 0020                          mov  r0,r2,#0
+02a9 : 12c0 13c1 1dc2 3ce3           pop  r2,r3,link
+02ad : afd0                          ret
+02ae :                               .osxrandom16
+02ae : 5ce1 21c0                     push  r1
+02b0 : 10f0 4010                     ldm  r0,#randomseed
+02b2 : 90e1                          ror  r0,#1
+02b3 : d0e0                          skp  r0
+02b4 : 70f0 3400                     xor  r0,#$3400
+02b6 : 20f0 4010                     stm  r0,#randomseed
+02b8 : 11f0 ff30                     ldm  r1,#hwtimer
+02ba : 7010                          xor  r0,r1,#0
+02bb : 11c0 3ce1                     pop  r1
+02bd : afd0                          ret
+02be :                               .osxstrtoint
+02be : 5ce6 22c0 23c1 24c2 25c3      push  r2,r3,r4,r5,r6,link
+02c5 : 0200                          mov  r2,r0,#0
+02c6 : 7330                          clr  r3
+02c7 : 7440                          clr  r4
+02c8 : 06e1                          mov  r6,#1
+02c9 : ad20                          brl  r13,r2,#0
+02ca : 60f0 00ff                     and  r0,#$00ff
+02cc : 0500                          mov  r5,r0,#0
+02cd : 75f0 002d                     xor  r5,#'-'
+02cf : b5e0                          skz  r5
+02d0 : aff0 02d4                     jmp  #_ossiloop
+02d2 : 34e1                          inc  r4
+02d3 : ad20                          brl  r13,r2,#0
+02d4 :                               ._ossiloop
+02d4 : adf0 001a                     jsr  #osuppercase
+02d6 : 50f0 0030                     sub  r0,#'0'
+02d8 : ffe1                          skge
+02d9 : aff0 02f0                     jmp  #_ossiexit
+02db : 0500                          mov  r5,r0,#0
+02dc : 50ea                          sub  r0,#10
+02dd : ffe1                          skge
+02de : aff0 02e5                     jmp  #_osshavedigit
+02e0 : 55e7                          sub  r5,#7
+02e1 : 50e7                          sub  r0,#7
+02e2 : ffe1                          skge
+02e3 : aff0 02f0                     jmp  #_ossiexit
+02e5 :                               ._osshavedigit
+02e5 : 0050                          mov  r0,r5,#0
+02e6 : 5010                          sub  r0,r1,#0
+02e7 : ffe0                          sklt
+02e8 : aff0 02f0                     jmp  #_ossiexit
+02ea : 8310                          mult  r3,r1,#0
+02eb : 3350                          add  r3,r5,#0
+02ec : 7660                          clr  r6
+02ed : ad20                          brl  r13,r2,#0
+02ee : aff0 02d4                     jmp  #_ossiloop
+02f0 :                               ._ossiexit
+02f0 : 7550                          clr  r5
+02f1 : 5530                          sub  r5,r3,#0
+02f2 : b4e0                          skz  r4
+02f3 : 0350                          mov  r3,r5,#0
+02f4 : 0030                          mov  r0,r3,#0
+02f5 : 0160                          mov  r1,r6,#0
+02f6 : 12c0 13c1 14c2 15c3 16c4      pop  r2,r3,r4,r5,r6,link
+02fd : afd0                          ret
+02fe :                               .osxinttostr
+02fe : 5ce5 21c0 22c1 23c2 24c3      push  r1,r2,r3,r4,link
+0304 : 02f0 4011                     mov  r2,#convbuffer
+0306 : 2e20                          stm  r14,r2,#0
+0307 : 2e21                          stm  r14,r2,#1
+0308 : e1e0                          skm  r1
+0309 : aff0 0316                     jmp  #_osisnotnegative
+030b : e0e0                          skm  r0
+030c : aff0 0316                     jmp  #_osisnotnegative
+030e : 03f0 002d                     mov  r3,#'-'
+0310 : 2321                          stm  r3,r2,#1
+0311 : 03e1                          mov  r3,#1
+0312 : 2320                          stm  r3,r2,#0
+0313 : 70f0 ffff                     xor  r0,#$ffff
+0315 : 30e1                          inc  r0
+0316 :                               ._osisnotnegative
+0316 : 61f0 001f                     and  r1,#$001f
+0318 : 0310                          mov  r3,r1,#0
+0319 : adf0 0324                     jsr  #_osisrecurse
+031b : 00f0 4011                     mov  r0,#convbuffer
+031d : 11c0 12c1 13c2 14c3 1dc4      pop  r1,r2,r3,r4,link
+0323 : afd0                          ret
+0324 :                               ._osisrecurse
+0324 : 5ce2 21c0 2dc1                push  r1,link
+0327 : 0130                          mov  r1,r3,#0
+0328 : adf0 0010                     jsr  #osudivide16
+032a : b0e0                          skz  r0
+032b : adf0 0324                     jsr  #_osisrecurse
+032d : 51ea                          sub  r1,#10
+032e : e1e0                          skm  r1
+032f : 31e7                          add  r1,#7
+0330 : 31f0 003a                     add  r1,#58
+0332 : 1020                          ldm  r0,r2,#0
+0333 : 90e1                          ror  r0,#1
+0334 : d0e0                          skp  r0
+0335 : 91e8                          ror  r1,#8
+0336 : 60f0 7fff                     and  r0,#$7fff
+0338 : 30f0 4012                     add  r0,#convbuffer+1
+033a : 1400                          ldm  r4,r0,#0
+033b : 3410                          add  r4,r1,#0
+033c : 2400                          stm  r4,r0,#0
+033d : 2e01                          stm  r14,r0,#1
+033e : 1020                          ldm  r0,r2,#0
+033f : 30e1                          inc  r0
+0340 : 2020                          stm  r0,r2,#0
+0341 : 11c0 1dc1 3ce2                pop  r1,link
+0344 : afd0                          ret
+0345 :                               .osxuppercase
+0345 : 5ce1 21c0                     push  r1
+0347 : 0100                          mov  r1,r0,#0
+0348 : 61f0 00ff                     and  r1,#$00ff
+034a : 51f0 0061                     sub  r1,#'a'
+034c : ffe1                          skge
+034d : aff0 0354                     jmp  #_osucexit
+034f : 51f0 001a                     sub  r1,#26
+0351 : ffe1                          skge
+0352 : 50f0 0020                     sub  r0,#32
+0354 :                               ._osucexit
+0354 : 11c0 3ce1                     pop  r1
+0356 : afd0                          ret
+0357 :                               .osxlowercase
+0357 : 5ce1 21c0                     push  r1
+0359 : 0100                          mov  r1,r0,#0
+035a : 61f0 00ff                     and  r1,#$00ff
+035c : 51f0 0041                     sub  r1,#65
+035e : ffe1                          skge
+035f : aff0 0366                     jmp  #_oslcexit
+0361 : 51f0 001a                     sub  r1,#26
+0363 : ffe1                          skge
+0364 : 30f0 0020                     add  r0,#32
+0366 :                               ._oslcexit
+0366 : 11c0 3ce1                     pop  r1
+0368 : afd0                          ret
+0369 :                               .osxwordlength
+0369 : 1000                          ldm  r0,r0,#0
+036a : 30e1                          inc  r0
+036b : 90e1                          ror  r0,#1
+036c : 60f0 7fff                     and  r0,#$7fff
+036e : afd0                          ret
+036f :                               .keyboardmapping
+036f : 3231 3433 3635 3837 3039      byte 49,50,51,52,53,54,55,56,57,48,45,61,8,0,0,0
+0377 : 7109 6577 7472 7579 6f69      byte 9,113,119,101,114,116,121,117,105,111,112,91,
+037f : 7361 6664 6867 6b6a 3b6c      byte 97,115,100,102,103,104,106,107,108,59,39,35,1
+0387 : 5c20 787a 7663 6e62 2c6d      byte 32,92,122,120,99,118,98,110,109,44,46,47,0,0,
+038f : 0201 0403 0000 0000 0000      byte 1,2,3,4,0,0,0,0,0,0,0,0,0,0,0,0
+0397 :                               .shifttable
+0397 : 2740                          byte  64, 39
+0398 : 2c3c                          byte  60, 44
+0399 : 2d5f                          byte  95, 45
+039a : 2e3e                          byte  62, 46
+039b : 2f3f                          byte  63, 47
+039c : 3029                          byte  41, 48
+039d : 3121                          byte  33, 49
+039e : 3222                          byte  34, 50
+039f : 3323                          byte  35, 51
+03a0 : 3424                          byte  36, 52
+03a1 : 3525                          byte  37, 53
+03a2 : 365e                          byte  94, 54
+03a3 : 3726                          byte  38, 55
+03a4 : 382a                          byte  42, 56
+03a5 : 3928                          byte  40, 57
+03a6 : 3b3a                          byte  58, 59
+03a7 : 3d2b                          byte  43, 61
+03a8 : 5b7b                          byte 123, 91
+03a9 : 5d7d                          byte 125, 93
+03aa : 0000                          byte  0,0
+03ab :                               .bootprompt
+03ab : 0055 0f1c 0c16 2a2a 4520      string "[1c,0f,16,0c]** eris retrocomputer **[0d,0
+03d7 :                               .fontdata
+03d7 : 0000 0000 0000 0000 0000      word 0,0,0,0,0,0,0,0,12288,30720,30720,12288,12288
 4000 :                               .initialisedstart
 4000 :                               .highmemory
 4001 :                               .textmemory
@@ -562,11 +686,13 @@
 4004 :                               .colourmask
 4005 :                               .fgrcolour
 4006 :                               .bgrcolour
-4007 :                               .currentkey
-4008 :                               .currentrowstatus
-400d :                               .keyrepeattime
-400e :                               .initialisedend
-400e :                               .randomseed
-400f :                               .convbuffer
-4019 :                               .fontbuffer
-4021 :                               .freememory
+4007 :                               .xtextpos
+4008 :                               .ytextpos
+4009 :                               .currentkey
+400a :                               .currentrowstatus
+400f :                               .keyrepeattime
+4010 :                               .initialisedend
+4010 :                               .randomseed
+4011 :                               .convbuffer
+401b :                               .fontbuffer
+4023 :                               .freememory

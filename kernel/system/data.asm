@@ -35,6 +35,11 @@
 .bgrColour 									; background colour
 		fill 	1		
 
+.xTextPos 									; text position
+		fill 	1
+.yTextPos
+		fill 	1
+				
 .currentKey									; character code of current key, 0 if none pressed
 		fill 	1 							
 

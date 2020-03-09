@@ -59,6 +59,12 @@
 		mov 	sp,r0,#0 					; initialise Stack Pointer.
 		stm 	r0,#randomSeed 				; initialise the random number generator
 ;
+;		Initialise the colour mask
+;
+		mov 	r0,#15
+		stm 	r0,#colourMask
+
+;
 ;		Show the boot prompt
 ;		
 		mov 	r0,#bootPrompt 				; display boot prompt.		
@@ -84,20 +90,6 @@
 		ror 	r0,#1
 		ror 	r1,#1
 ;		jsr 	#OSBeep
-
-		mov 	r0,#15
-		stm 	r0,#colourMask
-		mov 	r0,#1
-		stm 	r0,#bgrColour
-		mov 	r5,#6
-		stm 	r5,#fgrColour
-.loop	inc 	r5
-		stm 	r5,#$6000
-		mov 	r0,r5,#0
-		and 	r0,#15		
-		stm 	r0,#bgrColour
-		jsr 	#OSIClearScreen
-		jmp 	#loop
 
 .halt 	jmp 	#halt		
 

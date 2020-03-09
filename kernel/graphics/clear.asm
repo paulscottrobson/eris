@@ -48,5 +48,5 @@
 		pop 	r0,r1,link
 		ret
 
-._OSFSBar
+._OSFSBar									; solid bar for screen filling.
 		word 	$FFFF		
