@@ -245,5 +245,53 @@
 ; *****************************************************************************
 
 ._OSPCScroll
+		ldm 	r0,#textMemory 					; first physically scroll text memory
+		mov 	r1,r0,#0 						; R0 = target, R1 = source
+		add 	r1,#charWidth
+		mov 	r2,#charWidth*(charHeight-1)	; copy whole screen bar one line
+._OSPCCopy1
+		ldm 	r3,r1,#0
+		stm		r3,r0,#0
+		inc 	r0
+		inc 	r1
+		dec 	r2
+		skz 	r2
+		jmp 	#_OSPCCopy1
+		mov 	r2,#charHeight 					; and blank the last line.
+		ldm 	r1,#bgrColour 					; background colour
+		ror 	r1,#4
+._OSPCCopy2
+		stm 	r1,r0,#0
+		inc 	r0
+		dec 	r2
+		skz 	r2
+		jmp 	#_OSPCCopy2
+		;
+		clr 	r1 								; r1 = current line y graphics position
+		ldm 	r2,#textMemory 					; r2 = text memory source
+		;
+._OSPCNextLine
+		mov 	r3,#charWidth 					; r3 = number of characters per line.
+		clr 	r4 								; r4 = current line x graphics position
+._OSPCNextCharacter
+		stm 	r4,#xGraphic 					; update graphic position
+		stm 	r1,#yGraphic 
+		ldm 	r0,r2,#0 						; read character to output
+		inc 	r2
+		jsr 	#OSXDrawSolidCharacter 			; display it
+		add 	r4,#8 							; advance
+		dec 	r3 								; do a line
+		skz 	r3
+		jmp 	#_OSPCNextCharacter
+		add 	r1,#8
+		mov 	r0,r1,#0 						; check EOS
+		xor 	r0,#charHeight*8
+		skz 	r0
+		jmp 	#_OSPCNextLine
+		mov 	r0,#charHeight-1 				; set the vertical cursor pos
+		stm 	r0,#yTextPos 				
+		jmp 	#_OSPCExit
+
 		break
+
 		; #TODO
