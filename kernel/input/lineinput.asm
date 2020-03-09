@@ -3,7 +3,7 @@
 ;
 ;		Name:		lineinput.asm
 ;		Purpose:	Line Input code
-;		Created:	29th February 2020
+;		Created:	9th March 2020
 ;		Author:		Paul Robson (paul@robsons.org.uk)
 ;
 ; *****************************************************************************
@@ -14,11 +14,12 @@
 ;			Input a line from the screen, return text as ASCIIZ @ R0  
 ;
 ;							(note the text is coloured)
-;	(Note, the text is in screen memory, so it may change if you print to it)
+;	(Note, the text is in screen memory, so it may change if you print to it,
+;	 if you wish to do this copy it to a buffer)
 ; *****************************************************************************
 
 .OSXLineInput
-		push 	r1,link
+		push 	r1,link		
 		clr 	r0 								; don't print anything first time.
 ._OSXLIEdit		
 		jsr 	#OSPrintCharacter 				; print char
@@ -27,11 +28,11 @@
 		sub 	r1,#13
 		skz 	r1
 		jmp 	#_OSXLIEdit
+		;
 		mov 	r0,#14 							; print a non-destructive CR
 		jsr 	#OSXPrintCharacter 
-		ldm 	r0,#textPosition 				; R0 = position of start of line after edit line.
-		ldm 	r1,#textMemory
-		add 	r0,r1,#0
+		jsr 	#_OSCurrentTextR1				; get address into R1
+		mov 	r0,r1,#0 						; put into R0
 		;
 		;		Keep going back until you hit a $xx00 at the end of the previous line. Note
 		;		that there is a $0000 word before the top left character in the text buffer

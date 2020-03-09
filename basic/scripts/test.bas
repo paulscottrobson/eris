@@ -3,5 +3,5 @@
 20 dim d2$(5)
 40 a$="ab":b$="de"
 50 print "World"+chr$(8);
-60 goto 60
+60 stop
 

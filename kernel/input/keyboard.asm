@@ -34,7 +34,7 @@
 		jmp 	#_GKDebounce
 		;
 		ldm 	r5,#keyboardPort 				; read keyboard port status
-		and 	r5,#$0FFF 						; clear any common keys (bits 12-15 may be used for break)
+		and 	r5,#$3FFF 						; clear any common keys (bits 14-15 may be used for break)
 		add 	r4,r5,#0 						; add to sum of all key inputs.
 		;
 		ldm 	r0,r2,#0 						; read current row status.

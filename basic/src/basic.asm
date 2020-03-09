@@ -35,7 +35,8 @@
 		ldm 	sp,#initialSP 				; reset the stack
 		mov 	r0,#$12 					; go green
 		jsr 	#OSPrintCharacter
-.h1		;jsr 	#OSLineInput
+.h1		jsr 	#OSLineInput
+		inc 	r9
 	 	jmp 	#h1
 
 

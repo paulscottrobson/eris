@@ -30,6 +30,12 @@
 .OSDrawSolidCharacter
 		jmp 	#OSXDrawSolidCharacter
 		
+.OSCursorGet		
+		jmp 	#OSXCursorGet
+		
+.OSLineInput
+		jmp 	#OSXLineInput		
+		
 .OSUDivide16		
 		jmp 	#OSXUDivide16	
 

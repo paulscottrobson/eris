@@ -191,7 +191,7 @@
 ; *****************************************************************************
 
 ._OSPrintCharacterAtXY
-		push 	r0,link		
+		push 	r0,r1,r2,link		
 		ldm 	r1,#fgrColour 					; Add FGR << 8
 		ror 	r1,#8
 		add 	r0,r1,#0
@@ -200,15 +200,27 @@
 		add 	r0,r1,#0 						; R0 now is the character
 		jsr 	#_OSSetCharDrawPos
 		jsr 	#OSDrawSolidCharacter			; draw it.
-		;
+
+		jsr 	#_OSCurrentTextR1				; get address
+		stm 	r0,r1,#0 						; write into buffer.
+		pop 	r0,r1,r2,link
+		ret
+
+; *****************************************************************************
+;
+;			Put the text buffer address of current character in R1
+;
+; *****************************************************************************
+
+._OSCurrentTextR1
+		push 	r2
 		ldm 	r1,#xTextPos 					; calculate address in buffer
 		ldm 	r2,#yTextPos
 		mult 	r2,#charWidth
 		add 	r1,r2,#0
 		ldm 	r2,#textMemory
 		add 	r1,r2,#0
-		stm 	r0,r1,#0 						; write into buffer.
-		pop 	r0,link
+		pop 	r2
 		ret
 
 ; *****************************************************************************

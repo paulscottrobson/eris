@@ -38,6 +38,7 @@
 		stm 	r0,#blitterData
 		mov 	r1,#PixelWidth-16 			; position of first band
 ._OSIFillLoop		
+		jsr 	#OSWaitBlitter 				; wait for blitter
 		stm 	r1,#blitterX 				; set position to (x,0)
 		stm 	r14,#blitterY
 		mov 	r0,#$8000+PixelHeight		; draw bar
