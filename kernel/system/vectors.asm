@@ -53,7 +53,7 @@
 
 .OSWordLength
 		jmp 	#OSXWordLength
-
+		
 .OSManager
 		ret
 		

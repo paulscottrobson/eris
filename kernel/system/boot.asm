@@ -87,34 +87,17 @@
 
 		mov 	r0,#15
 		stm 	r0,#colourMask
-		stm 	r14,#xGraphic
-		stm 	r14,#yGraphic
-		mov 	r5,#$0121
-		mov 	r7,r5,#0
-		clr 	r6
-.drawloop
-		inc 	r5
+		mov 	r0,#1
+		stm 	r0,#bgrColour
+		mov 	r5,#6
+		stm 	r5,#fgrColour
+.loop	inc 	r5
+		stm 	r5,#$6000
 		mov 	r0,r5,#0
-		jsr 	#OSDrawSolidCharacter
-		ldm 	r0,#xGraphic
-		add 	r0,#8
-		stm 	r0,#xGraphic
-		sub 	r0,#320
-		skge 	r0
-		jmp 	#drawloop
-		stm 	r14,#xGraphic
-		ldm 	r0,#yGraphic
-		add 	r0,#8
-		stm 	r0,#yGraphic
-		sub 	r0,#240
-		skge 	r0
-		jmp 	#drawloop
-		stm 	r14,#yGraphic
-		add 	r7,#$40
-		mov 	r5,r7,#0
-		inc 	r6
-		stm 	r6,#$6000
-		jmp 	#drawloop
+		and 	r0,#15		
+		stm 	r0,#bgrColour
+		jsr 	#OSIClearScreen
+		jmp 	#loop
 
 .halt 	jmp 	#halt		
 

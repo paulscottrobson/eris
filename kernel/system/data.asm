@@ -30,7 +30,9 @@
 
 .colourMask 								; colour mask
 		fill 	1		
-.colourPaint								; draw colour in MSB.
+.fgrColour 									; foreground colour
+		fill 	1		
+.bgrColour 									; background colour
 		fill 	1		
 
 .currentKey									; character code of current key, 0 if none pressed
