@@ -26,7 +26,7 @@
 		jmp 	#_OSPCControl 					
 		;
 		;		Standard character 32-127
-		;
+		;		
 		jsr 	#_OSPrintCharacterAtXY 			; write character to display.
 		ldm 	r0,#xTextPos 					; move right.
 		inc 	r0
@@ -123,12 +123,15 @@
 		jmp 	#_OSPCExit 						; exit
 
 ._OSPCReturn
-		mov 	r0,#' '							; print space until new line
-		jsr 	#OSXPrintCharacter
+		clr 	r0								; print null/space until new line
+		jsr 	#_OSPrintCharacterAtXY
 		ldm 	r0,#xTextPos
+		inc 	r0
+		stm 	r0,#xTextPos
+		xor 	r0,#charWidth
 		skz 	r0
 		jmp 	#_OSPCReturn
-		jmp 	#_OSPCCheckScroll 				; check if we need to scroll.
+		jmp 	#_OSPCFreeReturn 				; check if we need to scroll.
 
 ._OSPCTab
 		ldm 	r0,#xTextPos
@@ -138,17 +141,40 @@
 		jmp 	#_OSPCCheckNewLine				; check off rhs and return.
 
 ._OSPCMoveUp 									; chr(1-4) move cursor.
-		; # TODO
+		mov 	r0,#-1
+		sknz 	r0
 ._OSPCMoveDown
-		; # TODO
+		mov 	r0,#1
+		mov 	r2,#charHeight
+		mov 	r3,#yTextPos
+._OSPCAdjust		
+		ldm 	r1,r3,#0 						; read it
+		add 	r1,r0,#0 						; new position
+		skp 	r1 								; add size if -ve
+		add 	r1,r2,#0
+		sub 	r1,r2,#0 						; subtract
+		skp 	r1 	
+		add 	r1,r2,#0 						; re-add if gone -ve
+		stm 	r1,r3,#0 						; write back
+		ret	
+
 ._OSPCMoveLeft
-		; # TODO
+		mov 	r0,#-1
+		sknz 	r0
 ._OSPCMoveRight
-		; # TODO
-		ret
+		mov 	r0,#1
+		mov 	r2,#charWidth
+		mov 	r3,#xTextPos
+		jmp 	#_OSPCAdjust
 
 ._OSPCBackSpace 								; chr(8) backspace
-		; # TODO
+		ldm 	r0,#xTextPos 					; exit if x = 0
+		sknz 	r0
+		ret
+		dec 	r0
+		stm 	r0,#xTextPos 					; go back one.
+		mov 	r0,#32
+		jsr 	#_OSPrintCharacterAtXY 			; and erase it.
 		jmp 	#_OSPCExit
 
 ._OSPCSwapColours 								; chr(15) swap background and foreground
@@ -181,7 +207,7 @@
 		add 	r1,r2,#0
 		ldm 	r2,#textMemory
 		add 	r1,r2,#0
-		stm 	r0,r2,#0 						; write into buffer.
+		stm 	r0,r1,#0 						; write into buffer.
 		pop 	r0,link
 		ret
 
