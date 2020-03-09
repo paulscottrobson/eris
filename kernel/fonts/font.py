@@ -20,6 +20,7 @@ for i in range(0,8):
 	fnt[(126-32)*8+i] = 170 if (i & 1) else 84
 	fnt[(127-32)*8+i] = 0xFF
 h = open("font.inc","w")
+h.write("\torg kernelEnd-8*96\n")
 h.write(".FontData:\n")
 h.write("\tword {0}\n\n".format(",".join([str(x << 8) for x in fnt])))
 h.close()

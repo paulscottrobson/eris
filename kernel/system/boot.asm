@@ -91,7 +91,5 @@
 		ror 	r1,#1
 ;		jsr 	#OSBeep
 
-.halt 	jmp 	#halt		
-
-	 	jmp 	#kernelEnd 					; enter the ROM.
-
+		jmp 	#KernelEnd
+		

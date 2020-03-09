@@ -9,6 +9,6 @@ rem python uasm.py
 pushd ..\kernel
 call build.bat
 popd
-rem pushd ..\basic
-rem call build.bat
-rem popd
+pushd ..\basic
+call build.bat
+popd

@@ -128,10 +128,14 @@
 		ldm 	r0,#xTextPos
 		skz 	r0
 		jmp 	#_OSPCReturn
+		jmp 	#_OSPCCheckScroll 				; check if we need to scroll.
 
 ._OSPCTab
-		; # TODO
-		jmp 	#_OSPCCheckScroll 				; check scroll and exit.
+		ldm 	r0,#xTextPos
+		add 	r0,#tabStop 					; forward 
+		and 	r0,#$FFFF-(tabStop-1)			; fix it to a tab stop
+		stm 	r0,#xTextPos
+		jmp 	#_OSPCCheckNewLine				; check off rhs and return.
 
 ._OSPCMoveUp 									; chr(1-4) move cursor.
 		; # TODO
@@ -203,20 +207,5 @@
 ; *****************************************************************************
 
 ._OSPCScroll
-		push 	link
-		ldm 	r3,#textMemory 					; r3 points to text memory
-		mov 	r4,r3,#0 						; r4 points to next row down
-		add 	r4,#charWidth 					
-		mov 	r1,#charWidth*(charHeight-1)	; r1 is count to move		
-._OSPCCopy1 									; scroll text up in text buffer		
-		ldm 	r0,r4,#0
-		stm 	r0,r3,#0 
-		inc 	r3
-		inc 	r4
-		dec 	r1
-		skz 	r1
-		jmp 	#_OSPCCopy1
-		; TODO: Erase
-		; TODO: Refresh
-		pop 	link
-		ret
+		break
+		; #TODO
