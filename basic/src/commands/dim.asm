@@ -13,7 +13,7 @@
 		push 	link
 ._CDINextArray		
 		ldm 	r0,r11,#0 					; check it is an array identifier first
-		ror 	r0,#14
+		ror 	r0,#12
 		skm 	r0
 		jmp 	#SyntaxError 				; if so, syntax error occurs
 		;

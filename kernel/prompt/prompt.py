@@ -13,7 +13,7 @@ from datetime import datetime
 #
 #		Current version
 #
-kernelVersion = "0.00"
+kernelVersion = "0.01"
 basicVersion = "0.01"
 #
 #		Timestamp

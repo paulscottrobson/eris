@@ -25,6 +25,7 @@ void CPUReset(void);
 BYTE8 CPUExecuteInstruction(void);
 WORD16 CPUReadMemory(WORD16 address);
 void CPUWriteMemory(WORD16 address,WORD16 data);
+WORD16 CPUGetEmulatedTimer(void);
 
 typedef struct __CPUSTATUS {
 	int r[16],carry,pc;

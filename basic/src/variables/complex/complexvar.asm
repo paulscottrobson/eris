@@ -69,8 +69,10 @@
 		skm 	r1
 		jmp 	#_GVRHaveVariable
 		;
-		; TODO: Array lookup
-		;
+		ror 	r1,#14 						; shift the index bit back into sign bit
+		skp 	r1 							; if array, do indexing
+		jsr 	#IndexArray
+		skm 	r1 							; if not array ....
 		add 	r0,#2 						; convert to data pointer.
 		;
 		;		Set the reference in the evaluation stack.
@@ -85,7 +87,6 @@
 
 ._GVRNullString
 		word 	0		
-
 
 ; *****************************************************************************
 ;

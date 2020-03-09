@@ -38,9 +38,21 @@ class Tokeniser(object):
 		#
 		#		Check for integer
 		#
-		m = re.match("^(\\d+)(.*)$",s)								# digits
+		base = 10
+		m = re.match("^(\\d+)(.*)$",s)								# digits, in one
+		if m is None:												# of three bases
+			base = 2
+			token = self.tokens.getInfo("%")["token"]
+			m = re.match("^\\%([0-1]+)(.*)$",s)
+			if m is None:
+				base = 16
+				token = self.tokens.getInfo("&")["token"]
+				m = re.match("^\\&([0-9A-Fa-f]+)(.*)$",s)
+
 		if m is not None:
-			n = int(m.group(1)) & 0xFFFF							# work out integer
+			n = int(m.group(1),base) & 0xFFFF						# work out integer
+			if base != 10:											# prefix ?
+				self.code.append(token)
 			if n >= 0x8000:											# if 8000-FFFF need constant shift
 				self.code.append(self.tokens.getInfo("|constshift")["token"])
 			self.code.append((n & 0x7FFF) | 0x8000)					# add lower 15 bits
@@ -93,4 +105,5 @@ if __name__ == "__main__":
 	tk.test('"Hi!"')
 	tk.test("< <>")
 	tk.test("left$( val( a( a$ print0 print")
-	
+	tk.test("%101010 &2A")
+	tk.test("axxx(")
