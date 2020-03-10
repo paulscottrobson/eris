@@ -97,7 +97,7 @@
 .Unary_Asc		;; [asc(]
 		push 	link
 		jsr 	#EvaluateString 			; get string into R0.
-		ldm 	r0,r0,#0 					; read first double character
+		ldm 	r0,r0,#1 					; read first double character
 		and 	r0,#$00FF 					; extract low character
 		stm 	r0,r10,#esValue1 			; update value
 		stm 	r14,r10,#esType1 			; convert to integer

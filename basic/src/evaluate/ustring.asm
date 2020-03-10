@@ -21,15 +21,16 @@
 		jsr 	#EvaluateString 			; get string into R0.
 		jsr 	#CheckRightBracket 			; check there's a right bracket
 
-		push 	r10,r11 		 			; these are temp reg for string extraction
+		push 	r9,r10,r11 		 			; these are temp reg for string extraction
 		clr 	r11 						; R11 is 0 (low) #0 (high)
-		mov 	r10,r0,#0 					; R10 is the string itself.
+		mov 	r10,r0,#1 					; R10 is the string itself.
+		ldm 	r9,r0,#0 					; R9 is the character count.
 		mov 	r0,#StringExtract 			; this is the function that gets the characters
 		mov 	r1,#10 						; base 10
 		jsr 	#OSStrToInt 				; convert to integer
 		skz 	r1 							; error
 		jmp 	#BadNumberError
-		pop 	r10,r11 				
+		pop 	r9,r10,r11 				
 		;
 		stm 	r0,r10,#esValue1 			; save value
 		stm 	r14,r10,#esType1 			; it's an integer constant
@@ -40,11 +41,17 @@
 
 ; *****************************************************************************
 ;
-;		    String extractor function. State is in R10 (ptr) R11 (half)
+;		    			String extractor function. 
+;				State is in R9 (count) R10 (ptr) R11 (half)
 ;
 ; *****************************************************************************
 
 .StringExtract
+		clr 	r0 							; if count is zero, return zero
+		sknz 	r9
+		ret
+		;
+		dec 	r9 							; decrement count
 		ldm 	r0,r10,#0 					; read the next character
 		skz 	r11 						; if it is the upper half (r11 != 0)
 		ror 	r0,#8 						; swap the bytes.

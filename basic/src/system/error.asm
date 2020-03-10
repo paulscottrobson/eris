@@ -36,6 +36,9 @@
 .BadNumberError
 		jsr 	#GenErrorHandler
 		string 	"Bad Number"		
+.BadIndexError
+		jsr 	#GenErrorHandler
+		string 	"Bad Index"		
 .MemoryError
 		jsr 	#GenErrorHandler
 		string  "Out of Memory"
