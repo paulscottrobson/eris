@@ -172,6 +172,8 @@
 
 		mov 	r2,r1,#0 					; update mem alloc bottom
 		add 	r2,r0,#0 					; allocate words
+		sknc 	 							; if overflows too much memory
+		jmp 	#MemoryError
 		stm 	r2,#memAllocBottom
 		ldm 	r3,#memAllocTop 			; check out of memory
 		sub 	r3,#256 					; allow a gap

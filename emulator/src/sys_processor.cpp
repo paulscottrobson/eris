@@ -120,7 +120,9 @@ static WORD16 inline sub16Bit(WORD16 w1,WORD16 w2) {
 }
 
 static WORD16 inline mul16Bit(WORD16 w1,WORD16 w2) {
-	return w1 * w2;
+	temp32 = w1 * w2;
+	carryFlag = ((temp32 >> 16) != 0) ? 1 : 0;
+	return temp32 & 0xFFFF;
 }
 
 static WORD16 ror16Bit(WORD16 n,WORD16 count) {

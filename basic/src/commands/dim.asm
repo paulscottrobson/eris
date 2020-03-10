@@ -39,7 +39,7 @@
 		jmp 	#_CDIHaveDimension 			; if so, there is a second dimension
 		inc 	r11 						; skip comma
 		jsr 	#EvaluateInteger 			; get integer into R8
-		mov 	r8,r0,#0
+		mov 	r8,r0,#0 
 		sknz 	r8 							; must be non-zero.
 		jmp 	#BadNumberError
 ._CDIHaveDimension
@@ -50,6 +50,8 @@
 		mov 	r0,r5,#1					; work out memory requirements. Add 1 to each 
 		mov 	r1,r8,#1 					; dimension and multiply.
 		mult 	r0,r1,#0					; this is the data size
+		sknc 	 							; if multiply overflows array too large
+		jmp 	#BadNumberError
 		mov 	r4,r0,#0 					; put the array block size in R4.
 		add 	r0,#4 						; link, name, dim 1, dim 2
 		push 	r11  						; save R11
