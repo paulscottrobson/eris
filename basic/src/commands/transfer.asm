@@ -47,7 +47,6 @@
 .Command_GOSUB ;; [gosub]
 		push 	link 						
 		jsr 	#EvaluateInteger 			; get integer into R0 (line number)
-		break
 		push 	r0
 		jsr 	#StackPushPosition 			; push current position/line offset
 		jsr 	#StackPushMarker 			; push an 'S' marker
@@ -62,7 +61,6 @@
 ; *****************************************************************************
 
 .Command_RETURN ;; [return]
-		break
 		push 	link
 		jsr 	#StackCheckMarker 			; check TOS is an 'S' marker.
 		word 	'S'
