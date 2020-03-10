@@ -69,6 +69,12 @@
 .WendError
 		jsr 	#GenErrorHandler
 		string 	"Wend without While"
+.ElseError
+		jsr 	#GenErrorHandler
+		string 	"Else without If"
+.EndIfError
+		jsr 	#GenErrorHandler
+		string 	"Endif without If"
 
 ; *****************************************************************************
 ;

@@ -35,8 +35,11 @@
 		jmp 	#_SSFound
 		;
 ._SSNext
-		;
-		; TODO: Strings
+		ldm 	r2,r11,#0 					; get token
+		and 	r2,#$FF00 					; check if it is a string
+		xor 	r2,#$0100
+		sknz 	r2
+		jmp 	#_SSString
 		;
 		ldm 	r2,r11,#0 					; get token and copy to R4
 		mov 	r4,r2,#0
@@ -56,6 +59,14 @@
 		skm 	r3 							; if -ve then error
 		jmp 	#_SSLoop 					
 		jmp 	#StructureError
+		;
+		;		Handle String
+		;
+._SSString		
+		ldm 	r2,r11,#0 					; get length and add
+		and 	r2,#$00FF
+		add 	r11,r2,#0
+		jmp 	#_SSLoop
 		;
 		;		Found either token
 		;

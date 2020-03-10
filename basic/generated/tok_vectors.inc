@@ -48,10 +48,10 @@
 	word	Dummy4                   ; $322b TO
 	word	Dummy5                   ; $322c STEP
 	word	SyntaxError              ; $3e2d FOR
-	word	SyntaxError              ; $3e2e IF
+	word	Command_If               ; $3e2e IF
 	word	Command_Repeat           ; $3e2f REPEAT
 	word	Command_While            ; $3e30 WHILE
-	word	SyntaxError              ; $3a31 ENDIF
+	word	Command_ENDIF            ; $3a31 ENDIF
 	word	SyntaxError              ; $3a32 NEXT
 	word	SyntaxError              ; $3a33 THEN
 	word	Command_Until            ; $3a34 UNTIL
@@ -62,7 +62,7 @@
 	word	SyntaxError              ; $3c39 CALL
 	word	Command_Clear            ; $3c3a CLEAR
 	word	Command_DIM              ; $3c3b DIM
-	word	SyntaxError              ; $3c3c ELSE
+	word	Command_ELSE             ; $3c3c ELSE
 	word	WarmStart                ; $3c3d END
 	word	SyntaxError              ; $3c3e ENDPROC
 	word	Command_GOSUB            ; $3c3f GOSUB
