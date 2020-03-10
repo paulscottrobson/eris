@@ -40,4 +40,4 @@ print asc("*")
 print len("hello")
 print str$(-42)
 
-11111 print random(1,6):goto 11111
+11111 print "hello "+"world":goto 11111

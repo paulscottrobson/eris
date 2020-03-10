@@ -29,7 +29,7 @@
 ; *****************************************************************************
 
 .Evaluator
-		push 	r0,r1,r2,link
+		push 	r0,r1,r2,r3,r4,r5,r6,link
 		ldm 	r0,r11,#0 					; read the next character
 		skm 	r0 							; if it is -ve it is a constant
 		jmp 	#_EVNotConstant
@@ -104,7 +104,7 @@
 		;		Exit evaluator.
 		;
 ._EVExit
-		pop 	r0,r1,r2,link
+		pop 	r0,r1,r2,r3,r4,r5,r6,link
 		ret
 		;
 		;		R11 points to an identifier
