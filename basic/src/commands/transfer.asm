@@ -11,17 +11,15 @@
 
 ; *****************************************************************************
 ;
-;			GOTO code. This is also used by GOSUB, so on exit R2 and R3
-; 			are the line number and line position respectively.
+;									GOTO code. 
 ;
 ; *****************************************************************************
 
 .Command_GOTO		;; [goto]
 		push 	link
-		jsr 	#EvaluateInteger 			; get integer into R0.
-		mov 	r2,r11,#0 					; save return address and return line into R2/R3
-		ldm 	r3,#currentLine
+		jsr 	#EvaluateInteger 			; get integer into R0 (line number)
 		;
+._CGMain		
 		ldm 	r11,#programCode 			; start R11 at program code base.
 ._CGSearch
 		ldm 	r1,r11,#0 					; get offset into R1
@@ -40,3 +38,37 @@
 		pop 	link
 		ret
 
+; *****************************************************************************
+;
+;								GOSUB code
+;
+; *****************************************************************************
+
+.Command_GOSUB ;; [gosub]
+		push 	link 						
+		jsr 	#EvaluateInteger 			; get integer into R0 (line number)
+		break
+		push 	r0
+		jsr 	#StackPushPosition 			; push current position/line offset
+		jsr 	#StackPushMarker 			; push an 'S' marker
+		word 	'S'
+		pop 	r0 
+		jmp 	#_CGMain					; go do the GOTO code.
+
+; *****************************************************************************
+;
+;								GOSUB code
+;
+; *****************************************************************************
+
+.Command_RETURN ;; [return]
+		break
+		push 	link
+		jsr 	#StackCheckMarker 			; check TOS is an 'S' marker.
+		word 	'S'
+		jmp 	#ReturnError
+		jsr 	#StackPopPosition 			; restore position from stack.
+		mov 	r0,#1+stackPosSize 			; and reclaim that many words off the stack
+		jsr 	#StackPopWords
+		pop 	link
+		ret

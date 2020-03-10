@@ -37,3 +37,11 @@ esReference1 = 2
 esValue2 = 0+stackElementSize
 esType2 = 1+stackElementSize
 esReference2 = 2+stackElementSize
+;
+;		Size of return stack.
+;
+returnStackSize = 256
+;
+; 		Words required to store the stack position (line address, code address)
+;
+stackPosSize = 2

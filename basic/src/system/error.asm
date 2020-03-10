@@ -57,7 +57,10 @@
 .StrlenError
 		jsr 	#GenErrorHandler
 		string 	"String Size"
-
+.ReturnError
+		jsr 	#GenErrorHandler
+		string 	"Return without Gosub"
+		
 ; *****************************************************************************
 ;
 ;							General error handler

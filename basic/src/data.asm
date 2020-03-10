@@ -38,6 +38,12 @@
 .tempStringAlloc 							; allocate interim string
 		fill 	1	
 
+.returnStackTop 							; top of return stack
+		fill 	1
+
+.returnStackPtr 							; return stack pointer
+		fill 	1
+		
 ;
 ;		Evaluation stack.
 ;			+0 	data 	(either pointer to a string, or integer)

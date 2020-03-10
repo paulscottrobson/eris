@@ -65,7 +65,7 @@
 	word	SyntaxError              ; $3c3c ELSE
 	word	WarmStart                ; $3c3d END
 	word	SyntaxError              ; $3c3e ENDPROC
-	word	SyntaxError              ; $3c3f GOSUB
+	word	Command_GOSUB            ; $3c3f GOSUB
 	word	Command_GOTO             ; $3c40 GOTO
 	word	SyntaxError              ; $3c41 INPUT
 	word	Command_Let              ; $3c42 LET
@@ -77,7 +77,7 @@
 	word	Command_Print            ; $3c48 PRINT
 	word	SyntaxError              ; $3c49 PROC
 	word	CommentCommand2          ; $3c4a REM
-	word	SyntaxError              ; $3c4b RETURN
+	word	Command_RETURN           ; $3c4b RETURN
 	word	RunProgram               ; $3c4c RUN
 	word	SyntaxError              ; $3c4d SAVE
 	word	StopError                ; $3c4e STOP

@@ -18,9 +18,15 @@
 ; *****************************************************************************
 
 .ColdStart	
+		dec 	sp 							; high memory address -> first free word
+		stm 	sp,#returnStackTop 			; allocate space for BASIC return stack
+		sub 	sp,#returnStackSize
+		;
 		stm 	sp,#initialSP 				; save initial stack pointer.
+		;
 		mov 	r0,#freeBasicCode			; initialise code pointer.
 		stm 	r0,#programCode
+		;
 		jmp 	#RunProgram					; run program code.
 
 		jsr 	#Command_New
