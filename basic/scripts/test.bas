@@ -39,4 +39,5 @@ print t(2,3)
 print asc("*")
 print len("hello")
 print str$(-42)
-print val("-")
+
+11111 print random(1,6):goto 11111

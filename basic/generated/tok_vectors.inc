@@ -71,15 +71,14 @@
 	word	Command_Let              ; $3c42 LET
 	word	SyntaxError              ; $3c43 LIST
 	word	SyntaxError              ; $3c44 LOAD
-	word	SyntaxError              ; $3c45 LOCAL
-	word	Command_New              ; $3c46 NEW
-	word	SyntaxError              ; $3c47 OLD
-	word	SyntaxError              ; $3c48 POKE
-	word	Command_Print            ; $3c49 PRINT
-	word	SyntaxError              ; $3c4a PROC
-	word	CommentCommand2          ; $3c4b REM
-	word	SyntaxError              ; $3c4c RETURN
-	word	RunProgram               ; $3c4d RUN
-	word	SyntaxError              ; $3c4e SAVE
-	word	StopError                ; $3c4f STOP
-	word	SyntaxError              ; $3c50 SYS
+	word	Command_New              ; $3c45 NEW
+	word	SyntaxError              ; $3c46 OLD
+	word	SyntaxError              ; $3c47 POKE
+	word	Command_Print            ; $3c48 PRINT
+	word	SyntaxError              ; $3c49 PROC
+	word	CommentCommand2          ; $3c4a REM
+	word	SyntaxError              ; $3c4b RETURN
+	word	RunProgram               ; $3c4c RUN
+	word	SyntaxError              ; $3c4d SAVE
+	word	StopError                ; $3c4e STOP
+	word	SyntaxError              ; $3c4f SYS

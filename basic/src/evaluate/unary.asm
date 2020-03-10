@@ -165,7 +165,7 @@
 
 .Unary_Rnd		;; [rnd(]
 .Unary_Rnd2		;; [random(]
-		push 	link
+		push 	r3,link
 		jsr 	#OSRandom16 				; get random #
 		ldm 	r1,r11,#0 					; is the next token ) ?
 		xor 	r1,#TOK_RPAREN
@@ -189,5 +189,5 @@
 		stm 	r14,r10,#esType1 			; make integer constant
 		stm 	r14,r10,#esReference1			
 		jsr 	#CheckRightBracket 			; check there's a right bracket
-		pop 	link
+		pop 	r3,link
 		ret

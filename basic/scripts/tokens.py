@@ -164,8 +164,8 @@ class Tokens(object):
 [Cmd]
 	' 
 	assert 	call 	clear 	dim 	else 	end 	endproc gosub 	goto 
-	input 	let 	list 	load 	local 	new 	old 	poke 	print 	
-	proc 	rem 	return 	run 	save 	stop 	sys 	
+	input 	let 	list 	load 	new 	old 	poke 	print 	proc 	
+	rem 	return 	run 	save 	stop 	sys 	
 
 """
 

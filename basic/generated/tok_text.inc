@@ -71,16 +71,15 @@
 	word	$0e02,$40d4,$6014                ; $3c42 LET
 	word	$0e02,$4174,$6333                ; $3c43 LIST
 	word	$0e02,$4264,$60a1                ; $3c44 LOAD
-	word	$0e03,$4264,$402b,$600c          ; $3c45 LOCAL
-	word	$0e02,$40d6,$6017                ; $3c46 NEW
-	word	$0e02,$41ef,$6004                ; $3c47 OLD
-	word	$0e02,$4268,$60d3                ; $3c48 POKE
-	word	$0e03,$42e0,$4239,$6014          ; $3c49 PRINT
-	word	$0e02,$42e0,$6087                ; $3c4a PROC
-	word	$0e02,$40da,$600d                ; $3c4b REM
-	word	$0e03,$40da,$435c,$6242          ; $3c4c RETURN
-	word	$0e02,$435a,$600e                ; $3c4d RUN
-	word	$0e02,$403b,$60de                ; $3c4e SAVE
-	word	$0e02,$4333,$628f                ; $3c4f STOP
-	word	$0e02,$43fb,$6013                ; $3c50 SYS
+	word	$0e02,$40d6,$6017                ; $3c45 NEW
+	word	$0e02,$41ef,$6004                ; $3c46 OLD
+	word	$0e02,$4268,$60d3                ; $3c47 POKE
+	word	$0e03,$42e0,$4239,$6014          ; $3c48 PRINT
+	word	$0e02,$42e0,$6087                ; $3c49 PROC
+	word	$0e02,$40da,$600d                ; $3c4a REM
+	word	$0e03,$40da,$435c,$6242          ; $3c4b RETURN
+	word	$0e02,$435a,$600e                ; $3c4c RUN
+	word	$0e02,$403b,$60de                ; $3c4d SAVE
+	word	$0e02,$4333,$628f                ; $3c4e STOP
+	word	$0e02,$43fb,$6013                ; $3c4f SYS
 	word	$0000
