@@ -50,12 +50,12 @@
 	word	Dummy5                   ; $382d STEP
 	word	SyntaxError              ; $3e2e FOR
 	word	SyntaxError              ; $3e2f IF
-	word	SyntaxError              ; $3e30 REPEAT
+	word	Command_Repeat           ; $3e30 REPEAT
 	word	SyntaxError              ; $3e31 WHILE
 	word	SyntaxError              ; $3a32 ENDIF
 	word	SyntaxError              ; $3a33 NEXT
 	word	SyntaxError              ; $3a34 THEN
-	word	SyntaxError              ; $3a35 UNTIL
+	word	Command_Until            ; $3a35 UNTIL
 	word	SyntaxError              ; $3a36 WEND
 	word	CommentCommand1          ; $3c37 '
 	word	CommandAssert            ; $3c38 ASSERT

@@ -60,6 +60,9 @@
 .ReturnError
 		jsr 	#GenErrorHandler
 		string 	"Return without Gosub"
+.UntilError
+		jsr 	#GenErrorHandler
+		string 	"Until without Repeat"
 		
 ; *****************************************************************************
 ;

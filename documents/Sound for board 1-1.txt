@@ -1,0 +1,24 @@
+Sound alternative
+=================
+
+AT PRESENT THIS DOES NOT WORK.
+
+Version 1.1 of the TTGO VGA32 board does not have audio. As a replacement, audio is
+output through pin 9 on the ESP32 which connects to the bottom right pin on the mouse
+port which is not used.
+
+			X
+		5V		0V
+		  X   SND
+
+
+Round about line 391 of the fabgl library soundgen.cpp , in function
+
+void SoundGenerator::i2s_audio_init() there is a line
+
+  i2s_set_dac_mode(I2S_DAC_CHANNEL_RIGHT_EN); // GPIO25
+
+change into I2S_DAC_CHANNEL_LEFT_EN		which is GPIO26
+
+(on my Linux box this is at .pio/libdeps/esp32/FabGL_ID6143/src/devdrivers from
+the esp32 directory)
