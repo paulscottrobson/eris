@@ -36,7 +36,7 @@ class Tokens(object):
 				elif w == "[UNARY]":
 					currentType = 8
 				elif w == "[SYNTAX]":
-					currentType = 12
+					currentType = 9
 				elif w == "[CMD-]":
 					currentType = 13
 				elif w == "[CMD]":
@@ -147,7 +147,7 @@ class Tokens(object):
 //		Syntax only tokens
 //
 [Syntax]
-	) 		: 		, 		; 		to 		step
+	) 		, 		; 		to 		step
 //
 //		Structure enter
 //
@@ -162,7 +162,7 @@ class Tokens(object):
 //		Commands
 //
 [Cmd]
-	' 
+	' 		:
 	assert 	call 	clear 	dim 	else 	end 	endproc gosub 	goto 
 	input 	let 	list 	load 	new 	old 	poke 	print 	proc 	
 	rem 	return 	run 	save 	stop 	sys 	

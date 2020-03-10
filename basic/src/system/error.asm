@@ -57,13 +57,19 @@
 .StrlenError
 		jsr 	#GenErrorHandler
 		string 	"String Size"
+.StructureError
+		jsr 	#GenErrorHandler
+		string 	"Structures wrong"
 .ReturnError
 		jsr 	#GenErrorHandler
 		string 	"Return without Gosub"
 .UntilError
 		jsr 	#GenErrorHandler
 		string 	"Until without Repeat"
-		
+.WendError
+		jsr 	#GenErrorHandler
+		string 	"Wend without While"
+
 ; *****************************************************************************
 ;
 ;							General error handler

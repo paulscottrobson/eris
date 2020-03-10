@@ -42,22 +42,22 @@
 	word	Unary_Str2               ; $3025 TO.STRING$(
 	word	Unary_Val2               ; $3026 TO.NUMBER(
 	word	Unary_Sgn2               ; $3027 SIGN(
-	word	Dummy1                   ; $3828 )
-	word	ColonHandler             ; $3829 :
-	word	Dummy2                   ; $382a ,
-	word	Dummy3                   ; $382b ;
-	word	Dummy4                   ; $382c TO
-	word	Dummy5                   ; $382d STEP
-	word	SyntaxError              ; $3e2e FOR
-	word	SyntaxError              ; $3e2f IF
-	word	Command_Repeat           ; $3e30 REPEAT
-	word	SyntaxError              ; $3e31 WHILE
-	word	SyntaxError              ; $3a32 ENDIF
-	word	SyntaxError              ; $3a33 NEXT
-	word	SyntaxError              ; $3a34 THEN
-	word	Command_Until            ; $3a35 UNTIL
-	word	SyntaxError              ; $3a36 WEND
-	word	CommentCommand1          ; $3c37 '
+	word	Dummy1                   ; $3228 )
+	word	Dummy2                   ; $3229 ,
+	word	Dummy3                   ; $322a ;
+	word	Dummy4                   ; $322b TO
+	word	Dummy5                   ; $322c STEP
+	word	SyntaxError              ; $3e2d FOR
+	word	SyntaxError              ; $3e2e IF
+	word	Command_Repeat           ; $3e2f REPEAT
+	word	Command_While            ; $3e30 WHILE
+	word	SyntaxError              ; $3a31 ENDIF
+	word	SyntaxError              ; $3a32 NEXT
+	word	SyntaxError              ; $3a33 THEN
+	word	Command_Until            ; $3a34 UNTIL
+	word	Command_Wend             ; $3a35 WEND
+	word	CommentCommand1          ; $3c36 '
+	word	ColonHandler             ; $3c37 :
 	word	CommandAssert            ; $3c38 ASSERT
 	word	SyntaxError              ; $3c39 CALL
 	word	Command_Clear            ; $3c3a CLEAR

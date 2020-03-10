@@ -42,22 +42,22 @@
 	word	$0805,$5a6c,$5b1d,$5ae4,$5a39,$7807 ; $3025 TO.STRING$(
 	word	$0805,$4a6c,$4a55,$4a1d,$48ca,$6812 ; $3026 TO.NUMBER(
 	word	$0802,$497b,$6a37                ; $3027 SIGN(
-	word	$0c01,$8029                      ; $3828 )
-	word	$0c01,$803a                      ; $3829 :
-	word	$0c01,$802c                      ; $382a ,
-	word	$0c01,$803b                      ; $382b ;
-	word	$0c01,$626c                      ; $382c TO
-	word	$0c02,$4333,$6285                ; $382d STEP
-	word	$0f02,$425e,$6012                ; $3e2e FOR
-	word	$0f01,$60f9                      ; $3e2f IF
-	word	$0f03,$40da,$40d8,$6321          ; $3e30 REPEAT
-	word	$0f03,$4157,$41e9,$6005          ; $3e31 WHILE
-	word	$0d03,$4235,$416c,$6006          ; $3a32 ENDIF
-	word	$0d02,$40d6,$6338                ; $3a33 NEXT
-	word	$0d02,$4154,$6235                ; $3a34 THEN
-	word	$0d03,$4245,$417c,$600c          ; $3a35 UNTIL
-	word	$0d02,$40df,$60ae                ; $3a36 WEND
-	word	$0e01,$8027                      ; $3c37 '
+	word	$0901,$8029                      ; $3228 )
+	word	$0901,$802c                      ; $3229 ,
+	word	$0901,$803b                      ; $322a ;
+	word	$0901,$626c                      ; $322b TO
+	word	$0902,$4333,$6285                ; $322c STEP
+	word	$0f02,$425e,$6012                ; $3e2d FOR
+	word	$0f01,$60f9                      ; $3e2e IF
+	word	$0f03,$40da,$40d8,$6321          ; $3e2f REPEAT
+	word	$0f03,$4157,$41e9,$6005          ; $3e30 WHILE
+	word	$0d03,$4235,$416c,$6006          ; $3a31 ENDIF
+	word	$0d02,$40d6,$6338                ; $3a32 NEXT
+	word	$0d02,$4154,$6235                ; $3a33 THEN
+	word	$0d03,$4245,$417c,$600c          ; $3a34 UNTIL
+	word	$0d02,$40df,$60ae                ; $3a35 WEND
+	word	$0e01,$8027                      ; $3c36 '
+	word	$0e01,$803a                      ; $3c37 :
 	word	$0e03,$42f9,$40db,$6332          ; $3c38 ASSERT
 	word	$0e02,$402b,$61ec                ; $3c39 CALL
 	word	$0e03,$41e3,$402d,$6012          ; $3c3a CLEAR
