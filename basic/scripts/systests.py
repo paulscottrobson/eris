@@ -13,6 +13,7 @@ import os,sys,re,random,importlib
 
 from program import *
 from test import *
+from complextest import *
 
 # *****************************************************************************
 #
@@ -25,7 +26,7 @@ class SimpleVariable(TestProgram):
 	def preTest(self):
 		self.variables = {}		
 		for i in range(0,self.count >> 1):
-			v = self.createVariableName()
+			v = self.createVariableName(self.variables)
 			self.variables[v] = '""' if v.endswith("$") else 0
 	#
 	def createTest(self):
@@ -72,6 +73,6 @@ class Comparison(TestProgram):
 if __name__ == "__main__":	
 	if len(sys.argv) > 1 and sys.argv[1] in globals():
 		newClass = globals()[sys.argv[1]]
-		newClass(False,200)
+		newClass(False,400)
 	else:
 		assert False,"Test not generated "+sys.argv[1]

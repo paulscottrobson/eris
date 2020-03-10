@@ -35,6 +35,7 @@ static WORD16 ramMemory[RAM_END-RAM_START];
 static LONG32 cycles;													
 static LONG32 iCount;													
 static WORD16 instReg;
+static WORD16 timer;
 
 // ****************************************************************************
 //							CPU Registers
@@ -119,7 +120,9 @@ static WORD16 inline sub16Bit(WORD16 w1,WORD16 w2) {
 }
 
 static WORD16 inline mul16Bit(WORD16 w1,WORD16 w2) {
-	return w1 * w2;
+	temp32 = w1 * w2;
+	carryFlag = ((temp32 >> 16) != 0) ? 1 : 0;
+	return temp32 & 0xFFFF;
 }
 
 static WORD16 ror16Bit(WORD16 n,WORD16 count) {
@@ -137,6 +140,14 @@ static void skip(BYTE8 test) {
 		R15++;
 		if ((temp16 & 0x00F0) == 0x00F0) R15++;
 	}
+}
+
+// ****************************************************************************
+//								Get internal timer
+// ****************************************************************************
+
+WORD16 CPUGetEmulatedTimer(void) {
+	return timer;
 }
 
 // ****************************************************************************
@@ -184,6 +195,7 @@ BYTE8 CPUExecuteInstruction(void) {
 	cycles++;
 	if (cycles < CYCLES_PER_FRAME) return 0;										// Not completed a frame.
 	cycles = cycles - CYCLES_PER_FRAME;												// Adjust this frame rate.
+	timer += 2;																		// Fix up 100Hz timer.	
 	iCount += CYCLES_PER_FRAME;
 	HWSync(iCount);																	// Update any hardware
 	return FRAME_RATE;																// Return frame rate.

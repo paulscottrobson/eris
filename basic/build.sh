@@ -7,7 +7,7 @@ pushd scripts >/dev/null
 python tables.py
 python program.py
 #
-#python systests.py SimpleVariable
+python systests.py ComplexVariable
 cp basiccode.prg ../../emulator/bin
 popd
 cp ../kernel/bin/a.lbl generated/kernel.labels

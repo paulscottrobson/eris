@@ -65,7 +65,8 @@ void HWWritePixel(WORD16 x,WORD16 y,BYTE8 colour) {
 // ****************************************************************************
 
 WORD16 HWGetSystemClock(void) {
-	return (GFXTimer() / 10) & 0xFFFF;
+	//return (GFXTimer() / 10) & 0xFFFF;
+	return CPUGetEmulatedTimer();
 }
 
 // ****************************************************************************

@@ -55,11 +55,14 @@ class TestProgram(Program):
 		ilist = [x for x in ilist]
 		return ilist[random.randint(0,len(ilist)-1)]
 	#
-	def createVariableName(self,isString = None):
+	def createVariableName(self,currentList = None,isString = None):
 		isString = (random.randint(0,1) == 0) if isString is None else isString
 		s = chr(random.randint(65,90))
 		s = s+"".join(["."+self.select(self.varChars) for x in range(0,random.randint(0,3))])
-		return s+"$" if isString else s
+		vName = s+"$" if isString else s
+		if currentList is not None and vName in currentList:
+			return self.createVariableName(currentList,isString)
+		return vName
 	#
 	def varCharacter(self):
 		return ""
