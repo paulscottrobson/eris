@@ -16,21 +16,6 @@
 ; 		R11		Program code pointer.
 ;
 ;
-;
-;		Evaluation stack.
-;			+0 	data 	(either pointer to a string, or integer)
-;			+1 	type 	(0 if integer, #0 if string)
-;			+2 	ref 	(0 if value,#0 if reference)
-;	
-;	
-.evalStack		
-		fill 	StackSize * stackElementSize
-
-.fixedVariables								; the 26 permanent variables A-Z
-		fill 	26 
-		
-.variableHashTable		
-		fill 	hashTableSize*4
 		
 .initialSP									; stack pointer value on start up.
 		fill 	1
@@ -52,6 +37,22 @@
 
 .tempStringAlloc 							; allocate interim string
 		fill 	1	
+
+;
+;		Evaluation stack.
+;			+0 	data 	(either pointer to a string, or integer)
+;			+1 	type 	(0 if integer, #0 if string)
+;			+2 	ref 	(0 if value,#0 if reference)
+;	
+;	
+.evalStack		
+		fill 	StackSize * stackElementSize
+
+.fixedVariables								; the 26 permanent variables A-Z
+		fill 	26 
+		
+.variableHashTable							; hash tables for 4 variable types
+		fill 	hashTableSize*4
 
 .tokenBuffer 								; tokenisation buffer.
 		fill 	256			

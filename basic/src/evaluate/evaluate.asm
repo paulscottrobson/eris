@@ -26,6 +26,8 @@
 ;
 ;			General evaluator. R9 precedence R10 stack R11 code
 ;
+;			   Unary / Binary operators can safely use R0-R6
+;
 ; *****************************************************************************
 
 .Evaluator

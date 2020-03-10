@@ -17,7 +17,9 @@
 
 .Command_New 	;; [new]		
 		ldm 	r0,#programCode				; overwrite the first program word, erasing program
-		stm		r14,r0,#0					; *** fall through ***
+		stm 	r14,r0,#0
+		jsr 	#Command_Clear				; clear variables
+		jmp 	#WarmStart 					; do a warm start
 
 ; *****************************************************************************
 ;

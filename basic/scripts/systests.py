@@ -42,7 +42,7 @@ class SimpleVariable(TestProgram):
 		for v in self.variables.keys():
 			self.add("assert {0} = {1}".format(v,self.variables[v]))
 
-		self.add("print chr$(42);:goto 1000")
+		#self.add("print chr$(42);:goto 1000")
 
 # *****************************************************************************
 #
