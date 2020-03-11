@@ -51,6 +51,9 @@
 .ArrayExistsError		
 		jsr 	#GenErrorHandler
 		string  "Array exists"
+.CallError
+		jsr 	#GenErrorHandler
+		string  "Unknown Procedure"
 .StopError		;; [stop]
 		jsr 	#GenErrorHandler
 		string 	"Stop"
@@ -75,6 +78,15 @@
 .EndIfError
 		jsr 	#GenErrorHandler
 		string 	"Endif without If"
+.EndProcError
+		jsr 	#GenErrorHandler
+		string 	"EndProc without Proc"
+.NextError
+		jsr 	#GenErrorHandler
+		string 	"Next without For"
+.ReturnStackError
+		jsr 	#GenErrorHandler
+		string 	"Structure too deep"
 
 ; *****************************************************************************
 ;

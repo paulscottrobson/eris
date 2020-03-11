@@ -21,6 +21,7 @@
 		dec 	sp 							; high memory address -> first free word
 		stm 	sp,#returnStackTop 			; allocate space for BASIC return stack
 		sub 	sp,#returnStackSize
+		stm 	sp,#returnStackBottom 		; save the bottom position
 		;
 		stm 	sp,#initialSP 				; save initial stack pointer.
 		;

@@ -60,3 +60,9 @@
 .Dummy3 		;; [;]
 .Dummy4 		;; [to]
 .Dummy5 		;; [step]
+.Dummy6 		;; [then]
+
+;
+;	Note then is a command because if...then is a structure, but it doesn't
+;	execute in its own right.
+;

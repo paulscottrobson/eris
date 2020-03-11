@@ -76,5 +76,5 @@ for t in tokens.getList():
 h.close()
 #
 undefined.sort()
-#print("Todo : "+" ".join(undefined).lower())
+print("TODO : "+" ".join(undefined).lower())
 				

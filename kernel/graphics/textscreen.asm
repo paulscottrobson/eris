@@ -257,7 +257,7 @@
 		dec 	r2
 		skz 	r2
 		jmp 	#_OSPCCopy1
-		mov 	r2,#charHeight 					; and blank the last line.
+		mov 	r2,#charWidth 					; and blank the last line.
 		ldm 	r1,#bgrColour 					; background colour
 		ror 	r1,#4
 ._OSPCCopy2

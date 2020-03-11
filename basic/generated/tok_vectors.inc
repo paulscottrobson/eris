@@ -52,19 +52,19 @@
 	word	Command_Repeat           ; $3e2f REPEAT
 	word	Command_While            ; $3e30 WHILE
 	word	Command_ENDIF            ; $3a31 ENDIF
-	word	SyntaxError              ; $3a32 NEXT
-	word	SyntaxError              ; $3a33 THEN
+	word	Command_Next             ; $3a32 NEXT
+	word	Dummy6                   ; $3a33 THEN
 	word	Command_Until            ; $3a34 UNTIL
 	word	Command_Wend             ; $3a35 WEND
 	word	CommentCommand1          ; $3c36 '
 	word	ColonHandler             ; $3c37 :
 	word	CommandAssert            ; $3c38 ASSERT
-	word	SyntaxError              ; $3c39 CALL
+	word	Command_Call             ; $3c39 CALL
 	word	Command_Clear            ; $3c3a CLEAR
 	word	Command_DIM              ; $3c3b DIM
 	word	Command_ELSE             ; $3c3c ELSE
 	word	WarmStart                ; $3c3d END
-	word	SyntaxError              ; $3c3e ENDPROC
+	word	Command_EndProc          ; $3c3e ENDPROC
 	word	Command_GOSUB            ; $3c3f GOSUB
 	word	Command_GOTO             ; $3c40 GOTO
 	word	SyntaxError              ; $3c41 INPUT
@@ -75,7 +75,7 @@
 	word	SyntaxError              ; $3c46 OLD
 	word	SyntaxError              ; $3c47 POKE
 	word	Command_Print            ; $3c48 PRINT
-	word	SyntaxError              ; $3c49 PROC
+	word	Command_Proc             ; $3c49 PROC
 	word	CommentCommand2          ; $3c4a REM
 	word	Command_RETURN           ; $3c4b RETURN
 	word	RunProgram               ; $3c4c RUN

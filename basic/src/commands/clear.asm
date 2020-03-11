@@ -46,11 +46,9 @@
 		inc 	r0 							; word after the last zero offset
 		stm 	r0,#memAllocBottom 			; allocate to low memory.
 		;
-		ldm 	r0,#returnStackTop 			; reset the return stack
-		stm 	r0,#returnStackPtr
-		stm 	r14,r0,#0 					; write $0000 as the top stack marker.
-											; [rsp] always points to the last marker.
-
+		jsr 	#StackReset 				; reset the basic stack
+		jsr 	#ScanForProcedures 			; scan for procedures
+		;
 		pop 	link
 		ret
 

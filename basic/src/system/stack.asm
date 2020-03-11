@@ -11,6 +11,19 @@
 
 ; *****************************************************************************
 ;
+;								Reset Stack
+;
+; *****************************************************************************
+
+.StackReset
+		ldm 	r0,#returnStackTop 			; reset the return stack
+		stm 	r0,#returnStackPtr
+		stm 	r14,r0,#0 					; write $0000 as the top stack marker.
+											; [rsp] always points to the last marker.
+		ret
+													
+; *****************************************************************************
+;
 ;			Push the current position in R11, and the current line 
 ;			pointer on the return stack.
 ;
@@ -55,6 +68,11 @@
 		ldm 	r1,link,#0 					; get return word
 		stm 	r1,r0,#0 					; write it
 		inc 	link						; skip return word
+
+		ldm 	r1,#returnStackBottom 		; check out of stack space
+		sub 	r0,r1,#0
+		skge 
+		jmp 	#ReturnStackError
 		ret
 
 ; *****************************************************************************
@@ -97,6 +115,6 @@
 		ldm 	r1,#returnStackPtr 			; make space for value
 		dec 	r1
 		stm 	r1,#returnStackPtr
-		stm 	r0,r1,#1
+		stm 	r0,r1,#0
 		pop 	r1
 		ret

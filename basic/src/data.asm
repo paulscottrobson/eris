@@ -35,12 +35,17 @@
 .memAllocBottom 							; memory allocated from bottom
 		fill 	1
 
+.procTable 									; list of procedure line addresses, ends with $0000
+		fill 	1
+		
 .tempStringAlloc 							; allocate interim string
 		fill 	1	
 
-.returnStackTop 							; top of return stack
+.returnStackTop 							; top and bottom of return stack
 		fill 	1
-
+.returnStackBottom
+		fill 	1
+		
 .returnStackPtr 							; return stack pointer
 		fill 	1
 		
