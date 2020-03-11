@@ -68,7 +68,21 @@
 ;
 		mov 	r0,#15
 		stm 	r0,#colourMask
-
+;
+;		Reset the palette
+;
+		clr 	r0 							; R0 is palette-write
+._bcWritePalette
+		mov 	r1,r0,#0 					; get the colour out of the table
+		ror 	r1,#8
+		and 	r1,#7
+		add 	r1,#paletteTable
+		ldm 	r1,r1,#0 	
+		add 	r1,r0,#0 					; build the word
+		stm 	r1,#paletteRegister 		; write to palette register
+		add 	r0,#$100
+		skz 	r0
+		jmp 	#_bcWritePalette
 ;
 ;		Show the boot prompt
 ;		
@@ -88,8 +102,10 @@
 		stm 	r14,#sndNoise 				; turn sound off.
 		stm 	r14,#sndTone1
 		stm 	r14,#sndTone2
-
-		mov 	r0,#22726 					; sort of BBC Microish startup beep
+;
+;		Sound the startup beep
+;
+		mov 	r0,#22726 	
 		mov 	r1,#50
 ;		jsr 	#OSBeep
 		ror 	r0,#1
@@ -97,4 +113,16 @@
 ;		jsr 	#OSBeep
 
 		jmp 	#KernelEnd
-		
+;
+;		Palette table all colours 0-255 are set to this based on the lower
+;		three bits of the palette number.
+;		
+.paletteTable
+		word 	0*16+0*4+0
+		word 	0*16+0*4+3
+		word 	0*16+3*4+0
+		word 	0*16+3*4+3
+		word 	3*16+0*4+0
+		word 	3*16+0*4+3
+		word 	3*16+3*4+0
+		word 	3*16+3*4+3

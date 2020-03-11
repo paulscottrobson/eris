@@ -103,6 +103,7 @@ BYTE8 BlitterGetPixel(WORD16 x,WORD16 y) {
 
 void HWWritePalette(BYTE8 port,WORD16 data) {
 	BYTE8 colour = (data >> 8) & 0x0F;
+	data &= 0x3F;
 	if (data != paletteMap[colour]) {
 		paletteMap[colour] = data & 0x3F;
 		for (int x = 0;x < DWIDTH;x++) {
