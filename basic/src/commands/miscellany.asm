@@ -47,7 +47,6 @@
 
 .CommandSys 		;; [sys]
 		push 	link
-		break
 		jsr 	#EvaluateInteger 			; address -> R1
 		mov 	r1,r0,#0 
 		mov 	r0,#fixedVariables 			; pass variables in R0

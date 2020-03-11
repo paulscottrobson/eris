@@ -59,6 +59,11 @@
 		mov 	sp,r0,#0 					; initialise Stack Pointer.
 		stm 	r0,#randomSeed 				; initialise the random number generator
 ;
+;		Erase the whole display using colour 0 mask $FF
+;		
+		mov 	r0,#$FF00
+		jsr 	#OSIFillScreen
+;
 ;		Initialise the colour mask
 ;
 		mov 	r0,#15
