@@ -53,6 +53,7 @@
 
 .ListPrintString
 		push 	r1,r2,link
+		mov 	r1,r0,#1 					; address 1st char pair in R1
 		jsr 	#OSWordLength 				; words to print in R2
 		mov 	r2,r0,#0
 ._LPSLoop		
@@ -61,6 +62,7 @@
 
 		ldm 	r0,r1,#0 					; get character pair
 		jsr 	#ListPrintCharacter 		; print low byte
+		ldm 	r0,r1,#0 					; get character pair
 		ror 	r0,#8 						; then the high byte, ignored if zero
 		jsr 	#ListPrintCharacter 		; print it.
 		inc 	r1 							; do next

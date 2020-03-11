@@ -87,16 +87,4 @@
 
 .DecodeToken
 		push 	link
-		clr 	r9 							; reset the index in current element flag
-		mov 	r0,#'A'
-		jsr 	#ListPrintCharacter
-		mov 	r0,#'0'
-		jsr 	#ListPrintCharacter
-		mov 	r0,#'B'
-		jsr 	#ListPrintCharacter
-		mov 	r0,#'9'
-		jsr 	#ListPrintCharacter
-		inc 	r11
-		pop 	link
-		ret
-
+		clr 	r9 							; clear the index in this token value.	
