@@ -17,7 +17,7 @@
 
 .Unary_Hex		;; [&]
 .Unary_Bin		;; [%]
-		jmp 	#EvaluateInteger 			; get integer into R0.
+		jmp 	#EvaluateTermInteger 		; get integer into R0.
 
 ; *****************************************************************************
 ;

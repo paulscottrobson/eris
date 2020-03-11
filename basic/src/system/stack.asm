@@ -86,3 +86,17 @@
 		stm 	r0,#returnStackPtr
 		ret
 
+; *****************************************************************************
+;
+;								Stack push value R0
+;
+; *****************************************************************************
+
+.StackPushR0
+		push 	r1
+		ldm 	r1,#returnStackPtr 			; make space for value
+		dec 	r1
+		stm 	r1,#returnStackPtr
+		stm 	r0,r1,#1
+		pop 	r1
+		ret

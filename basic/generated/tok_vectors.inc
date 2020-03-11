@@ -47,7 +47,7 @@
 	word	Dummy3                   ; $322a ;
 	word	Dummy4                   ; $322b TO
 	word	Dummy5                   ; $322c STEP
-	word	SyntaxError              ; $3e2d FOR
+	word	Command_FOR              ; $3e2d FOR
 	word	Command_If               ; $3e2e IF
 	word	Command_Repeat           ; $3e2f REPEAT
 	word	Command_While            ; $3e30 WHILE
