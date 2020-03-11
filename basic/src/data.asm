@@ -48,7 +48,9 @@
 		
 .returnStackPtr 							; return stack pointer
 		fill 	1
-		
+
+.lastListToken 								; last listed token (for base conversion)
+		fill 	1		
 ;
 ;		Evaluation stack.
 ;			+0 	data 	(either pointer to a string, or integer)
