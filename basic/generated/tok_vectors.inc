@@ -72,8 +72,8 @@
 	word	SyntaxError              ; $3c43 LIST
 	word	SyntaxError              ; $3c44 LOAD
 	word	Command_New              ; $3c45 NEW
-	word	SyntaxError              ; $3c46 OLD
-	word	SyntaxError              ; $3c47 POKE
+	word	Command_Old              ; $3c46 OLD
+	word	CommandPoke              ; $3c47 POKE
 	word	Command_Print            ; $3c48 PRINT
 	word	Command_Proc             ; $3c49 PROC
 	word	CommentCommand2          ; $3c4a REM
@@ -81,4 +81,4 @@
 	word	RunProgram               ; $3c4c RUN
 	word	SyntaxError              ; $3c4d SAVE
 	word	StopError                ; $3c4e STOP
-	word	SyntaxError              ; $3c4f SYS
+	word	CommandSys               ; $3c4f SYS
