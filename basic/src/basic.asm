@@ -43,7 +43,7 @@
 		mov 	r0,#$12 					; go green
 		jsr 	#OSPrintCharacter
 .h1		jsr 	#OSLineInput
-		inc 	r9
+		break
 	 	jmp 	#h1
 
 

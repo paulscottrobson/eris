@@ -69,7 +69,7 @@
 	word	Command_GOTO             ; $3c40 GOTO
 	word	SyntaxError              ; $3c41 INPUT
 	word	Command_Let              ; $3c42 LET
-	word	SyntaxError              ; $3c43 LIST
+	word	Command_List             ; $3c43 LIST
 	word	SyntaxError              ; $3c44 LOAD
 	word	Command_New              ; $3c45 NEW
 	word	Command_Old              ; $3c46 OLD
