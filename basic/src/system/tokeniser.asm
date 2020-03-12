@@ -17,7 +17,7 @@
 ; *****************************************************************************
 
 .TokeniseString	
-		push 	link
+		push 	r3,r7,r8,r9,link
 		mov 	r9,#tokenBuffer+1 			; tokenised code goes here. Allow 1 so can build line#/offset if reqd
 		mov 	r8,r0,#0 					; characters come from here.
 		mov 	r7,#$007F 					; R7 is the character mask 					
@@ -42,11 +42,12 @@
 		jmp 	#_TSLoop
 
 ._TSExit
+		stm 	r14,r9,#0 					; mark buffer end with a $0000
 		mov 	r0,#tokenBuffer 			; return token buffer
 		sknz 	r0 							; skip the clear
 ._TSFail
 		clr 	r0							; come here if you fail.
-		pop 	link
+		pop 	r3,r7,r8,r9,link
 		ret
 
 ; *****************************************************************************
@@ -59,50 +60,33 @@
 .TokeniseElement
 		push 	link
 		;
-		;		Check if it is 0..9
+		;		Special cases - "<quoted string>" &<hexadecimal> %<binary>
 		;
-		mov 	r0,r3,#0 					; check in the range 0..9
-		sub 	r0,#'0'
-		skge 
-		jmp 	#_TENot09
-		sub 	r0,#10
-		sklt
-		jmp 	#_TENot09
-		;
-		;		Found a digit 0-9. Try to convert it as an integer, possibly with a constant shift prefix.
-		;
-		clr 	r2 							; there's no prefix.
-		mov 	r1,#10  					; try to get a number
-		jmp 	#_TEIntegerConstantNoPrefix		
-._TEIntegerConstantWithPrefix
-		stm 	r9,#0
-		inc 	r9
-._TEIntegerConstantNoPrefix		
-		break
-		jmp 	#_TEExit 					; exit.
-		;
-		;		Not 0..9. Now check for & and %
-		;
-._TENot09		
-		mov 	r0,r1,#0 					; get first character again.
-		inc 	r8 							; advance past it for & % check.
-		mov 	r2,#TOK_AMPERSAND 			; first try &xxxx
-		mov 	r1,#16
-		xor 	r0,#'&'
-		sknz	r0
-		jmp 	#_TEIntegerConstantWithPrefix
-		mov 	r2,#TOK_PERCENT 			; now try %xxxx
-		mov 	r1,#2 						
-		xor 	r0,#'&'^'%'
-		sknz 	r0
-		jmp 	#_TEIntegerConstantWithPrefix
-		;
-		;		We have no identifier it is NOT 0-9 &[0-9A-F]+ or %[01]+ e.g. it is not a 
-		;		constant.
-		;
-		break				
 
-._TEExit
+		;
+		;		Identify whether it is punctuation, identifier (A-Z/.) or digit
+		;
+		break
+		mov 	r0,r3,#0 					; get character
+		jsr 	#GetCharacterType 			; 0 punctuation 1 alphabet 2 number
+		add 	r0,#_TEHandlerTable 		; address to jump to
+		ldm 	r0,r0,#0 					; get branch address
+		brl 	r15,r0,#0 					; and go there
+		;
+		;		Come back here depending on whether tokenisation succeeds or not.
+		;
+._TEExitOkay 								; come here if tokenised ok
+		clr 	r0
+		skz 	r0
+._TEExitFail								; come here if failed.
+		mov 	r0,#1 				
 		pop 	link
 		ret
+		;
+		;		Which handler do we go off and use
+		;
+._TEHandlerTable
+		word 	SyntaxError 				; 0 (punctuation)
+		word 	SyntaxError 				; 1 (identifier)
+		word	SyntaxError 				; 2 (number)		
 

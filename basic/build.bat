@@ -12,6 +12,7 @@ popd
 copy ..\kernel\bin\a.lbl generated\kernel.labels >NUL
 rem
 python ..\assembler\easm.zip
+if errorlevel 1 goto exit
 copy bin\a.prg ..\emulator\bin\basic.prg >NUL
 copy bin\_binary.h ..\emulator\bin\_basic.h >NUL
-
+:exit
