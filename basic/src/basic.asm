@@ -31,11 +31,10 @@
 		mov 	r0,#basicPrompt
 		jsr 	#OSPrintString
 
-		jmp 	#TestTokeniserRoutine
-		
+		jmp 	#TestTokeniserRoutine	
 		jmp 	#RunProgram					; run program code.
 
-		jsr 	#Command_New
+		jsr 	#Command_New 				; New program.
 		
 ; *****************************************************************************
 ;

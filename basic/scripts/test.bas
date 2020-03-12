@@ -1,4 +1,6 @@
 print val("42"),val("-422x")
+print &2A,%101010,&8004,40000,&X
+list
 if 1 then print "hi ?";
 repeat
 input ax$

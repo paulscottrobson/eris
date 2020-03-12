@@ -41,14 +41,6 @@
 		jmp 	#_CPRNewLine
 		;
 		dec 	r11 						; unpick token get.
-		mov 	r3,#10 						; display base for printing
-		ldm 	r0,r11,#0 					; look at next token.
-		xor 	r0,#TOK_PERCENT 			; if % or & change display base
-		sknz 	r0
-		mov		r3,#2
-		xor 	r0,#TOK_PERCENT^TOK_AMPERSAND
-		sknz 	r0
-		mov 	r3,#16
 		jsr 	#EvaluateExpression 		; evaluate something to print.
 		ldm 	r0,r10,#esValue1 			; get value into R0
 		ldm 	r2,r10,#esReference1 		; if reference
@@ -61,8 +53,7 @@
 		mov 	r0,#' '
 		jsr 	#OSPrintCharacter
 		mov 	r0,r2,#0
-		mov 	r1,r3,#0					; signed decimal format
-		add 	r1,#$8000
+		mov		r1,#$800A					; signed decimal format
 		jsr 	#OSIntToStr 				; convert it
 ._CPRPrintStr		
 		jsr 	#OSPrintString 				; print it

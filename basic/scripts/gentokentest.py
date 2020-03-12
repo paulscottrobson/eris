@@ -11,7 +11,7 @@
 
 import os,re,random
 
-inp = "  42 &2A %101010 40000 &C000"
+inp = "  42 "
 
 random.seed(42)
 inp = [ord(x) for x in inp]
