@@ -20,23 +20,33 @@
 		push 	link
 		jsr 	#EvaluateString 			; get string into R0.
 		jsr 	#CheckRightBracket 			; check there's a right bracket
-
-		push 	r9,r10,r11 		 			; these are temp reg for string extraction
-		clr 	r11 						; R11 is 0 (low) #0 (high)
-		mov 	r10,r0,#1 					; R10 is the string itself.
-		ldm 	r9,r0,#0 					; R9 is the character count.
-		mov 	r0,#StringExtract 			; this is the function that gets the characters
+		;
 		mov 	r1,#10 						; base 10
-		jsr 	#OSStrToInt 				; convert to integer
+		jsr 	#CompactStringToInteger		; convert to integer
 		skz 	r1 							; error
 		jmp 	#BadNumberError
-		pop 	r9,r10,r11 				
 		;
 		stm 	r0,r10,#esValue1 			; save value
 		stm 	r14,r10,#esType1 			; it's an integer constant
 		stm	 	r14,r10,#esReference1
 		;
 		pop 	link
+		ret
+
+; *****************************************************************************
+;
+;		Convert compact string at R0 in base R1, returns R0 value R1 error
+;
+; *****************************************************************************
+
+.CompactStringToInteger
+		push 	r9,r10,r11,link 			; these are temp reg for string extraction
+		clr 	r11 						; R11 is 0 (low) #0 (high)
+		mov 	r10,r0,#1 					; R10 is the string itself.
+		ldm 	r9,r0,#0 					; R9 is the character count.
+		mov 	r0,#StringExtract 			; this is the function that gets the characters
+		jsr 	#OSStrToInt 				; convert to integer
+		pop 	r9,r10,r11,link
 		ret
 
 ; *****************************************************************************

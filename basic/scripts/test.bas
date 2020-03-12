@@ -1,5 +1,9 @@
+print val("42"),val("-422x")
 if 1 then print "hi ?";
-input a$
+repeat
+input ax$
+print "(";ax$;")"
+until 0
 ;list 
 xz.a049 = 99
 repeat
