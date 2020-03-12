@@ -6,6 +6,7 @@ set -e
 pushd scripts >/dev/null
 python tables.py
 python program.py
+python gentokentest.py
 #
 #python systests.py ComplexVariable
 cp basiccode.prg ../../emulator/bin
