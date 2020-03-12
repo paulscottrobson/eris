@@ -152,19 +152,19 @@ class Tokens(object):
 //		Structure enter
 //
 [Cmd+]
-		for if repeat while
+		for if repeat while proc
 //
 //		Structure exit
 //		
 [Cmd-]
-		endif  next then until wend
+		endif  next then until wend endproc
 //
 //		Commands
 //
 [Cmd]
 	' 		:
-	assert 	call 	clear 	dim 	else 	end 	endproc gosub 	goto 
-	input 	let 	list 	load 	new 	old 	poke 	print 	proc 	
+	assert 	call 	clear 	dim 	else 	end 	gosub 	goto 
+	input 	let 	list 	load 	new 	old 	poke 	print 	
 	rem 	return 	run 	save 	stop 	sys 	
 
 """

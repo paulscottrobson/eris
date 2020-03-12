@@ -19,7 +19,7 @@
 ; *****************************************************************************
 
 .ListPrintCharacter
-		and 	r0,#$00FF					; convert to a byte
+		and 	r0,#$007F					; convert to a byte
 		sknz 	r0 							; ignore character zero
 		ret
 		push 	r6,r7,link
@@ -73,3 +73,91 @@
 		pop 	r1,r2,link
 		ret
 
+; *****************************************************************************
+;
+;	  Print the identifier sequence at R0, returns R0 after last identifier
+;
+; *****************************************************************************
+
+.ListPrintEncodedIdentifier
+		push 	r1,link
+._LPEILoop
+		ldm 	r1,r0,#0 					; read the next identifier element
+		jsr 	#_LPEIPrintIdentifier 		; print it		
+		ldm 	r1,r0,#0 					; get it back and bump pointer
+		inc 	r0
+		ror 	r1,#14 						; shift the 'last' flag into the sign bit
+		skm 	r1 							; exit if set
+		jmp 	#_LPEILoop
+		;
+		push 	r0
+		add 	r1,r1,#0 					
+		mov 	r0,#'$'
+		skp 	r1
+		jsr 	#ListPrintCharacter
+		add 	r1,r1,#0 					
+		mov 	r0,#'('
+		skp 	r1
+		jsr 	#ListPrintCharacter
+		pop 	r0
+		;
+		pop 	r1,link
+		ret
+;
+;		List print the identifier in R1
+;
+._LPEIPrintIdentifier
+		push 	r0,link
+		and 	r1,#$07FF 					; strip out identifier character bits.
+		clr 	r0 							; going to divide R1 by 40, remainder in R0.
+._LPEIDivide
+		sub 	r1,#40 						
+		inc 	r0		
+		skm 	r1
+		jmp 	#_LPEIDivide
+		dec 	r0 							; unfix the last subtraction.
+		add 	r1,#40
+		skz 	r1
+		jsr 	#_LPEIPrintR1 				; print R1 as character if non-zero (remainder)
+		mov 	r1,r0,#0 					; repeat for the divisior		
+		skz 	r1
+		jsr 	#_LPEIPrintR1 				
+		pop 	r0,link
+		ret		
+;
+;		R1 is a value from 1-39 representing an identifier, decode and print it.
+;
+._LPEIPrintR1		
+		push	r0,link
+		mov 	r0,r1,#0 					; R1 = R0+96, e.g. make A-Z first
+		add 	r0,#96
+		sub 	r1,#27 						; 1-26 is A-Z
+		skge
+		jmp 	#_LPEIPrint
+		add 	r0,#48-26-97 				; shift for 0-9
+		sub 	r1,#10
+		sklt
+		mov 	r0,#'.'						; finally .
+._LPEIPrint
+		jsr 	#ListPrintCharacter 		; output R0
+		pop 	r0,link
+		ret
+
+; *****************************************************************************
+;
+;					Print the token at R0 as punctuation
+;
+; *****************************************************************************
+
+.ListPrintPunctuation
+		push 	r0,r1,link
+		mov 	r1,r0,#0 					; address in R1
+		mov 	r0,#theme_punc+$10
+		jsr 	#OSPrintCharacter
+		ldm 	r0,r1,#0 					; read character
+		jsr 	#ListPrintCharacter 		; print LSB
+		ldm 	r0,r1,#0 					; read character
+		ror 	r0,#8
+		jsr 	#ListPrintCharacter 		; print MSB
+		pop 	r0,r1,link
+		ret

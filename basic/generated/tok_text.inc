@@ -51,31 +51,31 @@
 	word	$0f01,$60f9                      ; $3e2e IF
 	word	$0f03,$40da,$40d8,$6321          ; $3e2f REPEAT
 	word	$0f03,$4157,$41e9,$6005          ; $3e30 WHILE
-	word	$0d03,$4235,$416c,$6006          ; $3a31 ENDIF
-	word	$0d02,$40d6,$6338                ; $3a32 NEXT
-	word	$0d02,$4154,$6235                ; $3a33 THEN
-	word	$0d03,$4245,$417c,$600c          ; $3a34 UNTIL
-	word	$0d02,$40df,$60ae                ; $3a35 WEND
-	word	$0e01,$8027                      ; $3c36 '
-	word	$0e01,$803a                      ; $3c37 :
-	word	$0e03,$42f9,$40db,$6332          ; $3c38 ASSERT
-	word	$0e02,$402b,$61ec                ; $3c39 CALL
-	word	$0e03,$41e3,$402d,$6012          ; $3c3a CLEAR
-	word	$0e02,$416c,$600d                ; $3c3b DIM
-	word	$0e02,$41e5,$60db                ; $3c3c ELSE
-	word	$0e02,$4235,$6004                ; $3c3d END
-	word	$0e04,$4235,$4284,$426a,$6003    ; $3c3e ENDPROC
-	word	$0e03,$425f,$435b,$6002          ; $3c3f GOSUB
-	word	$0e02,$425f,$626c                ; $3c40 GOTO
-	word	$0e03,$4239,$4358,$6014          ; $3c41 INPUT
-	word	$0e02,$40d4,$6014                ; $3c42 LET
-	word	$0e02,$4174,$6333                ; $3c43 LIST
-	word	$0e02,$4264,$60a1                ; $3c44 LOAD
-	word	$0e02,$40d6,$6017                ; $3c45 NEW
-	word	$0e02,$41ef,$6004                ; $3c46 OLD
-	word	$0e02,$4268,$60d3                ; $3c47 POKE
-	word	$0e03,$42e0,$4239,$6014          ; $3c48 PRINT
-	word	$0e02,$42e0,$6087                ; $3c49 PROC
+	word	$0f02,$42e0,$6087                ; $3e31 PROC
+	word	$0d03,$4235,$416c,$6006          ; $3a32 ENDIF
+	word	$0d02,$40d6,$6338                ; $3a33 NEXT
+	word	$0d02,$4154,$6235                ; $3a34 THEN
+	word	$0d03,$4245,$417c,$600c          ; $3a35 UNTIL
+	word	$0d02,$40df,$60ae                ; $3a36 WEND
+	word	$0d04,$4235,$4284,$426a,$6003    ; $3a37 ENDPROC
+	word	$0e01,$8027                      ; $3c38 '
+	word	$0e01,$803a                      ; $3c39 :
+	word	$0e03,$42f9,$40db,$6332          ; $3c3a ASSERT
+	word	$0e02,$402b,$61ec                ; $3c3b CALL
+	word	$0e03,$41e3,$402d,$6012          ; $3c3c CLEAR
+	word	$0e02,$416c,$600d                ; $3c3d DIM
+	word	$0e02,$41e5,$60db                ; $3c3e ELSE
+	word	$0e02,$4235,$6004                ; $3c3f END
+	word	$0e03,$425f,$435b,$6002          ; $3c40 GOSUB
+	word	$0e02,$425f,$626c                ; $3c41 GOTO
+	word	$0e03,$4239,$4358,$6014          ; $3c42 INPUT
+	word	$0e02,$40d4,$6014                ; $3c43 LET
+	word	$0e02,$4174,$6333                ; $3c44 LIST
+	word	$0e02,$4264,$60a1                ; $3c45 LOAD
+	word	$0e02,$40d6,$6017                ; $3c46 NEW
+	word	$0e02,$41ef,$6004                ; $3c47 OLD
+	word	$0e02,$4268,$60d3                ; $3c48 POKE
+	word	$0e03,$42e0,$4239,$6014          ; $3c49 PRINT
 	word	$0e02,$40da,$600d                ; $3c4a REM
 	word	$0e03,$40da,$435c,$6242          ; $3c4b RETURN
 	word	$0e02,$435a,$600e                ; $3c4c RUN

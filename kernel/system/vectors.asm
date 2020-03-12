@@ -35,6 +35,9 @@
 		
 .OSLineInput
 		jmp 	#OSXLineInput		
+
+.OSGetTextPos
+		jmp 	#OSXGetTextPos		
 		
 .OSUDivide16		
 		jmp 	#OSXUDivide16	

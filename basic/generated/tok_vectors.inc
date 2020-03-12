@@ -51,31 +51,31 @@
 	word	Command_If               ; $3e2e IF
 	word	Command_Repeat           ; $3e2f REPEAT
 	word	Command_While            ; $3e30 WHILE
-	word	Command_ENDIF            ; $3a31 ENDIF
-	word	Command_Next             ; $3a32 NEXT
-	word	Dummy6                   ; $3a33 THEN
-	word	Command_Until            ; $3a34 UNTIL
-	word	Command_Wend             ; $3a35 WEND
-	word	CommentCommand1          ; $3c36 '
-	word	ColonHandler             ; $3c37 :
-	word	CommandAssert            ; $3c38 ASSERT
-	word	Command_Call             ; $3c39 CALL
-	word	Command_Clear            ; $3c3a CLEAR
-	word	Command_DIM              ; $3c3b DIM
-	word	Command_ELSE             ; $3c3c ELSE
-	word	WarmStart                ; $3c3d END
-	word	Command_EndProc          ; $3c3e ENDPROC
-	word	Command_GOSUB            ; $3c3f GOSUB
-	word	Command_GOTO             ; $3c40 GOTO
-	word	SyntaxError              ; $3c41 INPUT
-	word	Command_Let              ; $3c42 LET
-	word	Command_List             ; $3c43 LIST
-	word	SyntaxError              ; $3c44 LOAD
-	word	Command_New              ; $3c45 NEW
-	word	Command_Old              ; $3c46 OLD
-	word	CommandPoke              ; $3c47 POKE
-	word	Command_Print            ; $3c48 PRINT
-	word	Command_Proc             ; $3c49 PROC
+	word	Command_Proc             ; $3e31 PROC
+	word	Command_ENDIF            ; $3a32 ENDIF
+	word	Command_Next             ; $3a33 NEXT
+	word	Dummy6                   ; $3a34 THEN
+	word	Command_Until            ; $3a35 UNTIL
+	word	Command_Wend             ; $3a36 WEND
+	word	Command_EndProc          ; $3a37 ENDPROC
+	word	CommentCommand1          ; $3c38 '
+	word	ColonHandler             ; $3c39 :
+	word	CommandAssert            ; $3c3a ASSERT
+	word	Command_Call             ; $3c3b CALL
+	word	Command_Clear            ; $3c3c CLEAR
+	word	Command_DIM              ; $3c3d DIM
+	word	Command_ELSE             ; $3c3e ELSE
+	word	WarmStart                ; $3c3f END
+	word	Command_GOSUB            ; $3c40 GOSUB
+	word	Command_GOTO             ; $3c41 GOTO
+	word	SyntaxError              ; $3c42 INPUT
+	word	Command_Let              ; $3c43 LET
+	word	Command_List             ; $3c44 LIST
+	word	SyntaxError              ; $3c45 LOAD
+	word	Command_New              ; $3c46 NEW
+	word	Command_Old              ; $3c47 OLD
+	word	CommandPoke              ; $3c48 POKE
+	word	Command_Print            ; $3c49 PRINT
 	word	CommentCommand2          ; $3c4a REM
 	word	Command_RETURN           ; $3c4b RETURN
 	word	RunProgram               ; $3c4c RUN

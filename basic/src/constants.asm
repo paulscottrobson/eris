@@ -45,3 +45,7 @@ returnStackSize = 256
 ; 		Words required to store the stack position (line address, code address)
 ;
 stackPosSize = 2
+;
+;		Indent spaces per level
+;
+indentStep = 2

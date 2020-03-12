@@ -10,6 +10,8 @@
 ; *****************************************************************************
 
 .Command_List 		;; [list]
+		mov 	r0,#12 						; clear the screen	
+		jsr 	#OSPrintCharacter
 		clr 	r6 							; R6 is the lowest listed line number
 		clr 	r7 							; R7 is the current indentation.
 		mov 	r8,#10 						; R8 is current display base.
@@ -25,6 +27,11 @@
 ._CLHaveLine
 		ldm 	r11,#programCode 			; R11 is the pointer to the current line.
 ._CLListLoop
+		jsr 	#OSGetTextPos 				; get text position
+		sub 	r1,#CharHeight-4 			; check off the bottom
+		sklt
+		jmp 	#WarmStart
+		;
 		ldm 	r0,r11,#0 					; get the offset, if zero, warm start.
 		sknz 	r0
 		jmp 	#WarmStart					
@@ -48,14 +55,24 @@
 ; *****************************************************************************
 
 .ListOneLine
-		push 	r6,r11,link
+		push 	r6,r10,r11,link
 		;
+		mov 	r10,r11,#0 					; save SOL in R10
+		mov 	r0,#-indentStep 	 		; do down indents before
+		mov 	r1,#13<<9
+		jsr 	#ListCheckAdjustIndent
+
+		mov 	r0,#theme_line+$10
+		jsr 	#OSPrintCharacter
+
 		ldm 	r0,r11,#1 					; get line number
 		mov 	r1,#10 						; base
 		jsr 	#OSIntToStr 				; convert to string.
 		jsr 	#OSPrintString 				; print string.
 		ldm 	r0,r0,#0					; get string length
-		mov 	r1,r7,#6 					; get indent + 6
+		mov 	r1,#6 						; get indent + 6
+		skm 	r7 							; add indent if not -ve
+		add 	r1,r7,#0
 		sub 	r1,r0,#0 					; subtract length of string, spacing to code
 ._LOLSpacing
 		mov 	r0,#$20
@@ -76,7 +93,15 @@
 ._LOLExit				
 		mov 	r0,#13 						; print new line
 		jsr 	#OSPrintCharacter
-		pop 	r6,r11,link
+
+		mov 	r0,#indentStep 	 			; do up indents after
+		mov 	r1,#15<<9
+		jsr 	#ListCheckAdjustIndent
+
+		skp 	r7 							; clear indent if -ve
+		clr 	r7
+
+		pop 	r6,r10,r11,link
 		ret
 
 		
@@ -105,6 +130,8 @@
 		clr 	r1 							; we don't flip the constant
 		inc 	r11 						; skip over constant shift
 ._DTDigit
+		mov 	r0,#theme_const+$10
+		jsr 	#OSPrintCharacter
 		ldm 	r0,r11,#0 					; get the value and skip it
 		inc 	r11
 		xor 	r0,r1,#0 					; flip it
@@ -128,6 +155,8 @@
 		xor 	r0,#$0100
 		skz 	r0
 		jmp 	#_DTNotString
+		mov 	r0,#theme_string+$10
+		jsr 	#OSPrintCharacter
 		mov 	r0,#'"'
 		jsr 	#ListPrintCharacter
 		mov 	r0,r11,#1 					; print the string
@@ -143,12 +172,91 @@
 		;		So it's now either a token, or an identifier.
 		;
 ._DTNotString
-
-		inc 	r11
-
+		ldm 	r0,r11,#0 					; get the token
+		add 	r0,r0,#0 					; shift bit 14 into bit 15
+		skm 	r0 
+		jmp 	#_DTIsToken
+		;
+		;		It's an identifier
+		;
+		mov 	r0,#theme_ident+$10
+		jsr 	#OSPrintCharacter
+		mov 	r0,r11,#0 					; so print identifier here
+		jsr 	#ListPrintEncodedIdentifier
+		mov 	r11,r0,#0 					; and update when finished.
+		jmp 	#_DTExit
+		;
+		;		It's a token
+		;
+._DTIsToken
+		mov 	r0,#theme_keyword+$10
+		jsr 	#OSPrintCharacter
+		ldm 	r1,r11,#0 					; get the token
+		and 	r1,#$01FF 					; this is the token ID, lower 9 bits
+		mov 	r2,#TokeniserWords 			; this is the table address
+._DTFindToken
+		sknz 	r1 							; go forward till found the token text record
+		jmp 	#_DTHaveToken			
+		dec 	r1 							; dec count
+		ldm 	r0,r2,#0 					; get string length
+		and 	r0,#$00FF
+		add 	r2,r0,#1 					; advance to next record
+		jmp 	#_DTFindToken
+		;
+._DTHaveToken				
+		mov 	r0,r2,#1 					; R0 now contains the token text address
+		ldm 	r3,r0,#0 					; get the first token
+		skm 	r3 							; +ve print as identifier
+		jsr 	#ListPrintEncodedIdentifier
+		skp 	r3
+		jsr 	#ListPrintPunctuation
+		inc 	r11							; advance over token
 ._DTExit
 		pop 	r0 							; get the token and update last token
 		stm 	r0,#lastListToken
 		pop 	link
 		ret
 
+; *****************************************************************************
+;
+;		Check code line at R10 for command type R1, when found, adjust 
+;		indent in R7 by R0
+;
+; *****************************************************************************
+
+.ListCheckAdjustIndent
+		push 	r0,r1,r2,r10
+		inc 	r10
+._LCAILoop
+		inc 	r10 						; pre inc
+._LCAILoopNoInc		
+		ldm 	r2,r10,#0 					; check for strings/EOL
+		sknz 	r2
+		jmp 	#_LCAIExit
+		and 	r2,#$FF00
+		xor 	r2,#$0100
+		sknz 	r2
+		jmp 	#_LCAIStringSkip
+		;
+		ldm 	r2,r10,#0 					; get token back.		
+		and 	r2,#$E000 					; is it a token
+		xor 	r2,#$2000
+		skz 	r2
+		jmp 	#_LCAILoop 					; if not go back.
+		;
+		ldm 	r2,r10,#0 					; get token back
+		and 	r2,#15<<9 					; isolate type
+		xor 	r2,r1,#0 					; found it ?
+		sknz 	r2
+		add 	r7,r0,#0 					; add indent adjustment
+		jmp 	#_LCAILoop
+		;
+._LCAIStringSkip:
+		ldm 	r2,r10,#0 					; add string data length
+		and 	r2,#$00FF
+		add 	r10,r2,#0
+		jmp 	#_LCAILoopNoInc		
+
+._LCAIExit		
+		pop 	r0,r1,r2,r10
+		ret

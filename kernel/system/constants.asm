@@ -66,3 +66,12 @@ tabStop = 4
 ;		Buffer size required for a string to contain a converted integer
 ;
 maxIStrSize = 10
+;
+;		Colour schemes for listing
+;
+theme_line = 2 			; green lines
+theme_keyword = 6 		; cyan keywords
+theme_ident = 3 		; yellow identifiers
+theme_const = 1 		; red integers
+theme_string = 5 		; magenta strings
+theme_punc = 2			; green punctuation
