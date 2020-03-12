@@ -68,7 +68,7 @@
 	word	WarmStart                ; $3c3f END
 	word	Command_GOSUB            ; $3c40 GOSUB
 	word	Command_GOTO             ; $3c41 GOTO
-	word	SyntaxError              ; $3c42 INPUT
+	word	Command_Input            ; $3c42 INPUT
 	word	Command_Let              ; $3c43 LET
 	word	Command_List             ; $3c44 LIST
 	word	SyntaxError              ; $3c45 LOAD

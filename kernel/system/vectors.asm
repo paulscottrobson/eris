@@ -42,6 +42,9 @@
 .OSLineInput
 		jmp 	#OSXLineInput		
 
+.OSInputLimit
+		jmp 	#OSXInputLimit
+		
 .OSCheckBreak
 		jmp 	#OSXCheckBreak
 		

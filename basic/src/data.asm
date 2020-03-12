@@ -68,7 +68,10 @@
 		fill 	hashTableSize*4
 
 .tokenBuffer 								; tokenisation buffer.
-		fill 	256			
+		fill 	256	
+
+.inputBuffer	 							; buffer for INPUT
+		fill 	41 				
 ;
 ;							End of interpreter data
 ;

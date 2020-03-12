@@ -1,4 +1,5 @@
-if 1 then print "hi"
+if 1 then print "hi ?";
+input a$
 ;list 
 xz.a049 = 99
 repeat
