@@ -5,9 +5,6 @@ popd >/dev/null
 pushd keyboard-map >/dev/null
 python keyconv.py
 popd >/dev/null
-pushd prompt >/dev/null
-python prompt.py
-popd >/dev/null
 python ../assembler/easm.zip 
 cp bin/a.out ../emulator/bin/kernel.rom
 cp bin/a.prg ../emulator/bin/kernel.prg

@@ -5,9 +5,6 @@ popd
 pushd keyboard-map 
 python keyconv.py
 popd 
-pushd prompt 
-python prompt.py
-popd 
 python ..\assembler\easm.zip 
 if errorlevel 1 goto exit
 copy bin\a.out ..\emulator\bin\kernel.rom >NUL

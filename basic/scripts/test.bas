@@ -1,5 +1,5 @@
 if 1 then print "hi"
-list 
+;list 
 xz.a049 = 99
 repeat
 	while
@@ -10,7 +10,7 @@ repeat
 until
 proc test
 	call test
-endproc
+32700 endproc
 if 
 x
 else

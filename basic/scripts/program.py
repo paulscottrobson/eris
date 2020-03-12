@@ -42,7 +42,7 @@ class Program(object):
 			lineNumber = int(m.group(1))									# get it
 			assert lineNumber > self.lastLine,"Lines out of sequence"		# check order.
 			s = m.group(2).strip()											# line body.
-		assert lineNumber > 0 and lineNumber < 32768,"Bad line number" 		# must be 1-32767
+		assert lineNumber > 0 and lineNumber < 65536,"Bad line number" 		# must be 1-32767
 		self.lastLine = lineNumber 											# update state
 		self.nextLine = lineNumber+10
 		#

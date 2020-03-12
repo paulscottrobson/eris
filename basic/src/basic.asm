@@ -28,6 +28,8 @@
 		mov 	r0,#freeBasicCode			; initialise code pointer.
 		stm 	r0,#programCode
 		;
+		mov 	r0,#basicPrompt
+		jsr 	#OSPrintString
 		jmp 	#RunProgram					; run program code.
 
 		jsr 	#Command_New
@@ -46,5 +48,7 @@
 		break
 	 	jmp 	#h1
 
+.basicPrompt
+		string "Basic[3A]  0.01[0D,0D]"
 
 
