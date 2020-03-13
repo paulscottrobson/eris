@@ -31,6 +31,10 @@
 		mov 	r0,#basicPrompt
 		jsr 	#OSPrintString
 
+		mov 	r0,r8,#0
+		mov 	r1,r8,#0
+		mov 	r2,r8,#0
+		mov 	r3,r8,#0
 		jmp 	#TestTokeniserRoutine	
 		jmp 	#RunProgram					; run program code.
 

@@ -1,7 +1,10 @@
+@echo off
 rem pushd ..\assembler >NUL
 rem call build.bat
 rem popd >NUL
 rem
+del generated\token_test.inc
+
 pushd scripts >NUL
 python tables.py
 python gentokentest.py
