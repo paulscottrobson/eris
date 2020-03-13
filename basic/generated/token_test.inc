@@ -4,4 +4,4 @@
 	break
 	jmp #TestTokeniserRoutine
 .TokenTest
-	word $3920,$0c20,$8c34,$7d32,$7220,$4700
+	word $3922,$0c41,$8c42,$7d43,$7222,$4700

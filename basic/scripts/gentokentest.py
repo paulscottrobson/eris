@@ -11,7 +11,10 @@
 
 import os,re,random
 
-inp = "  42 "
+inp = "  42 32767 32769 &2A &802A %101010"
+inp = "* >= > = <> : |"
+inp = "2+3"
+inp = '"ABC"'
 
 random.seed(42)
 inp = [ord(x) for x in inp]
