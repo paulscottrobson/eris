@@ -1,5 +1,7 @@
+print 65534,&FFFE,%1111111111111110
 print val("42"),val("-422x")
 print &2A,%101010,&8004,40000,&X
+end
 list
 if 1 then print "hi ?";
 repeat

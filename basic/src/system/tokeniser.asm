@@ -18,7 +18,10 @@
 
 .TokeniseString	
 		push 	r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,link
-		mov 	r9,#tokenBuffer+2 			; tokenised code goes here.
+		mov 	r9,#tokenBuffer 			; tokenised code goes here.
+		stm 	r14,r9,#0 					; zero the first two words
+		stm 	r14,r9,#1
+		add 	r9,#2 						; and skip them
 		mov 	r8,r0,#0 					; characters come from here.
 		mov 	r7,#$007F 					; R7 is the character mask 					
 		;
@@ -43,7 +46,7 @@
 
 ._TSExit
 		stm 	r14,r9,#0 					; mark buffer end with a $0000
-		mov 	r0,#tokenBuffer+2 			; return token buffer
+		mov 	r0,#tokenBuffer 			; return token buffer
 		sknz 	r0 							; skip the clear
 ._TSFail
 		clr 	r0							; come here if you fail.

@@ -4,11 +4,10 @@ rem call build.bat
 rem popd >NUL
 rem
 del generated\token_test.inc
-
 pushd scripts >NUL
 python tables.py
-python gentokentest.py
 python program.py
+rem python gentokentest.py
 rem python systests.py Comparison
 copy basiccode.prg ..\..\emulator\bin >NUL
 popd

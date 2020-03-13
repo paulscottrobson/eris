@@ -60,6 +60,7 @@ class Generator(object):
 	def token(self):
 		t = Tokens().getList()
 		t = t[random.randint(0,len(t)-1)]
+		t = t.lower() if random.randint(0,1) == 0 else t.upper()
 		return self.token() if t == "&" or t == "%" or t.startswith("|") else t
 	#
 	def qstring(self):
@@ -82,6 +83,7 @@ h = open(".."+os.sep+"generated"+os.sep+"token_test.inc","w")
 h.write(".TestTokeniserRoutine\n")
 h.write("\tmov r0,#TokenTest\n")
 h.write("\tjsr #TokeniseString\n")
+h.write("\tadd r0,#2\n")
 h.write("\tmov r1,#TestResults\n")
 h.write("\tjsr #CompareR0R1\n")
 h.write("\tjmp #$FFFF\n")
