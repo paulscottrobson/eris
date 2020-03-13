@@ -17,7 +17,7 @@ import os,re,random
 #inp = '"ABC""" "ABCD" "A" "AB"'
 #inp = "az09."		# 4411 45bb 6025
 #inp = "az09.q"		# 4411 45bb 62CD
-inp = "to.number("
+inp = "to.number(right$(print>="
 
 random.seed(42)
 inp = [ord(x) for x in inp]

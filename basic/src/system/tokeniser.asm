@@ -17,7 +17,7 @@
 ; *****************************************************************************
 
 .TokeniseString	
-		push 	r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,link
+		push 	r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,link
 		mov 	r9,#tokenBuffer 			; tokenised code goes here.
 		mov 	r8,r0,#0 					; characters come from here.
 		mov 	r7,#$007F 					; R7 is the character mask 					
@@ -47,7 +47,7 @@
 		sknz 	r0 							; skip the clear
 ._TSFail
 		clr 	r0							; come here if you fail.
-		pop 	r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,link
+		pop 	r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,link
 		ret
 
 ; *****************************************************************************
@@ -390,5 +390,55 @@
 		;		Now there is a fully fledged identifier with all the bits set from R6 .. R9-1
 		;		Check if it is a token.
 		;
-		break		
-
+		mov 	r4,#TokeniserWords 			; R4 points into table
+		mov 	r5,r9,#0 					; R5 contains the identifier length which we can use to speed up.
+		sub 	r5,r6,#0
+		clr 	r11 						; R11 counts the tokens we've read.
+._TIKCheckIdentifier
+		ldm 	r0,r4,#0 					; read type/size byte
+		sknz 	r0 							; if it is zero, leave things as they are, e.g. the identifier as is
+		jmp 	#TEExitOkay
+		;
+		and 	r0,r7,#0 					; get the word length into R0
+		mov 	r3,r0,#0 					; save in R3
+		xor 	r0,r5,#0 					; is it the same as the token we have ?
+		skz 	r0
+		jmp 	#_TIKNext
+		;
+		;		Lengths match so compare token at R6 with that at R4+1, length R5
+		;
+		mov 	r1,r6,#0 					; R1, R2 are the pointers
+		mov 	r2,r4,#1  					; R3 contains the word length.
+._TIKCheckWord
+		ldm 	r0,r1,#0 					; compare [R1][R2]
+		ldm 	r10,r2,#0
+		xor 	r0,r10,#0
+		skz 	r0 							; different, go to next
+		jmp 	#_TIKNext
+		inc 	r1 							; bump pointers
+		inc 	r2
+		dec 	r3 							; do R3 words
+		skz 	r3
+		jmp 	#_TIKCheckWord
+		;
+		;		We have a token. R4 points to its type/size, R11 is the token ID
+		;
+		ldm 	r0,r4,#0 					; found a match, get the type/size byte
+		and 	r0,#$FF00 					; isolate the type
+		add 	r0,r0,#0 					; shift into bits 9..13
+		add 	r0,r11,#0 					; add the counter, the token base ID
+		add 	r0,#$2000 					; and the base value for the tokens at 2000-3FFF
+		mov 	r9,r6,#0 					; throw away the identifier and write the token
+		stm 	r0,r9,#0 					
+		stm 	r14,r9,#1  					; write a following $0000
+		inc 	r9
+		jmp 	#TEExitOkay 				; and exit successfully
+		;
+		;		Look at next token.
+		;
+._TIKNext
+		ldm 	r0,r4,#0 					; get type/size
+		and 	r0,r7,#0 					; isolate size
+		add 	r4,r0,#1 					; go to next record
+		inc 	r11 						; one more token
+		jmp 	#_TIKCheckIdentifier
