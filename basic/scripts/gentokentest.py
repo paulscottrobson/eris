@@ -13,9 +13,9 @@ import os,re,random
 
 inp = "  42 32767 32769 &2A &802A %101010"
 inp = "* >= > = <> : |"
-inp = "2+3"
-inp = '"ABC"'
-
+inp = "2+3>=9"
+inp = '"ABC""" "ABCD" "A" "AB"'
+inp = "right$("
 random.seed(42)
 inp = [ord(x) for x in inp]
 inp.append(0)

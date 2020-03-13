@@ -17,7 +17,7 @@
 ; *****************************************************************************
 
 .TokeniseString	
-		push 	r3,r7,r8,r9,link
+		push 	r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,link
 		mov 	r9,#tokenBuffer 			; tokenised code goes here.
 		mov 	r8,r0,#0 					; characters come from here.
 		mov 	r7,#$007F 					; R7 is the character mask 					
@@ -47,7 +47,7 @@
 		sknz 	r0 							; skip the clear
 ._TSFail
 		clr 	r0							; come here if you fail.
-		pop 	r3,r7,r8,r9,link
+		pop 	r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,link
 		ret
 
 ; *****************************************************************************
@@ -82,7 +82,7 @@
 		;
 ._TEHandlerTable
 		word 	TokenisePunctuation 		; 0 (punctuation)
-		word 	SyntaxError 				; 1 (identifier)
+		word 	TokeniseIdentKeyword		; 1 (identifier)
 		word	TokeniseConstant 			; 2 (number)		
 
 ; *****************************************************************************
@@ -242,4 +242,62 @@
 
 .TokeniseStringConstant
 		inc 	r8 							; advance past opening quote mark to first char of string.
+		mov 	r6,r9,#0 					; save start in R6
+		stm 	r14,r6,#1 					; start size in R6+1
+		mov 	r5,r6,#2 					; R5 is the write pointer, where the next character goes
+		;
+		;		Get and write next character
+		;		 					
+.TokStringLoop		
+		ldm 	r0,r8,#0 					; get next character
+		and 	r0,r7,#0
+		sknz 	r0 							; if zero, line end so we failed as no matching closing quote
+		jmp 	#TEExitFail
+		xor 	r0,#34						; found closing quote
+		sknz 	r0
+		jmp 	#TokStringComplete 			; we are done.
+		;
+		ldm 	r1,r6,#1 					; get the actual length so far
+		inc 	r1 							; increment it and write back
+		stm 	r1,r6,#1
+		ror 	r1,#1 						; R1 is now -ve if this is odd. e.g. char 0,2,4,6,8
+		;
+		ldm 	r0,r8,#0 					; get next character back
+		and 	r0,r7,#0
+		inc 	r8 							; skip it.
+		skm 	r1 							; for even characters 1,3,5
+		ror 	r0,#8 						; shift it into the upper byte.
+		;
+		ldm 	r2,r5,#0 					; add to current word
+		add 	r2,r0,#0
+		stm 	r2,r5,#0
+		stm 	r14,r5,#1 					; clear the next word.
+		skm 	r1 							; for even characters, advance to the next word.
+		inc 	r5
+		jmp 	#TokStringLoop
+
+.TokStringComplete
+		inc 	r8 							; advance past the closing quote.
+		ldm 	r0,r6,#1 					; get the count.
+		and 	r0,#1 						; if it is odd, advance to next - this is padding with $00
+		skz 	r0
+		inc 	r5
+		;
+		mov 	r9,r5,#0 					; advance token buffer pointer to next slot.
+		sub 	r5,r6,#0 					; this it the overall length
+		add 	r5,#$0100 					; make it a string token
+		stm 	r5,r6,#0 					; write in the first word
+		and 	r5,#$FF00 					; check it hasn't overflowed
+		xor 	r5,#$0100
+		skz 	r5
+		jmp 	#TEExitFail 				; if so it has failed to tokenise, string too long
+		jmp 	#TEExitOkay
+
+; *****************************************************************************
+;
+;						Tokenise an identifier/keyword
+;
+; *****************************************************************************
+
+.TokeniseIdentKeyword
 		break
