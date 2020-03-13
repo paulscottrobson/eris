@@ -3,7 +3,7 @@ rem pushd ..\assembler >NUL
 rem call build.bat
 rem popd >NUL
 rem
-del generated\token_test.inc
+del /Q generated\token_test.inc 2>NUL
 pushd scripts >NUL
 python tables.py
 python program.py
