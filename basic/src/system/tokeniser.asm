@@ -12,12 +12,12 @@
 ; *****************************************************************************
 ;
 ;		Tokenise coloured ASCII at R0. Return address of buffer in R0
-;	 	or 0 if tokenising failed.
+;	 	or 0 if tokenising failed, length in R1
 ;
 ; *****************************************************************************
 
 .TokeniseString	
-		push 	r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,link
+		push 	r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,link
 		mov 	r9,#tokenBuffer 			; tokenised code goes here.
 		stm 	r14,r9,#0 					; zero the first two words
 		stm 	r14,r9,#1
@@ -46,11 +46,14 @@
 
 ._TSExit
 		stm 	r14,r9,#0 					; mark buffer end with a $0000
+		mov 	r1,r9,#0 					; calculate actual length of whole thing
+		sub 	r1,#tokenBuffer-1
+		;
 		mov 	r0,#tokenBuffer 			; return token buffer
 		sknz 	r0 							; skip the clear
 ._TSFail
 		clr 	r0							; come here if you fail.
-		pop 	r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,link
+		pop 	r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,link
 		ret
 
 ; *****************************************************************************

@@ -33,9 +33,10 @@
 
 		;jmp 	#TestTokeniserRoutine	
 		
-		jmp 	#RunProgram					; run program code.
+		;jmp 	#RunProgram					; run program code.
 
-		jsr 	#Command_New 				; New program.
+		;jsr 	#Command_New 				; New program.
+		jsr 	#Command_Clear
 
 ; *****************************************************************************
 ;
@@ -53,10 +54,10 @@
 		jmp 	#TokeniseError
 		mov 	r11,r0,#0 					; put start of 'faux line' in R11.
 		;
-		ldm 	r1,r0,#2 					; look at first token to see if it is a number.
-		skm 	r1 							; no, it isn't
+		ldm 	r2,r0,#2 					; look at first token to see if it is a number.
+		skm 	r2 							; no, it isn't
 		jmp 	#RunProgramR11 				; run program from R11
-		jmp 	#SyntaxError
+		jmp 	#EditProgram 				; else edit
 
 .basicPrompt
 		string "Basic[3A]  0.01[0D,0D]"
