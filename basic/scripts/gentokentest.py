@@ -11,11 +11,14 @@
 
 import os,re,random
 
-inp = "  42 32767 32769 &2A &802A %101010"
-inp = "* >= > = <> : |"
-inp = "2+3>=9"
-inp = '"ABC""" "ABCD" "A" "AB"'
-inp = "right$("
+#inp = "  42 32767 32769 &2A &802A %101010"
+#inp = "* >= > = <> : |"
+#inp = "2+3>=9"
+#inp = '"ABC""" "ABCD" "A" "AB"'
+#inp = "az09."		# 4411 45bb 6025
+#inp = "az09.q"		# 4411 45bb 62CD
+inp = "to.number("
+
 random.seed(42)
 inp = [ord(x) for x in inp]
 inp.append(0)

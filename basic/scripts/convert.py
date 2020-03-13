@@ -106,4 +106,5 @@ if __name__ == "__main__":
 	tk.test("< <>")
 	tk.test("left$( val( a( a$ print0 print")
 	tk.test("%101010 &2A")
+	tk.test("az09.q")
 	tk.test("axxx(")

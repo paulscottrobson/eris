@@ -244,6 +244,7 @@
 		inc 	r8 							; advance past opening quote mark to first char of string.
 		mov 	r6,r9,#0 					; save start in R6
 		stm 	r14,r6,#1 					; start size in R6+1
+		stm 	r14,r6,#2 					; zero first word.
 		mov 	r5,r6,#2 					; R5 is the write pointer, where the next character goes
 		;
 		;		Get and write next character
@@ -300,4 +301,94 @@
 ; *****************************************************************************
 
 .TokeniseIdentKeyword
-		break
+		;
+		;		First, we extract the alphanumeric/dot part of the identifier
+		;
+		mov 	r6,r9,#0 					; R6 is the start of the identifier in the tokeniser buffer.
+		clr 	r5 							; R5 is the first/second byte flag.
+		stm 	r14,r9,#0 					; zero first byte of identifier.
+._TIKBuildIdent		
+		ldm 	r0,r8,#0 					; look at the next token
+		and 	r0,r7,#0
+		jsr 	#OSUpperCase 				; capitalise it.
+		mov 	r3,r0,#0 					; save in R3
+		;
+		mov		r1,#37 						; 37 is code for '.'
+		xor 	r0,#'.'						; which has handled seperately.
+		sknz 	r0
+		jmp 	#_TIKHaveCharacter
+		;
+		mov 	r0,r3,#0					; get character back
+		jsr 	#GetCharacterType 			; 0 punctuation 1 alphabet 2 number
+		sknz 	r0 							; end of identifier
+		jmp 	#_TIKHaveIdent
+		;
+		mov		r1,r3,#0 					; R1 = original character
+		sub 	r1,#64 						; adjust for A-Z : 1-26
+		dec 	r0 							; if R0 is number, e.g. 2
+		skz 	r0
+		add 	r1,#64-48+27 				; adjust for 0-9 27-36
+		;
+		;		Have the converted character in R1
+		;
+._TIKHaveCharacter
+		skz 	r5 							; if it's character 2 multiply it by 40
+		mult 	r1,#40
+		ldm 	r0,r9,#0 					; add into the current word
+		add 	r0,r1,#0
+		stm 	r0,r9,#0
+		stm 	r14,r9,#1 					; clear next word
+		skz 	r5 							; if it's character 2 bump the write pointer
+		inc 	r9
+		xor 	r5,#1 						; toggle first/second flag
+		inc 	r8 							; next source and go round
+		jmp 	#_TIKBuildIdent
+		;
+		;		Have the identifier at R6 .. R9, except for the last if odd.
+		;
+._TIKHaveIdent
+		skz 	r5  						; if just written the low byte only, then go to next								
+		inc 	r9 
+		;
+		dec 	r9 							; set the last bit of the identifier flag (bit 13)
+		ldm 	r0,r9,#0 					; on the last word of the identifier.
+		add 	r0,#$2000
+		stm 	r0,r9,#0
+		inc 	r9
+		;
+		;		Now type it. Checking for $ and then (. Identifier is R6..R9-1
+		;
+		mov 	r5,#$4000 					; we set these bits anyway, as they identify the identifier.
+		;
+		ldm 	r0,r8,#0 					; look at next, check if $
+		and 	r0,r7,#0
+		xor 	r0,#'$'
+		sknz 	r0
+		add 	r5,#$1000 					; if so set bit 11
+		sknz 	r0
+		inc 	r8
+		;
+		ldm 	r0,r8,#0 					; look at next, check if (
+		and 	r0,r7,#0
+		xor 	r0,#'('
+		sknz 	r0
+		add 	r5,#$0800 					; if so set bit 10
+		sknz 	r0
+		inc 	r8
+		;
+		mov 	r1,r6,#0 					; now apply that addition to the whole identifier.
+._TIKApplyTyping
+		ldm 	r0,r1,#0 					; add to the word
+		add 	r0,r5,#0
+		stm 	r0,r1,#0
+		inc 	r1 							; next word
+		mov 	r0,r1,#0 					; loop back if not at end.
+		xor 	r0,r9,#0
+		skz 	r0
+		jmp 	#_TIKApplyTyping		
+		;
+		;		Now there is a fully fledged identifier with all the bits set from R6 .. R9-1
+		;		Check if it is a token.
+		;
+		break		
+
