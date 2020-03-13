@@ -224,6 +224,7 @@ BYTE8 CPUExecute(WORD16 breakPoint1,WORD16 breakPoint2) {
 	WORD16 next;
 	do {
 		BYTE8 r = CPUExecuteInstruction();											// Execute an instruction
+		if (R15 == 0xFFFF) CPUExit(); 												// Exit if jumped to $FFFF
 		if (r != 0) return r; 														// Frame out.
 		next = CPUReadMemory(R15);
 	} while (R15 != breakPoint1 && R15 != breakPoint2 && next != 0);				// Stop on breakpoint or $FF break

@@ -51,6 +51,10 @@
 
 .lastListToken 								; last listed token (for base conversion)
 		fill 	1		
+
+.checkCount 								; check so we don't check Break/Sync every time.
+		fill 	1		
+
 ;
 ;		Evaluation stack.
 ;			+0 	data 	(either pointer to a string, or integer)
@@ -69,6 +73,7 @@
 
 .tokenBuffer 								; tokenisation buffer.
 		fill 	256	
+.tokenBufferEnd
 
 .inputBuffer	 							; buffer for INPUT
 		fill 	41 				

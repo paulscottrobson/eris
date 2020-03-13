@@ -36,20 +36,27 @@
 		jmp 	#RunProgram					; run program code.
 
 		jsr 	#Command_New 				; New program.
-		
+
 ; *****************************************************************************
 ;
 ;							  Warm start, also END
 ;
 ; *****************************************************************************
 
-.WarmStart ;; [end]	
+.WarmStart 
 		ldm 	sp,#initialSP 				; reset the stack
 		mov 	r0,#$12 					; go green
 		jsr 	#OSPrintCharacter
-.h1		jsr 	#OSLineInput
-		break
-	 	jmp 	#h1
+		jsr 	#OSLineInput 				; read a line off the screen
+		jsr 	#TokeniseString 			; try to tokenise and error if failed.
+		sknz 	r0
+		jmp 	#TokeniseError
+		mov 	r11,r0,#0 					; put start of 'faux line' in R11.
+		;
+		ldm 	r1,r0,#2 					; look at first token to see if it is a number.
+		skm 	r1 							; no, it isn't
+		jmp 	#RunProgramR11 				; run program from R11
+		jmp 	#SyntaxError
 
 .basicPrompt
 		string "Basic[3A]  0.01[0D,0D]"

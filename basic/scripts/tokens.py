@@ -96,7 +96,7 @@ class Tokens(object):
 	#
 	def encodePunctuation(self,s):
 		assert len(s) <= 2 and s != "","Bad "+s
-		assert re.match("^[\\!\\+\\-\\*\\>\\<\\=\\/\\(\\)\\:\\,\\;\\&\\%\\']+$",s) is not None,"Bad "+s
+		assert re.match("^[\\!\\+\\-\\*\\>\\<\\=\\/\\(\\)\\:\\,\\;\\&\\%\\'\\?]+$",s) is not None,"Bad "+s
 		s = s + chr(0)
 		return [ 0x8000 + ord(s[0]) + (ord(s[1]) << 8)]
 	#
@@ -162,7 +162,7 @@ class Tokens(object):
 //		Commands
 //
 [Cmd]
-	' 		:
+	' 		:		?
 	assert 	call 	clear 	dim 	else 	end 	gosub 	goto 
 	input 	let 	list 	load 	new 	old 	poke 	print 	
 	rem 	return 	run 	save 	stop 	sys 	

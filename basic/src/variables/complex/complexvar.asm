@@ -157,11 +157,17 @@
 ; *****************************************************************************
 
 .CreateVariableRecord
+		push 	r11,link
+
+		mov 	r3,r11,#0 					; check if identifier in token buffer
+		sub 	r3,#tokenBufferEnd
+		skge
+		jsr 	#DuplicateReference
 		ldm 	r1,#memAllocBottom 			; point R1 to free memory.
 		;
 		ldm 	r2,r6,#0 					; read head of linked list
 		stm 	r2,r1,#0 					; write into new record
-		stm 	r11,r1,#1 					; save pointer to name into new record
+		stm 	r11,r1,#1 					; save name address
 
 		ldm 	r3,r11,#0 					; get keyword token again.
 		ror 	r3,#13 						; type bit in R0.
@@ -183,4 +189,6 @@
 		;
 		stm 	r1,r6,#0 					; patch into linked list.
 		mov 	r0,r1,#0 					; address in R0
+		pop 	r11,link
 		ret
+

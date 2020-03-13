@@ -16,26 +16,39 @@
 ; *****************************************************************************
 
 .RunProgram	;; [run]
+		jsr 	#Command_Clear 				; clear command
+		ldm 	r11,#programCode 			; come back here to start new line.
+		ldm 	r0,r11,#0 					; get offset to next line.
+		sknz 	r0 							; if zero, then no program
+		jmp 	#WarmStart
+		;
+		;				Come here to run program from R11.
+		;
+.RunProgramR11	
 		ldm 	sp,#initialSP 				; reset the stack
 		mov 	r10,#evalStack 				; reset the evaluation stack.
-		jsr 	#Command_Clear 				; clear command
 		mov 	r0,#$17 					; switch colour to white
 		jsr 	#OSPrintCharacter
-		ldm 	r11,#programCode 			; come back here to start new line.
 		;
 		;				New line. On entry R11 points to offset word
 		;
 ._RPNewLine
 		stm 	r11,#currentLine 			; save current line number.
-		ldm 	r0,r11,#0 					; get offset to next line.
-		sknz 	r0 							; if zero, then End
-		jmp 	#WarmStart
 		add 	r11,#2 						; point to first token.
 		;
 		;				Next command.
 		;
 ._RPNewCommand		
-		jsr		#OSManager 					; call keyboard manager routine.
+		ldm 	r0,#checkCount 				; CS every 64 commands
+		add 	r0,#1024
+		stm 	r0,#checkCount
+		skc
+		jmp 	#_RPNoCheck
+		jsr		#OSManager 					; call service manager routine.
+		jsr 	#OSCheckBreak 				; check break
+		skz 	r0
+		jmp 	#BreakHandler
+._RPNoCheck		
 		stm 	r14,#tempStringAlloc 		; clear the temp string reference
 		ldm 	r0,r11,#0 					; get next token.
 		mov 	r1,r0,#0 					; save in R1 
@@ -56,7 +69,7 @@
 		;
 ._RPNotCommandToken		
 		sknz 	r1 							; if R1 is zero, end of line, go to new line
-		jmp 	#_RPNewLine 				
+		jmp 	#_RPNextLine 				
 		dec 	r11 						; unpick the token get
 		;
 		ldm 	r0,r11,#0 					; get token back
@@ -72,3 +85,19 @@
 ._RPDoLet		
 		jsr 	#Command_Let 				; try it as a 'let'
 		jmp 	#_RPNewCommand 				; and go round again.
+		;
+		;		Advance to next line.
+		;
+._RPNextLine
+		ldm 	r11,#currentLine 			; get current line
+		ldm 	r0,r11,#0 					; get offset to next line
+		sknz 	r0 							; if zero warm start
+		jmp 	#WarmStart
+		add 	r11,r0,#0 					; advance pointer
+		jmp 	#_RPNewLine
+		;
+		;		Break handler
+		;
+.BreakHandler		
+		jsr 	#OSGetKeyboard 				; this gets the current keyboard state so it doesn't do anything
+		jmp 	#BreakError

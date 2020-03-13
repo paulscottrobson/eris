@@ -17,7 +17,7 @@
 
 .OSXCheckBreak
 		;
-		;		This is a fast hard-coded test for control-C
+		;		This is a fast hard-coded test for control-space
 		;		
 		mov 	r0,#$10 					; check control pressed ($10 column 4)
 		stm 	r0,#keyboardPort
@@ -25,8 +25,8 @@
 		and 	r0,#$10
 		sknz 	r0
 		ret
-		mov 	r0,#$08 					; check C pressed ($08 column 4)
+		mov 	r0,#$08 					; check Z pressed ($01 column 3)
 		stm 	r0,#keyboardPort
 		ldm 	r0,#keyboardPort
-		and 	r0,#$10
+		and 	r0,#$01
 		ret

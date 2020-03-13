@@ -18,7 +18,6 @@
 .Command_New 	;; [new]		
 		ldm 	r0,#programCode				; overwrite the first program word, erasing program
 		stm 	r14,r0,#0
-		jsr 	#Command_Clear				; clear variables
 		jmp 	#WarmStart 					; do a warm start
 
 ; *****************************************************************************
@@ -47,7 +46,6 @@
 		jmp 	#_CONext2
 ;
 ._COFoundEnd
-		break
 		sub 	r0,r2,#0 					; calculate length
 		inc 	r0 							; add 1 to go to start of next line
 		stm 	r0,r2,#0 					; overwrite first offset

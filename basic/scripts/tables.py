@@ -26,7 +26,7 @@ for t in tokens.getList():
 	tn = tn.replace("+","PLUS").replace("-","MINUS").replace("*","STAR").replace("/","SLASH")
 	tn = tn.replace("!","PLING").replace(",","COMMA").replace(";","SEMICOLON").replace("%","PERCENT")
 	tn = tn.replace("(","LPAREN").replace(")","RPAREN").replace("&","AMPERSAND").replace("$","DOLLAR")
-	tn = tn.replace("'","QUOTE").replace(".","DOT").replace("|","VBAR").replace("","")
+	tn = tn.replace("'","QUOTE").replace(".","DOT").replace("|","VBAR").replace("?","QMARK")
 	#tn = tn.replace("","").replace("","").replace("","").replace("","")
 	assert re.match("^[A-Z0-9\\_]+$",tn) is not None,"Bad token "+tn
 	h.write("{0} = ${1:04x}\n".format(tn,id))

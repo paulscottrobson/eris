@@ -60,26 +60,27 @@
 	word	$0d04,$4235,$4284,$426a,$6003    ; $3a37 ENDPROC
 	word	$0e01,$8027                      ; $3c38 '
 	word	$0e01,$803a                      ; $3c39 :
-	word	$0e03,$42f9,$40db,$6332          ; $3c3a ASSERT
-	word	$0e02,$402b,$61ec                ; $3c3b CALL
-	word	$0e03,$41e3,$402d,$6012          ; $3c3c CLEAR
-	word	$0e02,$416c,$600d                ; $3c3d DIM
-	word	$0e02,$41e5,$60db                ; $3c3e ELSE
-	word	$0e02,$4235,$6004                ; $3c3f END
-	word	$0e03,$425f,$435b,$6002          ; $3c40 GOSUB
-	word	$0e02,$425f,$626c                ; $3c41 GOTO
-	word	$0e03,$4239,$4358,$6014          ; $3c42 INPUT
-	word	$0e02,$40d4,$6014                ; $3c43 LET
-	word	$0e02,$4174,$6333                ; $3c44 LIST
-	word	$0e02,$4264,$60a1                ; $3c45 LOAD
-	word	$0e02,$40d6,$6017                ; $3c46 NEW
-	word	$0e02,$41ef,$6004                ; $3c47 OLD
-	word	$0e02,$4268,$60d3                ; $3c48 POKE
-	word	$0e03,$42e0,$4239,$6014          ; $3c49 PRINT
-	word	$0e02,$40da,$600d                ; $3c4a REM
-	word	$0e03,$40da,$435c,$6242          ; $3c4b RETURN
-	word	$0e02,$435a,$600e                ; $3c4c RUN
-	word	$0e02,$403b,$60de                ; $3c4d SAVE
-	word	$0e02,$4333,$628f                ; $3c4e STOP
-	word	$0e02,$43fb,$6013                ; $3c4f SYS
+	word	$0e01,$803f                      ; $3c3a ?
+	word	$0e03,$42f9,$40db,$6332          ; $3c3b ASSERT
+	word	$0e02,$402b,$61ec                ; $3c3c CALL
+	word	$0e03,$41e3,$402d,$6012          ; $3c3d CLEAR
+	word	$0e02,$416c,$600d                ; $3c3e DIM
+	word	$0e02,$41e5,$60db                ; $3c3f ELSE
+	word	$0e02,$4235,$6004                ; $3c40 END
+	word	$0e03,$425f,$435b,$6002          ; $3c41 GOSUB
+	word	$0e02,$425f,$626c                ; $3c42 GOTO
+	word	$0e03,$4239,$4358,$6014          ; $3c43 INPUT
+	word	$0e02,$40d4,$6014                ; $3c44 LET
+	word	$0e02,$4174,$6333                ; $3c45 LIST
+	word	$0e02,$4264,$60a1                ; $3c46 LOAD
+	word	$0e02,$40d6,$6017                ; $3c47 NEW
+	word	$0e02,$41ef,$6004                ; $3c48 OLD
+	word	$0e02,$4268,$60d3                ; $3c49 POKE
+	word	$0e03,$42e0,$4239,$6014          ; $3c4a PRINT
+	word	$0e02,$40da,$600d                ; $3c4b REM
+	word	$0e03,$40da,$435c,$6242          ; $3c4c RETURN
+	word	$0e02,$435a,$600e                ; $3c4d RUN
+	word	$0e02,$403b,$60de                ; $3c4e SAVE
+	word	$0e02,$4333,$628f                ; $3c4f STOP
+	word	$0e02,$43fb,$6013                ; $3c50 SYS
 	word	$0000

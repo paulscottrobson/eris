@@ -87,7 +87,13 @@
 .ReturnStackError
 		jsr 	#GenErrorHandler
 		string 	"Structure too deep"
-
+.TokeniseError
+		jsr 	#GenErrorHandler
+		string 	"Cannot process line"
+.BreakError
+		jsr 	#GenErrorHandler
+		string 	"Break"
+				
 ; *****************************************************************************
 ;
 ;							General error handler
@@ -109,7 +115,7 @@
 		mov 	r1,#10 						; convert line# to string and print that
 		jsr 	#OSIntToStr
 		jsr 	#OSPrintString
+._ehExit		
 		jsr 	#OSPrintInline 				; print at
 		string 	"[0D][12]"					; CR and make green
-._ehExit		
 		jmp 	#WarmStart
