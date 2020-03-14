@@ -49,3 +49,12 @@ stackPosSize = 2
 ;		Indent spaces per level
 ;
 indentStep = 2
+;
+;		Colour schemes for listing
+;
+theme_line = 2 			; green lines
+theme_keyword = 6 		; cyan keywords
+theme_ident = 3 		; yellow identifiers
+theme_const = 3 		; yellow integers
+theme_string = 7 		; white strings
+theme_punc = 2			; green punctuation

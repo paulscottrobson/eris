@@ -90,10 +90,11 @@
 		;
 ._RPNextLine
 		ldm 	r11,#currentLine 			; get current line
-		ldm 	r0,r11,#0 					; get offset to next line
-		sknz 	r0 							; if zero warm start
-		jmp 	#WarmStart
+		ldm 	r0,r11,#0 					; get offset this line
 		add 	r11,r0,#0 					; advance pointer
+		ldm 	r0,r11,#0 					; get offset next line
+		sknz 	r0 							; if zero warm start
+		jmp 	#WarmStart		
 		jmp 	#_RPNewLine
 		;
 		;		Break handler

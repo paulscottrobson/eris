@@ -24,12 +24,6 @@
 		;
 		jsr 	#VarEraseHashTables			; erase hash tables
 		;
-		ldm 	r0,#programCode 			; look for program end.
-._CCFindEnd
-		ldm 	r1,r0,#0 					; get offset
-		add 	r0,r1,#0 					; add it
-		skz 	r1 							; skip if it wasn't zero.
-		jmp 	#_CCFindEnd
 		;
 		inc 	r0 							; word after the last zero offset
 		stm 	r0,#memAllocBottom 			; allocate to low memory.
