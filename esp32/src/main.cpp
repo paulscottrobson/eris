@@ -20,16 +20,32 @@
 #include <FS.h> 
 #include "SPIFFS.h"
 
+#include "character_rom.inc"
+
 #define FORMAT_SPIFFS_IF_FAILED true
 
 // select one color configuration
 #define USE_8_COLORS  0
 #define USE_64_COLORS 1
 
+// ****************************************************************************
+//
+//								Static objects
+//
+// ****************************************************************************
+
 fabgl::VGAController VGAController;
 fabgl::Canvas        Canvas(&VGAController);
 fabgl::PS2Controller PS2Controller;
 fabgl::Keyboard  Keyboard;
+
+SoundGenerator soundGen;
+SquareWaveformGenerator square1,square2;
+NoiseWaveformGenerator noise1;
+
+static RGB888 pColours[64];
+static uint8_t rawPixels[64];
+static int fsOpen,size;
 
 // indicate VGA GPIOs to use for selected color configuration
 #if USE_8_COLORS
@@ -52,11 +68,12 @@ fabgl::Keyboard  Keyboard;
 #define PS2_PORT0_CLK GPIO_NUM_33
 #define PS2_PORT0_DAT GPIO_NUM_32
 
-#include "character_rom.inc"
 
-static RGB888 pColours[64];
-static uint8_t rawPixels[64];
-static int fsOpen,size;
+// ****************************************************************************
+//
+//					  Character write - debugging
+//
+// ****************************************************************************
 
 void HWWriteCharacter(BYTE8 x,BYTE8 y,BYTE8 ch) {
 	RGB888 rgb,rgbx;rgb.R = rgb.G = 255;rgb.B = 0;
@@ -71,12 +88,22 @@ void HWWriteCharacter(BYTE8 x,BYTE8 y,BYTE8 ch) {
 	}
 }
 
-void HWLoadFile(const char *fName) {
-	File file = SPIFFS.open(fName);
+// ****************************************************************************
+//
+//							Load file from SPIFFS
+//
+// ****************************************************************************
+
+WORD16 HWLoadFile(char *fName,WORD16 override) {
+	char fullName[64];
+	sprintf(fullName,"/%s",fName);
+	File file = SPIFFS.open(fullName);
+	WORD16 r = (file != 0) ? 0 : 1;
 	if (file != 0) {
 		size = 0;
 		WORD16 loadAddress = file.read();
 		loadAddress = loadAddress + file.read()*256;
+		if (override != 0) loadAddress = override;
 		while (file.available()) {
 			WORD16 word = file.read();
 			word = word+file.read()*256;
@@ -84,7 +111,14 @@ void HWLoadFile(const char *fName) {
 		}
 		size = loadAddress;
 	}
+	return r;
 }
+
+// ****************************************************************************
+//
+//								Pixel update
+//
+// ****************************************************************************
 
 void HWWritePixelToScreen(WORD16 x,WORD16 y,BYTE8 colour) {
 	if (x >= DWIDTH || y >= DHEIGHT) return;
@@ -95,14 +129,21 @@ void HWWritePixelToScreen(WORD16 x,WORD16 y,BYTE8 colour) {
 	VGAController.setRawPixel(x,y,rp);
 }
 
+// ****************************************************************************
+//		
+//							Get keyboard activity
+//
+// ****************************************************************************
+
 int HWGetScanCode(void) {
 	return Keyboard.getNextScancode(0);
 }
 
-//HTTPClient httpClient;
-SoundGenerator soundGen;
-SquareWaveformGenerator square1,square2;
-NoiseWaveformGenerator noise1;
+// ****************************************************************************
+//
+//							  Set channel pitches
+//
+// ****************************************************************************
 
 void HWSetAudio(BYTE8 channel,WORD16 freq) {
 	if (channel == 0) {
@@ -119,6 +160,12 @@ void HWSetAudio(BYTE8 channel,WORD16 freq) {
 	}
 }
 
+// ****************************************************************************
+//
+//								Set up code
+//
+// ****************************************************************************
+
 #define CONVCOL(n) 	((n) == 3) ? 255 : ((n) * 80)
 
 void setup()
@@ -131,7 +178,7 @@ void setup()
 
 	fsOpen = SPIFFS.begin(FORMAT_SPIFFS_IF_FAILED);
 
-	HWLoadFile("/basicdemo2");
+	//HWLoadFile("/basicdemo2");
 
 	VGAController.setResolution(QVGA_320x240_60Hz);
 	VGAController.enableBackgroundPrimitiveExecution(false);
@@ -158,6 +205,12 @@ void setup()
 
 	soundGen.play(true);
 }
+
+// ****************************************************************************
+//
+//									Execution
+//
+// ****************************************************************************
 
 void loop()
 {

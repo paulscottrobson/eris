@@ -163,9 +163,9 @@ class Tokens(object):
 //
 [Cmd]
 	' 		:		?
-	assert 	call 	clear 	dim 	else 	end 	gosub 	goto 
-	input 	let 	list 	load 	new 	old 	poke 	print 	
-	rem 	return 	run 	save 	stop 	sys 	
+	assert 	call 	clear 	dim 	dir 	else 	end 	gosub 	goto 
+	input 	let 	list 	load 	new 	old 	poke 	print 	rem 	
+	return 	run 	save 	stop 	sys 	
 
 """
 

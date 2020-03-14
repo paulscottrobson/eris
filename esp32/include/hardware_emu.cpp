@@ -78,3 +78,27 @@ void HWWriteAudio(BYTE8 channel,WORD16 freq) {
 	//printf("Write %d to channel %d = %dHz\n",freq,channel,aFreq);
 	GFXSetFrequency(aFreq,channel);
 }
+
+// ****************************************************************************
+//								Load file in
+// ****************************************************************************
+
+WORD16 HWLoadFile(char * fileName,WORD16 override) {
+	char fullName[64];
+	sprintf(fullName,"storage%c%s",FILESEP,fileName);
+	FILE *f = fopen(fullName,"rb");
+	if (f != NULL) {
+		WORD16 addr = fgetc(f);
+		addr += (fgetc(f) << 8);
+		if (override != 0) addr = override;
+		while (!feof(f)) {
+			WORD16 data = fgetc(f);
+			data += (fgetc(f) << 8);
+			if (addr < 0xFF00) {
+				CPUWriteMemory(addr++,data);
+			}
+		}
+		fclose(f);
+	}
+	return (f != NULL) ? 0 : 1;
+}
