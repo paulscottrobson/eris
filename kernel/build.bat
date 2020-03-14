@@ -1,6 +1,6 @@
 @echo off
 pushd fonts
-python font.py
+python font5x7.py
 popd
 pushd keyboard-map 
 python keyconv.py

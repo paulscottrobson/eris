@@ -1,7 +1,7 @@
 # *****************************************************************************
 # *****************************************************************************
 #
-#       Name:       font.py
+#       Name:       font8x8.py
 #       Purpose:    Font Conversion
 #       Created:    8th March 2020
 #       Author:     Paul Robson (paul@robsons.org.uk)
@@ -21,6 +21,6 @@ for i in range(0,8):
 	fnt[(127-32)*8+i] = 0xFF
 h = open("font.inc","w")
 h.write("\torg kernelEnd-8*96\n")
-h.write(".FontData:\n")
+h.write(".FontData\n")
 h.write("\tword {0}\n\n".format(",".join([str(x << 8) for x in fnt])))
 h.close()

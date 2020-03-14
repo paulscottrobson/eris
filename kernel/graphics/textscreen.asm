@@ -231,10 +231,10 @@
 
 ._OSSetCharDrawPos
 		ldm 	r1,#xTextPos
-		ror 	r1,#13
+		mult 	r1,#pixelCharWidth
 		stm 	r1,#xGraphic
 		ldm 	r1,#yTextPos
-		ror 	r1,#13
+		mult 	r1,#pixelCharHeight
 		stm 	r1,#yGraphic
 		ret
 
@@ -279,13 +279,13 @@
 		ldm 	r0,r2,#0 						; read character to output
 		inc 	r2
 		jsr 	#OSXDrawSolidCharacter 			; display it
-		add 	r4,#8 							; advance
+		add 	r4,#pixelCharWidth 				; advance
 		dec 	r3 								; do a line
 		skz 	r3
 		jmp 	#_OSPCNextCharacter
-		add 	r1,#8
+		add 	r1,#pixelCharHeight
 		mov 	r0,r1,#0 						; check EOS
-		xor 	r0,#charHeight*8
+		xor 	r0,#charHeight*pixelCharHeight
 		skz 	r0
 		jmp 	#_OSPCNextLine
 		mov 	r0,#charHeight-1 				; set the vertical cursor pos

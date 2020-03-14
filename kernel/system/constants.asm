@@ -24,8 +24,13 @@ PixelHeight = 240
 ;
 ;		Text display size
 ;
-CharWidth = 40
+CharWidth = 53
 CharHeight = 30
+;
+;		Char size in Pixels
+;
+pixelCharWidth = 6
+pixelCharHeight = 8
 ;
 blitterBase = $FF20
 blitterStatus = blitterBase
