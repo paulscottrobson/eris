@@ -36,18 +36,18 @@
 .OSGetKeyboard
 		jmp 	#OSXGetKeyboard
 
-.OSCursorGet		
+.OSCursorGet
 		jmp 	#OSXCursorGet
-		
+
 .OSLineInput
-		jmp 	#OSXLineInput		
+		jmp 	#OSXLineInput
 
 .OSInputLimit
 		jmp 	#OSXInputLimit
-		
+
 .OSCheckBreak
 		jmp 	#OSXCheckBreak
-		
+
 ; *****************************************************************************
 ;
 ;								Text Group
@@ -55,16 +55,16 @@
 ; *****************************************************************************
 
 .OSGetTextPos
-		jmp 	#OSXGetTextPos		
-		
+		jmp 	#OSXGetTextPos
+
 ; *****************************************************************************
 ;
 ;								Graphic Group
 ;
 ; *****************************************************************************
 
-.OSDrawCharacter		
-		jmp 	#OSXDrawCharacter		
+.OSDrawCharacter
+		jmp 	#OSXDrawCharacter
 
 .OSDrawSolidCharacter
 		jmp 	#OSXDrawSolidCharacter
@@ -75,7 +75,7 @@
 ;
 ; *****************************************************************************
 
-.OSBeep		
+.OSBeep
 		jmp 	#OSXBeep
 
 ; *****************************************************************************
@@ -83,31 +83,34 @@
 ;								Utility Group
 ;
 ; *****************************************************************************
-		
-.OSUDivide16		
-		jmp 	#OSXUDivide16	
 
-.OSSDivide16		
-		jmp 	#OSXSDivide16			
+.OSFileOperation
+		jmp 	#OSXFileOperation
 
-.OSRandom16		
+.OSUDivide16
+		jmp 	#OSXUDivide16
+
+.OSSDivide16
+		jmp 	#OSXSDivide16
+
+.OSRandom16
 		jmp 	#OSXRandom16
 
-.OSStrToInt		
-		jmp 	#OSXStrToInt		
+.OSStrToInt
+		jmp 	#OSXStrToInt
 
 .OSIntToStr
 		jmp 	#OSXIntToStr
 
 .OSUpperCase
 		jmp 	#OSXUpperCase
-				
+
 .OSLowerCase
 		jmp 	#OSXLowerCase
 
 .OSWordLength
 		jmp 	#OSXWordLength
-		
+
 .OSManager
 		ret
-		
+

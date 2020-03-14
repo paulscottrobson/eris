@@ -23,8 +23,8 @@
 		clr		r14 						; default value for R14
 ;
 ;		Clear the OS Data area
-;		
-		mov 	r0,#initialisedStart 		
+;
+		mov 	r0,#initialisedStart
 		mov 	r1,r15,#0
 		word 	initialisedEnd-initialisedStart
 ._bcClear
@@ -55,17 +55,17 @@
 ;
 ;		Save that, allocate memory for the screen mirror and initialise the stack & PRNG
 ;
-._bcFoundEnd		
+._bcFoundEnd
 		stm 	r0,#highMemory 				; save high memory
 		sub 	r0,#(charWidth*charHeight)	; allocate text screen space
 		stm 	r0,#textMemory
-		dec 	r0 							; put a $0000 word before screen text so the 
+		dec 	r0 							; put a $0000 word before screen text so the
 		stm 	r14,r0,#0  					; scanner won't go up further on line input.
 		mov 	sp,r0,#0 					; initialise Stack Pointer.
 		stm 	r0,#randomSeed 				; initialise the random number generator
 ;
 ;		Erase the whole display using colour 0 mask $FF
-;		
+;
 		mov 	r0,#$FF00
 		jsr 	#OSIFillScreen
 ;
@@ -82,7 +82,7 @@
 		ror 	r1,#8
 		and 	r1,#7
 		add 	r1,#paletteTable
-		ldm 	r1,r1,#0 	
+		ldm 	r1,r1,#0
 		add 	r1,r0,#0 					; build the word
 		stm 	r1,#paletteRegister 		; write to palette register
 		add 	r0,#$100
@@ -90,8 +90,8 @@
 		jmp 	#_bcWritePalette
 ;
 ;		Show the boot prompt
-;		
-		mov 	r0,#bootPrompt 				; display boot prompt.		
+;
+		mov 	r0,#bootPrompt 				; display boot prompt.
 		jsr 	#OSPrintString
 		ldm 	r0,#highMemory 				; calculate free memory.
 		sub 	r0,#ramStart
@@ -110,9 +110,14 @@
 		stm 	r14,#sndTone1
 		stm 	r14,#sndTone2
 ;
+;		Initialise file I/O
+;
+		clr 	r0
+		jsr 	#OSFileOperation
+;
 ;		Sound the startup beep
 ;
-		mov 	r0,#22726 	
+		mov 	r0,#22726
 		mov 	r1,#50
 ;		jsr 	#OSBeep
 		ror 	r0,#1
@@ -123,7 +128,7 @@
 ;
 ;		Palette table all colours 0-255 are set to this based on the lower
 ;		three bits of the palette number.
-;		
+;
 .paletteTable
 		word 	0*16+0*4+0
 		word 	0*16+0*4+3

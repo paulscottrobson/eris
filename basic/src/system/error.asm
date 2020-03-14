@@ -13,8 +13,8 @@
 ;
 ;								Specific error handlers
 ;
-; *****************************************************************************		
-	 	
+; *****************************************************************************
+
 .SyntaxError
 		jsr 	#GenErrorHandler
 		string	"Syntax"
@@ -27,7 +27,7 @@
 .AssertError
 		jsr 	#GenErrorHandler
 		string 	"Assert"
-.LineError		
+.LineError
 		jsr 	#GenErrorHandler
 		string 	"Line unknown"
 .MissingBracketError
@@ -35,20 +35,20 @@
 		string 	"Missing )"
 .BadNumberError
 		jsr 	#GenErrorHandler
-		string 	"Bad Number"		
+		string 	"Bad Number"
 .BadIndexError
 		jsr 	#GenErrorHandler
-		string 	"Bad Index"		
+		string 	"Bad Index"
 .MemoryError
 		jsr 	#GenErrorHandler
 		string  "Out of Memory"
 .MissingCommaError
 		jsr 	#GenErrorHandler
 		string  "Missing ,"
-.ArrayAutoError		
+.ArrayAutoError
 		jsr 	#GenErrorHandler
 		string  "Unknown Array"
-.ArrayExistsError		
+.ArrayExistsError
 		jsr 	#GenErrorHandler
 		string  "Array exists"
 .CallError
@@ -93,7 +93,10 @@
 .BreakError
 		jsr 	#GenErrorHandler
 		string 	"Break"
-				
+.LoadError
+		jsr 	#GenErrorHandler
+		string 	"No such file"
+
 ; *****************************************************************************
 ;
 ;							General error handler
@@ -115,7 +118,7 @@
 		mov 	r1,#10 						; convert line# to string and print that
 		jsr 	#OSIntToStr
 		jsr 	#OSPrintString
-._ehExit		
+._ehExit
 		jsr 	#OSPrintInline 				; print at
 		string 	"[0D][12]"					; CR and make green
 		jmp 	#WarmStart

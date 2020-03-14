@@ -31,9 +31,9 @@ static const WORD16 romMemory[RAM_START] = {
 };
 #endif
 
-static WORD16 ramMemory[RAM_END-RAM_START];						
-static LONG32 cycles;													
-static LONG32 iCount;													
+static WORD16 ramMemory[RAM_END-RAM_START];
+static LONG32 cycles;
+static LONG32 iCount;
 static WORD16 instReg;
 static WORD16 timer;
 
@@ -66,7 +66,7 @@ static inline WORD16 fetchRead(void) {
 static inline WORD16 READ(WORD16 a) {
 	if (a < RAM_START) return romMemory[a];
 	if (a >= RAM_END) {
-		WORD16 d = 0;														// Default includes $FF20 blitter status 
+		WORD16 d = 0;														// Default includes $FF20 blitter status
 		if (a >= 0xFF00) {
 			if (a == 0xFF00) d = HWReadKeyboardColumns();					// $FF00 Keyboard state.
 			if (a == 0xFF30) d = HWGetSystemClock();						// $FF30 System clock
@@ -77,7 +77,7 @@ static inline WORD16 READ(WORD16 a) {
 }
 
 //
-//										Full write 
+//										Full write
 //
 static inline void WRITE(WORD16 a,WORD16 d) {
 	if (a >= RAM_START && a < RAM_END) {
@@ -85,10 +85,10 @@ static inline void WRITE(WORD16 a,WORD16 d) {
 		return;
 	}
 	if (a >= 0xFF00) {														// Hardware ?
-		switch(a & 0x00F0) {	
+		switch(a & 0x00F0) {
 			case 0x00:														// $FF0x = KeyLatch
 				HWWriteKeyboardLatch(d);
-				break;									
+				break;
 			case 0x10:														// $FF1x = Palette
 				HWWritePalette(a & 0x0F,d);
 				break;
@@ -98,6 +98,9 @@ static inline void WRITE(WORD16 a,WORD16 d) {
 			case 0x40:														// $FF4x = Audio Hardware
 				HWWriteAudio(a & 0x0F,d);
 				break;
+		}
+		if (a == 0xFFFE) {													// $FFFE = File I/O system
+			R0 = HWFileOperation(R0,R1,R2,R3);
 		}
 	}
 }
@@ -161,7 +164,7 @@ static void CPULoadChunk(FILE *f,BYTE8* memory,int count);
 void CPUReset(void) {
 	static BYTE8 ramInit = 0;
 	if (!ramInit) {																	// First time round
-		ramInit = 1;	
+		ramInit = 1;
 		HWReset();																	// Reset Hardware
 		R0 = R1 = R2 = R3 = R4 = R5 = R6 = R7 = R8 = R9 = R10 = R11 = R12 = R13 = R14 = 0x1111;
 	}
@@ -176,7 +179,7 @@ void CPUReset(void) {
 
 #ifdef INCLUDE_DEBUGGING_SUPPORT
 #include "gfx.h"
-void CPUExit(void) {	
+void CPUExit(void) {
 	GFXExit();
 }
 #else
@@ -195,7 +198,7 @@ BYTE8 CPUExecuteInstruction(void) {
 	cycles++;
 	if (cycles < CYCLES_PER_FRAME) return 0;										// Not completed a frame.
 	cycles = cycles - CYCLES_PER_FRAME;												// Adjust this frame rate.
-	timer += 2;																		// Fix up 100Hz timer.	
+	timer += 2;																		// Fix up 100Hz timer.
 	iCount += CYCLES_PER_FRAME;
 	HWSync(iCount);																	// Update any hardware
 	return FRAME_RATE;																// Return frame rate.
@@ -216,11 +219,11 @@ void CPUWriteMemory(WORD16 address,WORD16 data) {
 #ifdef INCLUDE_DEBUGGING_SUPPORT
 
 // ****************************************************************************
-//		Execute chunk of code, to either of two break points or frame-out, 
+//		Execute chunk of code, to either of two break points or frame-out,
 //		return non-zero frame rate on frame, breakpoint 0
 // ****************************************************************************
 
-BYTE8 CPUExecute(WORD16 breakPoint1,WORD16 breakPoint2) { 
+BYTE8 CPUExecute(WORD16 breakPoint1,WORD16 breakPoint2) {
 	WORD16 next;
 	do {
 		BYTE8 r = CPUExecuteInstruction();											// Execute an instruction
@@ -228,7 +231,7 @@ BYTE8 CPUExecute(WORD16 breakPoint1,WORD16 breakPoint2) {
 		if (r != 0) return r; 														// Frame out.
 		next = CPUReadMemory(R15);
 	} while (R15 != breakPoint1 && R15 != breakPoint2 && next != 0);				// Stop on breakpoint or $FF break
-	return 0; 
+	return 0;
 }
 
 // ****************************************************************************

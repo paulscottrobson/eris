@@ -72,7 +72,7 @@
 	word	Command_Input            ; $3c43 INPUT
 	word	Command_Let              ; $3c44 LET
 	word	Command_List             ; $3c45 LIST
-	word	SyntaxError              ; $3c46 LOAD
+	word	Command_Load             ; $3c46 LOAD
 	word	Command_New              ; $3c47 NEW
 	word	Command_Old              ; $3c48 OLD
 	word	CommandPoke              ; $3c49 POKE
