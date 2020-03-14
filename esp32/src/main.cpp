@@ -131,7 +131,7 @@ void setup()
 
 	fsOpen = SPIFFS.begin(FORMAT_SPIFFS_IF_FAILED);
 
-	HWLoadFile("/basiccode.prg");
+	HWLoadFile("/basicdemo2");
 
 	VGAController.setResolution(QVGA_320x240_60Hz);
 	VGAController.enableBackgroundPrimitiveExecution(false);
