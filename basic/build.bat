@@ -11,6 +11,9 @@ rem python gentokentest.py
 rem python systests.py Comparison
 copy basiccode.prg ..\..\emulator\bin >NUL
 popd
+pushd messages >NUL
+python msgconv.py
+popd messages
 copy ..\kernel\bin\a.lbl generated\kernel.labels >NUL
 rem
 python ..\assembler\easm.zip

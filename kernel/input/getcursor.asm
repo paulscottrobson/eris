@@ -20,7 +20,7 @@
 		clr 	r2 							; R2 is the last read timer value.
 ._OSCGLoop
 		ldm		r0,#hwTimer 				; read the timer
-		ror 	r0,#7 						; this puts the flag bit into R0:15
+		ror 	r0,#6						; this puts the flag bit into R0:15
 		skse 	r0,r2,#0 					; has the sign changed ?
 		jsr 	#_OSCGSetCursorBlock
 		jsr 	#OSGetKeyboard

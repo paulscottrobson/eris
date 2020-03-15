@@ -135,7 +135,7 @@ class Tokens(object):
 //		Basic Unary Functions
 //
 [Unary]
-	( 	&	% 	|CONSTSHIFT
+	( 	&	% 	|constshift
 	abs(	asc(	chr$(	get( 	get$( 	inkey( 	inkey$( 	
 	left$(	len(	mid$(	peek(	right$(	rnd(	sgn(	
 	str$(	val(
@@ -163,9 +163,9 @@ class Tokens(object):
 //
 [Cmd]
 	' 		:		?
-	assert 	call 	clear 	dim 	dir 	else 	end 	gosub 	goto 
-	input 	let 	list 	load 	new 	old 	poke 	print 	rem 	
-	return 	run 	save 	stop 	sys 	
+	assert 	call 	clear 	dim 	dir 	else 	end 	fkey	gosub 	
+	goto 	input 	let 	list 	load 	new 	old 	poke 	print 	
+	rem 	return 	run 	save 	stop 	sys 	
 
 """
 
@@ -177,3 +177,4 @@ if __name__ == "__main__":
 	print(tk.getList())
 	print(tk.getInfo("DIM"))	
 	print(tk.getInfo("DIMX"))		
+	

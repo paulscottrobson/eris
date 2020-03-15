@@ -68,19 +68,20 @@
 	word	Command_Dir              ; $3c3f DIR
 	word	Command_ELSE             ; $3c40 ELSE
 	word	Command_End              ; $3c41 END
-	word	Command_GOSUB            ; $3c42 GOSUB
-	word	Command_GOTO             ; $3c43 GOTO
-	word	Command_Input            ; $3c44 INPUT
-	word	Command_Let              ; $3c45 LET
-	word	Command_List             ; $3c46 LIST
-	word	Command_Load             ; $3c47 LOAD
-	word	Command_New              ; $3c48 NEW
-	word	Command_Old              ; $3c49 OLD
-	word	CommandPoke              ; $3c4a POKE
-	word	Command_Print            ; $3c4b PRINT
-	word	CommentCommand2          ; $3c4c REM
-	word	Command_RETURN           ; $3c4d RETURN
-	word	RunProgram               ; $3c4e RUN
-	word	Command_Save             ; $3c4f SAVE
-	word	SyntaxError              ; $3c50 STOP
-	word	CommandSys               ; $3c51 SYS
+	word	SyntaxError              ; $3c42 FKEY
+	word	Command_GOSUB            ; $3c43 GOSUB
+	word	Command_GOTO             ; $3c44 GOTO
+	word	Command_Input            ; $3c45 INPUT
+	word	Command_Let              ; $3c46 LET
+	word	Command_List             ; $3c47 LIST
+	word	Command_Load             ; $3c48 LOAD
+	word	Command_New              ; $3c49 NEW
+	word	Command_Old              ; $3c4a OLD
+	word	CommandPoke              ; $3c4b POKE
+	word	Command_Print            ; $3c4c PRINT
+	word	CommentCommand2          ; $3c4d REM
+	word	Command_RETURN           ; $3c4e RETURN
+	word	RunProgram               ; $3c4f RUN
+	word	Command_Save             ; $3c50 SAVE
+	word	Command_Stop             ; $3c51 STOP
+	word	CommandSys               ; $3c52 SYS
