@@ -13,6 +13,8 @@
 #include "hardware.h"
 #include "gfxkeys.h"
 #include <stdio.h>
+#include <sys/types.h>
+#include <dirent.h>
 
 #include <stdlib.h>
 #include "gfx.h"
@@ -84,8 +86,9 @@ void HWWriteAudio(BYTE8 channel,WORD16 freq) {
 // ****************************************************************************
 
 WORD16 HWLoadFile(char * fileName,WORD16 override) {
-	char fullName[64];
-	sprintf(fullName,"storage%c%s",FILESEP,fileName);
+	char fullName[128];
+	if (fileName[0] == 0) return 1;
+	sprintf(fullName,"%sstorage%c%s",SDL_GetBasePath(),FILESEP,fileName);
 	FILE *f = fopen(fullName,"rb");
 	if (f != NULL) {
 		WORD16 addr = fgetc(f);
@@ -102,3 +105,31 @@ WORD16 HWLoadFile(char * fileName,WORD16 override) {
 	}
 	return (f != NULL) ? 0 : 1;
 }
+
+// ****************************************************************************
+//
+//							  Load Directory In
+//
+// ****************************************************************************
+
+void HWLoadDirectory(WORD16 target) {
+	int count = 0;
+	DIR *dp;
+	struct dirent *ep;
+	char fullName[128];
+	sprintf(fullName,"%sstorage",SDL_GetBasePath());
+	dp = opendir(fullName);
+	if (dp != NULL) {
+		while (ep = readdir(dp)) {
+			if (ep->d_type == DT_REG) {
+				if (count != 0) CPUWriteMemory(target++,32);
+				char *p = ep->d_name;
+				while (*p != '\0') CPUWriteMemory(target++,*p++);
+				count++;
+			}
+		}
+		closedir(dp);
+	}
+	CPUWriteMemory(target,0);
+}
+

@@ -35,12 +35,13 @@ void HWWritePalette(BYTE8 port,WORD16 data);
 void BlitterWrite(BYTE8 port,WORD16 data);
 BYTE8 BlitterGetPixel(WORD16 x,WORD16 y);
 void BlitterGetStatus(CPUSTATUS *s);
-WORD16 HWFileOperation(WORD16 R0,WORD16 R1,WORD16 R2,WORD16 R3);
 
+WORD16 HWFileOperation(WORD16 R0,WORD16 R1,WORD16 R2,WORD16 R3);
 void HWWriteKeyboardLatch(BYTE8 latch);
 WORD16 HWReadKeyboardColumns(void);
-WORD16 HWLoadFile(char * fileName,WORD16 override);
 
+WORD16 HWLoadFile(char * fileName,WORD16 override);
+void HWLoadDirectory(WORD16 target);
 void HWSyncImplementation(LONG32 iCount);
 void HWWriteAudio(BYTE8 channel,WORD16 freq);
 void HWReset(void);

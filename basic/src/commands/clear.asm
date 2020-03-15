@@ -25,6 +25,7 @@
 		jsr 	#VarEraseHashTables			; erase hash tables
 		;
 		;
+		jsr 	#FindProgramEnd				; find end of program
 		inc 	r0 							; word after the last zero offset
 		stm 	r0,#memAllocBottom 			; allocate to low memory.
 		;
