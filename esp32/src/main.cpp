@@ -97,9 +97,10 @@ void HWWriteCharacter(BYTE8 x,BYTE8 y,BYTE8 ch) {
 WORD16 HWLoadFile(char *fName,WORD16 override) {
 	char fullName[64];
 	sprintf(fullName,"/%s",fName);
-	File file = SPIFFS.open(fullName);
-	WORD16 r = (file != 0) ? 0 : 1;
-	if (file != 0) {
+	fabgl::suspendInterrupts();
+	WORD16 exists = SPIFFS.exists(fullName);
+	if (exists != 0) {
+		File file = SPIFFS.open(fullName);
 		size = 0;
 		WORD16 loadAddress = file.read();
 		loadAddress = loadAddress + file.read()*256;
@@ -109,11 +110,39 @@ WORD16 HWLoadFile(char *fName,WORD16 override) {
 			word = word+file.read()*256;
 			CPUWriteMemory(loadAddress++,word);
 		}
+		file.close();
 		size = loadAddress;
 	}
-	return r;
+	fabgl::resumeInterrupts();
+	return exists == 0;
 }
 
+// ****************************************************************************
+//
+//							Save file to SPIFFS
+//
+// ****************************************************************************
+
+WORD16 HWSaveFile(char *fName,WORD16 start,WORD16 size) {
+	char fullName[64];
+	sprintf(fullName,"/%s",fName);
+	fabgl::suspendInterrupts();
+	File file = SPIFFS.open(fullName,FILE_WRITE);
+	WORD16 r = (file != 0) ? 0 : 1;
+	if (file != 0) {
+		file.write(start & 0xFF);
+		file.write(start >> 8);
+		while (size != 0) {
+			size--;
+			WORD16 d = CPUReadMemory(start++);
+			file.write(d & 0xFF);
+			file.write(d >> 8);
+		}
+		file.close();
+	}
+	fabgl::resumeInterrupts();
+	return r;
+}
 // ****************************************************************************
 //
 //						Directory of SPIFFS root
@@ -121,22 +150,25 @@ WORD16 HWLoadFile(char *fName,WORD16 override) {
 // ****************************************************************************
 
 void HWLoadDirectory(WORD16 target) {
-    File root = SPIFFS.open("/");
+	fabgl::suspendInterrupts();
+  	File root = SPIFFS.open("/");
     int count = 0;
-    File file = root.openNextFile();
-    while(file){
-        if(!file.isDirectory()){
-        	if (count != 0) CPUWriteMemory(target++,32);
-        	count++;
-            const char *p = file.name();
-            while (*p != '\0') {	
-            	if (*p != '/') CPUWriteMemory(target++,*p);
-            	p++;
-            }
-        }
-        file = root.openNextFile();
-    }
+   	File file = root.openNextFile();
+   	while(file){
+       	if(!file.isDirectory()){
+       		if (count != 0) CPUWriteMemory(target++,32);
+       		count++;
+           	const char *p = file.name();
+           	while (*p != '\0') {	
+           		if (*p != '/') CPUWriteMemory(target++,*p);
+           		p++;
+           	}
+       	}
+       	file.close();
+       	file = root.openNextFile();
+   	}
     CPUWriteMemory(target,0);
+	fabgl::resumeInterrupts();
 }
 
 // ****************************************************************************

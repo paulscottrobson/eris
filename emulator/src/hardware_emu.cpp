@@ -107,9 +107,29 @@ WORD16 HWLoadFile(char * fileName,WORD16 override) {
 }
 
 // ****************************************************************************
-//
+//								Save file out
+// ****************************************************************************
+
+WORD16 HWSaveFile(char *fileName,WORD16 start,WORD16 size) {
+	char fullName[128];
+	sprintf(fullName,"%sstorage%c%s",SDL_GetBasePath(),FILESEP,fileName);
+	FILE *f = fopen(fullName,"wb");
+	if (f != NULL) {
+		fputc(start & 0xFF,f);
+		fputc(start >> 8,f);
+		while (size != 0) {
+			size--;
+			WORD16 d = CPUReadMemory(start++);
+			fputc(d & 0xFF,f);
+			fputc(d >> 8,f);
+		}
+		fclose(f);
+	}
+	return (f != NULL) ? 0 : 1;
+}
+
+// ****************************************************************************
 //							  Load Directory In
-//
 // ****************************************************************************
 
 void HWLoadDirectory(WORD16 target) {

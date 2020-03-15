@@ -79,3 +79,6 @@
 .LoadError
 		jsr 	#GenErrorHandler
 		string 	"No such file"
+.SaveError
+		jsr 	#GenErrorHandler
+		string 	"Cannot save"

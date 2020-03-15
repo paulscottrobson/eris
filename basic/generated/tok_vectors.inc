@@ -81,6 +81,6 @@
 	word	CommentCommand2          ; $3c4c REM
 	word	Command_RETURN           ; $3c4d RETURN
 	word	RunProgram               ; $3c4e RUN
-	word	SyntaxError              ; $3c4f SAVE
+	word	Command_Save             ; $3c4f SAVE
 	word	SyntaxError              ; $3c50 STOP
 	word	CommandSys               ; $3c51 SYS

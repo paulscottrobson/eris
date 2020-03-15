@@ -55,3 +55,40 @@
 		jsr 	#OSPrintCharacter
 		pop 	link
 		ret
+
+; *****************************************************************************
+;
+;								Save program
+;
+; *****************************************************************************
+
+.Command_Save	;; [save]
+		push 	link
+		mov 	r1,#_CSDefault
+		ldm 	r0,r11,#0 					; check just save or save :
+		sknz 	r0
+		jmp 	#_CSHaveFileName
+		xor		r0,#TOK_COLON
+		sknz 	r0
+		jmp 	#_CSHaveFileName
+
+		jsr 	#EvaluateString 			; get save name
+		;
+		; 	TODO: Validate save name
+		;
+		mov 	r1,r0,#0 					; put string in R1
+._CSHaveFileName
+		jsr 	#FindProgramEnd 			; program end in R3
+		mov 	r3,r0,#0
+		ldm 	r2,#programCode 			; program start in R2
+		sub 	r3,r2,#0 					; calculate length (end-start+1) => R3
+		inc 	r3
+		mov 	r0,#3 						; save command
+		jsr 	#OSFileOperation 			; try to do it.
+		skz 	r0
+		jmp 	#SaveError
+		pop 	link
+		ret
+
+._CSDefault
+		string 	"last.save"

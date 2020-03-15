@@ -78,6 +78,9 @@ WORD16 HWFileOperation(WORD16 R0,WORD16 R1,WORD16 R2,WORD16 R3) {
 	if (R0 == 1 || R0 == 2) {
 		r = HWLoadFile(fileName,(R0 == 1) ? 0 : R2);
 	}
+	if (R0 == 3) {
+		r = HWSaveFile(fileName,R2,R3);
+	}
 	if (R0 == 4) {
 		HWLoadDirectory(R1);
 	}

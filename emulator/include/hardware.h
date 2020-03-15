@@ -42,6 +42,8 @@ WORD16 HWReadKeyboardColumns(void);
 
 WORD16 HWLoadFile(char * fileName,WORD16 override);
 void HWLoadDirectory(WORD16 target);
+WORD16 HWSaveFile(char *fileName,WORD16 start,WORD16 size);
+
 void HWSyncImplementation(LONG32 iCount);
 void HWWriteAudio(BYTE8 channel,WORD16 freq);
 void HWReset(void);
