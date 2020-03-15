@@ -116,6 +116,31 @@ WORD16 HWLoadFile(char *fName,WORD16 override) {
 
 // ****************************************************************************
 //
+//						Directory of SPIFFS root
+//
+// ****************************************************************************
+
+void HWLoadDirectory(WORD16 target) {
+    File root = SPIFFS.open("/");
+    int count = 0;
+    File file = root.openNextFile();
+    while(file){
+        if(!file.isDirectory()){
+        	if (count != 0) CPUWriteMemory(target++,32);
+        	count++;
+            const char *p = file.name();
+            while (*p != '\0') {	
+            	if (*p != '/') CPUWriteMemory(target++,*p);
+            	p++;
+            }
+        }
+        file = root.openNextFile();
+    }
+    CPUWriteMemory(target,0);
+}
+
+// ****************************************************************************
+//
 //								Pixel update
 //
 // ****************************************************************************
