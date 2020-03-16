@@ -4,7 +4,7 @@
 ;		Name:		utilitytext.asm
 ;		Purpose:	Text Utility Functions
 ;		Created:	8th March 2020
-;		Reviewed: 	TODO
+;		Reviewed: 	16th March 2020
 ;		Author:		Paul Robson (paul@robsons.org.uk)
 ;
 ; *****************************************************************************
@@ -40,7 +40,7 @@
 ; *****************************************************************************
 
 .OSXPrintInline
-		push 	r0 							; R0 is a temporary value
+		push 	r0 							; R0 is a temporary value / don't need to save link
 		mov 	r0,link,#0 	 				; string address -> R0
 		jsr 	#_OSXPInlinePrinter 		; call the inline printer routine.
 		mov 	link,r0,#0 					; return address in link register

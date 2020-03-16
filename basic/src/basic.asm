@@ -48,7 +48,7 @@
 		;
 		;		Uncomment this to automatically run the loaded program in the emulator.
 		;
-		jmp 	#RunProgram					; run program code.
+		;jmp 	#RunProgram					; run program code.
 
 		jsr 	#Command_New 				; New program.
 
