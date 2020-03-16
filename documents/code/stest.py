@@ -4,6 +4,7 @@
 #		Name:		stest.py
 #		Purpose:	16 bit signed comparison check.
 #		Created:	8th March 2020
+#		Reviewed: 	TODO
 #		Author:		Paul Robson (paul@robsons.org.uk)
 #
 # *****************************************************************************

@@ -1,4 +1,5 @@
-for i = 1 to 10
-	print "Hello world"
-next
+print "Keyboard test"
+repeat
+	print get()
+until 0
 end

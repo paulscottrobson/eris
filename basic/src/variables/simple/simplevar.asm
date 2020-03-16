@@ -4,6 +4,7 @@
 ;		Name:		simplevar.asm
 ;		Purpose:	Very simple variable implementation, 26 A-Z
 ;		Created:	3rd March 2020
+;		Reviewed: 	TODO
 ;		Author:		Paul Robson (paul@robsons.org.uk)
 ;
 ; *****************************************************************************

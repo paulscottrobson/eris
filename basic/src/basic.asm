@@ -4,6 +4,7 @@
 ;		Name:		basic.asm
 ;		Purpose:	Basic ROM Startup
 ;		Created:	2nd March 2020
+;		Reviewed: 	TODO
 ;		Author:		Paul Robson (paul@robsons.org.uk)
 ;
 ; *****************************************************************************
@@ -40,9 +41,14 @@
 		;
 		mov 	r0,#basicPrompt
 		jsr 	#OSPrintString
-
+		;
+		;		Uncomment this to test the tokeniser
+		;
 		;jmp 	#TestTokeniserRoutine		
-		;jmp 	#RunProgram					; run program code.
+		;
+		;		Uncomment this to automatically run the loaded program in the emulator.
+		;
+		jmp 	#RunProgram					; run program code.
 
 		jsr 	#Command_New 				; New program.
 
@@ -57,9 +63,11 @@
 		mov 	r0,#$12 					; go green
 		jsr 	#OSPrintCharacter
 		jsr 	#OSLineInput 				; read a line off the screen
+		;
 		jsr 	#TokeniseString 			; try to tokenise and error if failed.
 		sknz 	r0
 		jmp 	#TokeniseError
+		;
 		mov 	r11,r0,#0 					; put start of 'faux line' in R11.
 		;
 		ldm 	r2,r0,#2 					; look at first token to see if it is a number.

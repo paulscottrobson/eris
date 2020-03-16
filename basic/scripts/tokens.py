@@ -4,6 +4,7 @@
 #		Name:		tokens.py
 #		Purpose:	Token class
 #		Created:	2nd March 2020
+#		Reviewed: 	TODO
 #		Author:		Paul Robson (paul@robsons.org.uk)
 #
 # *****************************************************************************

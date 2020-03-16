@@ -4,6 +4,7 @@
 #		Name:		msgconv.py
 #		Purpose:	Convert messages file for internationalisation
 #		Created:	15th March 2020
+#		Reviewed: 	TODO
 #		Author:		Paul Robson (paul@robsons.org.uk)
 #
 # *****************************************************************************
