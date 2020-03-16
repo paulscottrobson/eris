@@ -69,7 +69,4 @@
 .convBuffer 								; buffer for string conversion. Up to 17 characters
 		fill 	maxIStrSize					; (a sign and 16 digits)
 
-.fontBuffer 								; font data.
-		fill 	8
-
 .freeMemory		

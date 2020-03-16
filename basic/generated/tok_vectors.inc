@@ -70,7 +70,7 @@
 	word	Command_Dir              ; $3c41 DIR
 	word	Command_ELSE             ; $3c42 ELSE
 	word	Command_End              ; $3c43 END
-	word	SyntaxError              ; $3c44 FKEY
+	word	Command_FKey             ; $3c44 FKEY
 	word	Command_GOSUB            ; $3c45 GOSUB
 	word	Command_GOTO             ; $3c46 GOTO
 	word	Command_Input            ; $3c47 INPUT

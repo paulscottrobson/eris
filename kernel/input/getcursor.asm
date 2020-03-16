@@ -36,6 +36,11 @@
 		clr 	r0 							; erase the cursor
 		jsr 	#_OSCGSetCursorBlock
 		pop 	r0
+		mov 	r1,r0,#0 					; check if it is a function key
+		and 	r1,#$F8
+		xor		r1,#$F0
+		sknz 	r1
+		jsr 	#_OSCGExpandFunctionKey
 		pop 	r1,r2,link
 		ret
 		;
@@ -75,5 +80,19 @@
 		pop 	r1,r2
 		sknz 	r0 							; if zero get the normal way
 		jmp 	#_OSCGKeyboard
+		ret
+
+		;
+		;		Expand function key, and call routine recursively to get character.
+		;		
+._OSCGExpandFunctionKey		
+		push 	link
+		and 	r0,#7 						; key number -> definition address
+		mult 	r0,#functionKeySize
+		add 	r0,#functionKeyDefinitions	
+		stm 	r0,#functionKeyQueue 		; put it in the queue.
+		stm 	r14,#functionKeyByte 		; start with low byte
+		jsr 	#OSXCursorGet
+		pop 	link
 		ret
 		

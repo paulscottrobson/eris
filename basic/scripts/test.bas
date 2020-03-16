@@ -1,5 +1,3 @@
-print "Keyboard test"
-repeat
-	print get()
-until 0
-end
+fkey 3,"***"
+fkey 4,"hello world"+chr$(13)
+fkey 5,"xxxx"
