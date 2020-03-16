@@ -4,7 +4,7 @@
 ;		Name:		keyboard.asm
 ;		Purpose:	Keyboard Input code
 ;		Created:	8th March 2020
-;		Reviewed: 	TODO
+;		Reviewed: 	16th March 2020
 ;		Author:		Paul Robson (paul@robsons.org.uk)
 ;
 ; *****************************************************************************
@@ -20,15 +20,18 @@
 		push 	r1,r2,r3,r4,r5,link
 		jsr		#OSManager 						; call keyboard manager routine.
 		mov 	r1,#KeyboardMapping+4*8 		; R1 points to keyboard mapping table.
-		mov 	r2,#currentRowStatus+4 			; R2 points to the current row, starts at $10
-		mov 	r3,#$10 						; R3 is the current row selected. Shift is always up to date
+		mov 	r2,#currentRowStatus+4 			; R2 points to the current row status, starts at $10
+		mov 	r3,#$10 						; R3 is the current row selectw word. Shift is always up to date
 		clr 	r4 								; R4 is the sum of all key inputs, check for any key.
 		;
 		;		Main scanning loop.
 		;
 ._GKScan
-		stm 	r3,#keyboardPort 				; select row.
-		mov 	r0,#20 							; short delay for debounce
+		;
+		;		Scan this row
+		;
+		stm 	r3,#keyboardPort 				; write current row to keyboard port
+		mov 	r0,#$0F 						; short delay for debounce
 ._GKDebounce:
 		dec 	r0
 		skz 	r0
@@ -39,23 +42,25 @@
 		add 	r4,r5,#0 						; add to sum of all key inputs.
 		;
 		ldm 	r0,r2,#0 						; read current row status.
-		stm 	r5,r2,#0 						; update current row status.
+		stm 	r5,r2,#0 						; update current row status with new value.
 		xor 	r0,#$FFFF 						; look for keys pressed before that weren't now.		
 		and 	r0,r5,#0 						; e.g. status & (~previous)	
 		skz 	r0 								; when zero, go process new key depression.
 		jmp 	#_GKKeyPressed 
 		;
-		sub		r1,#8 							; next 16 bytes of mapping table
+		;		Go to the next row
+		;
+		sub		r1,#8 							; previous 16 bytes of mapping table
 		dec 	r2 								; previous row status
-		ror 	r3,#1 							; rotate key right
-		skm 	r3 								; goes -v when $0001 rotated.
+		ror 	r3,#1 							; rotate column select word right
+		skm 	r3 								; goes -ve when $0001 rotated.
 		jmp 	#_GKScan 
 		;
 		;		No key currently pressed.
 		;
 ._GKNoKeyPressed		
 		clr 	r0 								; return zero
-		sknz 	r4 								; any key pressed at all ?
+		sknz 	r4 								; is any key pressed at all ?
 		stm 	r14,#currentKey 				; if not, clear current key.
 		sknz	r4
 		jmp 	#_GKExitWithR0 					; if not, then can't repeat.
@@ -64,38 +69,43 @@
 		sub 	r2,r1,#0
 		skm 	r2 								; if not, then exit
 		jmp 	#_GKExitWithR0
-		add 	r1,#repeatSpeed 				; reset timer for repeat speed
-		stm 	r1,#keyRepeatTime
+		add 	r1,#repeatSpeed 				; reset timer for repeat *speed*
+		stm 	r1,#keyRepeatTime 				; so it repeats faster than first delay
 		ldm 	r0,#currentKey 					; repeat current key.
 ._GKExitWithR0
 		pop 	r1,r2,r3,r4,r5,link
 		ret
 ;
-;		R0 contains the new key pressed bit. R1 points to the mapping table.
+;		R0 contains the new key pressed bits. R1 points to the mapping table.
 ;
 ._GKKeyPressed:
+		;
+		;		Figure out pressed key and convert to ASCII
+		;
 		mov 	r2,#-1 							; R2 is the bit count, which key in the row was
-._GKFindBitNumber 								; pressed.
-		inc 	r2
-		ror 	r0,#1
-		skm  	r0
+._GKFindBitNumber 								; pressed, pre decremented
+		inc 	r2 								; bump bit count
+		ror 	r0,#1 							; that bit number in the MSB
+		skm  	r0 								; until we identify the new key
 		jmp 	#_GKFindBitNumber
 		;
-		ror 	r2,#1 							; rotate bit count right as two per bit.
+		ror 	r2,#1 							; rotate bit count right as two elements per bit.
 		mov		r0,r2,#0 						; mask out the actual count to add.
 		and 	r0,#15
 		add 	r0,r1,#0 						; get the correct word out of the mapping table
 		ldm 	r0,r0,#0 						; from the character table.
 		skp 	r2 								; if the upper half swap it.
 		ror 	r0,#8
-		and 	r0,#$FF 						; and this is the character code.
+		and 	r0,#$FF 						; mask out the character code for this new depression
 		;
 		sknz 	r0 								; if no key pressed, exit via that code.
 		jmp 	#_GKNoKeyPressed
 		;
-		ldm 	r1,#hwTimer 					; reset repeat timer
+		ldm 	r1,#hwTimer 					; reset repeat timer to long delay
 		add 	r1,#repeatDelay 		
 		stm 	r1,#keyRepeatTime
+		;
+		;		Check Ctrl and Shift modifiers
 		;
 		ldm 	r1,#currentRowStatus+4			; get the row with ctrl and shift on it.
 		ror 	r1,#5 							; check control
@@ -117,10 +127,10 @@
 ._GKControl
 		mov 	r2,r0,#0 						; current -> R2
 		and 	r0,#$1F 						; mask out lower 5 bits
-		and 	r2,#$00F8 						; check 0-7
+		and 	r2,#$00F8 						; check Ctrl 0-7 characters - func keys
 		xor 	r2,#$0030
 		sknz 	r2
-		add 	r0,#$E0 						; map to 240-247	
+		add 	r0,#$E0 						; map them to 240-247	
 		ret
 
 ; *****************************************************************************
@@ -130,17 +140,18 @@
 ; *****************************************************************************
 
 ._GKShiftExecute:
-		mov 	r1,r0,#0						; check if a..z 
+		mov 	r1,r0,#0						; check if a..z , which we can do easily.
 		sub 	r1,#97
 		skge	
 		jmp 	#_GKNotAlpha
 		sub 	r1,#26
 		sklt
 		jmp 	#_GKNotAlpha
-		sub 	r0,#32 							; make U/C
+		sub 	r0,#32 							; make upper case as shifted
 		ret
 ;
-;		Check the conversion LUT.
+;		Check the conversion Look up table, as we've shifted something not alphabetic
+;		This table is generated from the keyboard map.
 ;
 ._GKNotAlpha		
 		mov 	r2,#ShiftTable 					; before MSB, after LSB.
@@ -157,8 +168,9 @@
 		jmp 	#_GKShiftLoop 					; until end of table
 		ret
 		;
+		;		Found an entry in the shift table
+		;
 ._GKShiftFound:						
 		ldm 	r0,r2,#0 						; get key which is the shifted value.
-		and 	r0,#$00FF						; mask out
+		and 	r0,#$00FF						; mask out the final shifted value
 		ret
-

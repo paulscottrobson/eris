@@ -4,7 +4,7 @@
 ;		Name:		lineinput.asm
 ;		Purpose:	Line Input code
 ;		Created:	9th March 2020
-;		Reviewed: 	TODO
+;		Reviewed: 	16th March 2020
 ;		Author:		Paul Robson (paul@robsons.org.uk)
 ;
 ; *****************************************************************************
@@ -23,21 +23,24 @@
 		push 	r1,link		
 		clr 	r0 								; don't print anything first time.
 ._OSXLIEdit		
-		jsr 	#OSPrintCharacter 				; print char
-		jsr 	#OSCursorGet 					; get next
+		jsr 	#OSPrintCharacter 				; print char (normally last typed)
+		jsr 	#OSCursorGet 					; get next character flashing cursor
 		mov 	r1,r0,#0 						; is it CR ?
 		sub 	r1,#13
 		skz 	r1
-		jmp 	#_OSXLIEdit
+		jmp 	#_OSXLIEdit 					; if not, echo it and keep going.
 		;
 		mov 	r0,#14 							; print a non-destructive CR
-		jsr 	#OSXPrintCharacter 
+		jsr 	#OSXPrintCharacter  			; which doesn't erase to EOL.
 		jsr 	#_OSCurrentTextR1				; get address into R1
 		mov 	r0,r1,#0 						; put into R0
 		;
 		;		Keep going back until you hit a $xx00 at the end of the previous line. Note
 		;		that there is a $0000 word before the top left character in the text buffer
 		; 		as a stop
+		;
+		;		IMPORTANT: The word immediately before the text buffer screen must have
+		;		$0000 in it.
 		;
 ._OSXLIFindStart:
 		sub 	r0,#charWidth 					; up one line.

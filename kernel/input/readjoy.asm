@@ -4,7 +4,7 @@
 ;		Name:		readjoy.asm
 ;		Purpose:	Return the joystick status.
 ;		Created:	16th March 2020
-;		Reviewed: 	TODO
+;		Reviewed: 	16th March 2020
 ;		Author:		Paul Robson (paul@robsons.org.uk)
 ;
 ; *****************************************************************************
