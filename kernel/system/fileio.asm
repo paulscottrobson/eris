@@ -4,16 +4,16 @@
 ;		Name:		fileio.asm
 ;		Purpose:	File I/O handler
 ;		Created:	14th March 2020
-;		Reviewed: 	TODO
+;		Reviewed: 	20th March 2020
 ;		Author:		Paul Robson (paul@robsons.org.uk)
 ;
 ; *****************************************************************************
 ; *****************************************************************************
 
-
 ; *****************************************************************************
 ;
-;							Kernel Boot code comes here
+;						This is handled by emulation.
+;					(FPGA will require different behaviour)
 ;
 ; *****************************************************************************
 

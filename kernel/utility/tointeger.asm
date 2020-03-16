@@ -4,7 +4,7 @@
 ;		Name:		tointeger.asm
 ;		Purpose:	Convert string to integer
 ;		Created:	8th March 2020
-;		Reviewed: 	TODO
+;		Reviewed: 	16th March 2020
 ;		Author:		Paul Robson (paul@robsons.org.uk)
 ;
 ; *****************************************************************************
@@ -70,20 +70,17 @@
 		;
 		mult 	r3,r1,#0 					; x current by base and add
 		add 	r3,r5,#0
-		clr 	r6 							; clear error flag
+		clr 	r6 							; clear error flag as we have one valid digit
 		brl 	r13,r2,#0 					; get next character and go around
 		jmp 	#_OSSILoop
 
 ._OSSIExit		
 		clr 	r5 							; R5 = -result
 		sub 	r5,r3,#0
-		skz 	r4 							; use this if signed flag set
+		skz 	r4 							; use this if signed flag set (result in r3)
 		mov 	r3,r5,#0
 		;
 		mov 	r0,r3,#0 					; result in R0
 		mov 	r1,r6,#0 					; error flag in R1
 		pop 	r2,r3,r4,r5,r6,link
 		ret
-
-
-

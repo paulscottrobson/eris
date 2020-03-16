@@ -4,7 +4,7 @@
 ;		Name:		tostring.asm
 ;		Purpose:	Convert integer to string
 ;		Created:	8th March 2020
-;		Reviewed: 	TODO
+;		Reviewed: 	16th March 2020
 ;		Author:		Paul Robson (paul@robsons.org.uk)
 ;
 ; *****************************************************************************
@@ -28,19 +28,21 @@
 		push 	r1,r2,r3,r4,link
 		;
 		mov 	r2,#convBuffer 				; point R2 to the buffer
-		stm 	r14,r2,#0 					; erase the length byte.
-		stm 	r14,r2,#1 					; erase first character 
+		stm 	r14,r2,#0 					; zero the length byte.
+		stm 	r14,r2,#1 					; zero first character 
 		;
-		skm 	r1 							; - format ?
+		skm 	r1 							; - format , i.e. is bit 15 of format set.
 		jmp 	#_OSIsNotNegative
-		skm 	r0 							; do - check 
+		skm 	r0 							; check if the value is negative.
 		jmp 	#_OSISNotNegative
+		;
 		mov 	r3,#'-' 					; write the - in the first slot LSB
 		stm 	r3,r2,#1
 		mov 	r3,#1 						; make the length now 1
 		stm 	r3,r2,#0
-		xor 	r0,#$FFFF 					; make R0 +ve.
+		xor 	r0,#$FFFF 					; make R0 +ve using 2's complement
 		inc 	r0
+		;
 ._OSISNotNegative		
 		and 	r1,#$001F 					; extract the base from the format, put in R3.
 		mov 	r3,r1,#0
@@ -48,20 +50,22 @@
 		mov 	r0,#convBuffer 				; return conversion buffer address.
 		pop 	r1,r2,r3,r4,link
 		ret
-
+;
+;		Recursive digit printer. R0 = number, R3 = base, R2 = Buffer start
+;
 ._OSISRecurse
 		push 	r1,link
 		mov 	r1,r3,#0 					; R0 = value, R1 = base.
 		jsr 	#OSUDivide16 				; divide by base. Result in R0, Modulus in R1
 		skz 	r0 							; if result is non zero recurse
 		jsr 	#_OSISRecurse
-		sub 	r1,#10 						; convert back to ASCII
+		sub 	r1,#10 						; convert back to ASCII 0-9 A-F
 		skm 	r1
 		add 	r1,#7
 		add 	r1,#58
 		;
 		ldm 	r0,r2,#0 					; get current length
-		ror 	r0,#1 						; bit 0->bit 15
+		ror 	r0,#1 						; bit 0->bit 15 e.g. the odd/even
 		skp 	r0 							; if the odd characters, byte swap
 		ror 	r1,#8
 		;
@@ -76,4 +80,3 @@
 		stm 	r0,r2,#0
 		pop 	r1,link						; exit
 		ret
-

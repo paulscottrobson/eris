@@ -4,7 +4,7 @@
 ;		Name:		boot.asm
 ;		Purpose:	Boot code
 ;		Created:	8th March 2020
-;		Reviewed: 	TODO
+;		Reviewed: 	20th March 2020
 ;		Author:		Paul Robson (paul@robsons.org.uk)
 ;
 ; *****************************************************************************
@@ -21,11 +21,11 @@
 ;
 ; *****************************************************************************
 .bootCode
-		clr		r14 						; default value for R14
+		clr		r14 						; default value for R14. Zero throughout
 ;
 ;		Clear the OS Data area
 ;
-		mov 	r0,#initialisedStart
+		mov 	r0,#initialisedStart 		; this blobk is defined in data.asm
 		mov 	r1,r15,#0
 		word 	initialisedEnd-initialisedStart
 ._bcClear
@@ -52,9 +52,8 @@
 		stm 	r1,r0,#0 					; write value back
 		add 	r0,#$100 					; next 1/4 on.
 		jmp 	#_bcCheckMemory
-
 ;
-;		Save that, allocate memory for the screen mirror and initialise the stack & PRNG
+;		Save memory end, allocate memory for the screen mirror and initialise the stack & PRNG
 ;
 ._bcFoundEnd
 		stm 	r0,#highMemory 				; save high memory
@@ -67,15 +66,16 @@
 ;
 ;		Erase the whole display using colour 0 mask $FF
 ;
-		mov 	r0,#$FF00
+		mov 	r0,#$FF00 					
 		jsr 	#OSIFillScreen
 ;
-;		Initialise the colour mask
+;		Initialise the colour mask. 00001111 means in there is just one plane used.
 ;
 		mov 	r0,#15
 		stm 	r0,#colourMask
 ;
-;		Reset the palette
+;		Reset the palette. All 256 values become BGR on the lower 3 bits
+;		(same palette as BBC Micro)
 ;
 		clr 	r0 							; R0 is palette-write
 ._bcWritePalette
@@ -90,7 +90,7 @@
 		skz 	r0
 		jmp 	#_bcWritePalette
 ;
-;		Show the boot prompt
+;		Show the boot prompt, free memory and kernel version
 ;
 		mov 	r0,#bootPrompt 				; display boot prompt.
 		jsr 	#OSPrintString
@@ -101,7 +101,7 @@
 		jsr 	#OSPrintString
 		jsr 	#OSPrintInline
 		string	" words RAM[0D,0D,12]"
-		mov 	r0,#kernelPrompt
+		mov 	r0,#kernelPrompt			; display kernel version
 		jsr 	#OSPrintString
 ;
 ;		Turn the audio off.
@@ -113,19 +113,19 @@
 ;
 ;		Initialise file I/O
 ;
-		clr 	r0
+		clr 	r0 							; send command 0.
 		jsr 	#OSFileOperation
 ;
 ;		Sound the startup beep
 ;
-		mov 	r0,#22726
+		mov 	r0,#22726 					; play A4 for 0.5s
 		mov 	r1,#50
 ;		jsr 	#OSBeep
-		ror 	r0,#1
+		ror 	r0,#1 						; halve it e.g. A3 for 0.25s
 		ror 	r1,#1
 ;		jsr 	#OSBeep
 
-		jmp 	#KernelEnd
+		jmp 	#KernelEnd 					; this is the end of the "kernel ROM"
 ;
 ;		Palette table all colours 0-255 are set to this based on the lower
 ;		three bits of the palette number.
@@ -139,4 +139,3 @@
 		word 	3*16+0*4+3
 		word 	3*16+3*4+0
 		word 	3*16+3*4+3
-

@@ -4,7 +4,7 @@
 ;		Name:		divide.asm
 ;		Purpose:	Integer Division (16 bit)
 ;		Created:	8th March 2020
-;		Reviewed: 	TODO
+;		Reviewed: 	16th March 2020
 ;		Author:		Paul Robson (paul@robsons.org.uk)
 ;
 ; *****************************************************************************
@@ -13,6 +13,7 @@
 ; *****************************************************************************
 ;
 ;		Unsigned 16 bit divide of R0/R1. Result in R0, Remainder in R1
+;							   (Does not zero test)
 ;
 ; *****************************************************************************
 
@@ -71,7 +72,7 @@
 
 		clr 	r2 								; calculate -answer
 		sub 	r2,r0,#0
-		skp 	r3 								; update sign if result signed.
+		skp 	r3 								; update result if result signed as per earlier
 		mov 	r0,r2,#0
 
 		pop 	r2,r3,link

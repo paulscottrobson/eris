@@ -4,7 +4,7 @@
 #		Name:		font5x7.py
 #		Purpose:	Generate font file.
 #		Created:	14th March 2020
-#       Reviewed:   TODO
+#       Reviewed:   16th March 2020
 #		Author:		Paul Robson (paul@robsons.org.uk)
 #
 # *****************************************************************************
@@ -111,11 +111,11 @@ fontData = [
     [  31, 31,  31,  31,  31,  31,  31, ]  # [95] solid block
   ]
 
-for x in fontData:
-    while len(x) < 8:
+for x in fontData:                                                      # for each line
+    while len(x) < 8:                                                   # pad out to 8 bytes
         x.append(0)
 
-h = open("font.inc","w")
+h = open("font.inc","w")                                                # generate word data
 h.write("\torg KernelEnd-8*96\n")
 h.write(".FontData\n")
 for i in range(0,len(fontData)):
