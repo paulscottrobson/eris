@@ -28,7 +28,7 @@
 		;
 ._GKScan
 		stm 	r3,#keyboardPort 				; select row.
-		mov 	r0,#200 						; short delay for debounce
+		mov 	r0,#20 							; short delay for debounce
 ._GKDebounce:
 		dec 	r0
 		skz 	r0

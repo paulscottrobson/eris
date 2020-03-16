@@ -76,6 +76,7 @@ for t in tokens.getList():
 	h.write("\tword\t{0:24} ; ${1:04x} {2}\n".format(handler,tokens.getInfo(t)["token"],t))	
 h.close()
 #
-undefined.sort()
-print("TODO : "+" ".join(undefined).lower())
+if len(undefined) > 0:
+	undefined.sort()
+	print("TODO : "+" ".join(undefined).lower())
 				

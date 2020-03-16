@@ -49,6 +49,9 @@
 .OSCheckBreak
 		jmp 	#OSXCheckBreak
 
+.OSReadJoystick
+		jmp 	#OSXReadJoystick
+		
 ; *****************************************************************************
 ;
 ;								Text Group

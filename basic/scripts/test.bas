@@ -1,3 +1,3 @@
-fkey 3,"***"
-fkey 4,"hello world"+chr$(13)
-fkey 5,"xxxx"
+repeat
+	print chr$(11);joyx(),joyy(),joyb(1),joyb(2)
+until false
