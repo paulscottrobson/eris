@@ -50,6 +50,15 @@
 .keyRepeatTime 								; timer when the key repeats.
 		fill 	1
 
+.functionKeyQueue 	 						; queue for function key expansion, 0 = not happening
+		fill 	1
+.functionKeyByte 							; indicates low byte (0) high byte (1)
+		fill 	1		
+
+.functionKeyDefinitions 					; 8 definitions, stored as pairs terminated by zero
+		fill 	8 * functionKeySize 		; *without* a leading size.
+
+
 .initialisedEnd		
 ;
 ;		This data is not initialised.

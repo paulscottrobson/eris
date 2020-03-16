@@ -17,6 +17,11 @@
 ; *****************************************************************************
 
 .OSXCursorGet
+		ldm 	r0,#functionKeyQueue 		; check the function key queue
+		skz 	r0
+		jmp 	#_OSCGFunctionKey
+._OSCGKeyboard
+		stm	 	r14,#functionKeyQueue 		; clear the queue
 		push 	r1,r2,link
 		clr 	r2 							; R2 is the last read timer value.
 ._OSCGLoop
@@ -33,7 +38,9 @@
 		pop 	r0
 		pop 	r1,r2,link
 		ret
-
+		;
+		;		Write cursor/character according to R0
+		;
 ._OSCGSetCursorBlock
 		push 	link		
 		mov 	r2,r0,#0 					; update state
@@ -48,3 +55,25 @@
 		jsr 	#OSXDrawSolidCharacter
 		pop 	link
 		ret
+		;
+		;		Handle function keys, R0 already has the block pointer
+		;
+._OSCGFunctionKey
+		push 	r1,r2
+		ldm 	r1,r0,#0 					; read that word
+		ldm 	r2,#functionKeyByte 		; indicates which half
+		skz 	r2 							; rotate depending
+		ror 	r1,#8		
+		skz 	r2 							; if upper byte bump the pointer
+		inc 	r0
+		xor 	r2,#1 						; toggle and write back
+		stm 	r2,#functionKeyByte
+		stm 	r0,#functionKeyQueue
+		;
+		and 	r1,#$FF 					; get character out
+		mov 	r0,r1,#0 					; put in R0
+		pop 	r1,r2
+		sknz 	r0 							; if zero get the normal way
+		jmp 	#_OSCGKeyboard
+		ret
+		

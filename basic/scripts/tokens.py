@@ -140,6 +140,7 @@ class Tokens(object):
 	abs(	asc(	chr$(	get( 	get$( 	inkey( 	inkey$( 	
 	left$(	len(	mid$(	peek(	right$(	rnd(	sgn(	
 	str$(	val(
+	true 	false
 //
 //		Synonyms
 //

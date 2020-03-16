@@ -24,6 +24,7 @@
 0000 :                               repeatspeed=$000a
 0000 :                               tabstop=$0004
 0000 :                               maxistrsize=$000a
+0000 :                               functionkeysize=$000c
 0000 :                               oswaitblitter=$0002
 0000 :                               osprintcharacter=$0004
 0000 :                               osprintinline=$0006
@@ -54,29 +55,29 @@
 0000 :                               palettetable=$00c2
 0000 :                               osxcheckbreak=$00ca
 0000 :                               osxcursorget=$00db
-0000 :                               osxgetkeyboard=$010a
-0000 :                               osxinputlimit=$01a5
-0000 :                               osxlineinput=$01fa
-0000 :                               osxwaitblitter=$0217
-0000 :                               osiclearscreen=$0221
-0000 :                               osifillscreen=$0232
-0000 :                               osxdrawsolidcharacter=$0253
-0000 :                               osxdrawcharacter=$0267
-0000 :                               osxprintcharacter=$0294
-0000 :                               osxgettextpos=$03b7
-0000 :                               osxprintstring=$03bc
-0000 :                               osxprintinline=$03c5
-0000 :                               osxbeep=$03e7
-0000 :                               osxudivide16=$03fb
-0000 :                               osxsdivide16=$0415
-0000 :                               osxrandom16=$042e
-0000 :                               osxstrtoint=$043e
-0000 :                               osxinttostr=$047e
-0000 :                               osxuppercase=$04c5
-0000 :                               osxlowercase=$04d7
-0000 :                               osxwordlength=$04e9
-0000 :                               keyboardmapping=$04ef
-0000 :                               shifttable=$0517
+0000 :                               osxgetkeyboard=$012a
+0000 :                               osxinputlimit=$01c5
+0000 :                               osxlineinput=$021a
+0000 :                               osxwaitblitter=$0237
+0000 :                               osiclearscreen=$0241
+0000 :                               osifillscreen=$0252
+0000 :                               osxdrawsolidcharacter=$0273
+0000 :                               osxdrawcharacter=$0287
+0000 :                               osxprintcharacter=$02b4
+0000 :                               osxgettextpos=$03d7
+0000 :                               osxprintstring=$03dc
+0000 :                               osxprintinline=$03e5
+0000 :                               osxbeep=$0407
+0000 :                               osxudivide16=$041b
+0000 :                               osxsdivide16=$0435
+0000 :                               osxrandom16=$044e
+0000 :                               osxstrtoint=$045e
+0000 :                               osxinttostr=$049e
+0000 :                               osxuppercase=$04e5
+0000 :                               osxlowercase=$04f7
+0000 :                               osxwordlength=$0509
+0000 :                               keyboardmapping=$050f
+0000 :                               shifttable=$0537
 0000 :                               fontdata=$0d00
 0000 :                               initialisedstart=$4000
 0000 :                               highmemory=$4000
@@ -91,11 +92,14 @@
 0000 :                               currentkey=$4009
 0000 :                               currentrowstatus=$400a
 0000 :                               keyrepeattime=$400f
-0000 :                               initialisedend=$4010
-0000 :                               randomseed=$4010
-0000 :                               convbuffer=$4011
-0000 :                               fontbuffer=$401b
-0000 :                               freememory=$4023
+0000 :                               functionkeyqueue=$4010
+0000 :                               functionkeybyte=$4011
+0000 :                               functionkeydefinitions=$4012
+0000 :                               initialisedend=$4072
+0000 :                               randomseed=$4072
+0000 :                               convbuffer=$4073
+0000 :                               fontbuffer=$407d
+0000 :                               freememory=$4085
 0000 :                               tok_and = $2200
 0000 :                               tok_or = $2201
 0000 :                               tok_xor = $2202
@@ -131,54 +135,56 @@
 0000 :                               tok_sgnlparen = $3020
 0000 :                               tok_strdollarlparen = $3021
 0000 :                               tok_vallparen = $3022
-0000 :                               tok_lengthlparen = $3023
-0000 :                               tok_randomlparen = $3024
-0000 :                               tok_todotstringdollarlparen = $3025
-0000 :                               tok_todotnumberlparen = $3026
-0000 :                               tok_signlparen = $3027
-0000 :                               tok_rparen = $3228
-0000 :                               tok_comma = $3229
-0000 :                               tok_semicolon = $322a
-0000 :                               tok_to = $322b
-0000 :                               tok_step = $322c
-0000 :                               tok_for = $3e2d
-0000 :                               tok_if = $3e2e
-0000 :                               tok_repeat = $3e2f
-0000 :                               tok_while = $3e30
-0000 :                               tok_proc = $3e31
-0000 :                               tok_endif = $3a32
-0000 :                               tok_next = $3a33
-0000 :                               tok_then = $3a34
-0000 :                               tok_until = $3a35
-0000 :                               tok_wend = $3a36
-0000 :                               tok_endproc = $3a37
-0000 :                               tok_quote = $3c38
-0000 :                               tok_colon = $3c39
-0000 :                               tok_qmark = $3c3a
-0000 :                               tok_assert = $3c3b
-0000 :                               tok_call = $3c3c
-0000 :                               tok_clear = $3c3d
-0000 :                               tok_dim = $3c3e
-0000 :                               tok_dir = $3c3f
-0000 :                               tok_else = $3c40
-0000 :                               tok_end = $3c41
-0000 :                               tok_fkey = $3c42
-0000 :                               tok_gosub = $3c43
-0000 :                               tok_goto = $3c44
-0000 :                               tok_input = $3c45
-0000 :                               tok_let = $3c46
-0000 :                               tok_list = $3c47
-0000 :                               tok_load = $3c48
-0000 :                               tok_new = $3c49
-0000 :                               tok_old = $3c4a
-0000 :                               tok_poke = $3c4b
-0000 :                               tok_print = $3c4c
-0000 :                               tok_rem = $3c4d
-0000 :                               tok_return = $3c4e
-0000 :                               tok_run = $3c4f
-0000 :                               tok_save = $3c50
-0000 :                               tok_stop = $3c51
-0000 :                               tok_sys = $3c52
+0000 :                               tok_true = $3023
+0000 :                               tok_false = $3024
+0000 :                               tok_lengthlparen = $3025
+0000 :                               tok_randomlparen = $3026
+0000 :                               tok_todotstringdollarlparen = $3027
+0000 :                               tok_todotnumberlparen = $3028
+0000 :                               tok_signlparen = $3029
+0000 :                               tok_rparen = $322a
+0000 :                               tok_comma = $322b
+0000 :                               tok_semicolon = $322c
+0000 :                               tok_to = $322d
+0000 :                               tok_step = $322e
+0000 :                               tok_for = $3e2f
+0000 :                               tok_if = $3e30
+0000 :                               tok_repeat = $3e31
+0000 :                               tok_while = $3e32
+0000 :                               tok_proc = $3e33
+0000 :                               tok_endif = $3a34
+0000 :                               tok_next = $3a35
+0000 :                               tok_then = $3a36
+0000 :                               tok_until = $3a37
+0000 :                               tok_wend = $3a38
+0000 :                               tok_endproc = $3a39
+0000 :                               tok_quote = $3c3a
+0000 :                               tok_colon = $3c3b
+0000 :                               tok_qmark = $3c3c
+0000 :                               tok_assert = $3c3d
+0000 :                               tok_call = $3c3e
+0000 :                               tok_clear = $3c3f
+0000 :                               tok_dim = $3c40
+0000 :                               tok_dir = $3c41
+0000 :                               tok_else = $3c42
+0000 :                               tok_end = $3c43
+0000 :                               tok_fkey = $3c44
+0000 :                               tok_gosub = $3c45
+0000 :                               tok_goto = $3c46
+0000 :                               tok_input = $3c47
+0000 :                               tok_let = $3c48
+0000 :                               tok_list = $3c49
+0000 :                               tok_load = $3c4a
+0000 :                               tok_new = $3c4b
+0000 :                               tok_old = $3c4c
+0000 :                               tok_poke = $3c4d
+0000 :                               tok_print = $3c4e
+0000 :                               tok_rem = $3c4f
+0000 :                               tok_return = $3c50
+0000 :                               tok_run = $3c51
+0000 :                               tok_save = $3c52
+0000 :                               tok_stop = $3c53
+0000 :                               tok_sys = $3c54
 0000 :                               maxstringsize = 255
 0000 :                               extrastringalloc = 8
 0000 :                               hashtablesize = 16
@@ -205,36 +211,36 @@
 1002 : 000e 6142 6973 3a63 2020      string "basic[3a]  0.01[0d,0d]"
 100a :                               .coldstart
 100a : 5ce1                          dec  sp
-100b : 2cf0 402b                     stm  sp,#returnstacktop
+100b : 2cf0 408d                     stm  sp,#returnstacktop
 100d : 5cf0 0100                     sub  sp,#returnstacksize
-100f : 2cf0 402c                     stm  sp,#returnstackbottom
-1011 : 2cf0 4023                     stm  sp,#initialsp
+100f : 2cf0 408e                     stm  sp,#returnstackbottom
+1011 : 2cf0 4085                     stm  sp,#initialsp
 1013 : 00f0 4200                     mov  r0,#freebasiccode
-1015 : 20f0 4025                     stm  r0,#programcode
+1015 : 20f0 4087                     stm  r0,#programcode
 1017 : 00f0 1002                     mov  r0,#basicprompt
 1019 : ade8                          jsr  #osprintstring
 101a : adf0 1457                     jsr  #command_new
 101c :                               .warmstart
-101c : 1cf0 4023                     ldm  sp,#initialsp
+101c : 1cf0 4085                     ldm  sp,#initialsp
 101e : 00f0 0012                     mov  r0,#$12
 1020 : ade4                          jsr  #osprintcharacter
 1021 : adee                          jsr  #oslineinput
-1022 : adf0 1af7                     jsr  #tokenisestring
+1022 : adf0 1aff                     jsr  #tokenisestring
 1024 : c0e0                          sknz  r0
-1025 : aff0 1e51                     jmp  #tokeniseerror
+1025 : aff0 1e59                     jmp  #tokeniseerror
 1027 : 0b00                          mov  r11,r0,#0
 1028 : 1202                          ldm  r2,r0,#2
 1029 : e2e0                          skm  r2
 102a : aff0 14eb                     jmp  #runprogramr11
-102c : aff0 1995                     jmp  #editprogram
+102c : aff0 199d                     jmp  #editprogram
 102e :                               .command_call
 102e : 5ce1 2dc0                     push  link
-1030 : 11f0 4029                     ldm  r1,#proctable
+1030 : 11f0 408b                     ldm  r1,#proctable
 1032 :                               ._ccaloop
 1032 : 1210                          ldm  r2,r1,#0
 1033 : 31e1                          inc  r1
 1034 : c1e0                          sknz  r1
-1035 : aff0 1dcc                     jmp  #callerror
+1035 : aff0 1dd4                     jmp  #callerror
 1037 : 0323                          mov  r3,r2,#3
 1038 : 04b0                          mov  r4,r11,#0
 1039 :                               ._ccacheck
@@ -249,35 +255,35 @@
 1042 : e5e0                          skm  r5
 1043 : aff0 1039                     jmp  #_ccacheck
 1045 : 0b40                          mov  r11,r4,#0
-1046 : adf0 1a6a                     jsr  #stackpushposition
-1048 : adf0 1a7b                     jsr  #stackpushmarker
+1046 : adf0 1a72                     jsr  #stackpushposition
+1048 : adf0 1a83                     jsr  #stackpushmarker
 104a : 0063                          word  'c'
 104b : 0b30                          mov  r11,r3,#0
-104c : 22f0 4024                     stm  r2,#currentline
+104c : 22f0 4086                     stm  r2,#currentline
 104e : 1dc0 3ce1                     pop  link
 1050 : afd0                          ret
 1051 :                               .command_proc
-1051 : aff0 1d67                     jmp  #syntaxerror
+1051 : aff0 1d6f                     jmp  #syntaxerror
 1053 :                               .command_endproc
 1053 : 5ce1 2dc0                     push  link
-1055 : adf0 1a8a                     jsr  #stackcheckmarker
+1055 : adf0 1a92                     jsr  #stackcheckmarker
 1057 : 0063                          word  'c'
-1058 : aff0 1e2d                     jmp  #endprocerror
-105a : adf0 1a74                     jsr  #stackpopposition
+1058 : aff0 1e35                     jmp  #endprocerror
+105a : adf0 1a7c                     jsr  #stackpopposition
 105c : 00e3                          mov  r0,#1+stackpossize
-105d : adf0 1a93                     jsr  #stackpopwords
+105d : adf0 1a9b                     jsr  #stackpopwords
 105f : 1dc0 3ce1                     pop  link
 1061 : afd0                          ret
 1062 :                               .scanforprocedures
-1062 : 12f0 4028                     ldm  r2,#memallocbottom
-1064 : 22f0 4029                     stm  r2,#proctable
-1066 : 13f0 4025                     ldm  r3,#programcode
+1062 : 12f0 408a                     ldm  r2,#memallocbottom
+1064 : 22f0 408b                     stm  r2,#proctable
+1066 : 13f0 4087                     ldm  r3,#programcode
 1068 :                               ._sfploop
 1068 : 1030                          ldm  r0,r3,#0
 1069 : c0e0                          sknz  r0
 106a : aff0 1086                     jmp  #_sfpexit
 106c : 1132                          ldm  r1,r3,#2
-106d : 71f0 3e31                     xor  r1,#tok_proc
+106d : 71f0 3e33                     xor  r1,#tok_proc
 106f : b1e0                          skz  r1
 1070 : aff0 1083                     jmp  #_sfpnext
 1072 : 1133                          ldm  r1,r3,#3
@@ -288,29 +294,29 @@
 107a : 2320                          stm  r3,r2,#0
 107b : 32e1                          inc  r2
 107c : 0124                          mov  r1,r2,#4
-107d : 14f0 4027                     ldm  r4,#memalloctop
+107d : 14f0 4089                     ldm  r4,#memalloctop
 107f : 5140                          sub  r1,r4,#0
 1080 : ffe0                          sklt
-1081 : aff0 1da7                     jmp  #memoryerror
+1081 : aff0 1daf                     jmp  #memoryerror
 1083 :                               ._sfpnext
 1083 : 3300                          add  r3,r0,#0
 1084 : aff0 1068                     jmp  #_sfploop
 1086 :                               ._sfpexit
 1086 : 2e20                          stm  r14,r2,#0
 1087 : 32e1                          inc  r2
-1088 : 22f0 4028                     stm  r2,#memallocbottom
+1088 : 22f0 408a                     stm  r2,#memallocbottom
 108a : afd0                          ret
 108b :                               .command_clear
 108b : 5ce1 2dc0                     push  link
 108d : 00c0                          mov  r0,sp,#0
 108e : 50f0 0200                     sub  r0,#512
-1090 : 20f0 4026                     stm  r0,#endmemory
-1092 : 20f0 4027                     stm   r0,#memalloctop
-1094 : adf0 1c7d                     jsr  #varerasehashtables
-1096 : adf0 1a01                     jsr  #findprogramend
+1090 : 20f0 4088                     stm  r0,#endmemory
+1092 : 20f0 4089                     stm   r0,#memalloctop
+1094 : adf0 1c85                     jsr  #varerasehashtables
+1096 : adf0 1a09                     jsr  #findprogramend
 1098 : 30e1                          inc  r0
-1099 : 20f0 4028                     stm  r0,#memallocbottom
-109b : adf0 1a64                     jsr  #stackreset
+1099 : 20f0 408a                     stm  r0,#memallocbottom
+109b : adf0 1a6c                     jsr  #stackreset
 109d : adf0 1062                     jsr  #scanforprocedures
 109f : 1dc0 3ce1                     pop  link
 10a1 : afd0                          ret
@@ -320,10 +326,10 @@
 10a4 : 10b0                          ldm  r0,r11,#0
 10a5 : 90ec                          ror  r0,#12
 10a6 : e0e0                          skm  r0
-10a7 : aff0 1d67                     jmp  #syntaxerror
-10a9 : adf0 1ce2                     jsr  #findvariable
+10a7 : aff0 1d6f                     jmp  #syntaxerror
+10a9 : adf0 1cea                     jsr  #findvariable
 10ab : b0e0                          skz  r0
-10ac : aff0 1dc3                     jmp  #arrayexistserror
+10ac : aff0 1dcb                     jmp  #arrayexistserror
 10ae : 07b0                          mov  r7,r11,#0
 10af :                               ._cdiadvance
 10af : 11b0                          ldm  r1,r11,#0
@@ -336,26 +342,26 @@
 10b8 : 0500                          mov  r5,r0,#0
 10b9 : 7880                          clr  r8
 10ba : 10b0                          ldm  r0,r11,#0
-10bb : 70f0 3229                     xor  r0,#tok_comma
+10bb : 70f0 322b                     xor  r0,#tok_comma
 10bd : b0e0                          skz  r0
 10be : aff0 10c7                     jmp  #_cdihavedimension
 10c0 : 3be1                          inc  r11
 10c1 : adf0 176e                     jsr  #evaluateinteger
 10c3 : 0800                          mov  r8,r0,#0
 10c4 : c8e0                          sknz  r8
-10c5 : aff0 1d97                     jmp  #badnumbererror
+10c5 : aff0 1d9f                     jmp  #badnumbererror
 10c7 :                               ._cdihavedimension
-10c7 : adf0 1956                     jsr  #checkrightbracket
+10c7 : adf0 195e                     jsr  #checkrightbracket
 10c9 : 0051                          mov  r0,r5,#1
 10ca : 0181                          mov  r1,r8,#1
 10cb : 8010                          mult  r0,r1,#0
 10cc : ffe0                          sknc
-10cd : aff0 1d97                     jmp  #badnumbererror
+10cd : aff0 1d9f                     jmp  #badnumbererror
 10cf : 0400                          mov  r4,r0,#0
 10d0 : 30e4                          add  r0,#4
 10d1 : 5ce1 2bc0                     push  r11
 10d3 : 0b70                          mov  r11,r7,#0
-10d4 : adf0 1d0a                     jsr  #createvariablerecord
+10d4 : adf0 1d12                     jsr  #createvariablerecord
 10d6 : 1bc0 3ce1                     pop  r11
 10d8 : 0104                          mov  r1,r0,#4
 10d9 : 1202                          ldm  r2,r0,#2
@@ -369,7 +375,7 @@
 10e1 : 2803                          stm  r8,r0,#3
 10e2 : 10b0                          ldm  r0,r11,#0
 10e3 : 3be1                          inc  r11
-10e4 : 70f0 3229                     xor  r0,#tok_comma
+10e4 : 70f0 322b                     xor  r0,#tok_comma
 10e6 : c0e0                          sknz  r0
 10e7 : aff0 10a4                     jmp  #_cdinextarray
 10e9 : 5be1                          dec  r11
@@ -382,14 +388,14 @@
 10f2 : 00e1                          mov  r0,#1
 10f3 : adf0 001c                     jsr  #osfileoperation
 10f5 : b0e0                          skz  r0
-10f6 : aff0 1e64                     jmp  #loaderror
+10f6 : aff0 1e6c                     jmp  #loaderror
 10f8 : adf0 108b                     jsr  #command_clear
 10fa : 1dc0 3ce1                     pop  link
 10fc : afd0                          ret
 10fd :                               .command_dir
 10fd : 5ce1 2dc0                     push  link
 10ff : 00e4                          mov  r0,#4
-1100 : 11f0 4028                     ldm  r1,#memallocbottom
+1100 : 11f0 408a                     ldm  r1,#memallocbottom
 1102 : adf0 001c                     jsr  #osfileoperation
 1104 :                               ._cdlist
 1104 : 1010                          ldm  r0,r1,#0
@@ -414,22 +420,22 @@
 111c : 10b0                          ldm  r0,r11,#0
 111d : c0e0                          sknz  r0
 111e : aff0 112a                     jmp  #_cshavefilename
-1120 : 70f0 3c39                     xor  r0,#tok_colon
+1120 : 70f0 3c3b                     xor  r0,#tok_colon
 1122 : c0e0                          sknz  r0
 1123 : aff0 112a                     jmp  #_cshavefilename
 1125 : adf0 1764                     jsr  #evaluatestring
 1127 : adf0 1140                     jsr  #_csvalidate
 1129 : 0100                          mov  r1,r0,#0
 112a :                               ._cshavefilename
-112a : adf0 1a01                     jsr  #findprogramend
+112a : adf0 1a09                     jsr  #findprogramend
 112c : 0300                          mov  r3,r0,#0
-112d : 12f0 4025                     ldm  r2,#programcode
+112d : 12f0 4087                     ldm  r2,#programcode
 112f : 5320                          sub  r3,r2,#0
 1130 : 33e1                          inc  r3
 1131 : 00e3                          mov  r0,#3
 1132 : adf0 001c                     jsr  #osfileoperation
 1134 : b0e0                          skz  r0
-1135 : aff0 1e6d                     jmp  #saveerror
+1135 : aff0 1e75                     jmp  #saveerror
 1137 : 1dc0 3ce1                     pop  link
 1139 : afd0                          ret
 113a :                               ._csdefault
@@ -438,7 +444,7 @@
 1140 : 5ce4 20c0 21c1 22c2 2dc3      push  r0,r1,r2,link
 1145 : 1100                          ldm  r1,r0,#0
 1146 : c1e0                          sknz  r1
-1147 : aff0 1e76                     jmp  #savenameerror
+1147 : aff0 1e7e                     jmp  #savenameerror
 1149 : 0100                          mov  r1,r0,#0
 114a : adf0 002c                     jsr  #oswordlength
 114c :                               ._csvloop
@@ -459,9 +465,9 @@
 1161 : afd0                          ret
 1162 : 5ce2 20c0 2dc1                push  r0,link
 1165 : 0020                          mov  r0,r2,#0
-1166 : adf0 196e                     jsr  #getcharactertype
+1166 : adf0 1976                     jsr  #getcharactertype
 1168 : c0e0                          sknz  r0
-1169 : aff0 1e76                     jmp  #savenameerror
+1169 : aff0 1e7e                     jmp  #savenameerror
 116b : 10c0 1dc1 3ce2                pop  r0,link
 116e : afd0                          ret
 116f :                               .command_for
@@ -470,41 +476,41 @@
 1173 : adf0 16c8                     jsr  #evaluator
 1175 : 10a2                          ldm  r0,r10,#esreference1
 1176 : c0e0                          sknz  r0
-1177 : aff0 1d6d                     jmp   #typemismatcherror
+1177 : aff0 1d75                     jmp   #typemismatcherror
 1179 : 10a1                          ldm  r0,r10,#estype1
 117a : b0e0                          skz  r0
-117b : aff0 1d6d                     jmp   #typemismatcherror
+117b : aff0 1d75                     jmp   #typemismatcherror
 117d : 10a0                          ldm  r0,r10,#esvalue1
 117e : 0100                          mov  r1,r0,#0
-117f : adf0 1a99                     jsr  #stackpushr0
+117f : adf0 1aa1                     jsr  #stackpushr0
 1181 : 00f0 2407                     mov  r0,#tok_equal
-1183 : adf0 194b                     jsr  #checknexttoken
+1183 : adf0 1953                     jsr  #checknexttoken
 1185 : adf0 176e                     jsr  #evaluateinteger
 1187 : 2010                          stm  r0,r1,#0
-1188 : 00f0 322b                     mov  r0,#tok_to
-118a : adf0 194b                     jsr  #checknexttoken
+1188 : 00f0 322d                     mov  r0,#tok_to
+118a : adf0 1953                     jsr  #checknexttoken
 118c : adf0 176e                     jsr  #evaluateinteger
-118e : adf0 1a99                     jsr  #stackpushr0
+118e : adf0 1aa1                     jsr  #stackpushr0
 1190 : 11b0                          ldm  r1,r11,#0
-1191 : 71f0 322c                     xor  r1,#tok_step
+1191 : 71f0 322e                     xor  r1,#tok_step
 1193 : 00e1                          mov  r0,#1
 1194 : b1e0                          skz  r1
 1195 : aff0 119a                     jmp  #_cfhavestep
 1197 : 3be1                          inc  r11
 1198 : adf0 176e                     jsr  #evaluateinteger
 119a :                               ._cfhavestep
-119a : adf0 1a99                     jsr  #stackpushr0
-119c : adf0 1a6a                     jsr  #stackpushposition
-119e : adf0 1a7b                     jsr  #stackpushmarker
+119a : adf0 1aa1                     jsr  #stackpushr0
+119c : adf0 1a72                     jsr  #stackpushposition
+119e : adf0 1a83                     jsr  #stackpushmarker
 11a0 : 0066                          word  'f'
 11a1 : 1dc0 3ce1                     pop  link
 11a3 : afd0                          ret
 11a4 :                               .command_next
 11a4 : 5ce1 2dc0                     push  link
-11a6 : adf0 1a8a                     jsr  #stackcheckmarker
+11a6 : adf0 1a92                     jsr  #stackcheckmarker
 11a8 : 0066                          word  'f'
-11a9 : aff0 1e3a                     jmp  #nexterror
-11ab : 12f0 402d                     ldm  r2,#returnstackptr
+11a9 : aff0 1e42                     jmp  #nexterror
+11ab : 12f0 408f                     ldm  r2,#returnstackptr
 11ad : 10b0                          ldm  r0,r11,#0
 11ae : 60f0 c000                     and  r0,#$c000
 11b0 : 70f0 4000                     xor  r0,#$4000
@@ -516,7 +522,7 @@
 11ba : 1125                          ldm  r1,r2,#stackpossize+3
 11bb : 7130                          xor  r1,r3,#0
 11bc : b1e0                          skz  r1
-11bd : aff0 1d9f                     jmp  #badindexerror
+11bd : aff0 1da7                     jmp  #badindexerror
 11bf :                               ._cndefaultidentifier
 11bf : 1325                          ldm  r3,r2,#stackpossize+3
 11c0 : 1424                          ldm  r4,r2,#stackpossize+2
@@ -533,25 +539,25 @@
 11cb : d410                          skse  r4,r1,#0
 11cc : aff0 11d3                     jmp  #_cnendloop
 11ce :                               ._cnloop
-11ce : adf0 1a74                     jsr  #stackpopposition
+11ce : adf0 1a7c                     jsr  #stackpopposition
 11d0 : 1dc0 3ce1                     pop  link
 11d2 : afd0                          ret
 11d3 :                               ._cnendloop
 11d3 : 00e6                          mov  r0,#4+stackpossize
-11d4 : adf0 1a93                     jsr  #stackpopwords
+11d4 : adf0 1a9b                     jsr  #stackpopwords
 11d6 : 1dc0 3ce1                     pop  link
 11d8 : afd0                          ret
 11d9 :                               .command_if
 11d9 : 5ce1 2dc0                     push  link
 11db : adf0 176e                     jsr  #evaluateinteger
 11dd : 11b0                          ldm  r1,r11,#0
-11de : 71f0 3a34                     xor  r1,#tok_then
+11de : 71f0 3a36                     xor  r1,#tok_then
 11e0 : b1e0                          skz  r1
 11e1 : aff0 11ef                     jmp  #_cifmultiline
 11e3 : 3be1                          inc  r11
 11e4 : b0e0                          skz  r0
 11e5 : aff0 11ec                     jmp  #_cifexit
-11e7 : 1bf0 4024                     ldm  r11,#currentline
+11e7 : 1bf0 4086                     ldm  r11,#currentline
 11e9 : 10b0                          ldm  r0,r11,#0
 11ea : 3b00                          add  r11,r0,#0
 11eb : 5be1                          dec  r11
@@ -561,43 +567,43 @@
 11ef :                               ._cifmultiline
 11ef : c0e0                          sknz  r0
 11f0 : aff0 11f8                     jmp  #_cifmultiline_false
-11f2 : adf0 1a7b                     jsr  #stackpushmarker
+11f2 : adf0 1a83                     jsr  #stackpushmarker
 11f4 : 0069                          word  'i'
 11f5 : 1dc0 3ce1                     pop  link
 11f7 : afd0                          ret
 11f8 :                               ._cifmultiline_false
-11f8 : 00f0 3c40                     mov  r0,#tok_else
-11fa : 01f0 3a32                     mov  r1,#tok_endif
-11fc : adf0 1a26                     jsr  #skipstructure
+11f8 : 00f0 3c42                     mov  r0,#tok_else
+11fa : 01f0 3a34                     mov  r1,#tok_endif
+11fc : adf0 1a2e                     jsr  #skipstructure
 11fe : 5be1                          dec  r11
 11ff : 10b0                          ldm  r0,r11,#0
 1200 : 3be1                          inc  r11
-1201 : 70f0 3a32                     xor  r0,#tok_endif
+1201 : 70f0 3a34                     xor  r0,#tok_endif
 1203 : c0e0                          sknz  r0
 1204 : aff0 11ec                     jmp  #_cifexit
-1206 : adf0 1a7b                     jsr  #stackpushmarker
+1206 : adf0 1a83                     jsr  #stackpushmarker
 1208 : 0069                          word  'i'
 1209 : 1dc0 3ce1                     pop  link
 120b : afd0                          ret
 120c :                               .command_else
 120c : 5ce1 2dc0                     push  link
-120e : adf0 1a8a                     jsr  #stackcheckmarker
+120e : adf0 1a92                     jsr  #stackcheckmarker
 1210 : 0069                          word  'i'
-1211 : aff0 1e17                     jmp  #elseerror
+1211 : aff0 1e1f                     jmp  #elseerror
 1213 : 00e1                          mov  r0,#1
-1214 : adf0 1a93                     jsr  #stackpopwords
-1216 : 00f0 3a32                     mov  r0,#tok_endif
+1214 : adf0 1a9b                     jsr  #stackpopwords
+1216 : 00f0 3a34                     mov  r0,#tok_endif
 1218 : 0100                          mov  r1,r0,#0
-1219 : adf0 1a26                     jsr  #skipstructure
+1219 : adf0 1a2e                     jsr  #skipstructure
 121b : 1dc0 3ce1                     pop  link
 121d : afd0                          ret
 121e :                               .command_endif
 121e : 5ce1 2dc0                     push  link
-1220 : adf0 1a8a                     jsr  #stackcheckmarker
+1220 : adf0 1a92                     jsr  #stackcheckmarker
 1222 : 0069                          word  'i'
-1223 : aff0 1e22                     jmp  #endiferror
+1223 : aff0 1e2a                     jmp  #endiferror
 1225 : 00e1                          mov  r0,#1
-1226 : adf0 1a93                     jsr  #stackpopwords
+1226 : adf0 1a9b                     jsr  #stackpopwords
 1228 : 1dc0 3ce1                     pop  link
 122a : afd0                          ret
 122b :                               .command_input
@@ -606,18 +612,18 @@
 122f : adf0 16c8                     jsr  #evaluator
 1231 : 10a2                          ldm  r0,r10,#esreference1
 1232 : c0e0                          sknz  r0
-1233 : aff0 1d67                     jmp  #syntaxerror
+1233 : aff0 1d6f                     jmp  #syntaxerror
 1235 :                               ._cinget
 1235 : adf0 0014                     jsr  #osgettextpos
 1237 : 01f0 0035                     mov  r1,#charwidth
 1239 : 5100                          sub  r1,r0,#0
-123a : 00f0 41ea                     mov  r0,#inputbuffer
+123a : 00f0 424c                     mov  r0,#inputbuffer
 123c : adf0 0010                     jsr  #osinputlimit
 123e : 11a1                          ldm  r1,r10,#estype1
 123f : b1e0                          skz  r1
 1240 : aff0 1252                     jmp  #_cinstring
 1242 : 01ea                          mov  r1,#10
-1243 : adf0 18ec                     jsr  #compactstringtointeger
+1243 : adf0 18f4                     jsr  #compactstringtointeger
 1245 : b1e0                          skz  r1
 1246 : aff0 124d                     jmp  #_cinbadinput
 1248 : 11a0                          ldm  r1,r10,#esvalue1
@@ -630,7 +636,7 @@
 1250 : aff0 1235                     jmp  #_cinget
 1252 :                               ._cinstring
 1252 : 11a0                          ldm  r1,r10,#esvalue1
-1253 : adf0 1abc                     jsr  #stringassign
+1253 : adf0 1ac4                     jsr  #stringassign
 1255 : 1dc0 3ce1                     pop  link
 1257 : afd0                          ret
 1258 :                               .command_let
@@ -639,9 +645,9 @@
 125d : adf0 16c8                     jsr  #evaluator
 125f : 10a2                          ldm  r0,r10,#esreference1
 1260 : c0e0                          sknz  r0
-1261 : aff0 1d67                     jmp  #syntaxerror
+1261 : aff0 1d6f                     jmp  #syntaxerror
 1263 : 00f0 2407                     mov  r0,#tok_equal
-1265 : adf0 194b                     jsr  #checknexttoken
+1265 : adf0 1953                     jsr  #checknexttoken
 1267 : 10a1                          ldm  r0,r10,#estype1
 1268 : b0e0                          skz  r0
 1269 : aff0 1273                     jmp  #_clstring
@@ -653,7 +659,7 @@
 1273 :                               ._clstring
 1273 : 11a0                          ldm  r1,r10,#esvalue1
 1274 : adf0 1764                     jsr  #evaluatestring
-1276 : adf0 1abc                     jsr  #stringassign
+1276 : adf0 1ac4                     jsr  #stringassign
 1278 : 19c0 1dc1 3ce2                pop  r9,link
 127b : afd0                          ret
 127c :                               .command_list
@@ -665,13 +671,13 @@
 1281 : 10b0                          ldm  r0,r11,#0
 1282 : c0e0                          sknz  r0
 1283 : aff0 128d                     jmp  #_clhaveline
-1285 : 70f0 3c39                     xor  r0,#tok_colon
+1285 : 70f0 3c3b                     xor  r0,#tok_colon
 1287 : c0e0                          sknz  r0
 1288 : aff0 128d                     jmp  #_clhaveline
 128a : adf0 176e                     jsr  #evaluateinteger
 128c : 0600                          mov  r6,r0,#0
 128d :                               ._clhaveline
-128d : 1bf0 4025                     ldm  r11,#programcode
+128d : 1bf0 4087                     ldm  r11,#programcode
 128f :                               ._cllistloop
 128f : adf0 0014                     jsr  #osgettextpos
 1291 : 51f0 001a                     sub  r1,#charheight-4
@@ -715,7 +721,7 @@
 12c4 : aff0 12bf                     jmp  #_lolspacing
 12c6 : 3be2                          add  r11,#2
 12c7 : 7880                          clr  r8
-12c8 : 2ef0 402e                     stm  r14,#lastlisttoken
+12c8 : 2ef0 4090                     stm  r14,#lastlisttoken
 12ca :                               ._lolloop
 12ca : 10b0                          ldm  r0,r11,#0
 12cb : c0e0                          sknz  r0
@@ -753,7 +759,7 @@
 12f8 : 3be1                          inc  r11
 12f9 : 7010                          xor  r0,r1,#0
 12fa : 01ea                          mov  r1,#10
-12fb : 12f0 402e                     ldm  r2,#lastlisttoken
+12fb : 12f0 4090                     ldm  r2,#lastlisttoken
 12fd : 72f0 3011                     xor  r2,#tok_percent
 12ff : c2e0                          sknz  r2
 1300 : 01e2                          mov  r1,#2
@@ -797,7 +803,7 @@
 1337 : ade4                          jsr  #osprintcharacter
 1338 : 11b0                          ldm  r1,r11,#0
 1339 : 61f0 01ff                     and  r1,#$01ff
-133b : 02f0 1e80                     mov  r2,#tokeniserwords
+133b : 02f0 1e88                     mov  r2,#tokeniserwords
 133d :                               ._dtfindtoken
 133d : c1e0                          sknz  r1
 133e : aff0 1347                     jmp  #_dthavetoken
@@ -816,7 +822,7 @@
 134f : 3be1                          inc  r11
 1350 :                               ._dtexit
 1350 : 10c0 3ce1                     pop  r0
-1352 : 20f0 402e                     stm  r0,#lastlisttoken
+1352 : 20f0 4090                     stm  r0,#lastlisttoken
 1354 : 1dc0 3ce1                     pop  link
 1356 : afd0                          ret
 1357 :                               .listcheckadjustindent
@@ -857,7 +863,7 @@
 1388 : afd0                          ret
 1389 : 5ce3 26c0 27c1 2dc2           push  r6,r7,link
 138d : 0600                          mov  r6,r0,#0
-138e : adf0 196e                     jsr  #getcharactertype
+138e : adf0 1976                     jsr  #getcharactertype
 1390 : 0700                          mov  r7,r0,#0
 1391 : b9e0                          skz  r9
 1392 : aff0 139d                     jmp  #_lpcprint
@@ -962,21 +968,21 @@
 1422 : 10c0 11c1 1dc2 3ce3           pop  r0,r1,link
 1426 : afd0                          ret
 1427 :                               .command_stop
-1427 : aff0 1dd8                     jmp  #stoperror
+1427 : aff0 1de0                     jmp  #stoperror
 1429 :                               .command_end
 1429 : aff0 101c                     jmp  #warmstart
 142b :                               .commandassert
 142b : 01d0                          mov  r1,link,#0
 142c : adf0 176e                     jsr  #evaluateinteger
 142e : c0e0                          sknz  r0
-142f : aff0 1d80                     jmp  #asserterror
+142f : aff0 1d88                     jmp  #asserterror
 1431 : 0d10                          mov  link,r1,#0
 1432 : afd0                          ret
 1433 :                               .commandpoke
 1433 : 5ce1 2dc0                     push  link
 1435 : adf0 176e                     jsr  #evaluateinteger
 1437 : 0100                          mov  r1,r0,#0
-1438 : adf0 1962                     jsr  #checkcomma
+1438 : adf0 196a                     jsr  #checkcomma
 143a : adf0 176e                     jsr  #evaluateinteger
 143c : 2010                          stm  r0,r1,#0
 143d : 1dc0 3ce1                     pop  link
@@ -985,7 +991,7 @@
 1440 : 5ce1 2dc0                     push  link
 1442 : adf0 176e                     jsr  #evaluateinteger
 1444 : 0100                          mov  r1,r0,#0
-1445 : 00f0 4090                     mov  r0,#fixedvariables
+1445 : 00f0 40f2                     mov  r0,#fixedvariables
 1447 : ad10                          brl  link,r1,#0
 1448 : 1dc0 3ce1                     pop  link
 144a : afd0                          ret
@@ -1008,12 +1014,12 @@
 1457 :                               .dummy5
 1457 :                               .dummy6
 1457 :                               .command_new
-1457 : 10f0 4025                     ldm  r0,#programcode
+1457 : 10f0 4087                     ldm  r0,#programcode
 1459 : 2e00                          stm  r14,r0,#0
 145a : adf0 108b                     jsr  #command_clear
 145c : aff0 101c                     jmp  #warmstart
 145e :                               .command_old
-145e : 10f0 4025                     ldm  r0,#programcode
+145e : 10f0 4087                     ldm  r0,#programcode
 1460 : 0200                          mov  r2,r0,#0
 1461 : 30e1                          inc  r0
 1462 :                               ._conext
@@ -1043,14 +1049,14 @@
 147d : 10b0                          ldm  r0,r11,#0
 147e : c0e0                          sknz r0
 147f : aff0 14bd                     jmp  #_cprexitcr
-1481 : 70f0 3c39                     xor  r0,#tok_colon
+1481 : 70f0 3c3b                     xor  r0,#tok_colon
 1483 : c0e0                          sknz  r0
 1484 : aff0 14bd                     jmp  #_cprexitcr
 1486 : 3be1                          inc  r11
-1487 : 70f0 0e13                     xor  r0,#tok_semicolon^tok_colon
+1487 : 70f0 0e17                     xor  r0,#tok_semicolon^tok_colon
 1489 : c0e0                          sknz  r0
 148a : aff0 14b2                     jmp  #_cprsemicolon
-148c : 70e3                          xor  r0,#tok_semicolon^tok_comma
+148c : 70e7                          xor  r0,#tok_semicolon^tok_comma
 148d : c0e0                          sknz  r0
 148e : aff0 14b0                     jmp  #_cprtab
 1490 : 70f0 0e11                     xor  r0,#tok_comma^tok_quote
@@ -1085,7 +1091,7 @@
 14b2 : 10b0                          ldm  r0,r11,#0
 14b3 : c0e0                          sknz r0
 14b4 : aff0 14bf                     jmp  #_cprexit
-14b6 : 70f0 3c39                     xor  r0,#tok_colon
+14b6 : 70f0 3c3b                     xor  r0,#tok_colon
 14b8 : c0e0                          sknz  r0
 14b9 : aff0 14bf                     jmp  #_cprexit
 14bb : aff0 147d                     jmp  #_cprloop
@@ -1097,45 +1103,45 @@
 14c1 : afd0                          ret
 14c2 :                               .command_repeat
 14c2 : 5ce1 2dc0                     push  link
-14c4 : adf0 1a6a                     jsr  #stackpushposition
-14c6 : adf0 1a7b                     jsr  #stackpushmarker
+14c4 : adf0 1a72                     jsr  #stackpushposition
+14c6 : adf0 1a83                     jsr  #stackpushmarker
 14c8 : 0072                          word  'r'
 14c9 : 1dc0 3ce1                     pop  link
 14cb : afd0                          ret
 14cc :                               .command_until
 14cc : 5ce1 2dc0                     push  link
-14ce : adf0 1a8a                     jsr  #stackcheckmarker
+14ce : adf0 1a92                     jsr  #stackcheckmarker
 14d0 : 0072                          word  'r'
-14d1 : aff0 1dfe                     jmp  #untilerror
+14d1 : aff0 1e06                     jmp  #untilerror
 14d3 : adf0 176e                     jsr  #evaluateinteger
 14d5 : b0e0                          skz  r0
 14d6 : aff0 14dd                     jmp  #_crpassed
-14d8 : adf0 1a74                     jsr  #stackpopposition
+14d8 : adf0 1a7c                     jsr  #stackpopposition
 14da : 1dc0 3ce1                     pop  link
 14dc : afd0                          ret
 14dd :                               ._crpassed
 14dd : 00e3                          mov  r0,#1+stackpossize
-14de : adf0 1a93                     jsr  #stackpopwords
+14de : adf0 1a9b                     jsr  #stackpopwords
 14e0 : 1dc0 3ce1                     pop  link
 14e2 : afd0                          ret
 14e3 :                               .runprogram
 14e3 : adf0 108b                     jsr  #command_clear
-14e5 : 1bf0 4025                     ldm  r11,#programcode
+14e5 : 1bf0 4087                     ldm  r11,#programcode
 14e7 : 10b0                          ldm  r0,r11,#0
 14e8 : c0e0                          sknz  r0
 14e9 : aff0 101c                     jmp  #warmstart
 14eb :                               .runprogramr11
-14eb : 1cf0 4023                     ldm  sp,#initialsp
-14ed : 0af0 4030                     mov  r10,#evalstack
+14eb : 1cf0 4085                     ldm  sp,#initialsp
+14ed : 0af0 4092                     mov  r10,#evalstack
 14ef : 00f0 0017                     mov  r0,#$17
 14f1 : ade4                          jsr  #osprintcharacter
 14f2 :                               ._rpnewline
-14f2 : 2bf0 4024                     stm  r11,#currentline
+14f2 : 2bf0 4086                     stm  r11,#currentline
 14f4 : 3be2                          add  r11,#2
 14f5 :                               ._rpnewcommand
-14f5 : 10f0 402f                     ldm  r0,#checkcount
+14f5 : 10f0 4091                     ldm  r0,#checkcount
 14f7 : 30f0 0400                     add  r0,#1024
-14f9 : 20f0 402f                     stm  r0,#checkcount
+14f9 : 20f0 4091                     stm  r0,#checkcount
 14fb : ffe1                          skc
 14fc : aff0 1505                     jmp  #_rpnocheck
 14fe : adf0 002e                     jsr  #osmanager
@@ -1143,7 +1149,7 @@
 1502 : b0e0                          skz  r0
 1503 : aff0 1539                     jmp  #breakhandler
 1505 :                               ._rpnocheck
-1505 : 2ef0 402a                     stm  r14,#tempstringalloc
+1505 : 2ef0 408c                     stm  r14,#tempstringalloc
 1507 : 10b0                          ldm  r0,r11,#0
 1508 : 0100                          mov  r1,r0,#0
 1509 : 3be1                          inc  r11
@@ -1152,7 +1158,7 @@
 150e : b0e0                          skz  r0
 150f : aff0 1519                     jmp  #_rpnotcommandtoken
 1511 : 61f0 01ff                     and  r1,#$01ff
-1513 : 31f0 1f79                     add  r1,#tokenvectors
+1513 : 31f0 1f88                     add  r1,#tokenvectors
 1515 : 1010                          ldm  r0,r1,#0
 1516 : ad00                          brl  link,r0,#0
 1517 : aff0 14f5                     jmp  #_rpnewcommand
@@ -1168,12 +1174,12 @@
 1524 : 61f0 c000                     and  r1,#$c000
 1526 : 71f0 4000                     xor  r1,#$4000
 1528 : b1e0                          skz  r1
-1529 : aff0 1d67                     jmp  #syntaxerror
+1529 : aff0 1d6f                     jmp  #syntaxerror
 152b :                               ._rpdolet
 152b : adf0 1258                     jsr  #command_let
 152d : aff0 14f5                     jmp  #_rpnewcommand
 152f :                               ._rpnextline
-152f : 1bf0 4024                     ldm  r11,#currentline
+152f : 1bf0 4086                     ldm  r11,#currentline
 1531 : 10b0                          ldm  r0,r11,#0
 1532 : 3b00                          add  r11,r0,#0
 1533 : 10b0                          ldm  r0,r11,#0
@@ -1182,16 +1188,16 @@
 1537 : aff0 14f2                     jmp  #_rpnewline
 1539 :                               .breakhandler
 1539 : adea                          jsr  #osgetkeyboard
-153a : aff0 1e5e                     jmp  #breakerror
+153a : aff0 1e66                     jmp  #breakerror
 153c :                               .command_goto
 153c : 5ce1 2dc0                     push  link
 153e : adf0 176e                     jsr  #evaluateinteger
 1540 :                               ._cgmain
-1540 : 1bf0 4025                     ldm  r11,#programcode
+1540 : 1bf0 4087                     ldm  r11,#programcode
 1542 :                               ._cgsearch
 1542 : 11b0                          ldm  r1,r11,#0
 1543 : c1e0                          sknz  r1
-1544 : aff0 1d86                     jmp  #lineerror
+1544 : aff0 1d8e                     jmp  #lineerror
 1546 : 14b1                          ldm  r4,r11,#1
 1547 : 7400                          xor  r4,r0,#0
 1548 : c4e0                          sknz  r4
@@ -1199,7 +1205,7 @@
 154b : 3b10                          add  r11,r1,#0
 154c : aff0 1542                     jmp  #_cgsearch
 154e :                               ._cgfound
-154e : 2bf0 4024                     stm  r11,#currentline
+154e : 2bf0 4086                     stm  r11,#currentline
 1550 : 3be2                          add  r11,#2
 1551 : 1dc0 3ce1                     pop  link
 1553 : afd0                          ret
@@ -1207,47 +1213,47 @@
 1554 : 5ce1 2dc0                     push  link
 1556 : adf0 176e                     jsr  #evaluateinteger
 1558 : 5ce1 20c0                     push  r0
-155a : adf0 1a6a                     jsr  #stackpushposition
-155c : adf0 1a7b                     jsr  #stackpushmarker
+155a : adf0 1a72                     jsr  #stackpushposition
+155c : adf0 1a83                     jsr  #stackpushmarker
 155e : 0073                          word  's'
 155f : 10c0 3ce1                     pop  r0
 1561 : aff0 1540                     jmp  #_cgmain
 1563 :                               .command_return
 1563 : 5ce1 2dc0                     push  link
-1565 : adf0 1a8a                     jsr  #stackcheckmarker
+1565 : adf0 1a92                     jsr  #stackcheckmarker
 1567 : 0073                          word  's'
-1568 : aff0 1df1                     jmp  #returnerror
-156a : adf0 1a74                     jsr  #stackpopposition
+1568 : aff0 1df9                     jmp  #returnerror
+156a : adf0 1a7c                     jsr  #stackpopposition
 156c : 00e3                          mov  r0,#1+stackpossize
-156d : adf0 1a93                     jsr  #stackpopwords
+156d : adf0 1a9b                     jsr  #stackpopwords
 156f : 1dc0 3ce1                     pop  link
 1571 : afd0                          ret
 1572 :                               .command_while
 1572 : 5ce1 2dc0                     push  link
 1574 : 5be1                          dec  r11
-1575 : adf0 1a6a                     jsr  #stackpushposition
-1577 : adf0 1a7b                     jsr  #stackpushmarker
+1575 : adf0 1a72                     jsr  #stackpushposition
+1577 : adf0 1a83                     jsr  #stackpushmarker
 1579 : 0077                          word  'w'
 157a : 3be1                          inc  r11
 157b : adf0 176e                     jsr  #evaluateinteger
 157d : b0e0                          skz  r0
 157e : aff0 1588                     jmp  #_cwexit
 1580 : 00e3                          mov  r0,#1+stackpossize
-1581 : adf0 1a93                     jsr  #stackpopwords
-1583 : 00f0 3a36                     mov  r0,#tok_wend
+1581 : adf0 1a9b                     jsr  #stackpopwords
+1583 : 00f0 3a38                     mov  r0,#tok_wend
 1585 : 0100                          mov  r1,r0,#0
-1586 : adf0 1a26                     jsr  #skipstructure
+1586 : adf0 1a2e                     jsr  #skipstructure
 1588 :                               ._cwexit
 1588 : 1dc0 3ce1                     pop  link
 158a : afd0                          ret
 158b :                               .command_wend
 158b : 5ce1 2dc0                     push  link
-158d : adf0 1a8a                     jsr  #stackcheckmarker
+158d : adf0 1a92                     jsr  #stackcheckmarker
 158f : 0077                          word  'w'
-1590 : aff0 1e0b                     jmp  #wenderror
-1592 : adf0 1a74                     jsr  #stackpopposition
+1590 : aff0 1e13                     jmp  #wenderror
+1592 : adf0 1a7c                     jsr  #stackpopposition
 1594 : 00e3                          mov  r0,#1+stackpossize
-1595 : adf0 1a93                     jsr  #stackpopwords
+1595 : adf0 1a9b                     jsr  #stackpopwords
 1597 : 1dc0 3ce1                     pop  link
 1599 : afd0                          ret
 159a :                               .binaryop_add
@@ -1285,7 +1291,7 @@
 15c3 : 10a0                          ldm  r0,r10,#esvalue1
 15c4 : 11a3                          ldm  r1,r10,#esvalue2
 15c5 : c1e0                          sknz  r1
-15c6 : aff0 1d75                     jmp  #dividezeroerror
+15c6 : aff0 1d7d                     jmp  #dividezeroerror
 15c8 : adf0 0020                     jsr  #ossdivide16
 15ca : 20a0                          stm  r0,r10,#esvalue1
 15cb : 1dc0 3ce1                     pop  link
@@ -1296,7 +1302,7 @@
 15d2 : 10a0                          ldm  r0,r10,#esvalue1
 15d3 : 11a3                          ldm  r1,r10,#esvalue2
 15d4 : c1e0                          sknz  r1
-15d5 : aff0 1d75                     jmp  #dividezeroerror
+15d5 : aff0 1d7d                     jmp  #dividezeroerror
 15d7 : adf0 0020                     jsr  #ossdivide16
 15d9 : 21a0                          stm  r1,r10,#esvalue1
 15da : 1dc0 3ce1                     pop  link
@@ -1346,7 +1352,7 @@
 1611 : 11a4                          ldm  r1,r10,#estype2
 1612 : 3010                          add  r0,r1,#0
 1613 : b0e0                          skz  r0
-1614 : aff0 1d6d                     jmp  #typemismatcherror
+1614 : aff0 1d75                     jmp  #typemismatcherror
 1616 :                               .dereferencebinary
 1616 : 10a5                          ldm  r0,r10,#esreference2
 1617 : 11a3                          ldm  r1,r10,#esvalue2
@@ -1372,10 +1378,10 @@
 1629 : afd0                          ret
 162a : 5ce1 2dc0                     push  link
 162c : c1e0                          sknz  r1
-162d : aff0 1d6d                     jmp  #typemismatcherror
+162d : aff0 1d75                     jmp  #typemismatcherror
 162f : 10a1                          ldm  r0,r10,#estype1
 1630 : c0e0                          sknz  r0
-1631 : aff0 1d6d                     jmp  #typemismatcherror
+1631 : aff0 1d75                     jmp  #typemismatcherror
 1633 : 1dc0 3ce1                     pop  link
 1635 : 5de2                          sub  link,#2
 1636 : afd0                          ret
@@ -1507,7 +1513,7 @@
 16db : aff0 16f0                     jmp  #_evhaveterm
 16dd :                               ._evnotconstant
 16dd : c0e0                          sknz  r0
-16de : aff0 1d67                     jmp  #syntaxerror
+16de : aff0 1d6f                     jmp  #syntaxerror
 16e0 : 3000                          add  r0,r0,#0
 16e1 : d0e0                          skp  r0
 16e2 : aff0 171d                     jmp  #_evvariable
@@ -1544,7 +1550,7 @@
 170a : 0920                          mov  r9,r2,#0
 170b :                               ._evcallhandler
 170b : 61f0 01ff                     and  r1,#$01ff
-170d : 31f0 1f79                     add  r1,#tokenvectors
+170d : 31f0 1f88                     add  r1,#tokenvectors
 170f : 1010                          ldm  r0,r1,#0
 1710 : ad00                          brl  link,r0,#0
 1711 : aff0 16f0                     jmp  #_evhaveterm
@@ -1552,7 +1558,7 @@
 1713 : 10c0 11c1 12c2 13c3 14c4      pop  r0,r1,r2,r3,r4,r5,r6,link
 171c : afd0                          ret
 171d :                               ._evvariable
-171d : adf0 1c9f                     jsr  #getvariablereference
+171d : adf0 1ca7                     jsr  #getvariablereference
 171f : aff0 16f0                     jmp  #_evhaveterm
 1721 :                               ._evunaryfunction
 1721 : 10b0                          ldm  r0,r11,#0
@@ -1578,7 +1584,7 @@
 173b : 60f0 1e00                     and  r0,#$1e00
 173d : 70f0 1000                     xor  r0,#$1000
 173f : b0e0                          skz  r0
-1740 : aff0 1d67                     jmp  #syntaxerror
+1740 : aff0 1d6f                     jmp  #syntaxerror
 1742 : 11b0                          ldm  r1,r11,#0
 1743 : 3be1                          inc  r11
 1744 : aff0 170b                     jmp  #_evcallhandler
@@ -1601,7 +1607,7 @@
 1759 : 2ea2                          stm  r14,r10,#esreference1
 175a : 19a1                          ldm  r9,r10,#estype1
 175b : b9e0                          skz  r9
-175c : aff0 1d6d                     jmp  #typemismatcherror
+175c : aff0 1d75                     jmp  #typemismatcherror
 175e : 10a0                          ldm  r0,r10,#esvalue1
 175f : 11c0 19c1 1dc2 3ce3           pop  r1,r9,link
 1763 : afd0                          ret
@@ -1611,13 +1617,13 @@
 1768 : 10a1                          ldm  r0,r10,#estype1
 1769 : b0e0                          skz  r0
 176a : aff0 1776                     jmp  #evaluatecommon
-176c : aff0 1d6d                     jmp  #typemismatcherror
+176c : aff0 1d75                     jmp  #typemismatcherror
 176e :                               .evaluateinteger
 176e : 5ce1 2dc0                     push  link
 1770 : adf0 16be                     jsr  #evaluateexpression
 1772 : 10a1                          ldm  r0,r10,#estype1
 1773 : b0e0                          skz  r0
-1774 : aff0 1d6d                     jmp  #typemismatcherror
+1774 : aff0 1d75                     jmp  #typemismatcherror
 1776 :                               .evaluatecommon
 1776 : 10a2                          ldm  r0,r10,#esreference1
 1777 : b0e0                          skz  r0
@@ -1642,7 +1648,7 @@
 178c : 0100                          mov  r1,r0,#0
 178d : 51f0 0100                     sub  r1,#maxstringsize+1
 178f : ffe0                          sklt
-1790 : aff0 1ddd                     jmp  #strlenerror
+1790 : aff0 1de5                     jmp  #strlenerror
 1792 : 90e1                          ror  r0,#1
 1793 : 60f0 7fff                     and  r0,#$7fff
 1795 : 30e2                          add  r0,#2
@@ -1675,7 +1681,7 @@
 17b8 : afd0                          ret
 17b9 :                               .sfallocate
 17b9 : 5ce1 2dc0                     push  link
-17bb : adf0 1aa4                     jsr  #allocatetempmemory
+17bb : adf0 1aac                     jsr  #allocatetempmemory
 17bd : 0100                          mov  r1,r0,#0
 17be : 7220                          clr  r2
 17bf : 2e10                          stm  r14,r1,#0
@@ -1705,24 +1711,24 @@
 17dc : 5ce1 2dc0                     push  link
 17de : adf0 1764                     jsr  #evaluatestring
 17e0 : 0300                          mov  r3,r0,#0
-17e1 : adf0 1962                     jsr  #checkcomma
+17e1 : adf0 196a                     jsr  #checkcomma
 17e3 : adf0 176e                     jsr  #evaluateinteger
 17e5 : 0400                          mov  r4,r0,#0
 17e6 : 05f0 00ff                     mov  r5,#maxstringsize
 17e8 : 10b0                          ldm  r0,r11,#0
-17e9 : 70f0 3228                     xor  r0,#tok_rparen
+17e9 : 70f0 322a                     xor  r0,#tok_rparen
 17eb : c0e0                          sknz r0
 17ec : aff0 17f3                     jmp  #unarystringslicecommon
-17ee : adf0 1962                     jsr  #checkcomma
+17ee : adf0 196a                     jsr  #checkcomma
 17f0 : adf0 176e                     jsr  #evaluateinteger
 17f2 : 0500                          mov  r5,r0,#0
 17f3 :                               .unarystringslicecommon
-17f3 : adf0 1956                     jsr  #checkrightbracket
+17f3 : adf0 195e                     jsr  #checkrightbracket
 17f5 : 54e1                          dec  r4
 17f6 : d4e0                          skp  r4
-17f7 : aff0 1d97                     jmp  #badnumbererror
+17f7 : aff0 1d9f                     jmp  #badnumbererror
 17f9 : d5e0                          skp  r5
-17fa : aff0 1d97                     jmp  #badnumbererror
+17fa : aff0 1d9f                     jmp  #badnumbererror
 17fc : c5e0                          sknz  r5
 17fd : aff0 1825                     jmp  #_usscnull
 17ff : 1030                          ldm  r0,r3,#0
@@ -1769,7 +1775,7 @@
 182e : 5ce1 2dc0                     push  link
 1830 : adf0 1764                     jsr  #evaluatestring
 1832 : 0300                          mov  r3,r0,#0
-1833 : adf0 1962                     jsr  #checkcomma
+1833 : adf0 196a                     jsr  #checkcomma
 1835 : 04e1                          mov  r4,#1
 1836 : adf0 176e                     jsr  #evaluateinteger
 1838 : 0500                          mov  r5,r0,#0
@@ -1780,7 +1786,7 @@
 183f : 0300                          mov  r3,r0,#0
 1840 : 1430                          ldm  r4,r3,#0
 1841 : 34e1                          inc  r4
-1842 : adf0 1962                     jsr  #checkcomma
+1842 : adf0 196a                     jsr  #checkcomma
 1844 : adf0 176e                     jsr  #evaluateinteger
 1846 : 5400                          sub  r4,r0,#0
 1847 : d4e0                          skp  r4
@@ -1795,7 +1801,7 @@
 1851 :                               .unary_parenthesis
 1851 : 5ce1 2dc0                     push  link
 1853 : adf0 16be                     jsr  #evaluateexpression
-1855 : adf0 1956                     jsr  #checkrightbracket
+1855 : adf0 195e                     jsr  #checkrightbracket
 1857 : 1dc0 3ce1                     pop  link
 1859 : afd0                          ret
 185a :                               .unary_abs
@@ -1806,7 +1812,7 @@
 1860 : d0e0                          skp  r0
 1861 : 0010                          mov  r0,r1,#0
 1862 : 20a0                          stm  r0,r10,#esvalue1
-1863 : adf0 1956                     jsr  #checkrightbracket
+1863 : adf0 195e                     jsr  #checkrightbracket
 1865 : 1dc0 3ce1                     pop  link
 1867 : afd0                          ret
 1868 :                               .unary_sgn
@@ -1819,7 +1825,7 @@
 1870 : c0e0                          sknz r0
 1871 : 7110                          clr  r1
 1872 : 21a0                          stm  r1,r10,#esvalue1
-1873 : adf0 1956                     jsr  #checkrightbracket
+1873 : adf0 195e                     jsr  #checkrightbracket
 1875 : 1dc0 3ce1                     pop  link
 1877 : afd0                          ret
 1878 :                               .unary_len
@@ -1829,7 +1835,7 @@
 187c : 1000                          ldm  r0,r0,#0
 187d : 20a0                          stm  r0,r10,#esvalue1
 187e : 2ea1                          stm  r14,r10,#estype1
-187f : adf0 1956                     jsr  #checkrightbracket
+187f : adf0 195e                     jsr  #checkrightbracket
 1881 : 1dc0 3ce1                     pop  link
 1883 : afd0                          ret
 1884 :                               .unary_asc
@@ -1839,7 +1845,7 @@
 1889 : 60f0 00ff                     and  r0,#$00ff
 188b : 20a0                          stm  r0,r10,#esvalue1
 188c : 2ea1                          stm  r14,r10,#estype1
-188d : adf0 1956                     jsr  #checkrightbracket
+188d : adf0 195e                     jsr  #checkrightbracket
 188f : 1dc0 3ce1                     pop  link
 1891 : afd0                          ret
 1892 :                               .unary_peek
@@ -1847,12 +1853,12 @@
 1894 : adf0 176e                     jsr  #evaluateinteger
 1896 : 1000                          ldm  r0,r0,#0
 1897 : 20a0                          stm  r0,r10,#esvalue1
-1898 : adf0 1956                     jsr  #checkrightbracket
+1898 : adf0 195e                     jsr  #checkrightbracket
 189a : 1dc0 3ce1                     pop  link
 189c : afd0                          ret
 189d :                               .unary_inkey
 189d : 5ce1 2dc0                     push  link
-189f : adf0 1956                     jsr  #checkrightbracket
+189f : adf0 195e                     jsr  #checkrightbracket
 18a1 : 1dc0 3ce1                     pop  link
 18a3 :                               .unaryinkeynocheck
 18a3 : 5ce1 2dc0                     push  link
@@ -1864,7 +1870,7 @@
 18ab : afd0                          ret
 18ac :                               .unary_get
 18ac : 5ce1 2dc0                     push  link
-18ae : adf0 1956                     jsr  #checkrightbracket
+18ae : adf0 195e                     jsr  #checkrightbracket
 18b0 :                               ._ugwait
 18b0 : adf0 18a3                     jsr  #unaryinkeynocheck
 18b2 : 10a0                          ldm  r0,r10,#esvalue1
@@ -1877,13 +1883,13 @@
 18b9 : 5ce1 2dc0                     push  link
 18bb : adf0 0022                     jsr  #osrandom16
 18bd : 11b0                          ldm  r1,r11,#0
-18be : 71f0 3228                     xor  r1,#tok_rparen
+18be : 71f0 322a                     xor  r1,#tok_rparen
 18c0 : c1e0                          sknz  r1
 18c1 : aff0 18d2                     jmp  #unary_rndexit
 18c3 : 0200                          mov  r2,r0,#0
 18c4 : adf0 176e                     jsr  #evaluateinteger
 18c6 : 0300                          mov  r3,r0,#0
-18c7 : adf0 1962                     jsr  #checkcomma
+18c7 : adf0 196a                     jsr  #checkcomma
 18c9 : adf0 176e                     jsr  #evaluateinteger
 18cb : 0101                          mov  r1,r0,#1
 18cc : 5130                          sub  r1,r3,#0
@@ -1895,1181 +1901,1194 @@
 18d2 : 20a0                          stm  r0,r10,#esvalue1
 18d3 : 2ea1                          stm  r14,r10,#estype1
 18d4 : 2ea2                          stm  r14,r10,#esreference1
-18d5 : adf0 1956                     jsr  #checkrightbracket
+18d5 : adf0 195e                     jsr  #checkrightbracket
 18d7 : 1dc0 3ce1                     pop  link
 18d9 : afd0                          ret
-18da :                               .unary_val
-18da :                               .unary_val2
-18da : 5ce1 2dc0                     push  link
-18dc : adf0 1764                     jsr  #evaluatestring
-18de : adf0 1956                     jsr  #checkrightbracket
-18e0 : 01ea                          mov  r1,#10
-18e1 : adf0 18ec                     jsr  #compactstringtointeger
-18e3 : b1e0                          skz  r1
-18e4 : aff0 1d97                     jmp  #badnumbererror
-18e6 : 20a0                          stm  r0,r10,#esvalue1
-18e7 : 2ea1                          stm  r14,r10,#estype1
-18e8 : 2ea2                          stm   r14,r10,#esreference1
-18e9 : 1dc0 3ce1                     pop  link
-18eb : afd0                          ret
-18ec :                               .compactstringtointeger
-18ec : 5ce4 29c0 2ac1 2bc2 2dc3      push  r9,r10,r11,link
-18f1 : 7bb0                          clr  r11
-18f2 : 0a01                          mov  r10,r0,#1
-18f3 : 1900                          ldm  r9,r0,#0
-18f4 : 00f0 18fe                     mov  r0,#stringextract
-18f6 : adf0 0024                     jsr  #osstrtoint
-18f8 : 19c0 1ac1 1bc2 1dc3 3ce4      pop  r9,r10,r11,link
-18fd : afd0                          ret
-18fe :                               .stringextract
-18fe : 7000                          clr  r0
-18ff : c9e0                          sknz  r9
-1900 : afd0                          ret
-1901 : 59e1                          dec  r9
-1902 : 10a0                          ldm  r0,r10,#0
-1903 : bbe0                          skz  r11
-1904 : 90e8                          ror  r0,#8
-1905 : 60f0 00ff                     and  r0,#$00ff
-1907 : 7be1                          xor  r11,#1
-1908 : cbe0                          sknz  r11
-1909 : 3ae1                          inc  r10
-190a : afd0                          ret
-190b :                               .unary_chr
-190b : 5ce1 2dc0                     push  link
-190d : adf0 176e                     jsr  #evaluateinteger
-190f : adf0 1956                     jsr  #checkrightbracket
-1911 : 60f0 00ff                     and  r0,#$00ff
-1913 :                               .unaryreturncharacter
-1913 : 0100                          mov  r1,r0,#0
-1914 : 00e2                          mov  r0,#2
-1915 : adf0 1aa4                     jsr  #allocatetempmemory
-1917 : 2101                          stm  r1,r0,#1
-1918 : 01e1                          mov  r1,#1
-1919 : 2100                          stm  r1,r0,#0
-191a : 20a0                          stm  r0,r10,#esvalue1
-191b : 2fa1                          stm  r15,r10,#estype1
-191c : 2ea2                          stm  r14,r10,#esreference1
-191d : 1dc0 3ce1                     pop  link
-191f : afd0                          ret
-1920 :                               .unary_getstring
-1920 : 5ce1 2dc0                     push  link
-1922 : adf0 18ac                     jsr  #unary_get
-1924 : 10a0                          ldm  r0,r10,#esvalue1
-1925 : aff0 1913                     jmp  #unaryreturncharacter
-1927 :                               .unary_inkeystring
-1927 : 5ce1 2dc0                     push  link
-1929 : adf0 189d                     jsr  #unary_inkey
-192b : 10a0                          ldm  r0,r10,#esvalue1
-192c : aff0 1913                     jmp  #unaryreturncharacter
-192e :                               .unary_str
-192e :                               .unary_str2
-192e : 5ce1 2dc0                     push  link
-1930 : adf0 176e                     jsr  #evaluateinteger
-1932 : adf0 1956                     jsr  #checkrightbracket
-1934 : 01f0 800a                     mov  r1,#$800a
-1936 : adf0 0026                     jsr  #osinttostr
-1938 : 0100                          mov  r1,r0,#0
-1939 : 00ea                          mov  r0,#maxistrsize
-193a : adf0 1aa4                     jsr  #allocatetempmemory
-193c : 20a0                          stm  r0,r10,#esvalue1
-193d : 2fa1                          stm  r15,r10,#estype1
-193e : 2ea2                          stm  r14,r10,#esreference1
-193f : 02ea                          mov  r2,#maxistrsize
-1940 :                               ._uscopy
-1940 : 1310                          ldm  r3,r1,#0
-1941 : 2300                          stm  r3,r0,#0
-1942 : 31e1                          inc  r1
-1943 : 30e1                          inc  r0
-1944 : 52e1                          dec  r2
-1945 : b2e0                          skz  r2
-1946 : aff0 1940                     jmp  #_uscopy
-1948 : 1dc0 3ce1                     pop  link
-194a : afd0                          ret
-194b :                               .checknexttoken
-194b : 5ce1 21c0                     push  r1
-194d : 11b0                          ldm  r1,r11,#0
-194e : 3be1                          inc  r11
-194f : 7010                          xor  r0,r1,#0
-1950 : b0e0                          skz  r0
-1951 : aff0 1d67                     jmp  #syntaxerror
-1953 : 11c0 3ce1                     pop  r1
-1955 : afd0                          ret
-1956 :                               .checkrightbracket
-1956 : 5ce1 20c0                     push  r0
-1958 : 10b0                          ldm  r0,r11,#0
-1959 : 3be1                          inc  r11
-195a : 70f0 3228                     xor  r0,#tok_rparen
-195c : b0e0                          skz  r0
-195d : aff0 1d8f                     jmp  #missingbracketerror
-195f : 10c0 3ce1                     pop  r0
-1961 : afd0                          ret
-1962 :                               .checkcomma
-1962 : 5ce1 20c0                     push  r0
-1964 : 10b0                          ldm  r0,r11,#0
-1965 : 3be1                          inc  r11
-1966 : 70f0 3229                     xor  r0,#tok_comma
-1968 : b0e0                          skz  r0
-1969 : aff0 1db1                     jmp  #missingcommaerror
-196b : 10c0 3ce1                     pop  r0
-196d : afd0                          ret
-196e :                               .getcharactertype
-196e : 5ce1 21c0                     push  r1
-1970 : 0100                          mov  r1,r0,#0
-1971 : 51f0 0060                     sub  r1,#96
-1973 : ffe0                          sklt
-1974 : 50f0 0020                     sub  r0,#32
-1976 : 7110                          clr  r1
-1977 : 50f0 0030                     sub  r0,#'0'
-1979 : ffe1                          skge
-197a : aff0 1991                     jmp  #_gctexit
-197c : 01e2                          mov  r1,#2
-197d : 50ea                          sub  r0,#10
-197e : ffe1                          skge
-197f : aff0 1991                     jmp  #_gctexit
-1981 : 7110                          clr  r1
-1982 : 50e7                          sub  r0,#7
-1983 : ffe1                          skge
-1984 : aff0 1991                     jmp  #_gctexit
-1986 : 50f0 001a                     sub  r0,#26
-1988 : 01e1                          mov  r1,#1
-1989 : ffe1                          skge
-198a : aff0 1991                     jmp  #_gctexit
-198c : 01e2                          mov  r1,#2
-198d : 70f0 ffd3                     xor  r0,#'.'-'0'-10-7-26
-198f : c0e0                          sknz  r0
-1990 : 7110                          clr  r1
-1991 :                               ._gctexit
-1991 : 0010                          mov  r0,r1,#0
-1992 : 11c0 3ce1                     pop  r1
-1994 : afd0                          ret
-1995 :                               .editprogram
-1995 : 51e1                          dec  r1
-1996 : 30e1                          inc  r0
-1997 : 2100                          stm  r1,r0,#0
-1998 : 1101                          ldm  r1,r0,#1
-1999 : 61f0 7fff                     and  r1,#$7fff
-199b : 2101                          stm  r1,r0,#1
-199c : 12f0 4025                     ldm  r2,#programcode
-199e :                               ._epfind
-199e : 1320                          ldm  r3,r2,#0
-199f : c3e0                          sknz  r3
-19a0 : aff0 19af                     jmp  #_epcinsert
-19a2 : 1421                          ldm  r4,r2,#1
-19a3 : 5410                          sub  r4,r1,#0
-19a4 : c4e0                          sknz  r4
-19a5 : aff0 19ad                     jmp  #_epcdelete
-19a7 : ffe0                          sklt
-19a8 : aff0 19af                     jmp  #_epcinsert
-19aa : 3230                          add  r2,r3,#0
-19ab : aff0 199e                     jmp  #_epfind
-19ad :                               ._epcdelete
-19ad : adf0 19e9                     jsr  #deleteline
-19af :                               ._epcinsert
-19af : 1302                          ldm  r3,r0,#2
-19b0 : c3e0                          sknz  r3
-19b1 : aff0 19b5                     jmp  #_epcdone
-19b3 : adf0 19b9                     jsr  #insertline
-19b5 :                               ._epcdone
-19b5 : adf0 108b                     jsr  #command_clear
-19b7 : aff0 101c                     jmp  #warmstart
-19b9 :                               .insertline
-19b9 : 5ce7 20c0 21c1 22c2 23c3      push  r0,r1,r2,r3,r4,r5,link
-19c1 : 0300                          mov  r3,r0,#0
-19c2 : adf0 1a01                     jsr  #findprogramend
-19c4 : 0100                          mov  r1,r0,#0
-19c5 : 1430                          ldm  r4,r3,#0
-19c6 : 3140                          add  r1,r4,#0
-19c7 : 14f0 4026                     ldm  r4,#endmemory
-19c9 : 5140                          sub  r1,r4,#0
-19ca : ffe0                          sklt
-19cb : aff0 1da7                     jmp  #memoryerror
-19cd : 3140                          add  r1,r4,#0
-19ce :                               ._ilmakespace
-19ce : 1500                          ldm  r5,r0,#0
-19cf : 2510                          stm  r5,r1,#0
-19d0 : 0500                          mov  r5,r0,#0
-19d1 : 7520                          xor  r5,r2,#0
-19d2 : 50e1                          dec  r0
-19d3 : 51e1                          dec  r1
-19d4 : b5e0                          skz  r5
-19d5 : aff0 19ce                     jmp  #_ilmakespace
-19d7 : 1130                          ldm  r1,r3,#0
-19d8 :                               ._ilcopynew
-19d8 : 1030                          ldm  r0,r3,#0
-19d9 : 2020                          stm  r0,r2,#0
-19da : 33e1                          inc  r3
-19db : 32e1                          inc  r2
-19dc : 51e1                          dec  r1
-19dd : b1e0                          skz  r1
-19de : aff0 19d8                     jmp  #_ilcopynew
-19e0 : 10c0 11c1 12c2 13c3 14c4      pop  r0,r1,r2,r3,r4,r5,link
-19e8 : afd0                          ret
-19e9 :                               .deleteline
-19e9 : 5ce4 20c0 21c1 22c2 2dc3      push r0,r1,r2,link
-19ee : 1120                          ldm  r1,r2,#0
-19ef : 3120                          add  r1,r2,#0
-19f0 : adf0 1a01                     jsr  #findprogramend
-19f2 :                               ._dlcopy
-19f2 : 1310                          ldm  r3,r1,#0
-19f3 : 2320                          stm  r3,r2,#0
-19f4 : 0310                          mov  r3,r1,#0
-19f5 : 7300                          xor  r3,r0,#0
-19f6 : 31e1                          inc  r1
-19f7 : 32e1                          inc  r2
-19f8 : b3e0                          skz  r3
-19f9 : aff0 19f2                     jmp  #_dlcopy
-19fb : 10c0 11c1 12c2 1dc3 3ce4      pop  r0,r1,r2,link
-1a00 : afd0                          ret
-1a01 :                               .findprogramend
-1a01 : 5ce1 21c0                     push  r1
-1a03 : 10f0 4025                     ldm  r0,#programcode
-1a05 :                               ._ccfindend
-1a05 : 1100                          ldm  r1,r0,#0
-1a06 : 3010                          add  r0,r1,#0
-1a07 : b1e0                          skz  r1
-1a08 : aff0 1a05                     jmp  #_ccfindend
-1a0a : 11c0 3ce1                     pop  r1
-1a0c : afd0                          ret
-1a0d :                               .generrorhandler
-1a0d : 01d0                          mov  r1,r13,#0
-1a0e : 00f0 0011                     mov  r0,#$11
-1a10 : ade4                          jsr  #osprintcharacter
-1a11 : 0010                          mov  r0,r1,#0
-1a12 : ade8                          jsr  #osprintstring
-1a13 : 10f0 4024                     ldm  r0,#currentline
-1a15 : 1001                          ldm  r0,r0,#1
-1a16 : c0e0                          sknz  r0
-1a17 : aff0 1a21                     jmp  #_ehexit
-1a19 : ade6                          jsr  #osprintinline
-1a1a : 0003 4020 0020                string  " @ "
-1a1d : 01ea                          mov  r1,#10
-1a1e : adf0 0026                     jsr  #osinttostr
-1a20 : ade8                          jsr  #osprintstring
-1a21 :                               ._ehexit
+18da :                               .unary_true
+18da : 00f0 ffff                     mov  r0,#-1
+18dc : c0e0                          sknz  r0
+18dd :                               .unary_false
+18dd : 7000                          clr  r0
+18de : 20a0                          stm  r0,r10,#esvalue1
+18df : 2ea1                          stm  r14,r10,#estype1
+18e0 : 2ea2                          stm  r14,r10,#esreference1
+18e1 : afd0                          ret
+18e2 :                               .unary_val
+18e2 :                               .unary_val2
+18e2 : 5ce1 2dc0                     push  link
+18e4 : adf0 1764                     jsr  #evaluatestring
+18e6 : adf0 195e                     jsr  #checkrightbracket
+18e8 : 01ea                          mov  r1,#10
+18e9 : adf0 18f4                     jsr  #compactstringtointeger
+18eb : b1e0                          skz  r1
+18ec : aff0 1d9f                     jmp  #badnumbererror
+18ee : 20a0                          stm  r0,r10,#esvalue1
+18ef : 2ea1                          stm  r14,r10,#estype1
+18f0 : 2ea2                          stm   r14,r10,#esreference1
+18f1 : 1dc0 3ce1                     pop  link
+18f3 : afd0                          ret
+18f4 :                               .compactstringtointeger
+18f4 : 5ce4 29c0 2ac1 2bc2 2dc3      push  r9,r10,r11,link
+18f9 : 7bb0                          clr  r11
+18fa : 0a01                          mov  r10,r0,#1
+18fb : 1900                          ldm  r9,r0,#0
+18fc : 00f0 1906                     mov  r0,#stringextract
+18fe : adf0 0024                     jsr  #osstrtoint
+1900 : 19c0 1ac1 1bc2 1dc3 3ce4      pop  r9,r10,r11,link
+1905 : afd0                          ret
+1906 :                               .stringextract
+1906 : 7000                          clr  r0
+1907 : c9e0                          sknz  r9
+1908 : afd0                          ret
+1909 : 59e1                          dec  r9
+190a : 10a0                          ldm  r0,r10,#0
+190b : bbe0                          skz  r11
+190c : 90e8                          ror  r0,#8
+190d : 60f0 00ff                     and  r0,#$00ff
+190f : 7be1                          xor  r11,#1
+1910 : cbe0                          sknz  r11
+1911 : 3ae1                          inc  r10
+1912 : afd0                          ret
+1913 :                               .unary_chr
+1913 : 5ce1 2dc0                     push  link
+1915 : adf0 176e                     jsr  #evaluateinteger
+1917 : adf0 195e                     jsr  #checkrightbracket
+1919 : 60f0 00ff                     and  r0,#$00ff
+191b :                               .unaryreturncharacter
+191b : 0100                          mov  r1,r0,#0
+191c : 00e2                          mov  r0,#2
+191d : adf0 1aac                     jsr  #allocatetempmemory
+191f : 2101                          stm  r1,r0,#1
+1920 : 01e1                          mov  r1,#1
+1921 : 2100                          stm  r1,r0,#0
+1922 : 20a0                          stm  r0,r10,#esvalue1
+1923 : 2fa1                          stm  r15,r10,#estype1
+1924 : 2ea2                          stm  r14,r10,#esreference1
+1925 : 1dc0 3ce1                     pop  link
+1927 : afd0                          ret
+1928 :                               .unary_getstring
+1928 : 5ce1 2dc0                     push  link
+192a : adf0 18ac                     jsr  #unary_get
+192c : 10a0                          ldm  r0,r10,#esvalue1
+192d : aff0 191b                     jmp  #unaryreturncharacter
+192f :                               .unary_inkeystring
+192f : 5ce1 2dc0                     push  link
+1931 : adf0 189d                     jsr  #unary_inkey
+1933 : 10a0                          ldm  r0,r10,#esvalue1
+1934 : aff0 191b                     jmp  #unaryreturncharacter
+1936 :                               .unary_str
+1936 :                               .unary_str2
+1936 : 5ce1 2dc0                     push  link
+1938 : adf0 176e                     jsr  #evaluateinteger
+193a : adf0 195e                     jsr  #checkrightbracket
+193c : 01f0 800a                     mov  r1,#$800a
+193e : adf0 0026                     jsr  #osinttostr
+1940 : 0100                          mov  r1,r0,#0
+1941 : 00ea                          mov  r0,#maxistrsize
+1942 : adf0 1aac                     jsr  #allocatetempmemory
+1944 : 20a0                          stm  r0,r10,#esvalue1
+1945 : 2fa1                          stm  r15,r10,#estype1
+1946 : 2ea2                          stm  r14,r10,#esreference1
+1947 : 02ea                          mov  r2,#maxistrsize
+1948 :                               ._uscopy
+1948 : 1310                          ldm  r3,r1,#0
+1949 : 2300                          stm  r3,r0,#0
+194a : 31e1                          inc  r1
+194b : 30e1                          inc  r0
+194c : 52e1                          dec  r2
+194d : b2e0                          skz  r2
+194e : aff0 1948                     jmp  #_uscopy
+1950 : 1dc0 3ce1                     pop  link
+1952 : afd0                          ret
+1953 :                               .checknexttoken
+1953 : 5ce1 21c0                     push  r1
+1955 : 11b0                          ldm  r1,r11,#0
+1956 : 3be1                          inc  r11
+1957 : 7010                          xor  r0,r1,#0
+1958 : b0e0                          skz  r0
+1959 : aff0 1d6f                     jmp  #syntaxerror
+195b : 11c0 3ce1                     pop  r1
+195d : afd0                          ret
+195e :                               .checkrightbracket
+195e : 5ce1 20c0                     push  r0
+1960 : 10b0                          ldm  r0,r11,#0
+1961 : 3be1                          inc  r11
+1962 : 70f0 322a                     xor  r0,#tok_rparen
+1964 : b0e0                          skz  r0
+1965 : aff0 1d97                     jmp  #missingbracketerror
+1967 : 10c0 3ce1                     pop  r0
+1969 : afd0                          ret
+196a :                               .checkcomma
+196a : 5ce1 20c0                     push  r0
+196c : 10b0                          ldm  r0,r11,#0
+196d : 3be1                          inc  r11
+196e : 70f0 322b                     xor  r0,#tok_comma
+1970 : b0e0                          skz  r0
+1971 : aff0 1db9                     jmp  #missingcommaerror
+1973 : 10c0 3ce1                     pop  r0
+1975 : afd0                          ret
+1976 :                               .getcharactertype
+1976 : 5ce1 21c0                     push  r1
+1978 : 0100                          mov  r1,r0,#0
+1979 : 51f0 0060                     sub  r1,#96
+197b : ffe0                          sklt
+197c : 50f0 0020                     sub  r0,#32
+197e : 7110                          clr  r1
+197f : 50f0 0030                     sub  r0,#'0'
+1981 : ffe1                          skge
+1982 : aff0 1999                     jmp  #_gctexit
+1984 : 01e2                          mov  r1,#2
+1985 : 50ea                          sub  r0,#10
+1986 : ffe1                          skge
+1987 : aff0 1999                     jmp  #_gctexit
+1989 : 7110                          clr  r1
+198a : 50e7                          sub  r0,#7
+198b : ffe1                          skge
+198c : aff0 1999                     jmp  #_gctexit
+198e : 50f0 001a                     sub  r0,#26
+1990 : 01e1                          mov  r1,#1
+1991 : ffe1                          skge
+1992 : aff0 1999                     jmp  #_gctexit
+1994 : 01e2                          mov  r1,#2
+1995 : 70f0 ffd3                     xor  r0,#'.'-'0'-10-7-26
+1997 : c0e0                          sknz  r0
+1998 : 7110                          clr  r1
+1999 :                               ._gctexit
+1999 : 0010                          mov  r0,r1,#0
+199a : 11c0 3ce1                     pop  r1
+199c : afd0                          ret
+199d :                               .editprogram
+199d : 51e1                          dec  r1
+199e : 30e1                          inc  r0
+199f : 2100                          stm  r1,r0,#0
+19a0 : 1101                          ldm  r1,r0,#1
+19a1 : 61f0 7fff                     and  r1,#$7fff
+19a3 : 2101                          stm  r1,r0,#1
+19a4 : 12f0 4087                     ldm  r2,#programcode
+19a6 :                               ._epfind
+19a6 : 1320                          ldm  r3,r2,#0
+19a7 : c3e0                          sknz  r3
+19a8 : aff0 19b7                     jmp  #_epcinsert
+19aa : 1421                          ldm  r4,r2,#1
+19ab : 5410                          sub  r4,r1,#0
+19ac : c4e0                          sknz  r4
+19ad : aff0 19b5                     jmp  #_epcdelete
+19af : ffe0                          sklt
+19b0 : aff0 19b7                     jmp  #_epcinsert
+19b2 : 3230                          add  r2,r3,#0
+19b3 : aff0 19a6                     jmp  #_epfind
+19b5 :                               ._epcdelete
+19b5 : adf0 19f1                     jsr  #deleteline
+19b7 :                               ._epcinsert
+19b7 : 1302                          ldm  r3,r0,#2
+19b8 : c3e0                          sknz  r3
+19b9 : aff0 19bd                     jmp  #_epcdone
+19bb : adf0 19c1                     jsr  #insertline
+19bd :                               ._epcdone
+19bd : adf0 108b                     jsr  #command_clear
+19bf : aff0 101c                     jmp  #warmstart
+19c1 :                               .insertline
+19c1 : 5ce7 20c0 21c1 22c2 23c3      push  r0,r1,r2,r3,r4,r5,link
+19c9 : 0300                          mov  r3,r0,#0
+19ca : adf0 1a09                     jsr  #findprogramend
+19cc : 0100                          mov  r1,r0,#0
+19cd : 1430                          ldm  r4,r3,#0
+19ce : 3140                          add  r1,r4,#0
+19cf : 14f0 4088                     ldm  r4,#endmemory
+19d1 : 5140                          sub  r1,r4,#0
+19d2 : ffe0                          sklt
+19d3 : aff0 1daf                     jmp  #memoryerror
+19d5 : 3140                          add  r1,r4,#0
+19d6 :                               ._ilmakespace
+19d6 : 1500                          ldm  r5,r0,#0
+19d7 : 2510                          stm  r5,r1,#0
+19d8 : 0500                          mov  r5,r0,#0
+19d9 : 7520                          xor  r5,r2,#0
+19da : 50e1                          dec  r0
+19db : 51e1                          dec  r1
+19dc : b5e0                          skz  r5
+19dd : aff0 19d6                     jmp  #_ilmakespace
+19df : 1130                          ldm  r1,r3,#0
+19e0 :                               ._ilcopynew
+19e0 : 1030                          ldm  r0,r3,#0
+19e1 : 2020                          stm  r0,r2,#0
+19e2 : 33e1                          inc  r3
+19e3 : 32e1                          inc  r2
+19e4 : 51e1                          dec  r1
+19e5 : b1e0                          skz  r1
+19e6 : aff0 19e0                     jmp  #_ilcopynew
+19e8 : 10c0 11c1 12c2 13c3 14c4      pop  r0,r1,r2,r3,r4,r5,link
+19f0 : afd0                          ret
+19f1 :                               .deleteline
+19f1 : 5ce4 20c0 21c1 22c2 2dc3      push r0,r1,r2,link
+19f6 : 1120                          ldm  r1,r2,#0
+19f7 : 3120                          add  r1,r2,#0
+19f8 : adf0 1a09                     jsr  #findprogramend
+19fa :                               ._dlcopy
+19fa : 1310                          ldm  r3,r1,#0
+19fb : 2320                          stm  r3,r2,#0
+19fc : 0310                          mov  r3,r1,#0
+19fd : 7300                          xor  r3,r0,#0
+19fe : 31e1                          inc  r1
+19ff : 32e1                          inc  r2
+1a00 : b3e0                          skz  r3
+1a01 : aff0 19fa                     jmp  #_dlcopy
+1a03 : 10c0 11c1 12c2 1dc3 3ce4      pop  r0,r1,r2,link
+1a08 : afd0                          ret
+1a09 :                               .findprogramend
+1a09 : 5ce1 21c0                     push  r1
+1a0b : 10f0 4087                     ldm  r0,#programcode
+1a0d :                               ._ccfindend
+1a0d : 1100                          ldm  r1,r0,#0
+1a0e : 3010                          add  r0,r1,#0
+1a0f : b1e0                          skz  r1
+1a10 : aff0 1a0d                     jmp  #_ccfindend
+1a12 : 11c0 3ce1                     pop  r1
+1a14 : afd0                          ret
+1a15 :                               .generrorhandler
+1a15 : 01d0                          mov  r1,r13,#0
+1a16 : 00f0 0011                     mov  r0,#$11
+1a18 : ade4                          jsr  #osprintcharacter
+1a19 : 0010                          mov  r0,r1,#0
+1a1a : ade8                          jsr  #osprintstring
+1a1b : 10f0 4086                     ldm  r0,#currentline
+1a1d : 1001                          ldm  r0,r0,#1
+1a1e : c0e0                          sknz  r0
+1a1f : aff0 1a29                     jmp  #_ehexit
 1a21 : ade6                          jsr  #osprintinline
-1a22 : 0002 120d                     string  "[0d][12]"
-1a24 : aff0 101c                     jmp  #warmstart
-1a26 :                               .skipstructure
-1a26 : 7330                          clr  r3
-1a27 :                               ._ssloop
-1a27 : 12b0                          ldm  r2,r11,#0
-1a28 : c2e0                          sknz  r2
-1a29 : aff0 1a5a                     jmp  #_ssnextline
-1a2b : b3e0                          skz  r3
-1a2c : aff0 1a37                     jmp  #_ssnext
-1a2e : 7200                          xor  r2,r0,#0
-1a2f : c2e0                          sknz  r2
-1a30 : aff0 1a58                     jmp  #_ssfound
-1a32 : 12b0                          ldm  r2,r11,#0
-1a33 : 7210                          xor  r2,r1,#0
-1a34 : c2e0                          sknz  r2
-1a35 : aff0 1a58                     jmp  #_ssfound
-1a37 :                               ._ssnext
-1a37 : 12b0                          ldm  r2,r11,#0
-1a38 : 62f0 ff00                     and  r2,#$ff00
-1a3a : 72f0 0100                     xor  r2,#$0100
+1a22 : 0003 4020 0020                string  " @ "
+1a25 : 01ea                          mov  r1,#10
+1a26 : adf0 0026                     jsr  #osinttostr
+1a28 : ade8                          jsr  #osprintstring
+1a29 :                               ._ehexit
+1a29 : ade6                          jsr  #osprintinline
+1a2a : 0002 120d                     string  "[0d][12]"
+1a2c : aff0 101c                     jmp  #warmstart
+1a2e :                               .skipstructure
+1a2e : 7330                          clr  r3
+1a2f :                               ._ssloop
+1a2f : 12b0                          ldm  r2,r11,#0
+1a30 : c2e0                          sknz  r2
+1a31 : aff0 1a62                     jmp  #_ssnextline
+1a33 : b3e0                          skz  r3
+1a34 : aff0 1a3f                     jmp  #_ssnext
+1a36 : 7200                          xor  r2,r0,#0
+1a37 : c2e0                          sknz  r2
+1a38 : aff0 1a60                     jmp  #_ssfound
+1a3a : 12b0                          ldm  r2,r11,#0
+1a3b : 7210                          xor  r2,r1,#0
 1a3c : c2e0                          sknz  r2
-1a3d : aff0 1a52                     jmp  #_ssstring
+1a3d : aff0 1a60                     jmp  #_ssfound
+1a3f :                               ._ssnext
 1a3f : 12b0                          ldm  r2,r11,#0
-1a40 : 0420                          mov  r4,r2,#0
-1a41 : 3be1                          inc  r11
-1a42 : 62f0 f800                     and  r2,#$f800
-1a44 : 72f0 3800                     xor  r2,#$3800
-1a46 : b2e0                          skz  r2
-1a47 : aff0 1a27                     jmp  #_ssloop
-1a49 : 94e9                          ror  r4,#9
-1a4a : 64e3                          and  r4,#3
-1a4b : 54e2                          sub  r4,#2
-1a4c : 3340                          add  r3,r4,#0
-1a4d : e3e0                          skm  r3
-1a4e : aff0 1a27                     jmp  #_ssloop
-1a50 : aff0 1de6                     jmp  #structureerror
-1a52 :                               ._ssstring
-1a52 : 12b0                          ldm  r2,r11,#0
-1a53 : 62f0 00ff                     and  r2,#$00ff
-1a55 : 3b20                          add  r11,r2,#0
-1a56 : aff0 1a27                     jmp  #_ssloop
-1a58 :                               ._ssfound
-1a58 : 3be1                          inc  r11
-1a59 : afd0                          ret
-1a5a :                               ._ssnextline
-1a5a : 3be1                          inc  r11
-1a5b : 12b0                          ldm  r2,r11,#0
-1a5c : c2e0                          sknz  r2
-1a5d : aff0 1de6                     jmp  #structureerror
-1a5f : 2bf0 4024                     stm  r11,#currentline
-1a61 : 3be2                          add  r11,#2
-1a62 : aff0 1a27                     jmp  #_ssloop
-1a64 :                               .stackreset
-1a64 : 10f0 402b                     ldm  r0,#returnstacktop
-1a66 : 20f0 402d                     stm  r0,#returnstackptr
-1a68 : 2e00                          stm  r14,r0,#0
-1a69 : afd0                          ret
-1a6a :                               .stackpushposition
-1a6a : 10f0 402d                     ldm  r0,#returnstackptr
-1a6c : 50e2                          sub  r0,#2
-1a6d : 20f0 402d                     stm  r0,#returnstackptr
-1a6f : 2b00                          stm  r11,r0,#0
-1a70 : 11f0 4024                     ldm  r1,#currentline
-1a72 : 2101                          stm  r1,r0,#1
-1a73 : afd0                          ret
-1a74 :                               .stackpopposition
-1a74 : 10f0 402d                     ldm  r0,#returnstackptr
-1a76 : 1b01                          ldm  r11,r0,#1
-1a77 : 1002                          ldm  r0,r0,#2
-1a78 : 20f0 4024                     stm  r0,#currentline
-1a7a : afd0                          ret
-1a7b :                               .stackpushmarker
-1a7b : 10f0 402d                     ldm  r0,#returnstackptr
-1a7d : 50e1                          dec  r0
-1a7e : 20f0 402d                     stm  r0,#returnstackptr
-1a80 : 11d0                          ldm  r1,link,#0
-1a81 : 2100                          stm  r1,r0,#0
-1a82 : 3de1                          inc  link
-1a83 : 11f0 402c                     ldm  r1,#returnstackbottom
-1a85 : 5010                          sub  r0,r1,#0
-1a86 : ffe1                          skge
-1a87 : aff0 1e45                     jmp  #returnstackerror
-1a89 : afd0                          ret
-1a8a :                               .stackcheckmarker
-1a8a : 10f0 402d                     ldm  r0,#returnstackptr
-1a8c : 1000                          ldm  r0,r0,#0
-1a8d : 11d0                          ldm  r1,link,#0
-1a8e : 3de1                          inc  link
-1a8f : 7010                          xor  r0,r1,#0
-1a90 : c0e0                          sknz  r0
-1a91 : 3de2                          add  link,#2
-1a92 : afd0                          ret
-1a93 :                               .stackpopwords
-1a93 : 11f0 402d                     ldm  r1,#returnstackptr
-1a95 : 3010                          add  r0,r1,#0
-1a96 : 20f0 402d                     stm  r0,#returnstackptr
-1a98 : afd0                          ret
-1a99 :                               .stackpushr0
-1a99 : 5ce1 21c0                     push  r1
-1a9b : 11f0 402d                     ldm  r1,#returnstackptr
-1a9d : 51e1                          dec  r1
-1a9e : 21f0 402d                     stm  r1,#returnstackptr
-1aa0 : 2010                          stm  r0,r1,#0
-1aa1 : 11c0 3ce1                     pop  r1
-1aa3 : afd0                          ret
-1aa4 :                               .allocatetempmemory
-1aa4 : 5ce1 21c0                     push  r1
-1aa6 : 11f0 402a                     ldm  r1,#tempstringalloc
-1aa8 : b1e0                          skz  r1
-1aa9 : aff0 1aaf                     jmp  #_atmnoinitialise
-1aab : 11f0 4027                     ldm  r1,#memalloctop
-1aad : 51f0 0080                     sub  r1,#(maxstringsize>>1)+1
-1aaf :                               ._atmnoinitialise
-1aaf : 5100                          sub  r1,r0,#0
-1ab0 : 21f0 402a                     stm  r1,#tempstringalloc
-1ab2 : 10f0 4028                     ldm  r0,#memallocbottom
-1ab4 : 5010                          sub  r0,r1,#0
-1ab5 : ffe0                          sklt  r0
-1ab6 : aff0 1da7                     jmp  #memoryerror
-1ab8 : 0010                          mov  r0,r1,#0
-1ab9 : 11c0 3ce1                     pop  r1
-1abb : afd0                          ret
-1abc :                               .stringassign
-1abc : 5ce6 20c0 21c1 22c2 23c3      push  r0,r1,r2,r3,r4,link
-1ac3 : 0200                          mov  r2,r0,#0
-1ac4 : adf0 002c                     jsr  #oswordlength
-1ac6 : 13f0 4027                     ldm  r3,#memalloctop
-1ac8 : 1410                          ldm   r4,r1,#0
-1ac9 : 5430                          sub  r4,r3,#0
-1aca : ffe1                          skge
-1acb : aff0 1ad5                     jmp  #_ssaconcrete
-1acd : 1410                          ldm  r4,r1,#0
-1ace : 54e1                          dec  r4
-1acf : 1340                          ldm  r3,r4,#0
-1ad0 : 53e1                          dec  r3
-1ad1 : 5300                          sub  r3,r0,#0
-1ad2 : ffe0                          sklt
-1ad3 : aff0 1ae6                     jmp  #_ssausecurrent
-1ad5 :                               ._ssaconcrete
-1ad5 : 0409                          mov  r4,r0,#1+extrastringalloc
-1ad6 : 13f0 4027                     ldm  r3,#memalloctop
-1ad8 : 5340                          sub  r3,r4,#0
-1ad9 : 23f0 4027                     stm  r3,#memalloctop
-1adb : 2430                          stm  r4,r3,#0
-1adc : 33e1                          inc  r3
-1add : 2310                          stm  r3,r1,#0
-1ade : 14f0 4028                     ldm  r4,#memallocbottom
-1ae0 : 34f0 0100                     add  r4,#256
-1ae2 : 5430                          sub  r4,r3,#0
-1ae3 : ffe0                          sklt
-1ae4 : aff0 1da7                     jmp  #memoryerror
-1ae6 :                               ._ssausecurrent
-1ae6 : 1310                          ldm  r3,r1,#0
-1ae7 :                               ._ssacopy
-1ae7 : 1420                          ldm  r4,r2,#0
-1ae8 : 2430                          stm  r4,r3,#0
-1ae9 : 32e1                          inc  r2
-1aea : 33e1                          inc  r3
-1aeb : 50e1                          dec  r0
-1aec : e0e0                          skm  r0
-1aed : aff0 1ae7                     jmp  #_ssacopy
-1aef : 10c0 11c1 12c2 13c3 14c4      pop  r0,r1,r2,r3,r4,link
-1af6 : afd0                          ret
-1af7 :                               .tokenisestring
-1af7 : 5ceb 22c0 23c1 24c2 25c3      push  r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,link
-1b03 : 09f0 40ea                     mov  r9,#tokenbuffer
-1b05 : 2e90                          stm  r14,r9,#0
-1b06 : 2e91                          stm  r14,r9,#1
-1b07 : 39e2                          add  r9,#2
-1b08 : 0800                          mov  r8,r0,#0
-1b09 : 07f0 007f                     mov  r7,#$007f
-1b0b :                               ._tsloop
-1b0b : 1080                          ldm  r0,r8,#0
-1b0c : 6070                          and  r0,r7,#0
-1b0d : 0300                          mov  r3,r0,#0
-1b0e : c0e0                          sknz  r0
-1b0f : aff0 1b1f                     jmp  #_tsexit
-1b11 : 70f0 0020                     xor  r0,#' '
-1b13 : 38e1                          inc  r8
-1b14 : c0e0                          sknz  r0
-1b15 : aff0 1b0b                     jmp  #_tsloop
-1b17 : 58e1                          dec  r8
-1b18 : adf0 1b34                     jsr  #tokeniseelement
-1b1a : b0e0                          skz  r0
-1b1b : aff0 1b26                     jmp  #_tsfail
-1b1d : aff0 1b0b                     jmp  #_tsloop
-1b1f :                               ._tsexit
-1b1f : 2e90                          stm  r14,r9,#0
-1b20 : 0190                          mov  r1,r9,#0
-1b21 : 51f0 40e9                     sub  r1,#tokenbuffer-1
-1b23 : 00f0 40ea                     mov  r0,#tokenbuffer
-1b25 : c0e0                          sknz  r0
-1b26 :                               ._tsfail
-1b26 : 7000                          clr  r0
-1b27 : 12c0 13c1 14c2 15c3 16c4      pop  r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,link
-1b33 : afd0                          ret
-1b34 :                               .tokeniseelement
-1b34 : 5ce1 2dc0                     push  link
-1b36 : 0030                          mov  r0,r3,#0
-1b37 : adf0 196e                     jsr  #getcharactertype
-1b39 : 30f0 1b43                     add  r0,#_tehandlertable
-1b3b : 1000                          ldm  r0,r0,#0
-1b3c : af00                          brl  r15,r0,#0
-1b3d :                               .teexitokay
-1b3d : 7000                          clr  r0
-1b3e : b0e0                          skz  r0
-1b3f :                               .teexitfail
-1b3f : 00e1                          mov  r0,#1
-1b40 : 1dc0 3ce1                     pop  link
-1b42 : afd0                          ret
-1b43 :                               ._tehandlertable
-1b43 : 1b69                          word  tokenisepunctuation
-1b44 : 1bf3                          word  tokeniseidentkeyword
-1b45 : 1b4b                          word tokeniseconstant
-1b46 :                               .tokeniseconstantbase
-1b46 : 2290                          stm  r2,r9,#0
-1b47 : 39e1                          inc  r9
-1b48 : 38e1                          inc  r8
-1b49 : aff0 1b4c                     jmp  #tccontinue
-1b4b :                               .tokeniseconstant
-1b4b : 01ea                          mov  r1,#10
-1b4c :                               .tccontinue
-1b4c : 0a80                          mov  r10,r8,#0
-1b4d : 00f0 1b64                     mov  r0,#tokconstfetch
-1b4f : adf0 0024                     jsr  #osstrtoint
-1b51 : b1e0                          skz  r1
-1b52 : aff0 1b3f                     jmp  #teexitfail
-1b54 : e0e0                          skm  r0
-1b55 : aff0 1b5b                     jmp  #_tcnoshift
-1b57 : 01f0 3012                     mov  r1,#tok_vbarconstshift
-1b59 : 2190                          stm  r1,r9,#0
-1b5a : 39e1                          inc  r9
-1b5b :                               ._tcnoshift
-1b5b : e0e0                          skm  r0
-1b5c : 30f0 8000                     add  r0,#$8000
-1b5e : 2090                          stm  r0,r9,#0
-1b5f : 39e1                          inc  r9
-1b60 : 08a0                          mov  r8,r10,#0
-1b61 : 58e1                          dec  r8
-1b62 : aff0 1b3d                     jmp  #teexitokay
-1b64 :                               .tokconstfetch
-1b64 : 10a0                          ldm  r0,r10,#0
-1b65 : 3ae1                          inc  r10
-1b66 : 60f0 007f                     and  r0,#$007f
-1b68 : afd0                          ret
-1b69 :                               .tokenisepunctuation
-1b69 : 0030                          mov  r0,r3,#0
-1b6a : 01e2                          mov  r1,#2
-1b6b : 02f0 3011                     mov  r2,#tok_percent
-1b6d : 70f0 0025                     xor  r0,#'%'
-1b6f : c0e0                          sknz  r0
-1b70 : aff0 1b46                     jmp  #tokeniseconstantbase
-1b72 : 01f0 0010                     mov  r1,#16
-1b74 : 02f0 3010                     mov  r2,#tok_ampersand
-1b76 : 70e3                          xor  r0,#'%'^'&'
+1a40 : 62f0 ff00                     and  r2,#$ff00
+1a42 : 72f0 0100                     xor  r2,#$0100
+1a44 : c2e0                          sknz  r2
+1a45 : aff0 1a5a                     jmp  #_ssstring
+1a47 : 12b0                          ldm  r2,r11,#0
+1a48 : 0420                          mov  r4,r2,#0
+1a49 : 3be1                          inc  r11
+1a4a : 62f0 f800                     and  r2,#$f800
+1a4c : 72f0 3800                     xor  r2,#$3800
+1a4e : b2e0                          skz  r2
+1a4f : aff0 1a2f                     jmp  #_ssloop
+1a51 : 94e9                          ror  r4,#9
+1a52 : 64e3                          and  r4,#3
+1a53 : 54e2                          sub  r4,#2
+1a54 : 3340                          add  r3,r4,#0
+1a55 : e3e0                          skm  r3
+1a56 : aff0 1a2f                     jmp  #_ssloop
+1a58 : aff0 1dee                     jmp  #structureerror
+1a5a :                               ._ssstring
+1a5a : 12b0                          ldm  r2,r11,#0
+1a5b : 62f0 00ff                     and  r2,#$00ff
+1a5d : 3b20                          add  r11,r2,#0
+1a5e : aff0 1a2f                     jmp  #_ssloop
+1a60 :                               ._ssfound
+1a60 : 3be1                          inc  r11
+1a61 : afd0                          ret
+1a62 :                               ._ssnextline
+1a62 : 3be1                          inc  r11
+1a63 : 12b0                          ldm  r2,r11,#0
+1a64 : c2e0                          sknz  r2
+1a65 : aff0 1dee                     jmp  #structureerror
+1a67 : 2bf0 4086                     stm  r11,#currentline
+1a69 : 3be2                          add  r11,#2
+1a6a : aff0 1a2f                     jmp  #_ssloop
+1a6c :                               .stackreset
+1a6c : 10f0 408d                     ldm  r0,#returnstacktop
+1a6e : 20f0 408f                     stm  r0,#returnstackptr
+1a70 : 2e00                          stm  r14,r0,#0
+1a71 : afd0                          ret
+1a72 :                               .stackpushposition
+1a72 : 10f0 408f                     ldm  r0,#returnstackptr
+1a74 : 50e2                          sub  r0,#2
+1a75 : 20f0 408f                     stm  r0,#returnstackptr
+1a77 : 2b00                          stm  r11,r0,#0
+1a78 : 11f0 4086                     ldm  r1,#currentline
+1a7a : 2101                          stm  r1,r0,#1
+1a7b : afd0                          ret
+1a7c :                               .stackpopposition
+1a7c : 10f0 408f                     ldm  r0,#returnstackptr
+1a7e : 1b01                          ldm  r11,r0,#1
+1a7f : 1002                          ldm  r0,r0,#2
+1a80 : 20f0 4086                     stm  r0,#currentline
+1a82 : afd0                          ret
+1a83 :                               .stackpushmarker
+1a83 : 10f0 408f                     ldm  r0,#returnstackptr
+1a85 : 50e1                          dec  r0
+1a86 : 20f0 408f                     stm  r0,#returnstackptr
+1a88 : 11d0                          ldm  r1,link,#0
+1a89 : 2100                          stm  r1,r0,#0
+1a8a : 3de1                          inc  link
+1a8b : 11f0 408e                     ldm  r1,#returnstackbottom
+1a8d : 5010                          sub  r0,r1,#0
+1a8e : ffe1                          skge
+1a8f : aff0 1e4d                     jmp  #returnstackerror
+1a91 : afd0                          ret
+1a92 :                               .stackcheckmarker
+1a92 : 10f0 408f                     ldm  r0,#returnstackptr
+1a94 : 1000                          ldm  r0,r0,#0
+1a95 : 11d0                          ldm  r1,link,#0
+1a96 : 3de1                          inc  link
+1a97 : 7010                          xor  r0,r1,#0
+1a98 : c0e0                          sknz  r0
+1a99 : 3de2                          add  link,#2
+1a9a : afd0                          ret
+1a9b :                               .stackpopwords
+1a9b : 11f0 408f                     ldm  r1,#returnstackptr
+1a9d : 3010                          add  r0,r1,#0
+1a9e : 20f0 408f                     stm  r0,#returnstackptr
+1aa0 : afd0                          ret
+1aa1 :                               .stackpushr0
+1aa1 : 5ce1 21c0                     push  r1
+1aa3 : 11f0 408f                     ldm  r1,#returnstackptr
+1aa5 : 51e1                          dec  r1
+1aa6 : 21f0 408f                     stm  r1,#returnstackptr
+1aa8 : 2010                          stm  r0,r1,#0
+1aa9 : 11c0 3ce1                     pop  r1
+1aab : afd0                          ret
+1aac :                               .allocatetempmemory
+1aac : 5ce1 21c0                     push  r1
+1aae : 11f0 408c                     ldm  r1,#tempstringalloc
+1ab0 : b1e0                          skz  r1
+1ab1 : aff0 1ab7                     jmp  #_atmnoinitialise
+1ab3 : 11f0 4089                     ldm  r1,#memalloctop
+1ab5 : 51f0 0080                     sub  r1,#(maxstringsize>>1)+1
+1ab7 :                               ._atmnoinitialise
+1ab7 : 5100                          sub  r1,r0,#0
+1ab8 : 21f0 408c                     stm  r1,#tempstringalloc
+1aba : 10f0 408a                     ldm  r0,#memallocbottom
+1abc : 5010                          sub  r0,r1,#0
+1abd : ffe0                          sklt  r0
+1abe : aff0 1daf                     jmp  #memoryerror
+1ac0 : 0010                          mov  r0,r1,#0
+1ac1 : 11c0 3ce1                     pop  r1
+1ac3 : afd0                          ret
+1ac4 :                               .stringassign
+1ac4 : 5ce6 20c0 21c1 22c2 23c3      push  r0,r1,r2,r3,r4,link
+1acb : 0200                          mov  r2,r0,#0
+1acc : adf0 002c                     jsr  #oswordlength
+1ace : 13f0 4089                     ldm  r3,#memalloctop
+1ad0 : 1410                          ldm   r4,r1,#0
+1ad1 : 5430                          sub  r4,r3,#0
+1ad2 : ffe1                          skge
+1ad3 : aff0 1add                     jmp  #_ssaconcrete
+1ad5 : 1410                          ldm  r4,r1,#0
+1ad6 : 54e1                          dec  r4
+1ad7 : 1340                          ldm  r3,r4,#0
+1ad8 : 53e1                          dec  r3
+1ad9 : 5300                          sub  r3,r0,#0
+1ada : ffe0                          sklt
+1adb : aff0 1aee                     jmp  #_ssausecurrent
+1add :                               ._ssaconcrete
+1add : 0409                          mov  r4,r0,#1+extrastringalloc
+1ade : 13f0 4089                     ldm  r3,#memalloctop
+1ae0 : 5340                          sub  r3,r4,#0
+1ae1 : 23f0 4089                     stm  r3,#memalloctop
+1ae3 : 2430                          stm  r4,r3,#0
+1ae4 : 33e1                          inc  r3
+1ae5 : 2310                          stm  r3,r1,#0
+1ae6 : 14f0 408a                     ldm  r4,#memallocbottom
+1ae8 : 34f0 0100                     add  r4,#256
+1aea : 5430                          sub  r4,r3,#0
+1aeb : ffe0                          sklt
+1aec : aff0 1daf                     jmp  #memoryerror
+1aee :                               ._ssausecurrent
+1aee : 1310                          ldm  r3,r1,#0
+1aef :                               ._ssacopy
+1aef : 1420                          ldm  r4,r2,#0
+1af0 : 2430                          stm  r4,r3,#0
+1af1 : 32e1                          inc  r2
+1af2 : 33e1                          inc  r3
+1af3 : 50e1                          dec  r0
+1af4 : e0e0                          skm  r0
+1af5 : aff0 1aef                     jmp  #_ssacopy
+1af7 : 10c0 11c1 12c2 13c3 14c4      pop  r0,r1,r2,r3,r4,link
+1afe : afd0                          ret
+1aff :                               .tokenisestring
+1aff : 5ceb 22c0 23c1 24c2 25c3      push  r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,link
+1b0b : 09f0 414c                     mov  r9,#tokenbuffer
+1b0d : 2e90                          stm  r14,r9,#0
+1b0e : 2e91                          stm  r14,r9,#1
+1b0f : 39e2                          add  r9,#2
+1b10 : 0800                          mov  r8,r0,#0
+1b11 : 07f0 007f                     mov  r7,#$007f
+1b13 :                               ._tsloop
+1b13 : 1080                          ldm  r0,r8,#0
+1b14 : 6070                          and  r0,r7,#0
+1b15 : 0300                          mov  r3,r0,#0
+1b16 : c0e0                          sknz  r0
+1b17 : aff0 1b27                     jmp  #_tsexit
+1b19 : 70f0 0020                     xor  r0,#' '
+1b1b : 38e1                          inc  r8
+1b1c : c0e0                          sknz  r0
+1b1d : aff0 1b13                     jmp  #_tsloop
+1b1f : 58e1                          dec  r8
+1b20 : adf0 1b3c                     jsr  #tokeniseelement
+1b22 : b0e0                          skz  r0
+1b23 : aff0 1b2e                     jmp  #_tsfail
+1b25 : aff0 1b13                     jmp  #_tsloop
+1b27 :                               ._tsexit
+1b27 : 2e90                          stm  r14,r9,#0
+1b28 : 0190                          mov  r1,r9,#0
+1b29 : 51f0 414b                     sub  r1,#tokenbuffer-1
+1b2b : 00f0 414c                     mov  r0,#tokenbuffer
+1b2d : c0e0                          sknz  r0
+1b2e :                               ._tsfail
+1b2e : 7000                          clr  r0
+1b2f : 12c0 13c1 14c2 15c3 16c4      pop  r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,link
+1b3b : afd0                          ret
+1b3c :                               .tokeniseelement
+1b3c : 5ce1 2dc0                     push  link
+1b3e : 0030                          mov  r0,r3,#0
+1b3f : adf0 1976                     jsr  #getcharactertype
+1b41 : 30f0 1b4b                     add  r0,#_tehandlertable
+1b43 : 1000                          ldm  r0,r0,#0
+1b44 : af00                          brl  r15,r0,#0
+1b45 :                               .teexitokay
+1b45 : 7000                          clr  r0
+1b46 : b0e0                          skz  r0
+1b47 :                               .teexitfail
+1b47 : 00e1                          mov  r0,#1
+1b48 : 1dc0 3ce1                     pop  link
+1b4a : afd0                          ret
+1b4b :                               ._tehandlertable
+1b4b : 1b71                          word  tokenisepunctuation
+1b4c : 1bfb                          word  tokeniseidentkeyword
+1b4d : 1b53                          word tokeniseconstant
+1b4e :                               .tokeniseconstantbase
+1b4e : 2290                          stm  r2,r9,#0
+1b4f : 39e1                          inc  r9
+1b50 : 38e1                          inc  r8
+1b51 : aff0 1b54                     jmp  #tccontinue
+1b53 :                               .tokeniseconstant
+1b53 : 01ea                          mov  r1,#10
+1b54 :                               .tccontinue
+1b54 : 0a80                          mov  r10,r8,#0
+1b55 : 00f0 1b6c                     mov  r0,#tokconstfetch
+1b57 : adf0 0024                     jsr  #osstrtoint
+1b59 : b1e0                          skz  r1
+1b5a : aff0 1b47                     jmp  #teexitfail
+1b5c : e0e0                          skm  r0
+1b5d : aff0 1b63                     jmp  #_tcnoshift
+1b5f : 01f0 3012                     mov  r1,#tok_vbarconstshift
+1b61 : 2190                          stm  r1,r9,#0
+1b62 : 39e1                          inc  r9
+1b63 :                               ._tcnoshift
+1b63 : e0e0                          skm  r0
+1b64 : 30f0 8000                     add  r0,#$8000
+1b66 : 2090                          stm  r0,r9,#0
+1b67 : 39e1                          inc  r9
+1b68 : 08a0                          mov  r8,r10,#0
+1b69 : 58e1                          dec  r8
+1b6a : aff0 1b45                     jmp  #teexitokay
+1b6c :                               .tokconstfetch
+1b6c : 10a0                          ldm  r0,r10,#0
+1b6d : 3ae1                          inc  r10
+1b6e : 60f0 007f                     and  r0,#$007f
+1b70 : afd0                          ret
+1b71 :                               .tokenisepunctuation
+1b71 : 0030                          mov  r0,r3,#0
+1b72 : 01e2                          mov  r1,#2
+1b73 : 02f0 3011                     mov  r2,#tok_percent
+1b75 : 70f0 0025                     xor  r0,#'%'
 1b77 : c0e0                          sknz  r0
-1b78 : aff0 1b46                     jmp  #tokeniseconstantbase
-1b7a : 70e4                          xor  r0,#'&'^'"'
-1b7b : c0e0                          sknz  r0
-1b7c : aff0 1bc0                     jmp  #tokenisestringconstant
-1b7e : 38e1                          inc  r8
-1b7f : 1080                          ldm  r0,r8,#0
-1b80 : 6070                          and  r0,r7,#0
-1b81 : adf0 196e                     jsr  #getcharactertype
-1b83 : b0e0                          skz  r0
-1b84 : aff0 1b91                     jmp  #tokpuncchecksingle
-1b86 : 1080                          ldm  r0,r8,#0
-1b87 : 38e1                          inc  r8
+1b78 : aff0 1b4e                     jmp  #tokeniseconstantbase
+1b7a : 01f0 0010                     mov  r1,#16
+1b7c : 02f0 3010                     mov  r2,#tok_ampersand
+1b7e : 70e3                          xor  r0,#'%'^'&'
+1b7f : c0e0                          sknz  r0
+1b80 : aff0 1b4e                     jmp  #tokeniseconstantbase
+1b82 : 70e4                          xor  r0,#'&'^'"'
+1b83 : c0e0                          sknz  r0
+1b84 : aff0 1bc8                     jmp  #tokenisestringconstant
+1b86 : 38e1                          inc  r8
+1b87 : 1080                          ldm  r0,r8,#0
 1b88 : 6070                          and  r0,r7,#0
-1b89 : 90e8                          ror  r0,#8
-1b8a : 3030                          add  r0,r3,#0
-1b8b : adf0 1b9b                     jsr  #tokpunccheckexists
-1b8d : b0e0                          skz  r0
-1b8e : aff0 1b97                     jmp  #tokpuncwritetoken
-1b90 : 58e1                          dec  r8
-1b91 :                               .tokpuncchecksingle
-1b91 : 0030                          mov  r0,r3,#0
-1b92 : adf0 1b9b                     jsr  #tokpunccheckexists
-1b94 : c0e0                          sknz  r0
-1b95 : aff0 1b3f                     jmp  #teexitfail
-1b97 :                               .tokpuncwritetoken
-1b97 : 2090                          stm  r0,r9,#0
-1b98 : 39e1                          inc  r9
-1b99 : aff0 1b3d                     jmp  #teexitokay
-1b9b :                               .tokpunccheckexists
-1b9b : 5ce3 23c0 24c1 25c2           push  r3,r4,r5
-1b9f : 04f0 1e80                     mov  r4,#tokeniserwords
-1ba1 : 0300                          mov   r3,r0,#0
-1ba2 : 33f0 8000                     add  r3,#$8000
-1ba4 : 7550                          clr  r5
-1ba5 :                               ._tpceloop
-1ba5 : 1040                          ldm  r0,r4,#0
-1ba6 : c0e0                          sknz  r0
-1ba7 : aff0 1bbb                     jmp  #_tpceexit
-1ba9 : 1041                          ldm  r0,r4,#1
-1baa : 7030                          xor  r0,r3,#0
-1bab : c0e0                          sknz  r0
-1bac : aff0 1bb4                     jmp  #_tpcefound
-1bae : 1040                          ldm  r0,r4,#0
-1baf : 6070                          and  r0,r7,#0
-1bb0 : 3401                          add  r4,r0,#1
-1bb1 : 35e1                          inc  r5
-1bb2 : aff0 1ba5                     jmp  #_tpceloop
-1bb4 :                               ._tpcefound
-1bb4 : 1040                          ldm  r0,r4,#0
-1bb5 : 60f0 ff00                     and  r0,#$ff00
-1bb7 : 3000                          add  r0,r0,#0
-1bb8 : 3050                          add  r0,r5,#0
-1bb9 : 30f0 2000                     add  r0,#$2000
-1bbb :                               ._tpceexit
-1bbb : 13c0 14c1 15c2 3ce3           pop  r3,r4,r5
-1bbf : afd0                          ret
-1bc0 :                               .tokenisestringconstant
-1bc0 : 38e1                          inc  r8
-1bc1 : 0690                          mov  r6,r9,#0
-1bc2 : 2e61                          stm  r14,r6,#1
-1bc3 : 2e62                          stm  r14,r6,#2
-1bc4 : 0562                          mov  r5,r6,#2
-1bc5 :                               .tokstringloop
-1bc5 : 1080                          ldm  r0,r8,#0
-1bc6 : 6070                          and  r0,r7,#0
-1bc7 : c0e0                          sknz  r0
-1bc8 : aff0 1b3f                     jmp  #teexitfail
-1bca : 70f0 0022                     xor  r0,#34
-1bcc : c0e0                          sknz  r0
-1bcd : aff0 1be0                     jmp  #tokstringcomplete
-1bcf : 1161                          ldm  r1,r6,#1
-1bd0 : 31e1                          inc  r1
-1bd1 : 2161                          stm  r1,r6,#1
-1bd2 : 91e1                          ror  r1,#1
-1bd3 : 1080                          ldm  r0,r8,#0
-1bd4 : 6070                          and  r0,r7,#0
-1bd5 : 38e1                          inc  r8
-1bd6 : e1e0                          skm  r1
-1bd7 : 90e8                          ror  r0,#8
-1bd8 : 1250                          ldm  r2,r5,#0
-1bd9 : 3200                          add  r2,r0,#0
-1bda : 2250                          stm  r2,r5,#0
-1bdb : 2e51                          stm  r14,r5,#1
-1bdc : e1e0                          skm  r1
-1bdd : 35e1                          inc  r5
-1bde : aff0 1bc5                     jmp  #tokstringloop
-1be0 :                               .tokstringcomplete
-1be0 : 38e1                          inc  r8
-1be1 : 1061                          ldm  r0,r6,#1
-1be2 : 60e1                          and  r0,#1
-1be3 : b0e0                          skz  r0
-1be4 : 35e1                          inc  r5
-1be5 : 0950                          mov  r9,r5,#0
-1be6 : 5560                          sub  r5,r6,#0
-1be7 : 35f0 0100                     add  r5,#$0100
-1be9 : 2560                          stm  r5,r6,#0
-1bea : 65f0 ff00                     and  r5,#$ff00
-1bec : 75f0 0100                     xor  r5,#$0100
-1bee : b5e0                          skz  r5
-1bef : aff0 1b3f                     jmp  #teexitfail
-1bf1 : aff0 1b3d                     jmp  #teexitokay
-1bf3 :                               .tokeniseidentkeyword
-1bf3 : 0690                          mov  r6,r9,#0
-1bf4 : 7550                          clr  r5
-1bf5 : 2e90                          stm  r14,r9,#0
-1bf6 :                               ._tikbuildident
-1bf6 : 1080                          ldm  r0,r8,#0
-1bf7 : 6070                          and  r0,r7,#0
-1bf8 : adf0 0028                     jsr  #osuppercase
-1bfa : 0300                          mov  r3,r0,#0
-1bfb : 01f0 0025                     mov  r1,#37
-1bfd : 70f0 002e                     xor  r0,#'.'
-1bff : c0e0                          sknz  r0
-1c00 : aff0 1c0f                     jmp  #_tikhavecharacter
-1c02 : 0030                          mov  r0,r3,#0
-1c03 : adf0 196e                     jsr  #getcharactertype
-1c05 : c0e0                          sknz  r0
-1c06 : aff0 1c1c                     jmp  #_tikhaveident
-1c08 : 0130                          mov  r1,r3,#0
-1c09 : 51f0 0040                     sub  r1,#64
-1c0b : 50e1                          dec  r0
-1c0c : b0e0                          skz  r0
-1c0d : 31f0 002b                     add  r1,#64-48+27
-1c0f :                               ._tikhavecharacter
-1c0f : b5e0                          skz  r5
-1c10 : 81f0 0028                     mult  r1,#40
-1c12 : 1090                          ldm  r0,r9,#0
-1c13 : 3010                          add  r0,r1,#0
-1c14 : 2090                          stm  r0,r9,#0
-1c15 : 2e91                          stm  r14,r9,#1
-1c16 : b5e0                          skz  r5
-1c17 : 39e1                          inc  r9
-1c18 : 75e1                          xor  r5,#1
-1c19 : 38e1                          inc  r8
-1c1a : aff0 1bf6                     jmp  #_tikbuildident
-1c1c :                               ._tikhaveident
-1c1c : b5e0                          skz  r5
-1c1d : 39e1                          inc  r9
-1c1e : 59e1                          dec  r9
-1c1f : 1090                          ldm  r0,r9,#0
-1c20 : 30f0 2000                     add  r0,#$2000
-1c22 : 2090                          stm  r0,r9,#0
-1c23 : 39e1                          inc  r9
-1c24 : 05f0 4000                     mov  r5,#$4000
-1c26 : 1080                          ldm  r0,r8,#0
-1c27 : 6070                          and  r0,r7,#0
-1c28 : 70f0 0024                     xor  r0,#'$'
-1c2a : c0e0                          sknz  r0
-1c2b : 35f0 1000                     add  r5,#$1000
-1c2d : c0e0                          sknz  r0
-1c2e : 38e1                          inc  r8
-1c2f : 1080                          ldm  r0,r8,#0
-1c30 : 6070                          and  r0,r7,#0
-1c31 : 70f0 0028                     xor  r0,#'('
-1c33 : c0e0                          sknz  r0
-1c34 : 35f0 0800                     add  r5,#$0800
-1c36 : c0e0                          sknz  r0
-1c37 : 38e1                          inc  r8
-1c38 : 0160                          mov  r1,r6,#0
-1c39 :                               ._tikapplytyping
-1c39 : 1010                          ldm  r0,r1,#0
-1c3a : 3050                          add  r0,r5,#0
-1c3b : 2010                          stm  r0,r1,#0
-1c3c : 31e1                          inc  r1
-1c3d : 0010                          mov  r0,r1,#0
-1c3e : 7090                          xor  r0,r9,#0
-1c3f : b0e0                          skz  r0
-1c40 : aff0 1c39                     jmp  #_tikapplytyping
-1c42 : 04f0 1e80                     mov  r4,#tokeniserwords
-1c44 : 0590                          mov  r5,r9,#0
-1c45 : 5560                          sub  r5,r6,#0
-1c46 : 7bb0                          clr  r11
-1c47 :                               ._tikcheckidentifier
-1c47 : 1040                          ldm  r0,r4,#0
-1c48 : c0e0                          sknz  r0
-1c49 : aff0 1b3d                     jmp  #teexitokay
-1c4b : 6070                          and  r0,r7,#0
-1c4c : 0300                          mov  r3,r0,#0
-1c4d : 7050                          xor  r0,r5,#0
-1c4e : b0e0                          skz  r0
-1c4f : aff0 1c6c                     jmp  #_tiknext
-1c51 : 0160                          mov  r1,r6,#0
-1c52 : 0241                          mov  r2,r4,#1
-1c53 :                               ._tikcheckword
-1c53 : 1010                          ldm  r0,r1,#0
-1c54 : 1a20                          ldm  r10,r2,#0
-1c55 : 70a0                          xor  r0,r10,#0
+1b89 : adf0 1976                     jsr  #getcharactertype
+1b8b : b0e0                          skz  r0
+1b8c : aff0 1b99                     jmp  #tokpuncchecksingle
+1b8e : 1080                          ldm  r0,r8,#0
+1b8f : 38e1                          inc  r8
+1b90 : 6070                          and  r0,r7,#0
+1b91 : 90e8                          ror  r0,#8
+1b92 : 3030                          add  r0,r3,#0
+1b93 : adf0 1ba3                     jsr  #tokpunccheckexists
+1b95 : b0e0                          skz  r0
+1b96 : aff0 1b9f                     jmp  #tokpuncwritetoken
+1b98 : 58e1                          dec  r8
+1b99 :                               .tokpuncchecksingle
+1b99 : 0030                          mov  r0,r3,#0
+1b9a : adf0 1ba3                     jsr  #tokpunccheckexists
+1b9c : c0e0                          sknz  r0
+1b9d : aff0 1b47                     jmp  #teexitfail
+1b9f :                               .tokpuncwritetoken
+1b9f : 2090                          stm  r0,r9,#0
+1ba0 : 39e1                          inc  r9
+1ba1 : aff0 1b45                     jmp  #teexitokay
+1ba3 :                               .tokpunccheckexists
+1ba3 : 5ce3 23c0 24c1 25c2           push  r3,r4,r5
+1ba7 : 04f0 1e88                     mov  r4,#tokeniserwords
+1ba9 : 0300                          mov   r3,r0,#0
+1baa : 33f0 8000                     add  r3,#$8000
+1bac : 7550                          clr  r5
+1bad :                               ._tpceloop
+1bad : 1040                          ldm  r0,r4,#0
+1bae : c0e0                          sknz  r0
+1baf : aff0 1bc3                     jmp  #_tpceexit
+1bb1 : 1041                          ldm  r0,r4,#1
+1bb2 : 7030                          xor  r0,r3,#0
+1bb3 : c0e0                          sknz  r0
+1bb4 : aff0 1bbc                     jmp  #_tpcefound
+1bb6 : 1040                          ldm  r0,r4,#0
+1bb7 : 6070                          and  r0,r7,#0
+1bb8 : 3401                          add  r4,r0,#1
+1bb9 : 35e1                          inc  r5
+1bba : aff0 1bad                     jmp  #_tpceloop
+1bbc :                               ._tpcefound
+1bbc : 1040                          ldm  r0,r4,#0
+1bbd : 60f0 ff00                     and  r0,#$ff00
+1bbf : 3000                          add  r0,r0,#0
+1bc0 : 3050                          add  r0,r5,#0
+1bc1 : 30f0 2000                     add  r0,#$2000
+1bc3 :                               ._tpceexit
+1bc3 : 13c0 14c1 15c2 3ce3           pop  r3,r4,r5
+1bc7 : afd0                          ret
+1bc8 :                               .tokenisestringconstant
+1bc8 : 38e1                          inc  r8
+1bc9 : 0690                          mov  r6,r9,#0
+1bca : 2e61                          stm  r14,r6,#1
+1bcb : 2e62                          stm  r14,r6,#2
+1bcc : 0562                          mov  r5,r6,#2
+1bcd :                               .tokstringloop
+1bcd : 1080                          ldm  r0,r8,#0
+1bce : 6070                          and  r0,r7,#0
+1bcf : c0e0                          sknz  r0
+1bd0 : aff0 1b47                     jmp  #teexitfail
+1bd2 : 70f0 0022                     xor  r0,#34
+1bd4 : c0e0                          sknz  r0
+1bd5 : aff0 1be8                     jmp  #tokstringcomplete
+1bd7 : 1161                          ldm  r1,r6,#1
+1bd8 : 31e1                          inc  r1
+1bd9 : 2161                          stm  r1,r6,#1
+1bda : 91e1                          ror  r1,#1
+1bdb : 1080                          ldm  r0,r8,#0
+1bdc : 6070                          and  r0,r7,#0
+1bdd : 38e1                          inc  r8
+1bde : e1e0                          skm  r1
+1bdf : 90e8                          ror  r0,#8
+1be0 : 1250                          ldm  r2,r5,#0
+1be1 : 3200                          add  r2,r0,#0
+1be2 : 2250                          stm  r2,r5,#0
+1be3 : 2e51                          stm  r14,r5,#1
+1be4 : e1e0                          skm  r1
+1be5 : 35e1                          inc  r5
+1be6 : aff0 1bcd                     jmp  #tokstringloop
+1be8 :                               .tokstringcomplete
+1be8 : 38e1                          inc  r8
+1be9 : 1061                          ldm  r0,r6,#1
+1bea : 60e1                          and  r0,#1
+1beb : b0e0                          skz  r0
+1bec : 35e1                          inc  r5
+1bed : 0950                          mov  r9,r5,#0
+1bee : 5560                          sub  r5,r6,#0
+1bef : 35f0 0100                     add  r5,#$0100
+1bf1 : 2560                          stm  r5,r6,#0
+1bf2 : 65f0 ff00                     and  r5,#$ff00
+1bf4 : 75f0 0100                     xor  r5,#$0100
+1bf6 : b5e0                          skz  r5
+1bf7 : aff0 1b47                     jmp  #teexitfail
+1bf9 : aff0 1b45                     jmp  #teexitokay
+1bfb :                               .tokeniseidentkeyword
+1bfb : 0690                          mov  r6,r9,#0
+1bfc : 7550                          clr  r5
+1bfd : 2e90                          stm  r14,r9,#0
+1bfe :                               ._tikbuildident
+1bfe : 1080                          ldm  r0,r8,#0
+1bff : 6070                          and  r0,r7,#0
+1c00 : adf0 0028                     jsr  #osuppercase
+1c02 : 0300                          mov  r3,r0,#0
+1c03 : 01f0 0025                     mov  r1,#37
+1c05 : 70f0 002e                     xor  r0,#'.'
+1c07 : c0e0                          sknz  r0
+1c08 : aff0 1c17                     jmp  #_tikhavecharacter
+1c0a : 0030                          mov  r0,r3,#0
+1c0b : adf0 1976                     jsr  #getcharactertype
+1c0d : c0e0                          sknz  r0
+1c0e : aff0 1c24                     jmp  #_tikhaveident
+1c10 : 0130                          mov  r1,r3,#0
+1c11 : 51f0 0040                     sub  r1,#64
+1c13 : 50e1                          dec  r0
+1c14 : b0e0                          skz  r0
+1c15 : 31f0 002b                     add  r1,#64-48+27
+1c17 :                               ._tikhavecharacter
+1c17 : b5e0                          skz  r5
+1c18 : 81f0 0028                     mult  r1,#40
+1c1a : 1090                          ldm  r0,r9,#0
+1c1b : 3010                          add  r0,r1,#0
+1c1c : 2090                          stm  r0,r9,#0
+1c1d : 2e91                          stm  r14,r9,#1
+1c1e : b5e0                          skz  r5
+1c1f : 39e1                          inc  r9
+1c20 : 75e1                          xor  r5,#1
+1c21 : 38e1                          inc  r8
+1c22 : aff0 1bfe                     jmp  #_tikbuildident
+1c24 :                               ._tikhaveident
+1c24 : b5e0                          skz  r5
+1c25 : 39e1                          inc  r9
+1c26 : 59e1                          dec  r9
+1c27 : 1090                          ldm  r0,r9,#0
+1c28 : 30f0 2000                     add  r0,#$2000
+1c2a : 2090                          stm  r0,r9,#0
+1c2b : 39e1                          inc  r9
+1c2c : 05f0 4000                     mov  r5,#$4000
+1c2e : 1080                          ldm  r0,r8,#0
+1c2f : 6070                          and  r0,r7,#0
+1c30 : 70f0 0024                     xor  r0,#'$'
+1c32 : c0e0                          sknz  r0
+1c33 : 35f0 1000                     add  r5,#$1000
+1c35 : c0e0                          sknz  r0
+1c36 : 38e1                          inc  r8
+1c37 : 1080                          ldm  r0,r8,#0
+1c38 : 6070                          and  r0,r7,#0
+1c39 : 70f0 0028                     xor  r0,#'('
+1c3b : c0e0                          sknz  r0
+1c3c : 35f0 0800                     add  r5,#$0800
+1c3e : c0e0                          sknz  r0
+1c3f : 38e1                          inc  r8
+1c40 : 0160                          mov  r1,r6,#0
+1c41 :                               ._tikapplytyping
+1c41 : 1010                          ldm  r0,r1,#0
+1c42 : 3050                          add  r0,r5,#0
+1c43 : 2010                          stm  r0,r1,#0
+1c44 : 31e1                          inc  r1
+1c45 : 0010                          mov  r0,r1,#0
+1c46 : 7090                          xor  r0,r9,#0
+1c47 : b0e0                          skz  r0
+1c48 : aff0 1c41                     jmp  #_tikapplytyping
+1c4a : 04f0 1e88                     mov  r4,#tokeniserwords
+1c4c : 0590                          mov  r5,r9,#0
+1c4d : 5560                          sub  r5,r6,#0
+1c4e : 7bb0                          clr  r11
+1c4f :                               ._tikcheckidentifier
+1c4f : 1040                          ldm  r0,r4,#0
+1c50 : c0e0                          sknz  r0
+1c51 : aff0 1b45                     jmp  #teexitokay
+1c53 : 6070                          and  r0,r7,#0
+1c54 : 0300                          mov  r3,r0,#0
+1c55 : 7050                          xor  r0,r5,#0
 1c56 : b0e0                          skz  r0
-1c57 : aff0 1c6c                     jmp  #_tiknext
-1c59 : 31e1                          inc  r1
-1c5a : 32e1                          inc  r2
-1c5b : 53e1                          dec  r3
-1c5c : b3e0                          skz  r3
-1c5d : aff0 1c53                     jmp  #_tikcheckword
-1c5f : 1040                          ldm  r0,r4,#0
-1c60 : 60f0 ff00                     and  r0,#$ff00
-1c62 : 3000                          add  r0,r0,#0
-1c63 : 30b0                          add  r0,r11,#0
-1c64 : 30f0 2000                     add  r0,#$2000
-1c66 : 0960                          mov  r9,r6,#0
-1c67 : 2090                          stm  r0,r9,#0
-1c68 : 2e91                          stm  r14,r9,#1
-1c69 : 39e1                          inc  r9
-1c6a : aff0 1b3d                     jmp  #teexitokay
-1c6c :                               ._tiknext
-1c6c : 1040                          ldm  r0,r4,#0
-1c6d : 6070                          and  r0,r7,#0
-1c6e : 3401                          add  r4,r0,#1
-1c6f : 3be1                          inc  r11
-1c70 : aff0 1c47                     jmp  #_tikcheckidentifier
-1c72 :                               .comparer0r1
-1c72 : 1200                          ldm  r2,r0,#0
-1c73 : 1310                          ldm  r3,r1,#0
-1c74 : 30e1                          inc  r0
-1c75 : 31e1                          inc  r1
-1c76 : 7230                          xor  r2,r3,#0
-1c77 : b2e0                          skz  r2
-1c78 : 0000                          break
-1c79 : b3e0                          skz  r3
-1c7a : aff0 1c72                     jmp  #comparer0r1
-1c7c : afd0                          ret
-1c7d :                               .varerasehashtables
-1c7d : 00f0 40aa                     mov  r0,#variablehashtable
-1c7f : 01f0 0040                     mov  r1,#hashtablesize*4
-1c81 :                               ._vehtloop
-1c81 : 2e00                          stm  r14,r0,#0
-1c82 : 30e1                          inc  r0
-1c83 : 51e1                          dec  r1
-1c84 : b1e0                          skz  r1
-1c85 : aff0 1c81                     jmp  #_vehtloop
-1c87 : afd0                          ret
-1c88 :                               .duplicatereference
-1c88 : 5ce3 20c0 21c1 22c2           push  r0,r1,r2
-1c8c : 10f0 4028                     ldm  r0,#memallocbottom
-1c8e : 0100                          mov  r1,r0,#0
-1c8f :                               ._drcopy
-1c8f : 12b0                          ldm  r2,r11,#0
-1c90 : 2200                          stm  r2,r0,#0
-1c91 : 30e1                          inc  r0
-1c92 : 3be1                          inc  r11
-1c93 : 92ee                          ror  r2,#14
-1c94 : e2e0                          skm  r2
-1c95 : aff0 1c8f                     jmp  #_drcopy
-1c97 : 20f0 4028                     stm  r0,#memallocbottom
-1c99 : 0b10                          mov  r11,r1,#0
-1c9a : 10c0 11c1 12c2 3ce3           pop  r0,r1,r2
-1c9e : afd0                          ret
-1c9f :                               .getvariablereference
-1c9f : 10b0                          ldm  r0,r11,#0
-1ca0 : 50f0 6000                     sub  r0,#$6000
-1ca2 : 50f0 001b                     sub  r0,#26+1
-1ca4 : ffe0                          sklt  r0
-1ca5 : aff0 1caf                     jmp  #_gvrnotfixedvariable
-1ca7 : 01f0 40aa                     mov  r1,#fixedvariables+26
-1ca9 : 3100                          add  r1,r0,#0
-1caa : 21a0                          stm  r1,r10,#esvalue1
-1cab : 2fa2                          stm  r15,r10,#esreference1
-1cac : 2ea1                          stm  r14,r10,#estype1
-1cad : 3be1                          inc  r11
-1cae : afd0                          ret
-1caf :                               ._gvrnotfixedvariable
-1caf : 5ce8 20c0 21c1 22c2 23c3      push  r0,r1,r2,r3,r4,r5,r6,link
-1cb8 : adf0 1ce2                     jsr  #findvariable
-1cba : b0e0                          skz  r0
-1cbb : aff0 1cc5                     jmp  #_gvrhavevariable
-1cbd :                               ._gvrnotfound
-1cbd : 10b0                          ldm  r0,r11,#0
-1cbe : 90ec                          ror  r0,#12
-1cbf : d0e0                          skp  r0
-1cc0 : aff0 1db9                     jmp  #arrayautoerror
-1cc2 : 00e3                          mov  r0,#3
-1cc3 : adf0 1d0a                     jsr  #createvariablerecord
-1cc5 :                               ._gvrhavevariable
-1cc5 : 11b0                          ldm  r1,r11,#0
-1cc6 : 0210                          mov  r2,r1,#0
-1cc7 : 3be1                          inc  r11
-1cc8 : 91ee                          ror  r1,#14
-1cc9 : e1e0                          skm  r1
-1cca : aff0 1cc5                     jmp  #_gvrhavevariable
-1ccc : 91ee                          ror  r1,#14
-1ccd : d1e0                          skp  r1
-1cce : adf0 1d34                     jsr  #indexarray
-1cd0 : e1e0                          skm  r1
-1cd1 : 30e2                          add  r0,#2
-1cd2 : 20a0                          stm  r0,r10,#esvalue1
-1cd3 : 2fa2                          stm  r15,r10,#esreference1
-1cd4 : 62f0 1000                     and  r2,#$1000
-1cd6 : 22a1                          stm  r2,r10,#estype1
-1cd7 : 10c0 11c1 12c2 13c3 14c4      pop  r0,r1,r2,r3,r4,r5,r6,link
-1ce0 : afd0                          ret
-1ce1 :                               ._gvrnullstring
-1ce1 : 0000                          word  0
-1ce2 :                               .findvariable
-1ce2 : 10b0                          ldm  r0,r11,#0
-1ce3 : 60f0 c000                     and  r0,#$c000
-1ce5 : 70f0 4000                     xor  r0,#$4000
-1ce7 : b0e0                          skz  r0
-1ce8 : aff0 1d67                     jmp  #syntaxerror
-1cea : 16b0                          ldm  r6,r11,#0
-1ceb : 0060                          mov  r0,r6,#0
-1cec : 90e6                          ror  r0,#6
-1ced : 3600                          add  r6,r0,#0
-1cee : 66ef                          and  r6,#hashtablesize-1
-1cef : 10b0                          ldm  r0,r11,#0
-1cf0 : 60f0 1800                     and  r0,#$1800
-1cf2 : 90e7                          ror  r0,#11-hashtablepower
-1cf3 : 3600                          add  r6,r0,#0
-1cf4 : 36f0 40aa                     add  r6,#variablehashtable
-1cf6 : 0060                          mov  r0,r6,#0
-1cf7 :                               ._fvrsearch
-1cf7 : 1000                          ldm  r0,r0,#0
-1cf8 : c0e0                          sknz  r0
-1cf9 : aff0 1d09                     jmp  #_fvrexit
-1cfb : 1101                          ldm  r1,r0,#1
-1cfc : 02b0                          mov  r2,r11,#0
-1cfd :                               ._fvrcompare
-1cfd : 1310                          ldm  r3,r1,#0
-1cfe : 1420                          ldm  r4,r2,#0
-1cff : 7340                          xor  r3,r4,#0
-1d00 : b3e0                          skz  r3
-1d01 : aff0 1cf7                     jmp  #_fvrsearch
-1d03 : 31e1                          inc  r1
-1d04 : 32e1                          inc  r2
-1d05 : 94ee                          ror  r4,#14
-1d06 : e4e0                          skm  r4
-1d07 : aff0 1cfd                     jmp  #_fvrcompare
-1d09 :                               ._fvrexit
-1d09 : afd0                          ret
-1d0a :                               .createvariablerecord
-1d0a : 5ce2 2bc0 2dc1                push  r11,link
-1d0d : 03b0                          mov  r3,r11,#0
-1d0e : 53f0 41ea                     sub  r3,#tokenbufferend
-1d10 : ffe1                          skge
-1d11 : adf0 1c88                     jsr  #duplicatereference
-1d13 : 11f0 4028                     ldm  r1,#memallocbottom
-1d15 : 1260                          ldm  r2,r6,#0
-1d16 : 2210                          stm  r2,r1,#0
-1d17 : 2b11                          stm  r11,r1,#1
-1d18 : 13b0                          ldm  r3,r11,#0
-1d19 : 93ed                          ror  r3,#13
-1d1a : 7220                          clr  r2
-1d1b : d3e0                          skp  r3
-1d1c : 02f0 1ce1                     mov  r2,#_gvrnullstring
-1d1e : 2212                          stm  r2,r1,#2
-1d1f : 0210                          mov  r2,r1,#0
-1d20 : 3200                          add  r2,r0,#0
-1d21 : ffe0                          sknc
-1d22 : aff0 1da7                     jmp  #memoryerror
-1d24 : 22f0 4028                     stm  r2,#memallocbottom
-1d26 : 13f0 4027                     ldm  r3,#memalloctop
-1d28 : 53f0 0100                     sub  r3,#256
-1d2a : 5230                          sub  r2,r3,#0
-1d2b : ffe0                          sklt
-1d2c : aff0 1da7                     jmp  #memoryerror
-1d2e : 2160                          stm  r1,r6,#0
-1d2f : 0010                          mov  r0,r1,#0
-1d30 : 1bc0 1dc1 3ce2                pop  r11,link
-1d33 : afd0                          ret
-1d34 :                               .indexarray
-1d34 : 5ce5 21c0 22c1 23c2 24c3      push  r1,r2,r3,r4,link
-1d3a : 0300                          mov  r3,r0,#0
-1d3b : adf0 176e                     jsr  #evaluateinteger
-1d3d : 1232                          ldm  r2,r3,#2
-1d3e : 5200                          sub  r2,r0,#0
-1d3f : ffe1                          skge
-1d40 : aff0 1d9f                     jmp  #badindexerror
-1d42 : 11b0                          ldm  r1,r11,#0
-1d43 : 71f0 3229                     xor  r1,#tok_comma
-1d45 : c1e0                          sknz  r1
-1d46 : aff0 1d56                     jmp  #_iadimension2
-1d48 : 1233                          ldm  r2,r3,#3
-1d49 : b2e0                          skz  r2
-1d4a : aff0 1db1                     jmp  #missingcommaerror
-1d4c :                               ._iadone
-1d4c : 3034                          add  r0,r3,#4
-1d4d : adf0 1956                     jsr  #checkrightbracket
-1d4f : 11c0 12c1 13c2 14c3 1dc4      pop  r1,r2,r3,r4,link
-1d55 : afd0                          ret
-1d56 :                               ._iadimension2
-1d56 : 3be1                          inc  r11
-1d57 : 0400                          mov  r4,r0,#0
-1d58 : adf0 176e                     jsr  #evaluateinteger
-1d5a : 1233                          ldm  r2,r3,#3
-1d5b : c2e0                          sknz  r2
-1d5c : aff0 1d8f                     jmp  #missingbracketerror
-1d5e : 5200                          sub  r2,r0,#0
-1d5f : ffe1                          skge
-1d60 : aff0 1d9f                     jmp  #badindexerror
-1d62 : 1232                          ldm  r2,r3,#2
-1d63 : 8021                          mult  r0,r2,#1
-1d64 : 3040                          add  r0,r4,#0
-1d65 : aff0 1d4c                     jmp  #_iadone
-1d67 :                               .syntaxerror
-1d67 : adf0 1a0d                     jsr #generrorhandler
-1d69 : 0006 7953 746e 7861           string "syntax"
-1d6d :                               .typemismatcherror
-1d6d : adf0 1a0d                     jsr #generrorhandler
-1d6f : 000a 7257 6e6f 2067 7974      string "wrong type"
-1d75 :                               .dividezeroerror
-1d75 : adf0 1a0d                     jsr #generrorhandler
-1d77 : 0010 6944 6976 6973 6e6f      string "division by zero"
-1d80 :                               .asserterror
-1d80 : adf0 1a0d                     jsr #generrorhandler
-1d82 : 0006 7341 6573 7472           string "assert"
-1d86 :                               .lineerror
-1d86 : adf0 1a0d                     jsr #generrorhandler
-1d88 : 000c 694c 656e 7520 6b6e      string "line unknown"
-1d8f :                               .missingbracketerror
-1d8f : adf0 1a0d                     jsr #generrorhandler
-1d91 : 0009 694d 7373 6e69 2067      string "missing )"
-1d97 :                               .badnumbererror
-1d97 : adf0 1a0d                     jsr #generrorhandler
-1d99 : 000a 6142 2064 754e 626d      string "bad number"
-1d9f :                               .badindexerror
-1d9f : adf0 1a0d                     jsr #generrorhandler
-1da1 : 0009 6142 2064 6e49 6564      string "bad index"
-1da7 :                               .memoryerror
-1da7 : adf0 1a0d                     jsr #generrorhandler
-1da9 : 000d 754f 2074 666f 4d20      string "out of memory"
-1db1 :                               .missingcommaerror
-1db1 : adf0 1a0d                     jsr #generrorhandler
-1db3 : 0009 694d 7373 6e69 2067      string "missing ,"
-1db9 :                               .arrayautoerror
-1db9 : adf0 1a0d                     jsr #generrorhandler
-1dbb : 000d 6e55 6e6b 776f 206e      string "unknown array"
-1dc3 :                               .arrayexistserror
-1dc3 : adf0 1a0d                     jsr #generrorhandler
-1dc5 : 000c 7241 6172 2079 7865      string "array exists"
-1dcc :                               .callerror
-1dcc : adf0 1a0d                     jsr #generrorhandler
-1dce : 0011 6e55 6e6b 776f 206e      string "unknown procedure"
-1dd8 :                               .stoperror
-1dd8 : adf0 1a0d                     jsr #generrorhandler
-1dda : 0004 7453 706f                string "stop"
-1ddd :                               .strlenerror
-1ddd : adf0 1a0d                     jsr #generrorhandler
-1ddf : 000b 7453 6972 676e 5320      string "string size"
-1de6 :                               .structureerror
-1de6 : adf0 1a0d                     jsr #generrorhandler
-1de8 : 0010 7453 7572 7463 7275      string "structures wrong"
-1df1 :                               .returnerror
-1df1 : adf0 1a0d                     jsr #generrorhandler
-1df3 : 0014 6552 7574 6e72 7720      string "return without gosub"
-1dfe :                               .untilerror
-1dfe : adf0 1a0d                     jsr #generrorhandler
-1e00 : 0014 6e55 6974 206c 6977      string "until without repeat"
-1e0b :                               .wenderror
-1e0b : adf0 1a0d                     jsr #generrorhandler
-1e0d : 0012 6557 646e 7720 7469      string "wend without while"
-1e17 :                               .elseerror
-1e17 : adf0 1a0d                     jsr #generrorhandler
-1e19 : 000f 6c45 6573 7720 7469      string "else without if"
-1e22 :                               .endiferror
-1e22 : adf0 1a0d                     jsr #generrorhandler
-1e24 : 0010 6e45 6964 2066 6977      string "endif without if"
-1e2d :                               .endprocerror
-1e2d : adf0 1a0d                     jsr #generrorhandler
-1e2f : 0014 6e45 5064 6f72 2063      string "endproc without proc"
-1e3a :                               .nexterror
-1e3a : adf0 1a0d                     jsr #generrorhandler
-1e3c : 0010 654e 7478 7720 7469      string "next without for"
-1e45 :                               .returnstackerror
-1e45 : adf0 1a0d                     jsr #generrorhandler
-1e47 : 0012 7453 7572 7463 7275      string "structure too deep"
-1e51 :                               .tokeniseerror
-1e51 : adf0 1a0d                     jsr #generrorhandler
-1e53 : 0013 6143 6e6e 746f 7020      string "cannot process line"
-1e5e :                               .breakerror
-1e5e : adf0 1a0d                     jsr #generrorhandler
-1e60 : 0005 7242 6165 006b           string "break"
-1e64 :                               .loaderror
-1e64 : adf0 1a0d                     jsr #generrorhandler
-1e66 : 000c 6f4e 7320 6375 2068      string "no such file"
-1e6d :                               .saveerror
-1e6d : adf0 1a0d                     jsr #generrorhandler
-1e6f : 000b 6143 6e6e 746f 7320      string "cannot save"
-1e76 :                               .savenameerror
-1e76 : adf0 1a0d                     jsr #generrorhandler
-1e78 : 000d 6142 2064 6966 656c      string "bad file name"
-1e80 :                               .tokeniserwords
-1e80 : 0102 4231 6004                word $0102,$4231,$6004
-1e83 : 0101 62df                     word $0101,$62df
-1e85 : 0102 4270 6012                word $0102,$4270,$6012
-1e88 : 0201 803e                     word $0201,$803e
-1e8a : 0201 bd3e                     word $0201,$bd3e
-1e8c : 0201 803c                     word $0201,$803c
-1e8e : 0201 bd3c                     word $0201,$bd3c
-1e90 : 0201 803d                     word $0201,$803d
-1e92 : 0201 be3c                     word $0201,$be3c
-1e94 : 0301 802b                     word $0301,$802b
-1e96 : 0301 802d                     word $0301,$802d
-1e98 : 0401 802a                     word $0401,$802a
-1e9a : 0401 802f                     word $0401,$802f
-1e9c : 0402 4265 6004                word $0402,$4265,$6004
-1e9f : 0501 8021                     word $0501,$8021
-1ea1 : 0801 8028                     word $0801,$8028
-1ea3 : 0801 8026                     word $0801,$8026
-1ea5 : 0801 8025                     word $0801,$8025
-1ea7 : 0801 ffff                     word $0801,$ffff
-1ea9 : 0802 4851 6813                word $0802,$4851,$6813
-1eac : 0802 4af9 6803                word $0802,$4af9,$6803
-1eaf : 0802 5943 7812                word $0802,$5943,$7812
-1eb2 : 0802 48cf 6814                word $0802,$48cf,$6814
-1eb5 : 0802 58cf 7814                word $0802,$58cf,$7814
-1eb8 : 0803 4a39 48d3 6819           word $0803,$4a39,$48d3,$6819
-1ebc : 0803 5a39 58d3 7819           word $0803,$5a39,$58d3,$7819
-1ec0 : 0802 58d4 7b26                word $0802,$58d4,$7b26
-1ec3 : 0802 48d4 680e                word $0802,$48d4,$680e
-1ec6 : 0802 5975 7804                word $0802,$5975,$7804
-1ec9 : 0802 48d8 69bd                word $0802,$48d8,$69bd
-1ecc : 0803 597a 5947 7814           word $0803,$597a,$5947,$7814
-1ed0 : 0802 4a42 6804                word $0802,$4a42,$6804
-1ed3 : 0802 492b 680e                word $0802,$492b,$680e
-1ed6 : 0802 5b33 7812                word $0802,$5b33,$7812
-1ed9 : 0802 483e 680c                word $0802,$483e,$680c
-1edc : 0803 48d4 4926 6954           word $0803,$48d4,$4926,$6954
-1ee0 : 0803 483a 48ae 6a17           word $0803,$483a,$48ae,$6a17
-1ee4 : 0805 5a6c 5b1d 5ae4 5a39      word $0805,$5a6c,$5b1d,$5ae4,$5a39,$7807
-1eea : 0805 4a6c 4a55 4a1d 48ca      word $0805,$4a6c,$4a55,$4a1d,$48ca,$6812
-1ef0 : 0802 497b 6a37                word $0802,$497b,$6a37
-1ef3 : 0901 8029                     word $0901,$8029
-1ef5 : 0901 802c                     word $0901,$802c
-1ef7 : 0901 803b                     word $0901,$803b
-1ef9 : 0901 626c                     word $0901,$626c
-1efb : 0902 4333 6285                word $0902,$4333,$6285
-1efe : 0f02 425e 6012                word $0f02,$425e,$6012
-1f01 : 0f01 60f9                     word $0f01,$60f9
-1f03 : 0f03 40da 40d8 6321           word $0f03,$40da,$40d8,$6321
-1f07 : 0f03 4157 41e9 6005           word $0f03,$4157,$41e9,$6005
-1f0b : 0f02 42e0 6087                word $0f02,$42e0,$6087
-1f0e : 0d03 4235 416c 6006           word $0d03,$4235,$416c,$6006
-1f12 : 0d02 40d6 6338                word $0d02,$40d6,$6338
-1f15 : 0d02 4154 6235                word $0d02,$4154,$6235
-1f18 : 0d03 4245 417c 600c           word $0d03,$4245,$417c,$600c
-1f1c : 0d02 40df 60ae                word $0d02,$40df,$60ae
-1f1f : 0d04 4235 4284 426a 6003      word $0d04,$4235,$4284,$426a,$6003
-1f24 : 0e01 8027                     word $0e01,$8027
-1f26 : 0e01 803a                     word $0e01,$803a
-1f28 : 0e01 803f                     word $0e01,$803f
-1f2a : 0e03 42f9 40db 6332           word $0e03,$42f9,$40db,$6332
-1f2e : 0e02 402b 61ec                word $0e02,$402b,$61ec
-1f31 : 0e03 41e3 402d 6012           word $0e03,$41e3,$402d,$6012
-1f35 : 0e02 416c 600d                word $0e02,$416c,$600d
-1f38 : 0e02 416c 6012                word $0e02,$416c,$6012
-1f3b : 0e02 41e5 60db                word $0e02,$41e5,$60db
-1f3e : 0e02 4235 6004                word $0e02,$4235,$6004
-1f41 : 0e02 41be 63ed                word $0e02,$41be,$63ed
-1f44 : 0e03 425f 435b 6002           word $0e03,$425f,$435b,$6002
-1f48 : 0e02 425f 626c                word $0e02,$425f,$626c
-1f4b : 0e03 4239 4358 6014           word $0e03,$4239,$4358,$6014
-1f4f : 0e02 40d4 6014                word $0e02,$40d4,$6014
-1f52 : 0e02 4174 6333                word $0e02,$4174,$6333
-1f55 : 0e02 4264 60a1                word $0e02,$4264,$60a1
-1f58 : 0e02 40d6 6017                word $0e02,$40d6,$6017
-1f5b : 0e02 41ef 6004                word $0e02,$41ef,$6004
-1f5e : 0e02 4268 60d3                word $0e02,$4268,$60d3
-1f61 : 0e03 42e0 4239 6014           word $0e03,$42e0,$4239,$6014
-1f65 : 0e02 40da 600d                word $0e02,$40da,$600d
-1f68 : 0e03 40da 435c 6242           word $0e03,$40da,$435c,$6242
-1f6c : 0e02 435a 600e                word $0e02,$435a,$600e
-1f6f : 0e02 403b 60de                word $0e02,$403b,$60de
-1f72 : 0e02 4333 628f                word $0e02,$4333,$628f
-1f75 : 0e02 43fb 6013                word $0e02,$43fb,$6013
-1f78 : 0000                          word $0000
-1f79 :                               .tokenvectors
-1f79 : 15dd                          word binaryop_and
-1f7a : 15e8                          word binaryop_or
-1f7b : 15f9                          word binaryop_xor
-1f7c : 1694                          word binaryop_greater
-1f7d : 164d                          word binaryop_greaterequal
-1f7e : 169a                          word binaryop_less
-1f7f : 1673                          word binaryop_lessequal
-1f80 : 1689                          word binaryop_equal
-1f81 : 1637                          word binaryop_notequal
-1f82 : 159a                          word binaryop_add
-1f83 : 15a9                          word binaryop_sub
-1f84 : 15b4                          word binaryop_mult
-1f85 : 15bf                          word binaryop_divide
-1f86 : 15ce                          word binaryop_mod
-1f87 : 1604                          word binaryop_indirect
-1f88 : 1851                          word unary_parenthesis
-1f89 : 184f                          word unary_hex
-1f8a : 184f                          word unary_bin
-1f8b : 1746                          word constshifthandler
-1f8c : 185a                          word unary_abs
-1f8d : 1884                          word unary_asc
-1f8e : 190b                          word unary_chr
-1f8f : 18ac                          word unary_get
-1f90 : 1920                          word unary_getstring
-1f91 : 189d                          word unary_inkey
-1f92 : 1927                          word unary_inkeystring
-1f93 : 182e                          word unary_left
-1f94 : 1878                          word unary_len
-1f95 : 17dc                          word unary_mid
-1f96 : 1892                          word unary_peek
-1f97 : 183b                          word unary_right
-1f98 : 18b9                          word unary_rnd
-1f99 : 1868                          word unary_sgn
-1f9a : 192e                          word unary_str
-1f9b : 18da                          word unary_val
-1f9c : 1878                          word unary_len2
-1f9d : 18b9                          word unary_rnd2
-1f9e : 192e                          word unary_str2
-1f9f : 18da                          word unary_val2
-1fa0 : 1868                          word unary_sgn2
-1fa1 : 1457                          word dummy1
-1fa2 : 1457                          word dummy2
-1fa3 : 1457                          word dummy3
-1fa4 : 1457                          word dummy4
-1fa5 : 1457                          word dummy5
-1fa6 : 116f                          word command_for
-1fa7 : 11d9                          word command_if
-1fa8 : 14c2                          word command_repeat
-1fa9 : 1572                          word command_while
-1faa : 1051                          word command_proc
-1fab : 121e                          word command_endif
-1fac : 11a4                          word command_next
-1fad : 1457                          word dummy6
-1fae : 14cc                          word command_until
-1faf : 158b                          word command_wend
-1fb0 : 1053                          word command_endproc
-1fb1 : 144b                          word commentcommand1
-1fb2 : 1456                          word colonhandler
-1fb3 : 147b                          word command_print2
-1fb4 : 142b                          word commandassert
-1fb5 : 102e                          word command_call
-1fb6 : 108b                          word command_clear
-1fb7 : 10a2                          word command_dim
-1fb8 : 10fd                          word command_dir
-1fb9 : 120c                          word command_else
-1fba : 1429                          word command_end
-1fbb : 1d67                          word syntaxerror
-1fbc : 1554                          word command_gosub
-1fbd : 153c                          word command_goto
-1fbe : 122b                          word command_input
-1fbf : 1258                          word command_let
-1fc0 : 127c                          word command_list
-1fc1 : 10ed                          word command_load
-1fc2 : 1457                          word command_new
-1fc3 : 145e                          word command_old
-1fc4 : 1433                          word commandpoke
-1fc5 : 147b                          word command_print
-1fc6 : 144b                          word commentcommand2
-1fc7 : 1563                          word command_return
-1fc8 : 14e3                          word runprogram
-1fc9 : 1118                          word command_save
-1fca : 1427                          word command_stop
-1fcb : 1440                          word commandsys
-4023 :                               .initialsp
-4024 :                               .currentline
-4025 :                               .programcode
-4026 :                               .endmemory
-4027 :                               .memalloctop
-4028 :                               .memallocbottom
-4029 :                               .proctable
-402a :                               .tempstringalloc
-402b :                               .returnstacktop
-402c :                               .returnstackbottom
-402d :                               .returnstackptr
-402e :                               .lastlisttoken
-402f :                               .checkcount
-4030 :                               .evalstack
-4090 :                               .fixedvariables
-40aa :                               .variablehashtable
-40ea :                               .tokenbuffer
-41ea :                               .tokenbufferend
-41ea :                               .inputbuffer
-4213 :                               .endofdata
-4213 :                               freebasiccode = ramstart + $200
+1c57 : aff0 1c74                     jmp  #_tiknext
+1c59 : 0160                          mov  r1,r6,#0
+1c5a : 0241                          mov  r2,r4,#1
+1c5b :                               ._tikcheckword
+1c5b : 1010                          ldm  r0,r1,#0
+1c5c : 1a20                          ldm  r10,r2,#0
+1c5d : 70a0                          xor  r0,r10,#0
+1c5e : b0e0                          skz  r0
+1c5f : aff0 1c74                     jmp  #_tiknext
+1c61 : 31e1                          inc  r1
+1c62 : 32e1                          inc  r2
+1c63 : 53e1                          dec  r3
+1c64 : b3e0                          skz  r3
+1c65 : aff0 1c5b                     jmp  #_tikcheckword
+1c67 : 1040                          ldm  r0,r4,#0
+1c68 : 60f0 ff00                     and  r0,#$ff00
+1c6a : 3000                          add  r0,r0,#0
+1c6b : 30b0                          add  r0,r11,#0
+1c6c : 30f0 2000                     add  r0,#$2000
+1c6e : 0960                          mov  r9,r6,#0
+1c6f : 2090                          stm  r0,r9,#0
+1c70 : 2e91                          stm  r14,r9,#1
+1c71 : 39e1                          inc  r9
+1c72 : aff0 1b45                     jmp  #teexitokay
+1c74 :                               ._tiknext
+1c74 : 1040                          ldm  r0,r4,#0
+1c75 : 6070                          and  r0,r7,#0
+1c76 : 3401                          add  r4,r0,#1
+1c77 : 3be1                          inc  r11
+1c78 : aff0 1c4f                     jmp  #_tikcheckidentifier
+1c7a :                               .comparer0r1
+1c7a : 1200                          ldm  r2,r0,#0
+1c7b : 1310                          ldm  r3,r1,#0
+1c7c : 30e1                          inc  r0
+1c7d : 31e1                          inc  r1
+1c7e : 7230                          xor  r2,r3,#0
+1c7f : b2e0                          skz  r2
+1c80 : 0000                          break
+1c81 : b3e0                          skz  r3
+1c82 : aff0 1c7a                     jmp  #comparer0r1
+1c84 : afd0                          ret
+1c85 :                               .varerasehashtables
+1c85 : 00f0 410c                     mov  r0,#variablehashtable
+1c87 : 01f0 0040                     mov  r1,#hashtablesize*4
+1c89 :                               ._vehtloop
+1c89 : 2e00                          stm  r14,r0,#0
+1c8a : 30e1                          inc  r0
+1c8b : 51e1                          dec  r1
+1c8c : b1e0                          skz  r1
+1c8d : aff0 1c89                     jmp  #_vehtloop
+1c8f : afd0                          ret
+1c90 :                               .duplicatereference
+1c90 : 5ce3 20c0 21c1 22c2           push  r0,r1,r2
+1c94 : 10f0 408a                     ldm  r0,#memallocbottom
+1c96 : 0100                          mov  r1,r0,#0
+1c97 :                               ._drcopy
+1c97 : 12b0                          ldm  r2,r11,#0
+1c98 : 2200                          stm  r2,r0,#0
+1c99 : 30e1                          inc  r0
+1c9a : 3be1                          inc  r11
+1c9b : 92ee                          ror  r2,#14
+1c9c : e2e0                          skm  r2
+1c9d : aff0 1c97                     jmp  #_drcopy
+1c9f : 20f0 408a                     stm  r0,#memallocbottom
+1ca1 : 0b10                          mov  r11,r1,#0
+1ca2 : 10c0 11c1 12c2 3ce3           pop  r0,r1,r2
+1ca6 : afd0                          ret
+1ca7 :                               .getvariablereference
+1ca7 : 10b0                          ldm  r0,r11,#0
+1ca8 : 50f0 6000                     sub  r0,#$6000
+1caa : 50f0 001b                     sub  r0,#26+1
+1cac : ffe0                          sklt  r0
+1cad : aff0 1cb7                     jmp  #_gvrnotfixedvariable
+1caf : 01f0 410c                     mov  r1,#fixedvariables+26
+1cb1 : 3100                          add  r1,r0,#0
+1cb2 : 21a0                          stm  r1,r10,#esvalue1
+1cb3 : 2fa2                          stm  r15,r10,#esreference1
+1cb4 : 2ea1                          stm  r14,r10,#estype1
+1cb5 : 3be1                          inc  r11
+1cb6 : afd0                          ret
+1cb7 :                               ._gvrnotfixedvariable
+1cb7 : 5ce8 20c0 21c1 22c2 23c3      push  r0,r1,r2,r3,r4,r5,r6,link
+1cc0 : adf0 1cea                     jsr  #findvariable
+1cc2 : b0e0                          skz  r0
+1cc3 : aff0 1ccd                     jmp  #_gvrhavevariable
+1cc5 :                               ._gvrnotfound
+1cc5 : 10b0                          ldm  r0,r11,#0
+1cc6 : 90ec                          ror  r0,#12
+1cc7 : d0e0                          skp  r0
+1cc8 : aff0 1dc1                     jmp  #arrayautoerror
+1cca : 00e3                          mov  r0,#3
+1ccb : adf0 1d12                     jsr  #createvariablerecord
+1ccd :                               ._gvrhavevariable
+1ccd : 11b0                          ldm  r1,r11,#0
+1cce : 0210                          mov  r2,r1,#0
+1ccf : 3be1                          inc  r11
+1cd0 : 91ee                          ror  r1,#14
+1cd1 : e1e0                          skm  r1
+1cd2 : aff0 1ccd                     jmp  #_gvrhavevariable
+1cd4 : 91ee                          ror  r1,#14
+1cd5 : d1e0                          skp  r1
+1cd6 : adf0 1d3c                     jsr  #indexarray
+1cd8 : e1e0                          skm  r1
+1cd9 : 30e2                          add  r0,#2
+1cda : 20a0                          stm  r0,r10,#esvalue1
+1cdb : 2fa2                          stm  r15,r10,#esreference1
+1cdc : 62f0 1000                     and  r2,#$1000
+1cde : 22a1                          stm  r2,r10,#estype1
+1cdf : 10c0 11c1 12c2 13c3 14c4      pop  r0,r1,r2,r3,r4,r5,r6,link
+1ce8 : afd0                          ret
+1ce9 :                               ._gvrnullstring
+1ce9 : 0000                          word  0
+1cea :                               .findvariable
+1cea : 10b0                          ldm  r0,r11,#0
+1ceb : 60f0 c000                     and  r0,#$c000
+1ced : 70f0 4000                     xor  r0,#$4000
+1cef : b0e0                          skz  r0
+1cf0 : aff0 1d6f                     jmp  #syntaxerror
+1cf2 : 16b0                          ldm  r6,r11,#0
+1cf3 : 0060                          mov  r0,r6,#0
+1cf4 : 90e6                          ror  r0,#6
+1cf5 : 3600                          add  r6,r0,#0
+1cf6 : 66ef                          and  r6,#hashtablesize-1
+1cf7 : 10b0                          ldm  r0,r11,#0
+1cf8 : 60f0 1800                     and  r0,#$1800
+1cfa : 90e7                          ror  r0,#11-hashtablepower
+1cfb : 3600                          add  r6,r0,#0
+1cfc : 36f0 410c                     add  r6,#variablehashtable
+1cfe : 0060                          mov  r0,r6,#0
+1cff :                               ._fvrsearch
+1cff : 1000                          ldm  r0,r0,#0
+1d00 : c0e0                          sknz  r0
+1d01 : aff0 1d11                     jmp  #_fvrexit
+1d03 : 1101                          ldm  r1,r0,#1
+1d04 : 02b0                          mov  r2,r11,#0
+1d05 :                               ._fvrcompare
+1d05 : 1310                          ldm  r3,r1,#0
+1d06 : 1420                          ldm  r4,r2,#0
+1d07 : 7340                          xor  r3,r4,#0
+1d08 : b3e0                          skz  r3
+1d09 : aff0 1cff                     jmp  #_fvrsearch
+1d0b : 31e1                          inc  r1
+1d0c : 32e1                          inc  r2
+1d0d : 94ee                          ror  r4,#14
+1d0e : e4e0                          skm  r4
+1d0f : aff0 1d05                     jmp  #_fvrcompare
+1d11 :                               ._fvrexit
+1d11 : afd0                          ret
+1d12 :                               .createvariablerecord
+1d12 : 5ce2 2bc0 2dc1                push  r11,link
+1d15 : 03b0                          mov  r3,r11,#0
+1d16 : 53f0 424c                     sub  r3,#tokenbufferend
+1d18 : ffe1                          skge
+1d19 : adf0 1c90                     jsr  #duplicatereference
+1d1b : 11f0 408a                     ldm  r1,#memallocbottom
+1d1d : 1260                          ldm  r2,r6,#0
+1d1e : 2210                          stm  r2,r1,#0
+1d1f : 2b11                          stm  r11,r1,#1
+1d20 : 13b0                          ldm  r3,r11,#0
+1d21 : 93ed                          ror  r3,#13
+1d22 : 7220                          clr  r2
+1d23 : d3e0                          skp  r3
+1d24 : 02f0 1ce9                     mov  r2,#_gvrnullstring
+1d26 : 2212                          stm  r2,r1,#2
+1d27 : 0210                          mov  r2,r1,#0
+1d28 : 3200                          add  r2,r0,#0
+1d29 : ffe0                          sknc
+1d2a : aff0 1daf                     jmp  #memoryerror
+1d2c : 22f0 408a                     stm  r2,#memallocbottom
+1d2e : 13f0 4089                     ldm  r3,#memalloctop
+1d30 : 53f0 0100                     sub  r3,#256
+1d32 : 5230                          sub  r2,r3,#0
+1d33 : ffe0                          sklt
+1d34 : aff0 1daf                     jmp  #memoryerror
+1d36 : 2160                          stm  r1,r6,#0
+1d37 : 0010                          mov  r0,r1,#0
+1d38 : 1bc0 1dc1 3ce2                pop  r11,link
+1d3b : afd0                          ret
+1d3c :                               .indexarray
+1d3c : 5ce5 21c0 22c1 23c2 24c3      push  r1,r2,r3,r4,link
+1d42 : 0300                          mov  r3,r0,#0
+1d43 : adf0 176e                     jsr  #evaluateinteger
+1d45 : 1232                          ldm  r2,r3,#2
+1d46 : 5200                          sub  r2,r0,#0
+1d47 : ffe1                          skge
+1d48 : aff0 1da7                     jmp  #badindexerror
+1d4a : 11b0                          ldm  r1,r11,#0
+1d4b : 71f0 322b                     xor  r1,#tok_comma
+1d4d : c1e0                          sknz  r1
+1d4e : aff0 1d5e                     jmp  #_iadimension2
+1d50 : 1233                          ldm  r2,r3,#3
+1d51 : b2e0                          skz  r2
+1d52 : aff0 1db9                     jmp  #missingcommaerror
+1d54 :                               ._iadone
+1d54 : 3034                          add  r0,r3,#4
+1d55 : adf0 195e                     jsr  #checkrightbracket
+1d57 : 11c0 12c1 13c2 14c3 1dc4      pop  r1,r2,r3,r4,link
+1d5d : afd0                          ret
+1d5e :                               ._iadimension2
+1d5e : 3be1                          inc  r11
+1d5f : 0400                          mov  r4,r0,#0
+1d60 : adf0 176e                     jsr  #evaluateinteger
+1d62 : 1233                          ldm  r2,r3,#3
+1d63 : c2e0                          sknz  r2
+1d64 : aff0 1d97                     jmp  #missingbracketerror
+1d66 : 5200                          sub  r2,r0,#0
+1d67 : ffe1                          skge
+1d68 : aff0 1da7                     jmp  #badindexerror
+1d6a : 1232                          ldm  r2,r3,#2
+1d6b : 8021                          mult  r0,r2,#1
+1d6c : 3040                          add  r0,r4,#0
+1d6d : aff0 1d54                     jmp  #_iadone
+1d6f :                               .syntaxerror
+1d6f : adf0 1a15                     jsr #generrorhandler
+1d71 : 0006 7953 746e 7861           string "syntax"
+1d75 :                               .typemismatcherror
+1d75 : adf0 1a15                     jsr #generrorhandler
+1d77 : 000a 7257 6e6f 2067 7974      string "wrong type"
+1d7d :                               .dividezeroerror
+1d7d : adf0 1a15                     jsr #generrorhandler
+1d7f : 0010 6944 6976 6973 6e6f      string "division by zero"
+1d88 :                               .asserterror
+1d88 : adf0 1a15                     jsr #generrorhandler
+1d8a : 0006 7341 6573 7472           string "assert"
+1d8e :                               .lineerror
+1d8e : adf0 1a15                     jsr #generrorhandler
+1d90 : 000c 694c 656e 7520 6b6e      string "line unknown"
+1d97 :                               .missingbracketerror
+1d97 : adf0 1a15                     jsr #generrorhandler
+1d99 : 0009 694d 7373 6e69 2067      string "missing )"
+1d9f :                               .badnumbererror
+1d9f : adf0 1a15                     jsr #generrorhandler
+1da1 : 000a 6142 2064 754e 626d      string "bad number"
+1da7 :                               .badindexerror
+1da7 : adf0 1a15                     jsr #generrorhandler
+1da9 : 0009 6142 2064 6e49 6564      string "bad index"
+1daf :                               .memoryerror
+1daf : adf0 1a15                     jsr #generrorhandler
+1db1 : 000d 754f 2074 666f 4d20      string "out of memory"
+1db9 :                               .missingcommaerror
+1db9 : adf0 1a15                     jsr #generrorhandler
+1dbb : 0009 694d 7373 6e69 2067      string "missing ,"
+1dc1 :                               .arrayautoerror
+1dc1 : adf0 1a15                     jsr #generrorhandler
+1dc3 : 000d 6e55 6e6b 776f 206e      string "unknown array"
+1dcb :                               .arrayexistserror
+1dcb : adf0 1a15                     jsr #generrorhandler
+1dcd : 000c 7241 6172 2079 7865      string "array exists"
+1dd4 :                               .callerror
+1dd4 : adf0 1a15                     jsr #generrorhandler
+1dd6 : 0011 6e55 6e6b 776f 206e      string "unknown procedure"
+1de0 :                               .stoperror
+1de0 : adf0 1a15                     jsr #generrorhandler
+1de2 : 0004 7453 706f                string "stop"
+1de5 :                               .strlenerror
+1de5 : adf0 1a15                     jsr #generrorhandler
+1de7 : 000b 7453 6972 676e 5320      string "string size"
+1dee :                               .structureerror
+1dee : adf0 1a15                     jsr #generrorhandler
+1df0 : 0010 7453 7572 7463 7275      string "structures wrong"
+1df9 :                               .returnerror
+1df9 : adf0 1a15                     jsr #generrorhandler
+1dfb : 0014 6552 7574 6e72 7720      string "return without gosub"
+1e06 :                               .untilerror
+1e06 : adf0 1a15                     jsr #generrorhandler
+1e08 : 0014 6e55 6974 206c 6977      string "until without repeat"
+1e13 :                               .wenderror
+1e13 : adf0 1a15                     jsr #generrorhandler
+1e15 : 0012 6557 646e 7720 7469      string "wend without while"
+1e1f :                               .elseerror
+1e1f : adf0 1a15                     jsr #generrorhandler
+1e21 : 000f 6c45 6573 7720 7469      string "else without if"
+1e2a :                               .endiferror
+1e2a : adf0 1a15                     jsr #generrorhandler
+1e2c : 0010 6e45 6964 2066 6977      string "endif without if"
+1e35 :                               .endprocerror
+1e35 : adf0 1a15                     jsr #generrorhandler
+1e37 : 0014 6e45 5064 6f72 2063      string "endproc without proc"
+1e42 :                               .nexterror
+1e42 : adf0 1a15                     jsr #generrorhandler
+1e44 : 0010 654e 7478 7720 7469      string "next without for"
+1e4d :                               .returnstackerror
+1e4d : adf0 1a15                     jsr #generrorhandler
+1e4f : 0012 7453 7572 7463 7275      string "structure too deep"
+1e59 :                               .tokeniseerror
+1e59 : adf0 1a15                     jsr #generrorhandler
+1e5b : 0013 6143 6e6e 746f 7020      string "cannot process line"
+1e66 :                               .breakerror
+1e66 : adf0 1a15                     jsr #generrorhandler
+1e68 : 0005 7242 6165 006b           string "break"
+1e6c :                               .loaderror
+1e6c : adf0 1a15                     jsr #generrorhandler
+1e6e : 000c 6f4e 7320 6375 2068      string "no such file"
+1e75 :                               .saveerror
+1e75 : adf0 1a15                     jsr #generrorhandler
+1e77 : 000b 6143 6e6e 746f 7320      string "cannot save"
+1e7e :                               .savenameerror
+1e7e : adf0 1a15                     jsr #generrorhandler
+1e80 : 000d 6142 2064 6966 656c      string "bad file name"
+1e88 :                               .tokeniserwords
+1e88 : 0102 4231 6004                word $0102,$4231,$6004
+1e8b : 0101 62df                     word $0101,$62df
+1e8d : 0102 4270 6012                word $0102,$4270,$6012
+1e90 : 0201 803e                     word $0201,$803e
+1e92 : 0201 bd3e                     word $0201,$bd3e
+1e94 : 0201 803c                     word $0201,$803c
+1e96 : 0201 bd3c                     word $0201,$bd3c
+1e98 : 0201 803d                     word $0201,$803d
+1e9a : 0201 be3c                     word $0201,$be3c
+1e9c : 0301 802b                     word $0301,$802b
+1e9e : 0301 802d                     word $0301,$802d
+1ea0 : 0401 802a                     word $0401,$802a
+1ea2 : 0401 802f                     word $0401,$802f
+1ea4 : 0402 4265 6004                word $0402,$4265,$6004
+1ea7 : 0501 8021                     word $0501,$8021
+1ea9 : 0801 8028                     word $0801,$8028
+1eab : 0801 8026                     word $0801,$8026
+1ead : 0801 8025                     word $0801,$8025
+1eaf : 0801 ffff                     word $0801,$ffff
+1eb1 : 0802 4851 6813                word $0802,$4851,$6813
+1eb4 : 0802 4af9 6803                word $0802,$4af9,$6803
+1eb7 : 0802 5943 7812                word $0802,$5943,$7812
+1eba : 0802 48cf 6814                word $0802,$48cf,$6814
+1ebd : 0802 58cf 7814                word $0802,$58cf,$7814
+1ec0 : 0803 4a39 48d3 6819           word $0803,$4a39,$48d3,$6819
+1ec4 : 0803 5a39 58d3 7819           word $0803,$5a39,$58d3,$7819
+1ec8 : 0802 58d4 7b26                word $0802,$58d4,$7b26
+1ecb : 0802 48d4 680e                word $0802,$48d4,$680e
+1ece : 0802 5975 7804                word $0802,$5975,$7804
+1ed1 : 0802 48d8 69bd                word $0802,$48d8,$69bd
+1ed4 : 0803 597a 5947 7814           word $0803,$597a,$5947,$7814
+1ed8 : 0802 4a42 6804                word $0802,$4a42,$6804
+1edb : 0802 492b 680e                word $0802,$492b,$680e
+1ede : 0802 5b33 7812                word $0802,$5b33,$7812
+1ee1 : 0802 483e 680c                word $0802,$483e,$680c
+1ee4 : 0802 42e4 60dd                word $0802,$42e4,$60dd
+1ee7 : 0803 402e 4304 6005           word $0803,$402e,$4304,$6005
+1eeb : 0803 48d4 4926 6954           word $0803,$48d4,$4926,$6954
+1eef : 0803 483a 48ae 6a17           word $0803,$483a,$48ae,$6a17
+1ef3 : 0805 5a6c 5b1d 5ae4 5a39      word $0805,$5a6c,$5b1d,$5ae4,$5a39,$7807
+1ef9 : 0805 4a6c 4a55 4a1d 48ca      word $0805,$4a6c,$4a55,$4a1d,$48ca,$6812
+1eff : 0802 497b 6a37                word $0802,$497b,$6a37
+1f02 : 0901 8029                     word $0901,$8029
+1f04 : 0901 802c                     word $0901,$802c
+1f06 : 0901 803b                     word $0901,$803b
+1f08 : 0901 626c                     word $0901,$626c
+1f0a : 0902 4333 6285                word $0902,$4333,$6285
+1f0d : 0f02 425e 6012                word $0f02,$425e,$6012
+1f10 : 0f01 60f9                     word $0f01,$60f9
+1f12 : 0f03 40da 40d8 6321           word $0f03,$40da,$40d8,$6321
+1f16 : 0f03 4157 41e9 6005           word $0f03,$4157,$41e9,$6005
+1f1a : 0f02 42e0 6087                word $0f02,$42e0,$6087
+1f1d : 0d03 4235 416c 6006           word $0d03,$4235,$416c,$6006
+1f21 : 0d02 40d6 6338                word $0d02,$40d6,$6338
+1f24 : 0d02 4154 6235                word $0d02,$4154,$6235
+1f27 : 0d03 4245 417c 600c           word $0d03,$4245,$417c,$600c
+1f2b : 0d02 40df 60ae                word $0d02,$40df,$60ae
+1f2e : 0d04 4235 4284 426a 6003      word $0d04,$4235,$4284,$426a,$6003
+1f33 : 0e01 8027                     word $0e01,$8027
+1f35 : 0e01 803a                     word $0e01,$803a
+1f37 : 0e01 803f                     word $0e01,$803f
+1f39 : 0e03 42f9 40db 6332           word $0e03,$42f9,$40db,$6332
+1f3d : 0e02 402b 61ec                word $0e02,$402b,$61ec
+1f40 : 0e03 41e3 402d 6012           word $0e03,$41e3,$402d,$6012
+1f44 : 0e02 416c 600d                word $0e02,$416c,$600d
+1f47 : 0e02 416c 6012                word $0e02,$416c,$6012
+1f4a : 0e02 41e5 60db                word $0e02,$41e5,$60db
+1f4d : 0e02 4235 6004                word $0e02,$4235,$6004
+1f50 : 0e02 41be 63ed                word $0e02,$41be,$63ed
+1f53 : 0e03 425f 435b 6002           word $0e03,$425f,$435b,$6002
+1f57 : 0e02 425f 626c                word $0e02,$425f,$626c
+1f5a : 0e03 4239 4358 6014           word $0e03,$4239,$4358,$6014
+1f5e : 0e02 40d4 6014                word $0e02,$40d4,$6014
+1f61 : 0e02 4174 6333                word $0e02,$4174,$6333
+1f64 : 0e02 4264 60a1                word $0e02,$4264,$60a1
+1f67 : 0e02 40d6 6017                word $0e02,$40d6,$6017
+1f6a : 0e02 41ef 6004                word $0e02,$41ef,$6004
+1f6d : 0e02 4268 60d3                word $0e02,$4268,$60d3
+1f70 : 0e03 42e0 4239 6014           word $0e03,$42e0,$4239,$6014
+1f74 : 0e02 40da 600d                word $0e02,$40da,$600d
+1f77 : 0e03 40da 435c 6242           word $0e03,$40da,$435c,$6242
+1f7b : 0e02 435a 600e                word $0e02,$435a,$600e
+1f7e : 0e02 403b 60de                word $0e02,$403b,$60de
+1f81 : 0e02 4333 628f                word $0e02,$4333,$628f
+1f84 : 0e02 43fb 6013                word $0e02,$43fb,$6013
+1f87 : 0000                          word $0000
+1f88 :                               .tokenvectors
+1f88 : 15dd                          word binaryop_and
+1f89 : 15e8                          word binaryop_or
+1f8a : 15f9                          word binaryop_xor
+1f8b : 1694                          word binaryop_greater
+1f8c : 164d                          word binaryop_greaterequal
+1f8d : 169a                          word binaryop_less
+1f8e : 1673                          word binaryop_lessequal
+1f8f : 1689                          word binaryop_equal
+1f90 : 1637                          word binaryop_notequal
+1f91 : 159a                          word binaryop_add
+1f92 : 15a9                          word binaryop_sub
+1f93 : 15b4                          word binaryop_mult
+1f94 : 15bf                          word binaryop_divide
+1f95 : 15ce                          word binaryop_mod
+1f96 : 1604                          word binaryop_indirect
+1f97 : 1851                          word unary_parenthesis
+1f98 : 184f                          word unary_hex
+1f99 : 184f                          word unary_bin
+1f9a : 1746                          word constshifthandler
+1f9b : 185a                          word unary_abs
+1f9c : 1884                          word unary_asc
+1f9d : 1913                          word unary_chr
+1f9e : 18ac                          word unary_get
+1f9f : 1928                          word unary_getstring
+1fa0 : 189d                          word unary_inkey
+1fa1 : 192f                          word unary_inkeystring
+1fa2 : 182e                          word unary_left
+1fa3 : 1878                          word unary_len
+1fa4 : 17dc                          word unary_mid
+1fa5 : 1892                          word unary_peek
+1fa6 : 183b                          word unary_right
+1fa7 : 18b9                          word unary_rnd
+1fa8 : 1868                          word unary_sgn
+1fa9 : 1936                          word unary_str
+1faa : 18e2                          word unary_val
+1fab : 18da                          word unary_true
+1fac : 18dd                          word unary_false
+1fad : 1878                          word unary_len2
+1fae : 18b9                          word unary_rnd2
+1faf : 1936                          word unary_str2
+1fb0 : 18e2                          word unary_val2
+1fb1 : 1868                          word unary_sgn2
+1fb2 : 1457                          word dummy1
+1fb3 : 1457                          word dummy2
+1fb4 : 1457                          word dummy3
+1fb5 : 1457                          word dummy4
+1fb6 : 1457                          word dummy5
+1fb7 : 116f                          word command_for
+1fb8 : 11d9                          word command_if
+1fb9 : 14c2                          word command_repeat
+1fba : 1572                          word command_while
+1fbb : 1051                          word command_proc
+1fbc : 121e                          word command_endif
+1fbd : 11a4                          word command_next
+1fbe : 1457                          word dummy6
+1fbf : 14cc                          word command_until
+1fc0 : 158b                          word command_wend
+1fc1 : 1053                          word command_endproc
+1fc2 : 144b                          word commentcommand1
+1fc3 : 1456                          word colonhandler
+1fc4 : 147b                          word command_print2
+1fc5 : 142b                          word commandassert
+1fc6 : 102e                          word command_call
+1fc7 : 108b                          word command_clear
+1fc8 : 10a2                          word command_dim
+1fc9 : 10fd                          word command_dir
+1fca : 120c                          word command_else
+1fcb : 1429                          word command_end
+1fcc : 1d6f                          word syntaxerror
+1fcd : 1554                          word command_gosub
+1fce : 153c                          word command_goto
+1fcf : 122b                          word command_input
+1fd0 : 1258                          word command_let
+1fd1 : 127c                          word command_list
+1fd2 : 10ed                          word command_load
+1fd3 : 1457                          word command_new
+1fd4 : 145e                          word command_old
+1fd5 : 1433                          word commandpoke
+1fd6 : 147b                          word command_print
+1fd7 : 144b                          word commentcommand2
+1fd8 : 1563                          word command_return
+1fd9 : 14e3                          word runprogram
+1fda : 1118                          word command_save
+1fdb : 1427                          word command_stop
+1fdc : 1440                          word commandsys
+4085 :                               .initialsp
+4086 :                               .currentline
+4087 :                               .programcode
+4088 :                               .endmemory
+4089 :                               .memalloctop
+408a :                               .memallocbottom
+408b :                               .proctable
+408c :                               .tempstringalloc
+408d :                               .returnstacktop
+408e :                               .returnstackbottom
+408f :                               .returnstackptr
+4090 :                               .lastlisttoken
+4091 :                               .checkcount
+4092 :                               .evalstack
+40f2 :                               .fixedvariables
+410c :                               .variablehashtable
+414c :                               .tokenbuffer
+424c :                               .tokenbufferend
+424c :                               .inputbuffer
+4275 :                               .endofdata
+4275 :                               freebasiccode = ramstart + $200

@@ -192,3 +192,21 @@
 		jsr 	#CheckRightBracket 			; check there's a right bracket
 		pop 	link
 		ret
+
+; *****************************************************************************
+;
+;							True/False
+;
+; *****************************************************************************
+
+.Unary_True		;; [true]
+		mov 	r0,#-1
+		sknz 	r0
+.Unary_False	;; [false]
+		clr 	r0
+		stm 	r0,r10,#esValue1
+		stm 	r14,r10,#esType1 			; make integer constant
+		stm 	r14,r10,#esReference1			
+		ret
+
+

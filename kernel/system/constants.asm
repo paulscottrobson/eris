@@ -72,3 +72,7 @@ tabStop = 4
 ;		Buffer size required for a string to contain a converted integer
 ;
 maxIStrSize = 10
+;
+;		Maximum size in words for each function key (characters is 2 x this)
+;
+functionKeySize = 12
