@@ -100,14 +100,29 @@
 		ldm 	r1,#currentRowStatus+4			; get the row with ctrl and shift on it.
 		ror 	r1,#5 							; check control
 		skp 	r1
-		and 	r0,#$1F 						
+		jsr 	#_GKControl
 		ror 	r1,#1 							; check shift
 		skp 	r1
 		jsr 	#_GKShiftExecute
 		;
 		stm 	r0,#currentKey 					; save as currently pressed key value.
 		jmp 	#_GKExitWithR0 					; and exit with the result.	
+
+; *****************************************************************************
+;
+;							Convert Control keys
+;
+; *****************************************************************************
 	
+._GKControl
+		mov 	r2,r0,#0 						; current -> R2
+		and 	r0,#$1F 						; mask out lower 5 bits
+		and 	r2,#$00F8 						; check 0-7
+		xor 	r2,#$0030
+		sknz 	r2
+		add 	r0,#$E0 						; map to 240-247	
+		ret
+
 ; *****************************************************************************
 ;
 ;							Shift the character code in R0
