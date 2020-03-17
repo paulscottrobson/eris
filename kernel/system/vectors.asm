@@ -67,6 +67,9 @@
 ;
 ; *****************************************************************************
 
+.OSSetPlanes
+		jmp		#OSXSetPlanes
+
 .OSDrawCharacter
 		jmp 	#OSXDrawCharacter
 

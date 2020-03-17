@@ -59,8 +59,13 @@
 .yGraphic 	
 		fill 	1
 
-.colourMask 								; colour mask
+.colourMask 								; colour mask for background
 		fill 	1		
+.spriteMask									; colour mask for sprites
+		fill	1
+.spriteRotate 								; value to rotate to convert a colour to a sprite colour
+		fill 	1
+
 .fgrColour 									; foreground colour
 		fill 	1		
 .bgrColour 									; background colour

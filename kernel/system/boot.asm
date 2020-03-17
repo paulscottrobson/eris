@@ -86,10 +86,10 @@
 		mov 	r0,#$FF00 					
 		jsr 	#OSIFillScreen
 ;
-;		Initialise the colour mask. 00001111 means in there is just one plane used.
+;		Initialise the plane usage
 ;
-		mov 	r0,#15
-		stm 	r0,#colourMask
+		mov 	r0,#$0004					; 4 backplanes no srite plane
+		jsr 	#OSSetPlanes
 ;
 ;		Reset the palette. All 256 values become BGR on the lower 3 bits
 ;		(same palette as BBC Micro)
