@@ -4,7 +4,7 @@
 ;		Name:		listutils.asm
 ;		Purpose:	List Utilities 
 ;		Created:	11th March 2020
-;		Reviewed: 	TODO
+;		Reviewed: 	17th March 2020sss
 ;		Author:		Paul Robson (paul@robsons.org.uk)
 ;
 ; *****************************************************************************
@@ -91,12 +91,12 @@
 		skm 	r1 							; exit if set
 		jmp 	#_LPEILoop
 		;
-		push 	r0
+		push 	r0 							; handle $ bit
 		add 	r1,r1,#0 					
 		mov 	r0,#'$'
 		skp 	r1
 		jsr 	#ListPrintCharacter
-		add 	r1,r1,#0 					
+		add 	r1,r1,#0 					; handle ( bit
 		mov 	r0,#'('
 		skp 	r1
 		jsr 	#ListPrintCharacter
@@ -162,3 +162,4 @@
 		jsr 	#ListPrintCharacter 		; print MSB
 		pop 	r0,r1,link
 		ret
+
