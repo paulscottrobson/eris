@@ -53,10 +53,20 @@
 		ldm 	r1,#yGraphic
 		stm 	r1,#blitterY
 
-		ldm 	r1,#colourMask 				; get the current mask in bits 0..7
 		and 	r2,#$0F00  					; mask the colour out of bits 8..11 of character
+		ror 	r2,#8 						; colour in bits 0..3 now
+
+		sknz 	r2 							; if not background check masking hasn't made it background
+		jmp 	#_OSDCNotBackground
+		ldm 	r1,#colourMask 				; and with colour mask, if 0 use colour mask
+		and 	r1,r2,#0
+		sknz 	r1
+		ldm 	r2,#colourMask
+._OSDCNotBackground
+
+		ldm 	r1,#colourMask 				; get the current mask in bits 0..7
+		ror 	r1,#8 						; put in 8..11
 		add 	r2,r1,#0 					; compose the two.
-		ror 	r2,#8 						; colour in bits 0..3, mask in bits 8..15
 		stm 	r2,#blitterCMask 			; that's the colour.high mask.low
 		;
 		ror 	r0,#13 						; multiply (char# - 33) result by 8 the character height
