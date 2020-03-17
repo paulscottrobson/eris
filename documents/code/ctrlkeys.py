@@ -4,7 +4,6 @@
 #		Name:		ctrlkeys.py
 #		Purpose:	Show keys generating specific codes
 #		Created:	9th March 2020
-#		Reviewed: 	TODO
 #		Author:		Paul Robson (paul@robsons.org.uk)
 #
 # *****************************************************************************

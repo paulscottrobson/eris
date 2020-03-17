@@ -4,7 +4,6 @@
 #		Name:		asmworker.py
 #		Purpose:	Assembler Worker Module
 #		Created:	20th February 2020
-#		Reviewed: 	TODO
 #		Author:		Paul Robson (paul@robsons.org.uk)
 #
 # *****************************************************************************

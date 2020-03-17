@@ -4,7 +4,7 @@
 #		Name:		process.py
 #		Purpose:	Processor CPU Definition
 #		Created:	8th March 2020
-#		Reviewed: 	TODO
+#		Reviewed: 	17th March 2020
 #		Author:		Paul Robson (paul@robsons.org.uk)
 #
 # *****************************************************************************
@@ -22,7 +22,7 @@ testText = ["ISZERO","ISPOSITIVE","ISCARRY","ISBLITTERAVAILABLE"] 	# Skip tests.
 for i in range(0,4096):
 	opcode = i << 4 												# operation code
 	instr = i >> 8 													# instruction code
-	bRegister = i & 15 											# B Register (source)
+	bRegister = i & 15 												# B Register (source)
 	aRegister = (i >> 4) & 15 										# A Register (target)
 
 	value = "(R{0}+CONST())".format(bRegister)						# RH value and Asm.

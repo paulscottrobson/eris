@@ -4,7 +4,7 @@
 ;		Name:		for.asm
 ;		Purpose:	For/Next
 ;		Created:	10th March 2020
-;		Reviewed: 	TODO
+;		Reviewed: 	17th March 2020
 ;		Author:		Paul Robson (paul@robsons.org.uk)
 ;
 ; *****************************************************************************
@@ -30,12 +30,12 @@
 		ldm 	r0,r10,#esReference1 		; check it is a reference
 		sknz 	r0
 		jmp	 	#TypeMismatchError
-		ldm 	r0,r10,#esType1 			; to an integer
+		ldm 	r0,r10,#esType1 			; and a reference to an integer
 		skz 	r0
 		jmp	 	#TypeMismatchError
 		;
-		ldm 	r0,r10,#esValue1 			; get reference for index
-		mov		r1,r0,#0 					; put reference in R1 and on stack
+		ldm 	r0,r10,#esValue1 			; get reference for index (address of counter)
+		mov		r1,r0,#0 					; put reference in R1 and on basic stack
 		jsr 	#StackPushR0
 		;
 		mov 	r0,#TOK_EQUAL 				; check next token is an equals
@@ -54,7 +54,7 @@
 		xor 	r1,#TOK_STEP
 		mov 	r0,#1 						; default STEP value
 		skz 	r1 
-		jmp 	#_CFHaveStep
+		jmp 	#_CFHaveStep				; if not STEP token use 1
 		;
 		inc 	r11 						; step over STEP
 		jsr 	#EvaluateInteger 			; get the STEP value
@@ -86,6 +86,8 @@
 		skz 	r0
 		jmp 	#_CNDefaultIdentifier
 		;
+		;		NEXT <identiifier> - check the right identifier
+		;
 		mov 	r9,#(TOK_PLING & 0x1E00)-0x400
 		jsr 	#Evaluator 					; get the variable reference
 		ldm 	r3,r10,#esValue1
@@ -101,7 +103,7 @@
 		ldm 	r5,r3,#0 					; R5 is current index
 		ldm 	r6,r2,#stackPosSize+1 		; R6 is step
 		skp 	r6 							; if R6 < 0 decrement the terminal value
-		dec 	r4
+		dec 	r4 							; so it counts right !
 		;
 		mov		r1,r4,#0 					; R1 = terminal-current
 		ldm 	r5,r3,#0

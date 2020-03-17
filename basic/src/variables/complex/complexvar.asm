@@ -4,7 +4,7 @@
 ;		Name:		complexvar.asm
 ;		Purpose:	Hashtable long identifier variable handler
 ;		Created:	3rd March 2020
-;		Reviewed: 	TODO
+;		Reviewed: 	17th March 2020
 ;		Author:		Paul Robson (paul@robsons.org.uk)
 ;
 ; *****************************************************************************
@@ -17,10 +17,13 @@
 ; *****************************************************************************
 
 .GetVariableReference
+		;
+		;		First process stock variables A-Z
+		;
 		ldm 	r0,r11,#0 					; get keyword which is an identifier.
 		sub 	r0,#$6000					; 01xx plus must be last character.
 		sub 	r0,#26+1 					; check range 1..26 ($6000 cannot happen)
-		sklt 	r0
+		sklt 	r0 							; that represent A-Z
 		jmp 	#_GVRNotFixedVariable
 		;
 		;		Fixed location A-Z variables.
@@ -34,12 +37,12 @@
 		inc 	r11 						; step over keyword
 		ret
 		;
-		;		It's not an A-Z variable reference, check it is an identifier 
+		;		It's not an A-Z variable reference, try to find it 
 		;
 ._GVRNotFixedVariable
 		push 	r0,r1,r2,r3,r4,r5,r6,link 	; push registers on the stack
 		;
-		jsr 	#FindVariable				; try to find variable.
+		jsr 	#FindVariable				; try to find variable. R6 will point to hash table.
 		skz 	r0 							; failed.
 		jmp 	#_GVRHaveVariable 			; variable record in R0, access it.
 		;
@@ -50,7 +53,7 @@
 		;
 ._GVRNotFound		
 		ldm 	r0,r11,#0 					; get keyword token again.
-		ror 	r0,#12 						; index bit in R0
+		ror 	r0,#12 						; array bit in R0
 		skp 	r0
 		jmp 	#ArrayAutoError 			; if set, can't autocreate arrays.
 		;
@@ -70,11 +73,11 @@
 		skm 	r1
 		jmp 	#_GVRHaveVariable
 		;
-		ror 	r1,#14 						; shift the index bit back into sign bit
+		ror 	r1,#14 						; shift the array bit back into sign bit
 		skp 	r1 							; if array, do indexing
 		jsr 	#IndexArray
 		skm 	r1 							; if not array ....
-		add 	r0,#2 						; convert to data pointer.
+		add 	r0,#2 						; convert to data pointer advance past link/name
 		;
 		;		Set the reference in the evaluation stack.
 		;
@@ -85,9 +88,6 @@
 
 		pop 	r0,r1,r2,r3,r4,r5,r6,link 	; push registers on the stack
 		ret
-
-._GVRNullString
-		word 	0		
 
 ; *****************************************************************************
 ;
@@ -102,7 +102,7 @@
 		and 	r0,#$C000					; check it is 4000-7FFF
 		xor 	r0,#$4000
 		skz 	r0
-		jmp 	#SyntaxError
+		jmp 	#SyntaxError      			; fail if not identifier
 		;
 		;		Calculate hashtable link entry address for this, put this in R6.
 		;
@@ -115,7 +115,7 @@
 		;clr 	R6 							; force 1 List !
 		;
 		ldm 	r0,r11,#0 					; get keyword token again
-		and 	r0,#$1800 					; mask out the type bits
+		and 	r0,#$1800 					; mask out the type/array bits
 		ror 	r0,#11-hashTablePower 		; shift right to 0-1, then multiply by hash table size.
 		add 	r6,r0,#0 					; add this to the 0-15 hash table value
 		;
@@ -123,7 +123,7 @@
 		;
 		;		Now see if this variable @R11 already exists in the linked list.
 		;
-		mov 	r0,r6,#0 					; address of first pointer
+		mov 	r0,r6,#0 					; address of first pointer (e.g. the hash table link first time)
 ._FVRSearch
 		ldm		r0,r0,#0 					; follow the link
 		sknz 	r0 							; if link is zero, then it is not found.
@@ -141,7 +141,7 @@
 		inc 	r1 							; advance to next identifier name
 		inc 	r2
 		ror 	r4,#14 						; is the end of identifier bit set ?
-		skm 	r4
+		skm 	r4 							; if so, exit with the record in r0
 		jmp 	#_FVRCompare 				; keep going
 ._FVRExit		
 		ret
@@ -149,7 +149,7 @@
 ; *****************************************************************************
 ;
 ;		Create a variable record from identifier at R11. Returns record
-;		in R0. Assumes R6 points to hash table. Record size in R0.
+;		in R0. Assumes R6 points to hash table. Complete Record size in R0.
 ;	
 ;		Sets variable defaults e.g. +0 link +1 name +2 data
 ;		
@@ -163,7 +163,8 @@
 		mov 	r3,r11,#0 					; check if identifier in token buffer
 		sub 	r3,#tokenBufferEnd
 		skge
-		jsr 	#DuplicateReference
+		jsr 	#DuplicateReference 		; if so, duplicate it because it is not permanent
+
 		ldm 	r1,#memAllocBottom 			; point R1 to free memory.
 		;
 		ldm 	r2,r6,#0 					; read head of linked list
@@ -175,21 +176,24 @@
 		clr 	r2 							; zero for integer, null string for string
 		skp 	r3
 		mov 	r2,#_GVRNullString 			
-		stm 	r2,r1,#2 				
+		stm 	r2,r1,#2 					; write into the data slot
 
 		mov 	r2,r1,#0 					; update mem alloc bottom
 		add 	r2,r0,#0 					; allocate words
 		sknc 	 							; if overflows too much memory
 		jmp 	#MemoryError
-		stm 	r2,#memAllocBottom
+		stm 	r2,#memAllocBottom 			; write it out
 		ldm 	r3,#memAllocTop 			; check out of memory
 		sub 	r3,#256 					; allow a gap
 		sub 	r2,r3,#0
 		sklt
-		jmp 	#MemoryError
+		jmp 	#MemoryError 				; >= out of memory
 		;
 		stm 	r1,r6,#0 					; patch into linked list.
 		mov 	r0,r1,#0 					; address in R0
 		pop 	r11,link
 		ret
+
+._GVRNullString
+		word 	0		
 

@@ -8,7 +8,8 @@ python tables.py
 python program.py
 python gentokentest.py
 #
-#python systests.py ComplexVariable
+python systests.py ComplexVariable
+#	
 cp basiccode.prg ../../emulator/bin
 popd
 cp ../kernel/bin/a.lbl generated/kernel.labels

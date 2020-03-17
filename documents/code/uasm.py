@@ -4,7 +4,6 @@
 #		Name:		uasm.py
 #		Purpose:	Ultra-Basic LC3 assembler
 #		Created:	8th March 2020
-#		Reviewed: 	TODO
 #		Author:		Paul Robson (paul@robsons.org.uk)
 #
 # *****************************************************************************

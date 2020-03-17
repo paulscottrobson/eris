@@ -4,7 +4,6 @@
 #		Name:		assembler.py
 #		Purpose:	Assembler Module
 #		Created:	8th March 2020
-#		Reviewed: 	TODO
 #		Author:		Paul Robson (paul@robsons.org.uk)
 #
 # *****************************************************************************

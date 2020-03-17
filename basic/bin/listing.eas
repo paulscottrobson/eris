@@ -342,7 +342,7 @@
 10a5 : 90ec                          ror  r0,#12
 10a6 : e0e0                          skm  r0
 10a7 : aff0 1dce                     jmp  #syntaxerror
-10a9 : adf0 1d49                     jsr  #findvariable
+10a9 : adf0 1d48                     jsr  #findvariable
 10ab : b0e0                          skz  r0
 10ac : aff0 1e2a                     jmp  #arrayexistserror
 10ae : 07b0                          mov  r7,r11,#0
@@ -376,7 +376,7 @@
 10d0 : 30e4                          add  r0,#4
 10d1 : 5ce1 2bc0                     push  r11
 10d3 : 0b70                          mov  r11,r7,#0
-10d4 : adf0 1d71                     jsr  #createvariablerecord
+10d4 : adf0 1d70                     jsr  #createvariablerecord
 10d6 : 1bc0 3ce1                     pop  r11
 10d8 : 0104                          mov  r1,r0,#4
 10d9 : 1202                          ldm  r2,r0,#2
@@ -2362,7 +2362,7 @@
 1b0f : b1e0                          skz  r1
 1b10 : aff0 1b16                     jmp  #_atmnoinitialise
 1b12 : 11f0 4086                     ldm  r1,#memalloctop
-1b14 : 51f0 0080                     sub  r1,#(maxstringsize>>1)+1
+1b14 : 51f0 00ff                     sub  r1,#maxstringsize
 1b16 :                               ._atmnoinitialise
 1b16 : 5100                          sub  r1,r0,#0
 1b17 : 21f0 4089                     stm  r1,#tempstringalloc
@@ -2769,7 +2769,7 @@
 1d15 : afd0                          ret
 1d16 :                               ._gvrnotfixedvariable
 1d16 : 5ce8 20c0 21c1 22c2 23c3      push  r0,r1,r2,r3,r4,r5,r6,link
-1d1f : adf0 1d49                     jsr  #findvariable
+1d1f : adf0 1d48                     jsr  #findvariable
 1d21 : b0e0                          skz  r0
 1d22 : aff0 1d2c                     jmp  #_gvrhavevariable
 1d24 :                               ._gvrnotfound
@@ -2778,7 +2778,7 @@
 1d26 : d0e0                          skp  r0
 1d27 : aff0 1e20                     jmp  #arrayautoerror
 1d29 : 00e3                          mov  r0,#3
-1d2a : adf0 1d71                     jsr  #createvariablerecord
+1d2a : adf0 1d70                     jsr  #createvariablerecord
 1d2c :                               ._gvrhavevariable
 1d2c : 11b0                          ldm  r1,r11,#0
 1d2d : 0210                          mov  r2,r1,#0
@@ -2797,74 +2797,74 @@
 1d3d : 22a1                          stm  r2,r10,#estype1
 1d3e : 10c0 11c1 12c2 13c3 14c4      pop  r0,r1,r2,r3,r4,r5,r6,link
 1d47 : afd0                          ret
-1d48 :                               ._gvrnullstring
-1d48 : 0000                          word  0
-1d49 :                               .findvariable
-1d49 : 10b0                          ldm  r0,r11,#0
-1d4a : 60f0 c000                     and  r0,#$c000
-1d4c : 70f0 4000                     xor  r0,#$4000
-1d4e : b0e0                          skz  r0
-1d4f : aff0 1dce                     jmp  #syntaxerror
-1d51 : 16b0                          ldm  r6,r11,#0
-1d52 : 0060                          mov  r0,r6,#0
-1d53 : 90e6                          ror  r0,#6
-1d54 : 3600                          add  r6,r0,#0
-1d55 : 66ef                          and  r6,#hashtablesize-1
-1d56 : 10b0                          ldm  r0,r11,#0
-1d57 : 60f0 1800                     and  r0,#$1800
-1d59 : 90e7                          ror  r0,#11-hashtablepower
-1d5a : 3600                          add  r6,r0,#0
-1d5b : 36f0 4109                     add  r6,#variablehashtable
-1d5d : 0060                          mov  r0,r6,#0
-1d5e :                               ._fvrsearch
-1d5e : 1000                          ldm  r0,r0,#0
-1d5f : c0e0                          sknz  r0
-1d60 : aff0 1d70                     jmp  #_fvrexit
-1d62 : 1101                          ldm  r1,r0,#1
-1d63 : 02b0                          mov  r2,r11,#0
-1d64 :                               ._fvrcompare
-1d64 : 1310                          ldm  r3,r1,#0
-1d65 : 1420                          ldm  r4,r2,#0
-1d66 : 7340                          xor  r3,r4,#0
-1d67 : b3e0                          skz  r3
-1d68 : aff0 1d5e                     jmp  #_fvrsearch
-1d6a : 31e1                          inc  r1
-1d6b : 32e1                          inc  r2
-1d6c : 94ee                          ror  r4,#14
-1d6d : e4e0                          skm  r4
-1d6e : aff0 1d64                     jmp  #_fvrcompare
-1d70 :                               ._fvrexit
-1d70 : afd0                          ret
-1d71 :                               .createvariablerecord
-1d71 : 5ce2 2bc0 2dc1                push  r11,link
-1d74 : 03b0                          mov  r3,r11,#0
-1d75 : 53f0 4249                     sub  r3,#tokenbufferend
-1d77 : ffe1                          skge
-1d78 : adf0 1cef                     jsr  #duplicatereference
-1d7a : 11f0 4087                     ldm  r1,#memallocbottom
-1d7c : 1260                          ldm  r2,r6,#0
-1d7d : 2210                          stm  r2,r1,#0
-1d7e : 2b11                          stm  r11,r1,#1
-1d7f : 13b0                          ldm  r3,r11,#0
-1d80 : 93ed                          ror  r3,#13
-1d81 : 7220                          clr  r2
-1d82 : d3e0                          skp  r3
-1d83 : 02f0 1d48                     mov  r2,#_gvrnullstring
-1d85 : 2212                          stm  r2,r1,#2
-1d86 : 0210                          mov  r2,r1,#0
-1d87 : 3200                          add  r2,r0,#0
-1d88 : ffe0                          sknc
-1d89 : aff0 1e0e                     jmp  #memoryerror
-1d8b : 22f0 4087                     stm  r2,#memallocbottom
-1d8d : 13f0 4086                     ldm  r3,#memalloctop
-1d8f : 53f0 0100                     sub  r3,#256
-1d91 : 5230                          sub  r2,r3,#0
-1d92 : ffe0                          sklt
-1d93 : aff0 1e0e                     jmp  #memoryerror
-1d95 : 2160                          stm  r1,r6,#0
-1d96 : 0010                          mov  r0,r1,#0
-1d97 : 1bc0 1dc1 3ce2                pop  r11,link
-1d9a : afd0                          ret
+1d48 :                               .findvariable
+1d48 : 10b0                          ldm  r0,r11,#0
+1d49 : 60f0 c000                     and  r0,#$c000
+1d4b : 70f0 4000                     xor  r0,#$4000
+1d4d : b0e0                          skz  r0
+1d4e : aff0 1dce                     jmp  #syntaxerror
+1d50 : 16b0                          ldm  r6,r11,#0
+1d51 : 0060                          mov  r0,r6,#0
+1d52 : 90e6                          ror  r0,#6
+1d53 : 3600                          add  r6,r0,#0
+1d54 : 66ef                          and  r6,#hashtablesize-1
+1d55 : 10b0                          ldm  r0,r11,#0
+1d56 : 60f0 1800                     and  r0,#$1800
+1d58 : 90e7                          ror  r0,#11-hashtablepower
+1d59 : 3600                          add  r6,r0,#0
+1d5a : 36f0 4109                     add  r6,#variablehashtable
+1d5c : 0060                          mov  r0,r6,#0
+1d5d :                               ._fvrsearch
+1d5d : 1000                          ldm  r0,r0,#0
+1d5e : c0e0                          sknz  r0
+1d5f : aff0 1d6f                     jmp  #_fvrexit
+1d61 : 1101                          ldm  r1,r0,#1
+1d62 : 02b0                          mov  r2,r11,#0
+1d63 :                               ._fvrcompare
+1d63 : 1310                          ldm  r3,r1,#0
+1d64 : 1420                          ldm  r4,r2,#0
+1d65 : 7340                          xor  r3,r4,#0
+1d66 : b3e0                          skz  r3
+1d67 : aff0 1d5d                     jmp  #_fvrsearch
+1d69 : 31e1                          inc  r1
+1d6a : 32e1                          inc  r2
+1d6b : 94ee                          ror  r4,#14
+1d6c : e4e0                          skm  r4
+1d6d : aff0 1d63                     jmp  #_fvrcompare
+1d6f :                               ._fvrexit
+1d6f : afd0                          ret
+1d70 :                               .createvariablerecord
+1d70 : 5ce2 2bc0 2dc1                push  r11,link
+1d73 : 03b0                          mov  r3,r11,#0
+1d74 : 53f0 4249                     sub  r3,#tokenbufferend
+1d76 : ffe1                          skge
+1d77 : adf0 1cef                     jsr  #duplicatereference
+1d79 : 11f0 4087                     ldm  r1,#memallocbottom
+1d7b : 1260                          ldm  r2,r6,#0
+1d7c : 2210                          stm  r2,r1,#0
+1d7d : 2b11                          stm  r11,r1,#1
+1d7e : 13b0                          ldm  r3,r11,#0
+1d7f : 93ed                          ror  r3,#13
+1d80 : 7220                          clr  r2
+1d81 : d3e0                          skp  r3
+1d82 : 02f0 1d9a                     mov  r2,#_gvrnullstring
+1d84 : 2212                          stm  r2,r1,#2
+1d85 : 0210                          mov  r2,r1,#0
+1d86 : 3200                          add  r2,r0,#0
+1d87 : ffe0                          sknc
+1d88 : aff0 1e0e                     jmp  #memoryerror
+1d8a : 22f0 4087                     stm  r2,#memallocbottom
+1d8c : 13f0 4086                     ldm  r3,#memalloctop
+1d8e : 53f0 0100                     sub  r3,#256
+1d90 : 5230                          sub  r2,r3,#0
+1d91 : ffe0                          sklt
+1d92 : aff0 1e0e                     jmp  #memoryerror
+1d94 : 2160                          stm  r1,r6,#0
+1d95 : 0010                          mov  r0,r1,#0
+1d96 : 1bc0 1dc1 3ce2                pop  r11,link
+1d99 : afd0                          ret
+1d9a :                               ._gvrnullstring
+1d9a : 0000                          word  0
 1d9b :                               .indexarray
 1d9b : 5ce5 21c0 22c1 23c2 24c3      push  r1,r2,r3,r4,link
 1da1 : 0300                          mov  r3,r0,#0

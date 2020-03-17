@@ -4,7 +4,6 @@
 #		Name:		__main__.py
 #		Purpose:	Macro Assembler main program
 #		Created:	8th March 2020
-#		Reviewed: 	TODO
 #		Author:		Paul Robson (paul@robsons.org.uk)
 #
 # *****************************************************************************
