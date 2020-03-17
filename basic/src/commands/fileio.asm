@@ -4,7 +4,7 @@
 ;		Name:		fileio.asm
 ;		Purpose:	Load and Save code
 ;		Created:	14th March 2020
-;		Reviewed: 	TODO
+;		Reviewed: 	17th March 2020
 ;		Author:		Paul Robson (paul@robsons.org.uk)
 ;
 ; *****************************************************************************
@@ -18,14 +18,14 @@
 
 .Command_Load	;; [load]
 		push 	link
-		jsr 	#EvaluateString
-		mov 	r1,r0,#0
-		mov 	r0,#2
-		ldm 	r2,#programCode
-		jsr 	#OSFileOperation
-		skz 	r0
-		jmp 	#LoadError
-		jsr 	#Command_Clear
+		jsr 	#EvaluateString 			; name of file to load
+		mov 	r1,r0,#0 					; save in R1
+		mov 	r0,#2 						; force load to address
+		ldm 	r2,#programCode 			; where program memory is.
+		jsr 	#OSFileOperation 			; do load
+		skz 	r0 				
+		jmp 	#LoadError 					; error if failed
+		jsr 	#Command_Clear 				; clear because program spaced has changed
 		pop 	link
 		ret
 
@@ -48,7 +48,7 @@
 		xor 	r2,#32
 		sknz 	r2
 		mov 	r0,#13
-		jsr 	#OSLowerCase
+		jsr 	#OSLowerCase 				; print in L/C
 		jsr 	#OSPrintCharacter
 		inc 	r1
 		jmp 	#_CDList
@@ -93,7 +93,7 @@
 ._CSDefault
 		string 	"last.save"
 ;
-;		Validate name.
+;		Validate name - must be A-Z . 0-9
 ;
 ._CSValidate	
 		push 	r0,r1,r2,link
@@ -103,7 +103,7 @@
 		mov 	r1,r0,#0 					; pointer in R1
 		jsr 	#OSWordLength 				; convert to word length.
 ._CSVLoop
-		inc 	r1 							; validate it
+		inc 	r1 							; validate it in two halves
 		ldm 	r2,r1,#0
 		jsr 	#_CSSubValidate
 		ldm 	r2,r1,#0

@@ -4,7 +4,7 @@
 ;		Name:		run.asm
 ;		Purpose:	Run program
 ;		Created:	3rd March 2020
-;		Reviewed: 	TODO
+;		Reviewed: 	17th March 2020
 ;		Author:		Paul Robson (paul@robsons.org.uk)
 ;
 ; *****************************************************************************
@@ -17,11 +17,11 @@
 ; *****************************************************************************
 
 .RunProgram	;; [run]
-		jsr 	#Command_Clear 				; clear command
-		ldm 	r11,#programCode 			; come back here to start new line.
+		jsr 	#Command_Clear 				; clear command, erase variables etc.
+		ldm 	r11,#programCode 			; address of first line.
 		ldm 	r0,r11,#0 					; get offset to next line.
-		sknz 	r0 							; if zero, then no program
-		jmp 	#WarmStart
+		sknz 	r0 							; if zero, then no program fo exit.
+		jmp 	#WarmStart 		
 		;
 		;				Come here to run program from R11.
 		;
@@ -40,26 +40,32 @@
 		;				Next command.
 		;
 ._RPNewCommand		
-		ldm 	r0,#checkCount 				; CS every 64 commands
+		ldm 	r0,#checkCount 				; Carry set every 64 commands
 		add 	r0,#1024
 		stm 	r0,#checkCount
 		skc
 		jmp 	#_RPNoCheck
+		;
+		;				Period checks - update sound (may be interrupt) and check break.
+		;
 		jsr		#OSManager 					; call service manager routine.
 		jsr 	#OSCheckBreak 				; check break
 		skz 	r0
-		jmp 	#BreakHandler
+		jmp 	#BreakError 				; error if broken.
+		;
+		;				New instruction at R11
+		;
 ._RPNoCheck		
-		stm 	r14,#tempStringAlloc 		; clear the temp string reference
+		stm 	r14,#tempStringAlloc 		; clear the temp string reference.
 		ldm 	r0,r11,#0 					; get next token.
 		mov 	r1,r0,#0 					; save in R1 
 		inc 	r11 						; skip over token.
 		and 	r0,#$F800 					; check it is 0011 1xx e.g. token with type 11xx
-		xor 	r0,#$3800 					
+		xor 	r0,#$3800 					; which is a command token of some sort
 		skz 	r0
 		jmp 	#_RPNotCommandToken 		
 		;
-		and 	r1,#$01FF 					; get token ID
+		and 	r1,#$01FF 					; get token ID lower 9 bits
 		add 	r1,#TokenVectors 			; R1 now points to the token code address
 		ldm 	r0,r1,#0 					; get the call address into R0
 		brl 	link,r0,#0 					; call that routine
@@ -74,20 +80,21 @@
 		dec 	r11 						; unpick the token get
 		;
 		ldm 	r0,r11,#0 					; get token back
-		xor 	r0,#TOK_PLING 				; ! is a special case
+		xor 	r0,#TOK_PLING 				; ! is a special case, we can do !x = 42
 		sknz 	r0
 		jmp 	#_RPDoLet
 		;
 		ldm 	r0,r11,#0 					; get token back
 		and 	r1,#$C000 					; is it an identifier e.g. 4000-7FFF
-		xor 	r1,#$4000 					
+		xor 	r1,#$4000 					; then if so this may be a default LET
 		skz 	r1
 		jmp 	#SyntaxError 				; if not, it's constant or string constant, syntax error.
 ._RPDoLet		
 		jsr 	#Command_Let 				; try it as a 'let'
 		jmp 	#_RPNewCommand 				; and go round again.
 		;
-		;		Advance to next line.
+		;		Advance to next line. If running from CLI offset will be zero so will not
+		;		change lines with the 'add'
 		;
 ._RPNextLine
 		ldm 	r11,#currentLine 			; get current line
@@ -97,9 +104,3 @@
 		sknz 	r0 							; if zero warm start
 		jmp 	#WarmStart		
 		jmp 	#_RPNewLine
-		;
-		;		Break handler
-		;
-.BreakHandler		
-		jsr 	#OSGetKeyboard 				; this gets the current keyboard state so it doesn't do anything
-		jmp 	#BreakError

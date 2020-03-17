@@ -4,7 +4,7 @@
 ;		Name:		print.asm
 ;		Purpose:	Print statement
 ;		Created:	4th March 2020
-;		Reviewed: 	TODO
+;		Reviewed: 	17th March 2020
 ;		Author:		Paul Robson (paul@robsons.org.uk)
 ;
 ; *****************************************************************************
@@ -32,6 +32,8 @@
 		;
 		inc 	r11 						; bump pointer
 		;
+		;		Special cases semicolon comma and quote (which is CR)
+		;
 		xor 	r0,#TOK_SEMICOLON^TOK_COLON ; check for ;
 		sknz 	r0
 		jmp		#_CPRSemicolon
@@ -42,6 +44,8 @@
 		sknz 	r0
 		jmp 	#_CPRNewLine
 		;
+		;		None of those so it's a string or integer expression.
+		;
 		dec 	r11 						; unpick token get.
 		jsr 	#EvaluateExpression 		; evaluate something to print.
 		ldm 	r0,r10,#esValue1 			; get value into R0
@@ -51,6 +55,9 @@
 		ldm 	r2,r10,#esType1 			; get type
 		skz 	r2 							; if number
 		jmp 	#_CPRPrintStr
+		;
+		;		Number printer
+		;
 		mov 	r2,r0,#0 					; print leading space.
 		mov 	r0,#' '
 		jsr 	#OSPrintCharacter
@@ -59,7 +66,7 @@
 		jsr 	#OSIntToStr 				; convert it
 ._CPRPrintStr		
 		jsr 	#OSPrintString 				; print it
-		jmp 	#_CPRLoop
+		jmp 	#_CPRLoop 					
 		;
 		;		New line
 		;		
@@ -74,7 +81,8 @@
 		mov 	r0,#9
 		jsr 	#OSPrintCharacter		
 		;
-		;		Check if it's the end , if so exit without printing CR
+		;		Check if it's the end , if so exit without printing CR - this is the
+		;		case where you do print "Hello", which will leave the cursor on the same line.
 		;
 ._CPRSemicolon
 		ldm 	r0,r11,#0 					; read next token
