@@ -53,10 +53,14 @@
 		add 	r0,#$100 					; next 1/4 on.
 		jmp 	#_bcCheckMemory
 ;
-;		Save memory end, allocate memory for the screen mirror and initialise the stack & PRNG
+;		Save memory end, allocate memory for the sprite images, screen mirror and initialise the stack & PRNG
 ;
 ._bcFoundEnd
 		stm 	r0,#highMemory 				; save high memory
+		sub 	r0,#spriteDefaultCount * 16 ; allow space for sprites
+		and 	r0,#$FFF0 					; put on 16 word boundary
+		stm 	r0,#spriteMemory
+		;
 		sub 	r0,#(charWidth*charHeight)	; allocate text screen space
 		stm 	r0,#textMemory
 		dec 	r0 							; put a $0000 word before screen text so the
@@ -65,16 +69,17 @@
 		mov 	sp,r0,#0 					; initialise Stack Pointer.
 		stm 	r0,#randomSeed 				; initialise the random number generator
 ;
-;
+;		Initialise other system variables
 ;
 		mov 	r1,#systemVariables 		; initialise other system variables
 		mov 	r0,#ramStart 			
 		stm 	r0,r1,#0
 		mov 	r0,#charWidth
-		stm 	r0,r1,#3
+		stm 	r0,r1,#5
 		mov 	r0,#charHeight
-		stm 	r0,r1,#4
-	
+		stm 	r0,r1,#6
+		mov 	r0,#spriteDefaultCount
+		stm 	r0,r1,#4			
 ;
 ;		Erase the whole display using colour 0 mask $FF
 ;

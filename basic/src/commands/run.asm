@@ -12,11 +12,18 @@
 
 ; *****************************************************************************
 ;
-;								Run program
+;						Run program / Run "Filename"
 ;
 ; *****************************************************************************
 
 .RunProgram	;; [run]
+		ldm 	r0,r11,#0 					; what follows ?
+		sknz 	r0
+		jmp		#RunProgramNoLoad
+		xor 	r0,#TOK_COLON
+		skz 	r0
+		jsr 	#FileLoader 				; if not EOL or colon try loading.
+.RunProgramNoLoad
 		jsr 	#Command_Clear 				; clear command, erase variables etc.
 		ldm 	r11,#programCode 			; address of first line.
 		ldm 	r0,r11,#0 					; get offset to next line.

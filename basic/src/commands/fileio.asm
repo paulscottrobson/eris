@@ -18,14 +18,29 @@
 
 .Command_Load	;; [load]
 		push 	link
+		jsr 	#FileLoader					; do the load
+		jsr 	#Command_Clear 				; clear because program spaced has changed
+		pop 	link
+		ret
+
+.FileLoader
+		push 	link
 		jsr 	#EvaluateString 			; name of file to load
 		mov 	r1,r0,#0 					; save in R1
-		mov 	r0,#2 						; force load to address
 		ldm 	r2,#programCode 			; where program memory is.
+		;
+		ldm 	r0,r11,#0					; get next token
+		xor 	r0,#TOK_COMMA 				; if comma, get load address
+		skz 	r0
+		jmp 	#_CLLoadContinue 			; if not load into program memory
+		inc 	r11 						; skip comma
+		jsr 	#EvaluateInteger 			; get load address
+		mov		r2,r0,#0 					; override target address
+._CLLoadContinue
+		mov 	r0,#2 						; force load to address
 		jsr 	#OSFileOperation 			; do load
 		skz 	r0 				
 		jmp 	#LoadError 					; error if failed
-		jsr 	#Command_Clear 				; clear because program spaced has changed
 		pop 	link
 		ret
 
@@ -73,7 +88,6 @@
 		xor		r0,#TOK_COLON
 		sknz 	r0
 		jmp 	#_CSHaveFileName
-
 		jsr 	#EvaluateString 			; get save name
 		jsr 	#_CSValidate
 		mov 	r1,r0,#0 					; put string in R1
@@ -83,6 +97,18 @@
 		ldm 	r2,#programCode 			; program start in R2
 		sub 	r3,r2,#0 					; calculate length (end-start+1) => R3
 		inc 	r3
+		;
+		ldm 	r0,r11,#0 					; save addr after name
+		xor 	r0,#TOK_COMMA 				; if comma, get Save address
+		skz 	r0
+		jmp 	#_CLSaveContinue 			; if not save into program memory
+		inc 	r11 						; skip comma
+		jsr 	#EvaluateInteger 			; get save address
+		mov		r2,r0,#0 					; override save address
+		jsr 	#CheckComma
+		jsr 	#EvaluateInteger 			; get save address
+		mov		r3,r0,#0 					; override save length
+._CLSaveContinue
 		mov 	r0,#3 						; save command
 		jsr 	#OSFileOperation 			; try to do it.
 		skz 	r0

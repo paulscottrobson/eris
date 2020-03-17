@@ -76,3 +76,7 @@ maxIStrSize = 10
 ;		Maximum size in words for each function key (characters is 2 x this)
 ;
 functionKeySize = 12
+;
+;		Default # of sprites
+;
+spriteDefaultCount = 16

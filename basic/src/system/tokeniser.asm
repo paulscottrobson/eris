@@ -43,6 +43,11 @@
 		jsr 	#TokeniseElement 			; do one element
 		skz 	r0 							; fail if return zero
 		jmp 	#_TSFail
+
+		mov 	r0,r9,#0					; check overflowed tokenise buffer
+		sub 	r0,#tokenBufferEnd-2
+		sklt 	
+		jmp 	#TokeniseError
 		jmp 	#_TSLoop
 
 ._TSExit
