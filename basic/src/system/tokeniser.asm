@@ -4,7 +4,7 @@
 ;		Name:		tokeniser.asm
 ;		Purpose:	Coloured ASCII -> Tokenised code
 ;		Created:	12th March 2020
-;		Reviewed: 	TODO
+;		Reviewed: 	17th March 2020
 ;		Author:		Paul Robson (paul@robsons.org.uk)
 ;
 ; *****************************************************************************
@@ -24,21 +24,21 @@
 		stm 	r14,r9,#1
 		add 	r9,#2 						; and skip them
 		mov 	r8,r0,#0 					; characters come from here.
-		mov 	r7,#$007F 					; R7 is the character mask 					
+		mov 	r7,#$0FF 					; R7 is the character mask 					
 		;
 		;		Main tokenising loop
 		;
 ._TSLoop		
-		ldm 	r0,r8,#0 					; look at next character
-		and 	r0,r7,#0 					; as a character
+		ldm 	r0,r8,#0 					; look at next word
+		and 	r0,r7,#0 					; as a character- this is coloured word text
 		mov 	r3,r0,#0 					; put in R3.
 		sknz 	r0
-		jmp 	#_TSExit 					; exit if end of list
+		jmp 	#_TSExit 					; exit if end of list of characters to tokenise
 		xor 	r0,#' '						; if space , skip over
 		inc 	r8
 		sknz 	r0
 		jmp 	#_TSLoop
-		dec 	r8 							; R8 now points to current character
+		dec 	r8 							; R8 now points to current character, not a space.
 		;
 		jsr 	#TokeniseElement 			; do one element
 		skz 	r0 							; fail if return zero
@@ -47,7 +47,7 @@
 
 ._TSExit
 		stm 	r14,r9,#0 					; mark buffer end with a $0000
-		mov 	r1,r9,#0 					; calculate actual length of whole thing
+		mov 	r1,r9,#0 					; calculate actual length of whole thing->R1
 		sub 	r1,#tokenBuffer-1
 		;
 		mov 	r0,#tokenBuffer 			; return token buffer
@@ -139,7 +139,7 @@
 .TokConstFetch
 		ldm 	r0,r10,#0 					; get and bump next
 		inc 	r10
-		and 	r0,#$007F 					; strip it back
+		and 	r0,#$00FF 					; strip it back
 		ret
 
 ; *****************************************************************************
@@ -206,14 +206,15 @@
 		inc 	r9
 		jmp 	#TEExitOkay
 ;
-;		Helper function. For the token in R0, set bit 15 (currently clear) and check the tokenise
+;		Helper function. For the token in R0, set bit 15 and check the tokenise
 ;		table for that token, return token in R0 if found, 0 if not found
 ;		
 .TokPuncCheckExists
 		push 	r3,r4,r5
 		mov 	r4,#TokeniserWords 			; R4 points into table
 		mov	 	r3,r0,#0 					; R3 is the token to match
-		add 	r3,#$8000 					; set bit 7 so token correct.
+		skm 	r3 							; skip if bit 15 set already
+		add 	r3,#$8000 					; set bit 15 so token correct.
 		clr 	r5 							; R5 is the base count.
 ._TPCELoop
 		ldm 	r0,r4,#0 					; reached end of table
@@ -453,6 +454,7 @@
 ; *****************************************************************************
 ;
 ;			Support routine, compares null terminated lists at R0/R1
+; 						(used in tokenisation testing only)
 ;
 ; *****************************************************************************
 

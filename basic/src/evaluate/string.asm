@@ -4,7 +4,7 @@
 ;		Name:		string.asm
 ;		Purpose:	String concatenation / splitting functions
 ;		Created:	5th March 2020
-;		Reviewed: 	TODO
+;		Reviewed: 	17th March 2020
 ;		Author:		Paul Robson (paul@robsons.org.uk)
 ;
 ; *****************************************************************************
@@ -22,12 +22,12 @@
 		ldm 	r1,r0,#0 					
 		ldm 	r0,r10,#esValue2 
 		ldm 	r0,r0,#0
-		add 	r0,r1,#0
+		add 	r0,r1,#0 					; add them together
 		mov 	r1,r0,#0 					; check if >= max string size
 		sub 	r1,#maxStringSize+1
 		sklt
 		jmp 	#StrlenError
-		ror 	r0,#1 						; divide by 2
+		ror 	r0,#1 						; divide by 2 + 2 to give a word size
 		and 	r0,#$7FFF 					
 		add 	r0,#2 						; add a little extra space.
 		jsr 	#SFAllocate					; and lazy writing.
@@ -65,14 +65,14 @@
 
 ; *****************************************************************************
 ;
-;	Allocate R0 bytes of string memory and set up R1 (base) and R2 (offset)
+;	Allocate R0 words of string memory and set up R1 (base) and R2 (offset)
 ;
 ; *****************************************************************************
 
 .SFAllocate
 		push 	link
-		jsr 	#AllocateTempMemory 		; allocate bytes for new string
-		mov 	r1,r0,#0 					; R1 is the next word to write
+		jsr 	#AllocateTempMemory 		; allocate words for new string
+		mov 	r1,r0,#0 					; R1 is the next string to write
 		clr 	r2 							; R2 is the rotation for that word, 0->8->0
 		stm 	r14,r1,#0 					; clear the length and first word
 		stm 	r14,r1,#1

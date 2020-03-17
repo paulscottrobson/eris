@@ -4,7 +4,7 @@
 ;		Name:		ustring.asm
 ;		Purpose:	Unary String functions
 ;		Created:	4th March 2020
-;		Reviewed: 	TODO
+;		Reviewed: 	17th March 2020
 ;		Author:		Paul Robson (paul@robsons.org.uk)
 ;
 ; *****************************************************************************

@@ -4,7 +4,7 @@
 ;		Name:		evaluate.asm
 ;		Purpose:	Expression evaluator
 ;		Created:	3rd March 2020
-;		Reviewed: 	TODO
+;		Reviewed: 	17th March 2020
 ;		Author:		Paul Robson (paul@robsons.org.uk)
 ;
 ; *****************************************************************************

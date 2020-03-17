@@ -4,7 +4,7 @@
 ;		Name:		arithmetic.asm
 ;		Purpose:	Basic arithmetic functions
 ;		Created:	3rd March 2020
-;		Reviewed: 	TODO
+;		Reviewed: 	17th March 2020
 ;		Author:		Paul Robson (paul@robsons.org.uk)
 ;
 ; *****************************************************************************
@@ -62,7 +62,7 @@
 
 ; *****************************************************************************
 ;
-;							 binary multiply/divide
+;							binary divide/modulus
 ;
 ; *****************************************************************************
 
@@ -160,7 +160,7 @@
 
 ; *****************************************************************************
 ;
-;			Check binary values are both string, and dereference them
+;			Check binary values are both integer, and dereference them
 ;
 ; *****************************************************************************
 

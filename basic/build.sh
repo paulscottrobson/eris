@@ -8,7 +8,7 @@ python tables.py
 python program.py
 python gentokentest.py
 #
-python systests.py ComplexVariable
+#python systests.py Comparison
 #	
 cp basiccode.prg ../../emulator/bin
 popd

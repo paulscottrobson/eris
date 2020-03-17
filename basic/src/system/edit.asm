@@ -4,7 +4,7 @@
 ;		Name:		edit.asm
 ;		Purpose:	Edit Program
 ;		Created:	13th March 2020
-;		Reviewed: 	TODO
+;		Reviewed: 	17th March 2020
 ;		Author:		Paul Robson (paul@robsons.org.uk)
 ;
 ; *****************************************************************************
@@ -18,9 +18,9 @@
 
 .EditProgram
 		dec 	r1 						; one fewer character, as we're converting to a code line
-		inc 	r0 						; the offset goes here, the first token becomes the number
+		inc 	r0 						; the offset goes here, the first token becomes the line number
 		stm 	r1,r0,#0
-		ldm 	r1,r0,#1 				; clear bit 15
+		ldm 	r1,r0,#1 				; clear bit 15 of line number
 		and 	r1,#$7FFF
 		stm 	r1,r0,#1 				
 		;
@@ -34,7 +34,7 @@
 		;
 		ldm 	r4,r2,#1 				; get line #
 		sub 	r4,r1,#0 				; subtract target line #
-		sknz 	r4 						; if zero, then delete
+		sknz 	r4 						; if = then delete
 		jmp 	#_EPCDelete
 		sklt  							; if > then insert at this point
 		jmp 	#_EPCInsert

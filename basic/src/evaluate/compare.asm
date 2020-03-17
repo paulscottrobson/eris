@@ -4,7 +4,7 @@
 ;		Name:		compare.asm
 ;		Purpose:	Comparison functions
 ;		Created:	4th March 2020
-;		Reviewed: 	TODO
+;		Reviewed: 	17th March 2020
 ;		Author:		Paul Robson (paul@robsons.org.uk)
 ;
 ; *****************************************************************************
@@ -149,7 +149,7 @@
 		ror 	r3,#1
 		and 	r3,#$7FFF
 		;
-		;		Compare R3 words word reversed.
+		;		Compare R3 words word reversed - so the first character is more significants
 		;
 ._CSLLoop
 		sknz 	r3 							; more to compare ?
