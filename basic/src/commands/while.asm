@@ -4,7 +4,7 @@
 ;		Name:		while.asm
 ;		Purpose:	While/Wend
 ;		Created:	10th March 2020
-;		Reviewed: 	TODO
+;		Reviewed: 	16th March 2020
 ;		Author:		Paul Robson (paul@robsons.org.uk)
 ;
 ; *****************************************************************************
@@ -18,14 +18,15 @@
 
 .Command_While		;; [while]
 		push 	link
-		dec 	r11 						; we want to come back to the WHILE
+		dec 	r11 						; we want to come back to the WHILE command
 		jsr 	#StackPushPosition 			; push current position/line offset
 		jsr 	#StackPushMarker 			; push an 'W' marker
 		word 	'W'
 		inc 	r11
+		;
 		jsr 	#EvaluateInteger 			; evaluate while what
 		skz 	r0 							; if evaluation is zero then exit loop
-		jmp 	#_CWExit
+		jmp 	#_CWExit 					; if non zero continue as normal
 		;
 		mov 	r0,#1+stackPosSize 			; and reclaim that many words off the stack
 		jsr 	#StackPopWords 				; (undo the position saving)
@@ -50,6 +51,7 @@
 		jmp 	#WendError
 		jsr 	#StackPopPosition 			; restore position from stack.
 		mov 	r0,#1+stackPosSize 			; and reclaim that many words off the stack
-		jsr 	#StackPopWords
+		jsr 	#StackPopWords 				; because we re-execute the WHILE command
 		pop 	link
 		ret
+

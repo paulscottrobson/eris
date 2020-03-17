@@ -4,7 +4,7 @@
 #		Name:		program.py
 #		Purpose:	Convert ASCII to tokenised BASIC
 #		Created:	3rd March 2020
-#		Reviewed: 	TODO
+#		Reviewed: 	17th March 2020
 #		Author:		Paul Robson (paul@robsons.org.uk)
 #
 # *****************************************************************************
@@ -31,8 +31,8 @@ class Program(object):
 	def append(self,srcFile):
 		for s in open(srcFile).readlines():
 			s = s.strip()
-			if not s.startswith(";") and s != "":
-				self.addLine(s)
+			if not s.startswith(";") and s != "":							# ignore comments and blanks
+				self.addLine(s)												# (not rem ' comments')
 	#
 	#		Append a line
 	#
@@ -59,23 +59,23 @@ class Program(object):
 	def write(self,tgtFile,label = None,forceAddress = None):
 		h = open(tgtFile,"w")
 		h.write(";\n;\tAutomatically generated\n;\n")
-		c = ",".join(["${0:04x}".format(c) for c in self.code])
-		if forceAddress is not None:
+		c = ",".join(["${0:04x}".format(c) for c in self.code]) 			# convert to text
+		if forceAddress is not None:										# this is no longer required
 			h.write("\torg\t\t${0:04x}\n".format(forceAddress))
-		if label is not None:
+		if label is not None:												# give it a label (no longer required)
 			h.write("."+label+"\n")
-		h.write("\tword\t{0}\n".format(c))
+		h.write("\tword\t{0}\n".format(c))									# write out program
 		h.write("\tword\t$0000\n")
 		h.write(".EndBasicProgram\n")
 		h.close()
 
-		h = open("basiccode.prg","wb")
-		h.write(bytes([0]))
+		h = open("basiccode.prg","wb")										# output as a .PRG
+		h.write(bytes([0])) 												# note hard coded $4200 address here
 		h.write(bytes([0x42]))
-		for i in self.code:
+		for i in self.code:													# program words LSB first
 			h.write(bytes([i & 0xFF]))
 			h.write(bytes([i >> 8]))
-		h.write(bytes([0]))
+		h.write(bytes([0])) 												# trailing NULL.
 		h.write(bytes([0]))
 		h.close()
 

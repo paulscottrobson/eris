@@ -4,7 +4,7 @@
 #		Name:		test.py
 #		Purpose:	Test classes
 #		Created:	5th March 2020
-#		Reviewed: 	TODO
+#		Reviewed: 	17th March 2020
 #		Author:		Paul Robson (paul@robsons.org.uk)
 #
 # *****************************************************************************
@@ -15,25 +15,26 @@ from program import *
 
 # *****************************************************************************
 #
-#							Base Test Class
+#							Abstract Base Test Class
 #
 # *****************************************************************************
 
 class TestProgram(Program):
 	def __init__(self,debug=False,count = 100):
 		Program.__init__(self)
-		random.seed()
+		random.seed()														# Actual randoms seed
 		self.debug = debug
-		self.seed = random.randint(0,10000)
+		self.seed = random.randint(0,10000)									# the test seed
+		random.seed(self.seed)												# seed it.
 		print("Test #",self.seed,"of",self.__class__.__name__)
-		self.count = count
-		self.varChars = [x for x in "ABCDEFGHIJKLMNOPQRSTUVWXYZ.0123456789"]
-		self.preTest()
-		for i in range(0,self.count):
+		self.count = count 													# # of tests
+		self.varChars = [x for x in "ABCDEFGHIJKLMNOPQRSTUVWXYZ.0123456789"]# variable characters
+		self.preTest()														# set up
+		for i in range(0,self.count):										# create tests
 			self.index = i
 			line = self.createTest()
 			self.add(line)
-		self.postTest()
+		self.postTest()														# check any results
 		self.addLine("stop")
 		self.write(".."+os.sep+"generated"+os.sep+"test_program.inc","basicProgram",None)
 	#
@@ -52,9 +53,13 @@ class TestProgram(Program):
 	def postTest(self):
 		pass
 	#
+	#		Randomly choose from a list
+	#
 	def select(self,ilist):
 		ilist = [x for x in ilist]
 		return ilist[random.randint(0,len(ilist)-1)]
+	#
+	#		Create variable names. Every other is a '.' so tokens aren't generated.
 	#
 	def createVariableName(self,currentList = None,isString = None):
 		isString = (random.randint(0,1) == 0) if isString is None else isString
@@ -65,11 +70,12 @@ class TestProgram(Program):
 			return self.createVariableName(currentList,isString)
 		return vName
 	#
-	def varCharacter(self):
-		return ""
+	#		Random constant value
 	#
 	def randomConstant(self):
 		return random.randint(-32768,32767) if random.randint(0,10) > 0 else 0
+	#
+	#		Random string value
 	#
 	def randomString(self):
 		s = "".join([chr(random.randint(65,90)) for x in range(0,random.randint(1,32))])

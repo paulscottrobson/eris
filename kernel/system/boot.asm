@@ -13,7 +13,7 @@
 .bootPrompt
 	string "[10,0F,16,0C]*** Eris RetroComputer ***[0D,0D,13]Written by Paul Robson 2020[0D,0D]"
 .kernelPrompt
-	string "Kernel[3A] 0.10[0D]"
+	string "Kernel[3A] 0.11[0D]"
 
 ; *****************************************************************************
 ;
@@ -37,7 +37,7 @@
 ;
 ;		Non destructive memory test.
 ;
-		mov 	r0,#$4000  					; non destructive memory test.
+		mov 	r0,#ramStart 				; non destructive memory test.
 ._bcCheckMemory:
 		ldm 	r1,r0,#0 					; read the byte in memory already there
 		mov 	r2,#$AAAA 					; value being checked.
@@ -61,8 +61,20 @@
 		stm 	r0,#textMemory
 		dec 	r0 							; put a $0000 word before screen text so the
 		stm 	r14,r0,#0  					; scanner won't go up further on line input.
+		;
 		mov 	sp,r0,#0 					; initialise Stack Pointer.
 		stm 	r0,#randomSeed 				; initialise the random number generator
+;
+;
+;
+		mov 	r1,#systemVariables 		; initialise other system variables
+		mov 	r0,#ramStart 			
+		stm 	r0,r1,#0
+		mov 	r0,#charWidth
+		stm 	r0,r1,#3
+		mov 	r0,#charHeight
+		stm 	r0,r1,#4
+	
 ;
 ;		Erase the whole display using colour 0 mask $FF
 ;

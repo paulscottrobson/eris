@@ -3,8 +3,9 @@
 #
 #		Name:		convert.py
 #		Purpose:	Tokenising class, converts ASCII -> tokenised BASIC
+#					The code in tokenise.asm does the same thing.
 #		Created:	3rd March 2020
-#		Reviewed: 	TODO
+#		Reviewed: 	17th March 2020
 #		Author:		Paul Robson (paul@robsons.org.uk)
 #
 # *****************************************************************************
@@ -22,9 +23,9 @@ from tokens import *
 class Tokeniser(object):
 	#
 	def __init__(self):
-		self.tokens = Tokens()
-		self.tokenList = self.tokens.getList()
-		self.tokenDictionary = self.tokens.getDictionary()
+		self.tokens = Tokens()										# tokens object
+		self.tokenList = self.tokens.getList() 						# list of tokens
+		self.tokenDictionary = self.tokens.getDictionary() 			# look up table
 	#
 	#							Tokenise a string
 	#
@@ -71,7 +72,8 @@ class Tokeniser(object):
 				self.code.append(ord(st[i])+ord(st[i+1])*256)
 			return m.group(2).strip()
 		#
-		#		
+		#		Check for identifier including $ ( trailing typing which is encoded in.
+		#		This can also be a textual token.
 		#
 		if s[0].upper() >= "A" and s[0].upper() <= "Z":				# identifier including $( ?
 			m = re.match("^([A-Za-z][A-Za-z0-9\\.]*\\$?\\(?)(.*)$",s)

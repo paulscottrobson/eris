@@ -20,7 +20,8 @@
 		push 	link
 		jsr 	#EvaluateString
 		mov 	r1,r0,#0
-		mov 	r0,#1
+		mov 	r0,#2
+		ldm 	r2,#programCode
 		jsr 	#OSFileOperation
 		skz 	r0
 		jmp 	#LoadError

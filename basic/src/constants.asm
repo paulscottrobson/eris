@@ -4,18 +4,22 @@
 ;		Name:		constants.asm
 ;		Purpose:	Basic Constants
 ;		Created:	3rd March 2020
-;		Reviewed: 	TODO
+;		Reviewed: 	16th March 2020
 ;		Author:		Paul Robson (paul@robsons.org.uk)
 ;
 ; *****************************************************************************
 ; *****************************************************************************
 
 ;
+;		Memory allocate for CPU stack
+;
+cpuStackSize = 256
+;
 ;		Max size of string
 ;
 maxStringSize = 255
 ;
-;		Extra space allocated concreting strings, so that they can be expanded
+;		Extra space allocated concreting strings, so that they can be expanded in words
 ;
 extraStringAlloc = 8
 ;
@@ -29,7 +33,7 @@ hashTablePower = 4
 stackSize = 32
 stackElementSize = 3
 ;
-;		Offsets to evaluation stack elements
+;		Offsets to evaluation stack elements on 1st and 2nd levels
 ;
 esValue1 = 0
 esType1 = 1
@@ -39,7 +43,7 @@ esValue2 = 0+stackElementSize
 esType2 = 1+stackElementSize
 esReference2 = 2+stackElementSize
 ;
-;		Size of return stack.
+;		Size of return stack for CALL, REPEAT etc.
 ;
 returnStackSize = 256
 ;
@@ -47,7 +51,7 @@ returnStackSize = 256
 ;
 stackPosSize = 2
 ;
-;		Indent spaces per level
+;		Indent spaces per level when listing structures.
 ;
 indentStep = 2
 ;
@@ -59,3 +63,4 @@ theme_ident = 3 		; yellow identifiers
 theme_const = 3 		; yellow integers
 theme_string = 7 		; white strings
 theme_punc = 2			; green punctuation
+

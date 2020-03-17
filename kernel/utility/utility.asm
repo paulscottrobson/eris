@@ -63,4 +63,15 @@
 		ror 	r0,#1
 		and 	r0,#$7FFF
 		ret
+
+; *****************************************************************************
+;
+;							Read System Variable # R0
+;
+; *****************************************************************************
+		
+.OSXReadSystemVariable
+		add 	r0,#systemVariables 		; make address
+		ldm 	r0,r0,#0 					; read it
+		ret
 		

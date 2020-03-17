@@ -88,6 +88,9 @@
 ;
 ; *****************************************************************************
 
+.OSReadSystemVariable
+		jmp 	#OSXReadSystemVariable
+		
 .OSFileOperation
 		jmp 	#OSXFileOperation
 

@@ -2,12 +2,18 @@
 # *****************************************************************************
 #
 #		Name:		gentokentest.py
-#		Purpose:	Generate test routines for tokeniser
+#		Purpose:	Generate test routines for tokeniser (not part of program tests)
 #		Created:	12th March 2020
-#		Reviewed: 	TODO
+#		Reviewed: 	17th March 2020
 #		Author:		Paul Robson (paul@robsons.org.uk)
 #
 # *****************************************************************************
+# *****************************************************************************
+
+# *****************************************************************************
+#
+#			Generate random strings to tokenise via assembly
+#
 # *****************************************************************************
 
 import os,re,random
@@ -26,7 +32,7 @@ class Generator(object):
 	def create(self):
 		self.code = ""
 		for i in range(0,16):
-			n = random.randint(0,3)
+			n = random.randint(0,3) 										# one of four things
 			if n == 0:
 				s = self.identifier()
 			if n == 1:
@@ -93,4 +99,3 @@ h.write("\tword {0}\n".format(",".join(["${0:04x}".format(c) for c in gen.getCod
 h.write(".TestResults\n")
 h.write("\tword {0}\n".format(",".join(["${0:04x}".format(c) for c in gen.getTokens()])))
 h.close()
-

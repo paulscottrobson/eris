@@ -4,7 +4,7 @@
 ;		Name:		repeat.asm
 ;		Purpose:	Repeat/Until
 ;		Created:	10th March 2020
-;		Reviewed: 	TODO
+;		Reviewed: 	16th March 2020
 ;		Author:		Paul Robson (paul@robsons.org.uk)
 ;
 ; *****************************************************************************
@@ -35,11 +35,11 @@
 		jsr 	#StackCheckMarker 			; check TOS is an 'R' marker.
 		word 	'R'
 		jmp 	#UntilError
-		jsr 	#EvaluateInteger			; do the test
+		jsr 	#EvaluateInteger			; do the test, e.g. until what.
 		skz 	r0 							
-		jmp 	#_CRPassed
+		jmp 	#_CRPassed 					; if <> 0 then remove from stack and continue
 		;
-		jsr 	#StackPopPosition 			; restore position from stack.
+		jsr 	#StackPopPosition 			; restore position from stack, e.g. go back
 		pop 	link
 		ret
 
@@ -48,4 +48,3 @@
 		jsr 	#StackPopWords
 		pop 	link
 		ret
-

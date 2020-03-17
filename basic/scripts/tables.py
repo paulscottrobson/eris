@@ -4,7 +4,7 @@
 #		Name:		tables.py
 #		Purpose:	Generate external tables
 #		Created:	2nd March 2020
-#		Reviewed: 	TODO
+#		Reviewed: 	17th March 2020
 #		Author:		Paul Robson (paul@robsons.org.uk)
 #
 # *****************************************************************************
@@ -22,7 +22,7 @@ h = open(".."+os.sep+"generated"+os.sep+"tok_const.inc","w")
 h.write(";\n;\tAutomatically generated\n;\n")
 for t in tokens.getList():
 	id = tokens.getInfo(t)["token"]
-	tn = "TOK_"+t
+	tn = "TOK_"+t 															# Convert punctuation to text
 	tn = tn.replace("<","LESS").replace(">","GREATER").replace("=","EQUAL").replace(":","COLON")
 	tn = tn.replace("+","PLUS").replace("-","MINUS").replace("*","STAR").replace("/","SLASH")
 	tn = tn.replace("!","PLING").replace(",","COMMA").replace(";","SEMICOLON").replace("%","PERCENT")
@@ -41,6 +41,9 @@ h.write(".TokeniserWords\n")
 for t in tokens.getList():
 	id = tokens.getInfo(t)["token"]
 	code = tokens.encode(t)
+	#
+	#		This word contains the type in bits 8..11 and the encoded token length in 0..7
+	#
 	defWord = (((id >> 9) & 0x0F) << 8) | len(code)
 	code.insert(0,defWord)
 	code = ",".join(["${0:04x}".format(c) for c in code])
@@ -75,6 +78,8 @@ for t in tokens.getList():
 	 	undefined.append(t)
 	h.write("\tword\t{0:24} ; ${1:04x} {2}\n".format(handler,tokens.getInfo(t)["token"],t))	
 h.close()
+#
+#		If any aren't implemented output a warning.
 #
 if len(undefined) > 0:
 	undefined.sort()

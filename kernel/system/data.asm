@@ -12,17 +12,47 @@
 
 		org 	ramStart
 
+; *****************************************************************************
 ;
-;		This data is erased to $0000
+;							This data is erased to $0000
 ;
+; *****************************************************************************
+
 .initialisedStart
 
-.highmemory									; first memory address after the end of 
-		fill 	1							; RAM (e.g. if RAM is $4000-$BFFF,$C000)
+; *****************************************************************************
+;
+;				System Variables (order must be maintained)
+;					 (should be viewed as read only)
+;
+; *****************************************************************************
 
-.textMemory 								; address of 40x30 character text buffer.
+.systemVariables
+
+.lowmemory 									; lowest memory address [$SYS+0]
 		fill 	1
 
+.highmemory									; first memory address after the end of [$SYS+1]
+		fill 	1							; RAM (e.g. if RAM is $4000-$BFFF,$C000)
+
+.textMemory 								; address of 40x30 character text buffer [$SYS+2]
+		fill 	1
+
+.spriteMemory 								; available sprite memory [$SYS+3]
+		fill 	1
+
+.spriteCount  								; sprite maximum count [$SYS+4]
+		fill 	1
+
+.xTextExtent								; screen width, characters [$SYS+5]
+		fill 	1
+
+.yTextExtent 								; screen height, characters [$SYS+6]
+		fill 	1
+
+; *****************************************************************************
+;				(these can be accessed by assembler and so on)
+; *****************************************************************************
 
 .xGraphic 									; graphic cursor position.
 		fill 	1

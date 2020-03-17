@@ -4,7 +4,7 @@
 #		Name:		complexvar.py
 #		Purpose:	Test classes - complex variables
 #		Created:	6th March 2020
-#		Reviewed: 	TODO
+#		Reviewed: 	17th March 2020
 #		Author:		Paul Robson (paul@robsons.org.uk)
 #
 # *****************************************************************************
@@ -75,5 +75,6 @@ class ComplexVariable(TestProgram):
 					for i in range(0,v["size"][0]+1):
 						for j in range(0,v["size"][1]+1):
 							self.validate(v,str(i)+","+str(j),v["value"][i][j])
+	#
 	def validate(self,rec,index,val):
 		self.add("assert {0}({1}) = {2}".format(rec["name"],index,val))

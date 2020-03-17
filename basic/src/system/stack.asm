@@ -4,7 +4,7 @@
 ;		Name:		stack.asm
 ;		Purpose:	BASIC Stack routines
 ;		Created:	10th March 2020
-;		Reviewed: 	TODO
+;		Reviewed: 	16th March 2020
 ;		Author:		Paul Robson (paul@robsons.org.uk)
 ;
 ; *****************************************************************************
@@ -21,7 +21,7 @@
 		stm 	r0,#returnStackPtr
 		stm 	r14,r0,#0 					; write $0000 as the top stack marker.
 											; [rsp] always points to the last marker.
-		ret
+		ret 								; and the stack top.
 													
 ; *****************************************************************************
 ;
@@ -66,12 +66,12 @@
 		dec 	r0
 		stm 	r0,#returnStackPtr
 
-		ldm 	r1,link,#0 					; get return word
-		stm 	r1,r0,#0 					; write it
+		ldm 	r1,link,#0 					; get return word from following word
+		stm 	r1,r0,#0 					; write it to the space just created
 		inc 	link						; skip return word
 
-		ldm 	r1,#returnStackBottom 		; check out of stack space
-		sub 	r0,r1,#0
+		ldm 	r1,#returnStackBottom 		; check out of stack space ; this will be the
+		sub 	r0,r1,#0  					; last thing written on a structure or call
 		skge 
 		jmp 	#ReturnStackError
 		ret
@@ -81,16 +81,21 @@
 ;			Check that the stack top value is the word following the
 ;			call. If not, return +1, else return +3 
 ;
+;			This skips a jump which is the error routine e.g.
+;				jsr 	#StackCheckMarker
+;				word 	<markerCode>
+;				jmp 	<Handle Error>
+;
 ; *****************************************************************************
 
 .StackCheckMarker
 		ldm 	r0,#returnStackPtr 			; tos address
-		ldm 	r0,r0,#0 					; tos data
+		ldm 	r0,r0,#0 					; tos data, e.g. the current marker
 		ldm		r1,link,#0 					; get word after call
 		inc 	link 						; skip it.
-		xor 	r0,r1,#0 					; if they are the same
+		xor 	r0,r1,#0 					; check if they are the same
 		sknz 	r0 							
-		add 	link,#2 					; skip the jump
+		add 	link,#2 					; skip the jump if they are the same
 		ret
 
 ; *****************************************************************************

@@ -4,12 +4,14 @@
 ;		Name:		simplevar.asm
 ;		Purpose:	Very simple variable implementation, 26 A-Z
 ;		Created:	3rd March 2020
-;		Reviewed: 	TODO
+;		Reviewed: 	16th March 2020
 ;		Author:		Paul Robson (paul@robsons.org.uk)
 ;
 ; *****************************************************************************
 ; *****************************************************************************
-
+;
+;									NOT USED
+;
 ; *****************************************************************************
 ;
 ;				Get variable reference @R11 to stack @R10
@@ -26,7 +28,7 @@
 		jmp 	#SyntaxError 				; bad variable.
 		;
 		stm 	r1,r10,#esValue1 			; save address
-		stm 	r15,r10,#esReference1 		; and it is a reference.
+		stm 	r15,r10,#esReference1 		; and it is a reference e.g. non zero
 		stm 	r14,r10,#esType1 			; and a reference to an integer
 		;
 		inc 	r11 						; step over keyword

@@ -4,7 +4,7 @@
 ;		Name:		miscellany.asm
 ;		Purpose:	Miscellaneous Commands
 ;		Created:	3rd March 2020
-;		Reviewed: 	TODO
+;		Reviewed: 	16th March 2020
 ;		Author:		Paul Robson (paul@robsons.org.uk)
 ;
 ; *****************************************************************************
@@ -35,11 +35,11 @@
 ; *****************************************************************************
 
 .CommandAssert 		;; [assert]
-		mov 	r1,link,#0
+		push 	link
 		jsr 	#EvaluateInteger 			; assert what ?
 		sknz 	r0
 		jmp 	#AssertError 				; failed.
-		mov 	link,r1,#0
+		pop 	link
 		ret
 
 ; *****************************************************************************
@@ -50,7 +50,7 @@
 
 .CommandPoke 		;; [poke]
 		push 	link
-		jsr 	#EvaluateInteger 			; address -> R1
+		jsr 	#EvaluateInteger 			; address to poke -> R1
 		mov 	r1,r0,#0 
 		jsr 	#CheckComma
 		jsr 	#EvaluateInteger 			; data -> R0
@@ -68,7 +68,7 @@
 		push 	link
 		jsr 	#EvaluateInteger 			; address -> R1
 		mov 	r1,r0,#0 
-		mov 	r0,#fixedVariables 			; pass variables in R0
+		mov 	r0,#fixedVariables 			; pass variables in R0 e.g. the address of A-Z block
 		brl 	link,r1,#0 					; call the routine
 		pop 	link
 		ret
@@ -76,6 +76,7 @@
 ; *****************************************************************************
 ;
 ;					Code for ' and REM comment handlers
+;				  Can be REM or REM "comment", same for '
 ;
 ; *****************************************************************************
 
@@ -87,7 +88,7 @@
 		and 	r0,#$FF00 					; msb of token in R0 					
 		xor 	r0,#$0100 					; if it is $0100 then 
 		sknz 	r0
-		add 	r11,r1,#0 					; add the length to R11
+		add 	r11,r1,#0 					; add the length to R11. skipping string
 		ret
 
 ; *****************************************************************************

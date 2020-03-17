@@ -4,7 +4,7 @@
 #		Name:		tokens.py
 #		Purpose:	Token class
 #		Created:	2nd March 2020
-#		Reviewed: 	TODO
+#		Reviewed: 	17th March 2020
 #		Author:		Paul Robson (paul@robsons.org.uk)
 #
 # *****************************************************************************
@@ -32,7 +32,7 @@ class Tokens(object):
 			#
 			src = [x for x in self.getRaw().replace("\t"," ").split("\n") if not x.startswith("//")]
 			for w in " ".join(src).upper().split():
-				if re.match("^\\[\\d\\]$",w) is not None:
+				if re.match("^\\[\\d\\]$",w) is not None:					# Switch token type
 					currentType = int(w[1])
 				elif w == "[UNARY]":
 					currentType = 8
@@ -45,11 +45,11 @@ class Tokens(object):
 				elif w == "[CMD+]":
 					currentType = 15
 				else:
-					assert not(w.startswith("[") and w.endswith("]"))
-					assert tokenID < 512
+					assert not(w.startswith("[") and w.endswith("]"))		# bad type
+					assert tokenID < 512 									# too many tokens.
 					newToken = { "name":w,"token":0x2000+currentType*512+tokenID }
 					tokenID += 1
-					Tokens.TOKENS[w] = newToken
+					Tokens.TOKENS[w] = newToken								# store in hash and list
 					Tokens.TOKENLIST.append(w)
 	#
 	#		Get list of tokens in id order (e.g. the lower 9 bits)
@@ -72,31 +72,31 @@ class Tokens(object):
 	#		or an identifier.
 	#
 	def encode(self,token):
-		token = token.strip().upper()
-		if token.startswith("|"):
+		token = token.strip().upper()										# clean up
+		if token.startswith("|"): 											# this means we dont' use it.
 			return [0xFFFF]
-		isAlpha = token[0] >= 'A' and token[0] <= 'Z'
+		isAlpha = token[0] >= 'A' and token[0] <= 'Z'						# encoding for punctuation/identifier
 		return self.encodeIdentifier(token) if isAlpha else self.encodePunctuation(token)
 	#
 	#		Encode an identifier which may end with $ $( or ( which types it.
 	#
 	def encodeIdentifier(self,s):
-		m = re.match("^([A-Z][A-Z0-9\\.]*)(\\$?)(\\(?)$",s)
+		m = re.match("^([A-Z][A-Z0-9\\.]*)(\\$?)(\\(?)$",s)					# check matches pattern
 		assert m is not None,"Bad "+s
-		s = m.group(1) if len(m.group(1)) % 2 == 0 else m.group(1)+" "
+		s = m.group(1) if len(m.group(1)) % 2 == 0 else m.group(1)+" "		# pad to even size with spaces
 		code = []
-		for i in range(0,len(s),2):
+		for i in range(0,len(s),2): 										# build it a word at a time
 			encWord = 0x4000 + self.encodeChar(s[i])+self.encodeChar(s[i+1])*40
-			encWord = encWord if m.group(2) == "" else encWord+0x1000
+			encWord = encWord if m.group(2) == "" else encWord+0x1000		# adjust for typing
 			encWord = encWord if m.group(3) == "" else encWord+0x0800
 			code.append(encWord)
-		code[-1] += 0x2000
+		code[-1] += 0x2000 													# mark end of word
 		return code
 	#
 	#		Encode a 1 or 2 character punctuation token
 	#
 	def encodePunctuation(self,s):
-		assert len(s) <= 2 and s != "","Bad "+s
+		assert len(s) <= 2 and s != "","Bad "+s 							# rubbish validation but works
 		assert re.match("^[\\!\\+\\-\\*\\>\\<\\=\\/\\(\\)\\:\\,\\;\\&\\%\\'\\?]+$",s) is not None,"Bad "+s
 		s = s + chr(0)
 		return [ 0x8000 + ord(s[0]) + (ord(s[1]) << 8)]
@@ -104,7 +104,7 @@ class Tokens(object):
 	#		encode a character
 	#	
 	def encodeChar(self,c):
-		n = " ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.".find(c.upper())
+		n = " ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.".find(c.upper())		# identifier char -> 0-37
 		assert n >= 0,"Unknown char "+c
 		return n
 	#
@@ -138,8 +138,8 @@ class Tokens(object):
 [Unary]
 	( 	&	% 	|constshift
 	abs(	asc(	chr$(	false	get( 	get$( 	inkey( 	inkey$( 	
-	joyx( 	joyy( 	joyb(	left$(	len(	mid$(	peek(	right$(	
-	rnd(	sgn(	str$(	true 	val(	
+	joyx( 	joyy( 	joyb(	left$(	len(	mid$(	page	peek(	
+	right$(	rnd(	sgn(	str$(	sysvar(	true 	val(	
 //
 //		Synonyms
 //

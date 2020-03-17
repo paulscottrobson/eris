@@ -12,6 +12,31 @@
 
 ; *****************************************************************************
 ;
+;				Page returns a reference to the program Code word
+;
+; *****************************************************************************
+
+.Command_Page	 ;; [page]
+		mov 	r0,#programCode
+		stm 	r0,r10,#esValue1 			; update value
+		stm 	r14,r10,#esType1 			; make integer *reference*
+		stm 	r15,r10,#esReference1			
+		ret
+
+; *****************************************************************************
+;
+;				 SysVar(n) returns a system variable value
+;
+; *****************************************************************************
+
+.Command_SysVar 	;; [sysvar(]
+		push 	link
+		jsr 	#EvaluateInteger 			
+		jsr 	#OSReadSystemVariable
+		jmp 	#_JoyExit
+		
+; *****************************************************************************
+;
 ;							Joystick axis functions
 ;
 ; *****************************************************************************

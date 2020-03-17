@@ -4,7 +4,7 @@
 ;		Name:		basic.asm
 ;		Purpose:	Basic ROM Startup
 ;		Created:	2nd March 2020
-;		Reviewed: 	TODO
+;		Reviewed: 	16th March 2020
 ;		Author:		Paul Robson (paul@robsons.org.uk)
 ;
 ; *****************************************************************************
@@ -37,9 +37,9 @@
 		stm 	sp,#initialSP 				; save initial stack pointer.
 		;
 		mov 	r0,#freeBasicCode			; initialise code pointer.
-		stm 	r0,#programCode
+		stm 	r0,#programCode 			; to the space allocate for BASIC programs
 		;
-		mov 	r0,#basicPrompt
+		mov 	r0,#basicPrompt 			; display the prompt
 		jsr 	#OSPrintString
 		;
 		;		Uncomment this to test the tokeniser
@@ -71,10 +71,8 @@
 		mov 	r11,r0,#0 					; put start of 'faux line' in R11.
 		;
 		ldm 	r2,r0,#2 					; look at first token to see if it is a number.
-		skm 	r2 							; no, it isn't
-		jmp 	#RunProgramR11 				; run program from R11
+		skm 	r2 							; skip if it isn't (that's 8000-FFFF => 0-32767)
+		jmp 	#RunProgramR11 				; run program from R11 as a command
 		jmp 	#EditProgram 				; else edit
-
-
 
 

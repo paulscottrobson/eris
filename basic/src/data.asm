@@ -4,7 +4,7 @@
 ;		Name:		data.asm
 ;		Purpose:	Basic Data Usage
 ;		Created:	3rd March 2020
-;		Reviewed: 	TODO
+;		Reviewed: 	16th March 2020
 ;		Author:		Paul Robson (paul@robsons.org.uk)
 ;
 ; *****************************************************************************
@@ -18,7 +18,7 @@
 ;
 ;
 		
-.initialSP									; stack pointer value on start up.
+.initialSP									; stack pointer value on BASIC start up.
 		fill 	1
 
 .currentLine 								; current line address (address of pointer)
@@ -63,7 +63,7 @@
 ;			+2 	ref 	(0 if value,#0 if reference)
 ;	
 ;	
-.evalStack		
+.evalStack									; stack for evaluation
 		fill 	StackSize * stackElementSize
 
 .fixedVariables								; the 26 permanent variables A-Z
@@ -86,3 +86,4 @@
 ;					We put the basic program on a page boundary
 ;
 freeBasicCode = ramStart + $200
+
