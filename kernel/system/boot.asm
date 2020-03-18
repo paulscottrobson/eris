@@ -88,7 +88,7 @@
 ;
 ;		Initialise the plane usage
 ;
-		mov 	r0,#$0004					; 4 backplanes no srite plane
+		mov 	r0,#$0202					; 4 backplanes no sprite plane
 		jsr 	#OSSetPlanes
 
 ;

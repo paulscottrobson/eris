@@ -95,6 +95,6 @@
 	word	Command_RETURN           ; $3c5a RETURN
 	word	RunProgram               ; $3c5b RUN
 	word	Command_Save             ; $3c5c SAVE
-	word	SyntaxError              ; $3c5d SCREEN
+	word	Command_Screen           ; $3c5d SCREEN
 	word	Command_Stop             ; $3c5e STOP
 	word	CommandSys               ; $3c5f SYS
