@@ -80,21 +80,22 @@
 	word	$0e02,$41be,$63ed                ; $3c4b FKEY
 	word	$0e03,$425f,$435b,$6002          ; $3c4c GOSUB
 	word	$0e02,$425f,$626c                ; $3c4d GOTO
-	word	$0e03,$4239,$4358,$6014          ; $3c4e INPUT
-	word	$0e02,$40d4,$6014                ; $3c4f LET
-	word	$0e02,$4174,$6333                ; $3c50 LIST
-	word	$0e02,$4264,$60a1                ; $3c51 LOAD
-	word	$0e02,$40d6,$6017                ; $3c52 NEW
-	word	$0e02,$41ef,$6004                ; $3c53 OLD
-	word	$0e04,$4038,$40d4,$4334,$6005    ; $3c54 PALETTE
-	word	$0e03,$4038,$40d8,$6012          ; $3c55 PAPER
-	word	$0e02,$4268,$60d3                ; $3c56 POKE
-	word	$0e03,$42e0,$4239,$6014          ; $3c57 PRINT
-	word	$0e02,$40da,$600d                ; $3c58 REM
-	word	$0e03,$40da,$435c,$6242          ; $3c59 RETURN
-	word	$0e02,$435a,$600e                ; $3c5a RUN
-	word	$0e02,$403b,$60de                ; $3c5b SAVE
-	word	$0e03,$408b,$40da,$6235          ; $3c5c SCREEN
-	word	$0e02,$4333,$628f                ; $3c5d STOP
-	word	$0e02,$43fb,$6013                ; $3c5e SYS
+	word	$0e02,$4239,$600b                ; $3c4e INK
+	word	$0e03,$4239,$4358,$6014          ; $3c4f INPUT
+	word	$0e02,$40d4,$6014                ; $3c50 LET
+	word	$0e02,$4174,$6333                ; $3c51 LIST
+	word	$0e02,$4264,$60a1                ; $3c52 LOAD
+	word	$0e02,$40d6,$6017                ; $3c53 NEW
+	word	$0e02,$41ef,$6004                ; $3c54 OLD
+	word	$0e04,$4038,$40d4,$4334,$6005    ; $3c55 PALETTE
+	word	$0e03,$4038,$40d8,$6012          ; $3c56 PAPER
+	word	$0e02,$4268,$60d3                ; $3c57 POKE
+	word	$0e03,$42e0,$4239,$6014          ; $3c58 PRINT
+	word	$0e02,$40da,$600d                ; $3c59 REM
+	word	$0e03,$40da,$435c,$6242          ; $3c5a RETURN
+	word	$0e02,$435a,$600e                ; $3c5b RUN
+	word	$0e02,$403b,$60de                ; $3c5c SAVE
+	word	$0e03,$408b,$40da,$6235          ; $3c5d SCREEN
+	word	$0e02,$4333,$628f                ; $3c5e STOP
+	word	$0e02,$43fb,$6013                ; $3c5f SYS
 	word	$0000

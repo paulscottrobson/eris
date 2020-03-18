@@ -90,22 +90,7 @@
 ;
 		mov 	r0,#$0004					; 4 backplanes no srite plane
 		jsr 	#OSSetPlanes
-;
-;		Reset the palette. All 256 values become BGR on the lower 3 bits
-;		(same palette as BBC Micro)
-;
-		clr 	r0 							; R0 is palette-write
-._bcWritePalette
-		mov 	r1,r0,#0 					; get the colour out of the table
-		ror 	r1,#8
-		and 	r1,#7
-		add 	r1,#paletteTable
-		ldm 	r1,r1,#0
-		add 	r1,r0,#0 					; build the word
-		stm 	r1,#paletteRegister 		; write to palette register
-		add 	r0,#$100
-		skz 	r0
-		jmp 	#_bcWritePalette
+
 ;
 ;		Show the boot prompt, free memory and kernel version
 ;
@@ -143,16 +128,3 @@
 ;		jsr 	#OSBeep
 
 		jmp 	#KernelEnd 					; this is the end of the "kernel ROM"
-;
-;		Palette table all colours 0-255 are set to this based on the lower
-;		three bits of the palette number.
-;
-.paletteTable
-		word 	0*16+0*4+0
-		word 	0*16+0*4+3
-		word 	0*16+3*4+0
-		word 	0*16+3*4+3
-		word 	3*16+0*4+0
-		word 	3*16+0*4+3
-		word 	3*16+3*4+0
-		word 	3*16+3*4+3

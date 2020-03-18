@@ -165,8 +165,8 @@ class Tokens(object):
 [Cmd]
 	' 		:		?
 	assert 	blit 	call 	clear 	cls 	dim 	dir 	else 	end 	fkey	gosub 	
-	goto 	input 	let 	list 	load 	new 	old 	palette	paper	poke 	print 	
-	rem 	return 	run 	save 	screen	stop 	sys 	
+	goto 	ink 	input 	let 	list 	load 	new 	old 	palette	paper	poke 	
+	print 	rem 	return 	run 	save 	screen	stop 	sys 	
 
 """
 

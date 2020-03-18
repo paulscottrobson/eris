@@ -27,7 +27,7 @@
 ; *****************************************************************************
 
 .OSXSetPlanes
-		push 	r0,r1,r2
+		push 	r0,r1,r2,link
 		mov 	r1,r0,#0					; save mode in R1
 		and 	r0,#$00FF					; the number of planes in the background
 		;
@@ -54,5 +54,48 @@
 		dec 	r2							; this is thee mask
 		ror 	r2,r0,#0					; and this makes it a sprite mask
 		stm 	r2,#spriteMask
+
+		mov 	r0,#15 						; do entire palette, both planes.
+._spSetPalette
+		mov 	r2,r0,#0 					; get palette number
+		and 	r2,#7 						; what colour do we want to use
+		add 	r2,#_spPaletteTable 		; the address of the colour to write
+		ldm 	r2,r2,#0 					; get colour into R2
+		mov 	r1,#1 						; write to sprite palette
+		jsr 	#OSXSetPalette
+		clr 	r1
+		jsr 	#OSXSetPalette
+		dec 	r0 							; do 255->0
+		skm 	r0
+		jmp 	#_spSetPalette
+		pop 	r0,r1,r2,link
+		ret
+;
+;		Palette table default colours for lower 3 bits of any plane
+;
+._spPaletteTable
+		word 	0*16+0*4+0
+		word 	0*16+0*4+3
+		word 	0*16+3*4+0
+		word 	0*16+3*4+3
+		word 	3*16+0*4+0
+		word 	3*16+0*4+3
+		word 	3*16+3*4+0
+		word 	3*16+3*4+3
+
+; *****************************************************************************
+;
+;					Update a palette for colour R0. 
+;		Plane R1 (0 = background,1 = sprite plane), BGR 2 bit R2
+;
+; *****************************************************************************
+
+.OSXSetPalette
+		skz 	r1  						; don't do sprites
+		ret
+		push 	r0,r1,r2
+		ror 	r0,#8
+		add 	r0,r2,#0
+		stm 	r0,#paletteRegister 		; write to palette register
 		pop 	r0,r1,r2
 		ret

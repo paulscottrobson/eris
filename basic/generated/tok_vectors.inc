@@ -80,20 +80,21 @@
 	word	Command_FKey             ; $3c4b FKEY
 	word	Command_GOSUB            ; $3c4c GOSUB
 	word	Command_GOTO             ; $3c4d GOTO
-	word	Command_Input            ; $3c4e INPUT
-	word	Command_Let              ; $3c4f LET
-	word	Command_List             ; $3c50 LIST
-	word	Command_Load             ; $3c51 LOAD
-	word	Command_New              ; $3c52 NEW
-	word	Command_Old              ; $3c53 OLD
-	word	SyntaxError              ; $3c54 PALETTE
-	word	SyntaxError              ; $3c55 PAPER
-	word	CommandPoke              ; $3c56 POKE
-	word	Command_Print            ; $3c57 PRINT
-	word	CommentCommand2          ; $3c58 REM
-	word	Command_RETURN           ; $3c59 RETURN
-	word	RunProgram               ; $3c5a RUN
-	word	Command_Save             ; $3c5b SAVE
-	word	SyntaxError              ; $3c5c SCREEN
-	word	Command_Stop             ; $3c5d STOP
-	word	CommandSys               ; $3c5e SYS
+	word	SyntaxError              ; $3c4e INK
+	word	Command_Input            ; $3c4f INPUT
+	word	Command_Let              ; $3c50 LET
+	word	Command_List             ; $3c51 LIST
+	word	Command_Load             ; $3c52 LOAD
+	word	Command_New              ; $3c53 NEW
+	word	Command_Old              ; $3c54 OLD
+	word	SyntaxError              ; $3c55 PALETTE
+	word	SyntaxError              ; $3c56 PAPER
+	word	CommandPoke              ; $3c57 POKE
+	word	Command_Print            ; $3c58 PRINT
+	word	CommentCommand2          ; $3c59 REM
+	word	Command_RETURN           ; $3c5a RETURN
+	word	RunProgram               ; $3c5b RUN
+	word	Command_Save             ; $3c5c SAVE
+	word	SyntaxError              ; $3c5d SCREEN
+	word	Command_Stop             ; $3c5e STOP
+	word	CommandSys               ; $3c5f SYS
