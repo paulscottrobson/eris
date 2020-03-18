@@ -69,27 +69,32 @@
 	word	$0e01,$803a                      ; $3c40 :
 	word	$0e01,$803f                      ; $3c41 ?
 	word	$0e03,$42f9,$40db,$6332          ; $3c42 ASSERT
-	word	$0e02,$402b,$61ec                ; $3c43 CALL
-	word	$0e03,$41e3,$402d,$6012          ; $3c44 CLEAR
-	word	$0e02,$416c,$600d                ; $3c45 DIM
-	word	$0e02,$416c,$6012                ; $3c46 DIR
-	word	$0e02,$41e5,$60db                ; $3c47 ELSE
-	word	$0e02,$4235,$6004                ; $3c48 END
-	word	$0e02,$41be,$63ed                ; $3c49 FKEY
-	word	$0e03,$425f,$435b,$6002          ; $3c4a GOSUB
-	word	$0e02,$425f,$626c                ; $3c4b GOTO
-	word	$0e03,$4239,$4358,$6014          ; $3c4c INPUT
-	word	$0e02,$40d4,$6014                ; $3c4d LET
-	word	$0e02,$4174,$6333                ; $3c4e LIST
-	word	$0e02,$4264,$60a1                ; $3c4f LOAD
-	word	$0e02,$40d6,$6017                ; $3c50 NEW
-	word	$0e02,$41ef,$6004                ; $3c51 OLD
-	word	$0e02,$4268,$60d3                ; $3c52 POKE
-	word	$0e03,$42e0,$4239,$6014          ; $3c53 PRINT
-	word	$0e02,$40da,$600d                ; $3c54 REM
-	word	$0e03,$40da,$435c,$6242          ; $3c55 RETURN
-	word	$0e02,$435a,$600e                ; $3c56 RUN
-	word	$0e02,$403b,$60de                ; $3c57 SAVE
-	word	$0e02,$4333,$628f                ; $3c58 STOP
-	word	$0e02,$43fb,$6013                ; $3c59 SYS
+	word	$0e02,$41e2,$6329                ; $3c43 BLIT
+	word	$0e02,$402b,$61ec                ; $3c44 CALL
+	word	$0e03,$41e3,$402d,$6012          ; $3c45 CLEAR
+	word	$0e02,$41e3,$6013                ; $3c46 CLS
+	word	$0e02,$416c,$600d                ; $3c47 DIM
+	word	$0e02,$416c,$6012                ; $3c48 DIR
+	word	$0e02,$41e5,$60db                ; $3c49 ELSE
+	word	$0e02,$4235,$6004                ; $3c4a END
+	word	$0e02,$41be,$63ed                ; $3c4b FKEY
+	word	$0e03,$425f,$435b,$6002          ; $3c4c GOSUB
+	word	$0e02,$425f,$626c                ; $3c4d GOTO
+	word	$0e03,$4239,$4358,$6014          ; $3c4e INPUT
+	word	$0e02,$40d4,$6014                ; $3c4f LET
+	word	$0e02,$4174,$6333                ; $3c50 LIST
+	word	$0e02,$4264,$60a1                ; $3c51 LOAD
+	word	$0e02,$40d6,$6017                ; $3c52 NEW
+	word	$0e02,$41ef,$6004                ; $3c53 OLD
+	word	$0e04,$4038,$40d4,$4334,$6005    ; $3c54 PALETTE
+	word	$0e03,$4038,$40d8,$6012          ; $3c55 PAPER
+	word	$0e02,$4268,$60d3                ; $3c56 POKE
+	word	$0e03,$42e0,$4239,$6014          ; $3c57 PRINT
+	word	$0e02,$40da,$600d                ; $3c58 REM
+	word	$0e03,$40da,$435c,$6242          ; $3c59 RETURN
+	word	$0e02,$435a,$600e                ; $3c5a RUN
+	word	$0e02,$403b,$60de                ; $3c5b SAVE
+	word	$0e03,$408b,$40da,$6235          ; $3c5c SCREEN
+	word	$0e02,$4333,$628f                ; $3c5d STOP
+	word	$0e02,$43fb,$6013                ; $3c5e SYS
 	word	$0000

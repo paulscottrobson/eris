@@ -25,7 +25,7 @@
 0000 :                               tabstop=$0004
 0000 :                               maxistrsize=$000a
 0000 :                               functionkeysize=$000c
-0000 :                               spritedefaultcount=$0010
+0000 :                               spritedefaultimagecount=$0010
 0000 :                               oswaitblitter=$0002
 0000 :                               osprintcharacter=$0004
 0000 :                               osprintinline=$0006
@@ -91,8 +91,8 @@
 0000 :                               lowmemory=$4000
 0000 :                               highmemory=$4001
 0000 :                               textmemory=$4002
-0000 :                               spritememory=$4003
-0000 :                               spritecount=$4004
+0000 :                               spriteimagememory=$4003
+0000 :                               spriteimagecount=$4004
 0000 :                               xtextextent=$4005
 0000 :                               ytextextent=$4006
 0000 :                               xgraphic=$4007
@@ -181,29 +181,34 @@
 0000 :                               tok_colon = $3c40
 0000 :                               tok_qmark = $3c41
 0000 :                               tok_assert = $3c42
-0000 :                               tok_call = $3c43
-0000 :                               tok_clear = $3c44
-0000 :                               tok_dim = $3c45
-0000 :                               tok_dir = $3c46
-0000 :                               tok_else = $3c47
-0000 :                               tok_end = $3c48
-0000 :                               tok_fkey = $3c49
-0000 :                               tok_gosub = $3c4a
-0000 :                               tok_goto = $3c4b
-0000 :                               tok_input = $3c4c
-0000 :                               tok_let = $3c4d
-0000 :                               tok_list = $3c4e
-0000 :                               tok_load = $3c4f
-0000 :                               tok_new = $3c50
-0000 :                               tok_old = $3c51
-0000 :                               tok_poke = $3c52
-0000 :                               tok_print = $3c53
-0000 :                               tok_rem = $3c54
-0000 :                               tok_return = $3c55
-0000 :                               tok_run = $3c56
-0000 :                               tok_save = $3c57
-0000 :                               tok_stop = $3c58
-0000 :                               tok_sys = $3c59
+0000 :                               tok_blit = $3c43
+0000 :                               tok_call = $3c44
+0000 :                               tok_clear = $3c45
+0000 :                               tok_cls = $3c46
+0000 :                               tok_dim = $3c47
+0000 :                               tok_dir = $3c48
+0000 :                               tok_else = $3c49
+0000 :                               tok_end = $3c4a
+0000 :                               tok_fkey = $3c4b
+0000 :                               tok_gosub = $3c4c
+0000 :                               tok_goto = $3c4d
+0000 :                               tok_input = $3c4e
+0000 :                               tok_let = $3c4f
+0000 :                               tok_list = $3c50
+0000 :                               tok_load = $3c51
+0000 :                               tok_new = $3c52
+0000 :                               tok_old = $3c53
+0000 :                               tok_palette = $3c54
+0000 :                               tok_paper = $3c55
+0000 :                               tok_poke = $3c56
+0000 :                               tok_print = $3c57
+0000 :                               tok_rem = $3c58
+0000 :                               tok_return = $3c59
+0000 :                               tok_run = $3c5a
+0000 :                               tok_save = $3c5b
+0000 :                               tok_screen = $3c5c
+0000 :                               tok_stop = $3c5d
+0000 :                               tok_sys = $3c5e
 0000 :                               cpustacksize = 256
 0000 :                               maxstringsize = 255
 0000 :                               extrastringalloc = 8
@@ -645,7 +650,7 @@
 123c : 1dc0 3ce1                     pop  link
 123e : afd0                          ret
 123f :                               ._cifmultiline_false
-123f : 00f0 3c47                     mov  r0,#tok_else
+123f : 00f0 3c49                     mov  r0,#tok_else
 1241 : 01f0 3a39                     mov  r1,#tok_endif
 1243 : adf0 1ab5                     jsr  #skipstructure
 1245 : 5be1                          dec  r11
@@ -1237,7 +1242,7 @@
 155f : b0e0                          skz  r0
 1560 : aff0 156a                     jmp  #_rpnotcommandtoken
 1562 : 61f0 01ff                     and  r1,#$01ff
-1564 : 31f0 2026                     add  r1,#tokenvectors
+1564 : 31f0 2039                     add  r1,#tokenvectors
 1566 : 1010                          ldm  r0,r1,#0
 1567 : ad00                          brl  link,r0,#0
 1568 : aff0 1546                     jmp  #_rpnewcommand
@@ -1626,7 +1631,7 @@
 1758 : 0920                          mov  r9,r2,#0
 1759 :                               ._evcallhandler
 1759 : 61f0 01ff                     and  r1,#$01ff
-175b : 31f0 2026                     add  r1,#tokenvectors
+175b : 31f0 2039                     add  r1,#tokenvectors
 175d : 1010                          ldm  r0,r1,#0
 175e : ad00                          brl  link,r0,#0
 175f : aff0 173e                     jmp  #_evhaveterm
@@ -3094,121 +3099,131 @@
 1fd3 : 0e01 803a                     word $0e01,$803a
 1fd5 : 0e01 803f                     word $0e01,$803f
 1fd7 : 0e03 42f9 40db 6332           word $0e03,$42f9,$40db,$6332
-1fdb : 0e02 402b 61ec                word $0e02,$402b,$61ec
-1fde : 0e03 41e3 402d 6012           word $0e03,$41e3,$402d,$6012
-1fe2 : 0e02 416c 600d                word $0e02,$416c,$600d
-1fe5 : 0e02 416c 6012                word $0e02,$416c,$6012
-1fe8 : 0e02 41e5 60db                word $0e02,$41e5,$60db
-1feb : 0e02 4235 6004                word $0e02,$4235,$6004
-1fee : 0e02 41be 63ed                word $0e02,$41be,$63ed
-1ff1 : 0e03 425f 435b 6002           word $0e03,$425f,$435b,$6002
-1ff5 : 0e02 425f 626c                word $0e02,$425f,$626c
-1ff8 : 0e03 4239 4358 6014           word $0e03,$4239,$4358,$6014
-1ffc : 0e02 40d4 6014                word $0e02,$40d4,$6014
-1fff : 0e02 4174 6333                word $0e02,$4174,$6333
-2002 : 0e02 4264 60a1                word $0e02,$4264,$60a1
-2005 : 0e02 40d6 6017                word $0e02,$40d6,$6017
-2008 : 0e02 41ef 6004                word $0e02,$41ef,$6004
-200b : 0e02 4268 60d3                word $0e02,$4268,$60d3
-200e : 0e03 42e0 4239 6014           word $0e03,$42e0,$4239,$6014
-2012 : 0e02 40da 600d                word $0e02,$40da,$600d
-2015 : 0e03 40da 435c 6242           word $0e03,$40da,$435c,$6242
-2019 : 0e02 435a 600e                word $0e02,$435a,$600e
-201c : 0e02 403b 60de                word $0e02,$403b,$60de
-201f : 0e02 4333 628f                word $0e02,$4333,$628f
-2022 : 0e02 43fb 6013                word $0e02,$43fb,$6013
-2025 : 0000                          word $0000
-2026 :                               .tokenvectors
-2026 : 162b                          word binaryop_and
-2027 : 1636                          word binaryop_or
-2028 : 1647                          word binaryop_xor
-2029 : 16e2                          word binaryop_greater
-202a : 169b                          word binaryop_greaterequal
-202b : 16e8                          word binaryop_less
-202c : 16c1                          word binaryop_lessequal
-202d : 16d7                          word binaryop_equal
-202e : 1685                          word binaryop_notequal
-202f : 15e8                          word binaryop_add
-2030 : 15f7                          word binaryop_sub
-2031 : 1602                          word binaryop_mult
-2032 : 160d                          word binaryop_divide
-2033 : 161c                          word binaryop_mod
-2034 : 1652                          word binaryop_indirect
-2035 : 189f                          word unary_parenthesis
-2036 : 189d                          word unary_hex
-2037 : 189d                          word unary_bin
-2038 : 1794                          word constshifthandler
-2039 : 18a8                          word unary_abs
-203a : 18d2                          word unary_asc
-203b : 1996                          word unary_chr
-203c : 192b                          word unary_false
-203d : 18fa                          word unary_get
-203e : 19ab                          word unary_getstring
-203f : 18eb                          word unary_inkey
-2040 : 19b2                          word unary_inkeystring
-2041 : 193e                          word command_jx
-2042 : 1940                          word command_jy
-2043 : 1953                          word command_jbutton
-2044 : 187c                          word unary_left
-2045 : 18c6                          word unary_len
-2046 : 182a                          word unary_mid
-2047 : 1930                          word command_page
-2048 : 18e0                          word unary_peek
-2049 : 1889                          word unary_right
-204a : 1907                          word unary_rnd
-204b : 18b6                          word unary_sgn
-204c : 19b9                          word unary_str
-204d : 1936                          word command_sysvar
-204e : 1928                          word unary_true
-204f : 1965                          word unary_val
-2050 : 18c6                          word unary_len2
-2051 : 1907                          word unary_rnd2
-2052 : 19b9                          word unary_str2
-2053 : 1965                          word unary_val2
-2054 : 18b6                          word unary_sgn2
-2055 : 149f                          word dummy1
-2056 : 149f                          word dummy2
-2057 : 149f                          word dummy3
-2058 : 149f                          word dummy4
-2059 : 149f                          word dummy5
-205a : 11b6                          word command_for
-205b : 1220                          word command_if
-205c : 150a                          word command_repeat
-205d : 15c0                          word command_while
-205e : 1051                          word command_proc
-205f : 1265                          word command_endif
-2060 : 11eb                          word command_next
-2061 : 149f                          word dummy6
-2062 : 1514                          word command_until
-2063 : 15d9                          word command_wend
-2064 : 1053                          word command_endproc
-2065 : 1493                          word commentcommand1
-2066 : 149e                          word colonhandler
-2067 : 14c3                          word command_print2
-2068 : 1471                          word commandassert
-2069 : 102e                          word command_call
-206a : 108b                          word command_clear
-206b : 10a2                          word command_dim
-206c : 1110                          word command_dir
-206d : 1253                          word command_else
-206e : 146f                          word command_end
-206f : 1191                          word command_fkey
-2070 : 15a2                          word command_gosub
-2071 : 158a                          word command_goto
-2072 : 1272                          word command_input
-2073 : 129f                          word command_let
-2074 : 12c3                          word command_list
-2075 : 10ed                          word command_load
-2076 : 149f                          word command_new
-2077 : 14a6                          word command_old
-2078 : 147b                          word commandpoke
-2079 : 14c3                          word command_print
-207a : 1493                          word commentcommand2
-207b : 15b1                          word command_return
-207c : 152b                          word runprogram
-207d : 112b                          word command_save
-207e : 146d                          word command_stop
-207f : 1488                          word commandsys
+1fdb : 0e02 41e2 6329                word $0e02,$41e2,$6329
+1fde : 0e02 402b 61ec                word $0e02,$402b,$61ec
+1fe1 : 0e03 41e3 402d 6012           word $0e03,$41e3,$402d,$6012
+1fe5 : 0e02 41e3 6013                word $0e02,$41e3,$6013
+1fe8 : 0e02 416c 600d                word $0e02,$416c,$600d
+1feb : 0e02 416c 6012                word $0e02,$416c,$6012
+1fee : 0e02 41e5 60db                word $0e02,$41e5,$60db
+1ff1 : 0e02 4235 6004                word $0e02,$4235,$6004
+1ff4 : 0e02 41be 63ed                word $0e02,$41be,$63ed
+1ff7 : 0e03 425f 435b 6002           word $0e03,$425f,$435b,$6002
+1ffb : 0e02 425f 626c                word $0e02,$425f,$626c
+1ffe : 0e03 4239 4358 6014           word $0e03,$4239,$4358,$6014
+2002 : 0e02 40d4 6014                word $0e02,$40d4,$6014
+2005 : 0e02 4174 6333                word $0e02,$4174,$6333
+2008 : 0e02 4264 60a1                word $0e02,$4264,$60a1
+200b : 0e02 40d6 6017                word $0e02,$40d6,$6017
+200e : 0e02 41ef 6004                word $0e02,$41ef,$6004
+2011 : 0e04 4038 40d4 4334 6005      word $0e04,$4038,$40d4,$4334,$6005
+2016 : 0e03 4038 40d8 6012           word $0e03,$4038,$40d8,$6012
+201a : 0e02 4268 60d3                word $0e02,$4268,$60d3
+201d : 0e03 42e0 4239 6014           word $0e03,$42e0,$4239,$6014
+2021 : 0e02 40da 600d                word $0e02,$40da,$600d
+2024 : 0e03 40da 435c 6242           word $0e03,$40da,$435c,$6242
+2028 : 0e02 435a 600e                word $0e02,$435a,$600e
+202b : 0e02 403b 60de                word $0e02,$403b,$60de
+202e : 0e03 408b 40da 6235           word $0e03,$408b,$40da,$6235
+2032 : 0e02 4333 628f                word $0e02,$4333,$628f
+2035 : 0e02 43fb 6013                word $0e02,$43fb,$6013
+2038 : 0000                          word $0000
+2039 :                               .tokenvectors
+2039 : 162b                          word binaryop_and
+203a : 1636                          word binaryop_or
+203b : 1647                          word binaryop_xor
+203c : 16e2                          word binaryop_greater
+203d : 169b                          word binaryop_greaterequal
+203e : 16e8                          word binaryop_less
+203f : 16c1                          word binaryop_lessequal
+2040 : 16d7                          word binaryop_equal
+2041 : 1685                          word binaryop_notequal
+2042 : 15e8                          word binaryop_add
+2043 : 15f7                          word binaryop_sub
+2044 : 1602                          word binaryop_mult
+2045 : 160d                          word binaryop_divide
+2046 : 161c                          word binaryop_mod
+2047 : 1652                          word binaryop_indirect
+2048 : 189f                          word unary_parenthesis
+2049 : 189d                          word unary_hex
+204a : 189d                          word unary_bin
+204b : 1794                          word constshifthandler
+204c : 18a8                          word unary_abs
+204d : 18d2                          word unary_asc
+204e : 1996                          word unary_chr
+204f : 192b                          word unary_false
+2050 : 18fa                          word unary_get
+2051 : 19ab                          word unary_getstring
+2052 : 18eb                          word unary_inkey
+2053 : 19b2                          word unary_inkeystring
+2054 : 193e                          word command_jx
+2055 : 1940                          word command_jy
+2056 : 1953                          word command_jbutton
+2057 : 187c                          word unary_left
+2058 : 18c6                          word unary_len
+2059 : 182a                          word unary_mid
+205a : 1930                          word command_page
+205b : 18e0                          word unary_peek
+205c : 1889                          word unary_right
+205d : 1907                          word unary_rnd
+205e : 18b6                          word unary_sgn
+205f : 19b9                          word unary_str
+2060 : 1936                          word command_sysvar
+2061 : 1928                          word unary_true
+2062 : 1965                          word unary_val
+2063 : 18c6                          word unary_len2
+2064 : 1907                          word unary_rnd2
+2065 : 19b9                          word unary_str2
+2066 : 1965                          word unary_val2
+2067 : 18b6                          word unary_sgn2
+2068 : 149f                          word dummy1
+2069 : 149f                          word dummy2
+206a : 149f                          word dummy3
+206b : 149f                          word dummy4
+206c : 149f                          word dummy5
+206d : 11b6                          word command_for
+206e : 1220                          word command_if
+206f : 150a                          word command_repeat
+2070 : 15c0                          word command_while
+2071 : 1051                          word command_proc
+2072 : 1265                          word command_endif
+2073 : 11eb                          word command_next
+2074 : 149f                          word dummy6
+2075 : 1514                          word command_until
+2076 : 15d9                          word command_wend
+2077 : 1053                          word command_endproc
+2078 : 1493                          word commentcommand1
+2079 : 149e                          word colonhandler
+207a : 14c3                          word command_print2
+207b : 1471                          word commandassert
+207c : 1dfd                          word syntaxerror
+207d : 102e                          word command_call
+207e : 108b                          word command_clear
+207f : 1dfd                          word syntaxerror
+2080 : 10a2                          word command_dim
+2081 : 1110                          word command_dir
+2082 : 1253                          word command_else
+2083 : 146f                          word command_end
+2084 : 1191                          word command_fkey
+2085 : 15a2                          word command_gosub
+2086 : 158a                          word command_goto
+2087 : 1272                          word command_input
+2088 : 129f                          word command_let
+2089 : 12c3                          word command_list
+208a : 10ed                          word command_load
+208b : 149f                          word command_new
+208c : 14a6                          word command_old
+208d : 1dfd                          word syntaxerror
+208e : 1dfd                          word syntaxerror
+208f : 147b                          word commandpoke
+2090 : 14c3                          word command_print
+2091 : 1493                          word commentcommand2
+2092 : 15b1                          word command_return
+2093 : 152b                          word runprogram
+2094 : 112b                          word command_save
+2095 : 1dfd                          word syntaxerror
+2096 : 146d                          word command_stop
+2097 : 1488                          word commandsys
 4084 :                               .initialsp
 4085 :                               .currentline
 4086 :                               .programcode

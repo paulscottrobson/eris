@@ -38,10 +38,10 @@
 .textMemory 								; address of 40x30 character text buffer [$SYS+2]
 		fill 	1
 
-.spriteMemory 								; available sprite memory [$SYS+3]
+.spriteImageMemory 							; available sprite image memory [$SYS+3]
 		fill 	1
 
-.spriteCount  								; sprite maximum count [$SYS+4]
+.spriteImageCount  							; sprite image maximum number [$SYS+4]
 		fill 	1
 
 .xTextExtent								; screen width, characters [$SYS+5]

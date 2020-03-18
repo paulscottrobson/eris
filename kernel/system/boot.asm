@@ -57,9 +57,9 @@
 ;
 ._bcFoundEnd
 		stm 	r0,#highMemory 				; save high memory
-		sub 	r0,#spriteDefaultCount * 16 ; allow space for sprites
+		sub 	r0,#spriteDefaultImageCount * 16 ; allow space for sprites
 		and 	r0,#$FFF0 					; put on 16 word boundary
-		stm 	r0,#spriteMemory
+		stm 	r0,#spriteImageMemory
 		;
 		sub 	r0,#(charWidth*charHeight)	; allocate text screen space
 		stm 	r0,#textMemory
@@ -78,7 +78,7 @@
 		stm 	r0,r1,#5
 		mov 	r0,#charHeight
 		stm 	r0,r1,#6
-		mov 	r0,#spriteDefaultCount
+		mov 	r0,#spriteDefaultImageCount
 		stm 	r0,r1,#4			
 ;
 ;		Erase the whole display using colour 0 mask $FF

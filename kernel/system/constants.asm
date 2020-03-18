@@ -79,4 +79,4 @@ functionKeySize = 12
 ;
 ;		Default # of sprites
 ;
-spriteDefaultCount = 16
+spriteDefaultImageCount = 16
