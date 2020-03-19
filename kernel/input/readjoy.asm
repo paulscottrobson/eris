@@ -18,7 +18,7 @@
 ; *****************************************************************************
 
 .OSXReadJoystick
-		mov 	r0,#$10 				; read row on bit 4
+		mov 	r0,#$20 				; read row on bit 4
 		stm 	r0,#keyboardPort
 ._OSXRJDelay		 					; little delay time.
 		dec 	r0

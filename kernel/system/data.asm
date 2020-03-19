@@ -80,7 +80,7 @@
 		fill 	1 							
 
 .currentRowStatus 							; status of each row of the keyboard for scanning. 						
-		fill 	5 							; row in order of documentation e.g. column $01 first.
+		fill 	6 							; row in order of documentation e.g. column $01 first.
 
 .keyRepeatTime 								; timer when the key repeats.
 		fill 	1
@@ -90,8 +90,8 @@
 .functionKeyByte 							; indicates low byte (0) high byte (1)
 		fill 	1		
 
-.functionKeyDefinitions 					; 8 definitions, stored as pairs terminated by zero
-		fill 	8 * functionKeySize 		; *without* a leading size.
+.functionKeyDefinitions 					; 6 definitions, stored as pairs terminated by zero
+		fill 	6 * functionKeySize 		; *without* a leading size.
 
 
 .initialisedEnd		

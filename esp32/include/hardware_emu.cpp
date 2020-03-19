@@ -30,6 +30,7 @@ static int keys[][16] = {
 	{ GFXKEY_TAB,'Q','W','E','R','T','Y','U','I','O','P','[',']',0 },
 	{ 'A','S','D','F','G','H','J','K','L',';','@','#',GFXKEY_RETURN,0 },
 	{ ' ','\\','Z','X','C','V','B','N','M',',','.','/',0  },
+	{ GFXKEY_F1, GFXKEY_F2, GFXKEY_F3, GFXKEY_F4, GFXKEY_F5, GFXKEY_F6, 0  },
 	{ GFXKEY_LEFT,GFXKEY_RIGHT,GFXKEY_UP,GFXKEY_DOWN,GFXKEY_CONTROL,GFXKEY_SHIFT,0  }
 };
 
@@ -141,7 +142,7 @@ void HWLoadDirectory(WORD16 target) {
 	dp = opendir(fullName);
 	if (dp != NULL) {
 		while (ep = readdir(dp)) {
-			if (ep->d_type == DT_REG) {
+			if (ep->d_name[0] != '.') {
 				if (count != 0) CPUWriteMemory(target++,32);
 				char *p = ep->d_name;
 				while (*p != '\0') CPUWriteMemory(target++,*p++);

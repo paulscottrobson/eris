@@ -4,3 +4,4 @@ next i
 
 
 
+fkey 2,"Key 2"+chr$(13)

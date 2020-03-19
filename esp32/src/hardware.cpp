@@ -16,7 +16,7 @@
 #include <ctype.h>
 
 static BYTE8 keyboardLatch = 0xFF;
-static WORD16 rowValues[5];
+static WORD16 rowValues[6];
 
 // ****************************************************************************
 //							  Reset Hardware
@@ -32,7 +32,7 @@ void HWReset(void) {
 
 void HWSync(LONG32 iCount) {
 	HWSyncImplementation(iCount);
-	for (int i = 0;i < 5;i++) {
+	for (int i = 0;i < 6;i++) {
 		rowValues[i] = HWGetKeyboardRow(i);
 	}
 }
@@ -51,7 +51,7 @@ void HWWriteKeyboardLatch(BYTE8 latch) {
 
 WORD16 HWReadKeyboardColumns(void) {
 	WORD16 r = 0;
-	for (int i = 0;i < 5;i++) {
+	for (int i = 0;i < 6;i++) {
 		if (keyboardLatch & (1 << i)) r |= rowValues[i];
 	}
 	return r;

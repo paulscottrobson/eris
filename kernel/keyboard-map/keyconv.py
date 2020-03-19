@@ -34,7 +34,7 @@ keyMapFile = "uk.keyboard"
 #		Create data structures.
 #
 bits = [ ]  														# create keys for bits 0..4
-for i in range(0,5):												# initially all empty.
+for i in range(0,6):												# initially all empty.
 	bits.append([ 0 ] * 16)								
 shiftMap = {}														# map chars to shift chars (not A-Z)	
 #
@@ -69,7 +69,7 @@ while p < len(src):
 h = open("keyboard.inc","w")
 h.write(";\n;\tAutomatically generated.\n;\n")
 h.write(".KeyboardMapping\n")
-for b in range(0,5):												# copy out our bits information
+for b in range(0,6):												# copy out our bits information
 	h.write("\tbyte {0:50} ; Bit {1}\n".format(",".join([str(x) for x in bits[b]]),b))
 h.write("\n")
 

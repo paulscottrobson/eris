@@ -19,9 +19,9 @@
 .OSXGetKeyboard
 		push 	r1,r2,r3,r4,r5,link
 		jsr		#OSManager 						; call keyboard manager routine.
-		mov 	r1,#KeyboardMapping+4*8 		; R1 points to keyboard mapping table.
-		mov 	r2,#currentRowStatus+4 			; R2 points to the current row status, starts at $10
-		mov 	r3,#$10 						; R3 is the current row selectw word. Shift is always up to date
+		mov 	r1,#KeyboardMapping+5*8 		; R1 points to keyboard mapping table.
+		mov 	r2,#currentRowStatus+5 			; R2 points to the current row status, starts at $20
+		mov 	r3,#$20 						; R3 is the current row selectw word. Shift is always up to date
 		clr 	r4 								; R4 is the sum of all key inputs, check for any key.
 		;
 		;		Main scanning loop.
@@ -107,7 +107,7 @@
 		;
 		;		Check Ctrl and Shift modifiers
 		;
-		ldm 	r1,#currentRowStatus+4			; get the row with ctrl and shift on it.
+		ldm 	r1,#currentRowStatus+5			; get the row with ctrl and shift on it.
 		ror 	r1,#5 							; check control
 		skp 	r1
 		jsr 	#_GKControl
@@ -129,8 +129,15 @@
 		and 	r0,#$1F 						; mask out lower 5 bits
 		and 	r2,#$00F8 						; check Ctrl 0-7 characters - func keys
 		xor 	r2,#$0030
+		skz 	r2
+		ret
+		mov 	r2,r0,#0 						; do not generate ctrl+0 or ctrl+7
 		sknz 	r2
-		add 	r0,#$E0 						; map them to 240-247	
+		ret
+		xor 	r2,#7
+		sknz 	r2
+		ret
+		add 	r0,#$DF 						; map them to 240-245
 		ret
 
 ; *****************************************************************************

@@ -20,7 +20,7 @@
 		;
 		;		This is a fast hard-coded test for control-space
 		;		
-		mov 	r0,#$10 					; check control pressed ($10 column 4)
+		mov 	r0,#$20 					; check control pressed ($10 column 5)
 		stm 	r0,#keyboardPort
 		ldm 	r0,#keyboardPort
 		and 	r0,#$10

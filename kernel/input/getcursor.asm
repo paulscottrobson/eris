@@ -99,6 +99,8 @@
 		stm 	r0,#functionKeyQueue 		; put it in the queue address
 		stm 	r14,#functionKeyByte 		; start with low byte so zero that flag
 		jsr 	#OSXCursorGet 				; call cursor get to get the next key
+._OSCGExit1
+
 		pop 	link
 		ret
 		

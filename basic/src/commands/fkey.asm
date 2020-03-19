@@ -19,9 +19,10 @@
 .Command_FKey		;; [fkey]
 		push 	link
 		jsr 	#EvaluateInteger 			; key number
-		mov 	r2,r0,#0 					; save it
-		and 	r0,#$FFF8 					; check range 0-7
-		skz 	r0
+		dec 	r0 							; map onto 0-5
+		mov 	r2,r0,#0 					; save it		
+		sub 	r0,#6 						; check range
+		sklt
 		jmp 	#BadNumberError
 		jsr 	#CheckComma 				; check comma
 		jsr 	#EvaluateString 			; look at the RHS
