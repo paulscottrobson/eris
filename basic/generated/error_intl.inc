@@ -1,33 +1,30 @@
+;
+;	Automatically generated
+;
 .SyntaxError
 	jsr	#GenErrorHandler
 	string	"Syntax"
+.AssertError
+	jsr	#GenErrorHandler
+	string	"Assert"
+.MissingBracketError
+	jsr	#GenErrorHandler
+	string	"Missing )"
+.MissingCommaError
+	jsr	#GenErrorHandler
+	string	"Missing ,"
 .TypeMismatchError
 	jsr	#GenErrorHandler
 	string	"Wrong type"
 .DivideZeroError
 	jsr	#GenErrorHandler
 	string	"Division by Zero"
-.AssertError
-	jsr	#GenErrorHandler
-	string	"Assert"
-.LineError
-	jsr	#GenErrorHandler
-	string	"Line unknown"
-.MissingBracketError
-	jsr	#GenErrorHandler
-	string	"Missing )"
 .BadNumberError
 	jsr	#GenErrorHandler
 	string	"Bad Number"
 .BadIndexError
 	jsr	#GenErrorHandler
 	string	"Bad Index"
-.MemoryError
-	jsr	#GenErrorHandler
-	string	"Out of Memory"
-.MissingCommaError
-	jsr	#GenErrorHandler
-	string	"Missing ,"
 .ArrayAutoError
 	jsr	#GenErrorHandler
 	string	"Unknown Array"
@@ -37,9 +34,6 @@
 .CallError
 	jsr	#GenErrorHandler
 	string	"Unknown Procedure"
-.StopError		;; [stop]
-	jsr	#GenErrorHandler
-	string	"Stop"
 .StrlenError
 	jsr	#GenErrorHandler
 	string	"String Size"
@@ -70,6 +64,15 @@
 .ReturnStackError
 	jsr	#GenErrorHandler
 	string	"Structure too deep"
+.LineError
+	jsr	#GenErrorHandler
+	string	"Line unknown"
+.MemoryError
+	jsr	#GenErrorHandler
+	string	"Out of Memory"
+.StopError
+	jsr	#GenErrorHandler
+	string	"Stop"
 .TokeniseError
 	jsr	#GenErrorHandler
 	string	"Cannot process line"

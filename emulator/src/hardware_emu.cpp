@@ -141,7 +141,7 @@ void HWLoadDirectory(WORD16 target) {
 	dp = opendir(fullName);
 	if (dp != NULL) {
 		while (ep = readdir(dp)) {
-			if (ep->d_type == DT_REG) {
+			if (ep->d_name[0] != '.') {
 				if (count != 0) CPUWriteMemory(target++,32);
 				char *p = ep->d_name;
 				while (*p != '\0') CPUWriteMemory(target++,*p++);
