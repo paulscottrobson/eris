@@ -27,7 +27,7 @@
 ; *****************************************************************************
 
 .OSXSetPlanes
-		push 	r0,r1,r2,link
+		push 	r0,r1,r2,r3,link
 		mov 	r1,r0,#0					; save mode in R1
 		and 	r0,#$00FF					; the number of planes in the background
 		;
@@ -51,24 +51,44 @@
 		ror		r2,r1,#0					; this is the number of colours in the sprite plane
 		and 	r2,#$FF						; if plane empty
 		skz 	r2
-		dec 	r2							; this is thee mask
+		dec 	r2							; this is the mask
+		mov 	r3,r2,#0 					; unshifted sprite mask in R3
 		ror 	r2,r0,#0					; and this makes it a sprite mask
 		stm 	r2,#spriteMask
-
-		mov 	r0,#15 						; do entire palette, both planes.
-._spSetPalette
-		mov 	r2,r0,#0 					; get palette number
-		and 	r2,#7 						; what colour do we want to use
-		add 	r2,#_spPaletteTable 		; the address of the colour to write
-		ldm 	r2,r2,#0 					; get colour into R2
-		mov 	r1,#1 						; write to sprite palette
-		jsr 	#OSXSetPalette
-		clr 	r1
-		jsr 	#OSXSetPalette
-		dec 	r0 							; do 255->0
+		;
+		;		Set the background palette colours
+		;
+		ldm 	r0,#colourMask 				; start with colour mask
+		sknz 	r0 							; skip if there is no background
+		jmp 	#_spSetBgrEnd
+._spSetBgrAll
+		mov 	r1,r0,#0					; get the colour to update
+		and 	r1,#7 						; read the colour to use -> R1
+		add 	r1,#_spPaletteTable 		
+		ldm 	r1,r1,#0		
+		jsr 	#OSSetBackPlanePalette 		; update back palette
+		dec 	r0
 		skm 	r0
-		jmp 	#_spSetPalette
-		pop 	r0,r1,r2,link
+		jmp 	#_spSetBgrAll
+		;
+._spSetBgrEnd
+		;
+		;		Set the foreground palette colours
+		;
+		sknz 	r3 							; is there any foreground colours at all
+		jmp 	#_spSetFgrEnd
+._spSetFgrAll
+		mov 	r0,r3,#0 					; R0 = foreground palette colour.
+		mov 	r1,r3,#0
+		and 	r1,#7 						; read the colour to use -> R1
+		add 	r1,#_spPaletteTable 		
+		ldm 	r1,r1,#0		
+		jsr 	#OSSetFrontPlanePalette 	; update front palette
+		dec 	r3
+		skm 	r3
+		jmp 	#_spSetBgrAll
+._spSetFgrEnd
+		pop 	r0,r1,r2,r3,link
 		ret
 ;
 ;		Palette table default colours for lower 3 bits of any plane
@@ -85,17 +105,34 @@
 
 ; *****************************************************************************
 ;
-;					Update a palette for colour R0. 
-;		Plane R1 (0 = background,1 = sprite plane), BGR 2 bit R2
+;			Update a palette for background palette R0,BGR R1
 ;
 ; *****************************************************************************
 
-.OSXSetPalette
-		skz 	r1  						; don't do sprites
-		ret
+.OSXSetBackPlanePalette
 		push 	r0,r1,r2
-		ror 	r0,#8
-		add 	r0,r2,#0
-		stm 	r0,#paletteRegister 		; write to palette register
+		mov 	r2,r0,#0					; build <colour>:<bgr> in R2
+		ror 	r2,#8	
+		add 	r2,r1,#0 					; check colour < colourMask+1
+		ldm 	r1,#colourMask
+		inc 	r1
+		sub 	r0,r1,#0
+		skge
+		stm 	r2,#paletteRegister 		; if so, update the palette register.
 		pop 	r0,r1,r2
+		ret
+
+; *****************************************************************************
+;
+;				  Set front plane palette colour R0, BGR R1
+;
+; *****************************************************************************
+
+.OSXSetFrontPlanePalette
+		sknz 	r0 							; you cannot set colour 0, it is transparent.
+		ret
+		;
+		push 	r0,r1,r2,r3
+._OSSFPPExit
+		pop 	r0,r1,r2,r3
 		ret

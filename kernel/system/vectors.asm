@@ -70,8 +70,11 @@
 .OSSetPlanes
 		jmp		#OSXSetPlanes
 
-.OSSetPalette
-		jmp 	#OSXSetPalette
+.OSSetBackPlanePalette
+		jmp 	#OSXSetBackPlanePalette
+
+.OSSetFrontPlanePalette
+		jmp 	#OSXSetFrontPlanePalette
 
 .OSDrawCharacter
 		jmp 	#OSXDrawCharacter
