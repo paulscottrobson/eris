@@ -87,7 +87,7 @@
 	word	Command_Load             ; $3c52 LOAD
 	word	Command_New              ; $3c53 NEW
 	word	Command_Old              ; $3c54 OLD
-	word	SyntaxError              ; $3c55 PALETTE
+	word	Command_Palette          ; $3c55 PALETTE
 	word	Command_Paper            ; $3c56 PAPER
 	word	CommandPoke              ; $3c57 POKE
 	word	Command_Print            ; $3c58 PRINT

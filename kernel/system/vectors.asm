@@ -46,9 +46,6 @@
 .OSInputLimit
 		jmp 	#OSXInputLimit
 
-.OSCheckBreak
-		jmp 	#OSXCheckBreak
-
 .OSReadJoystick
 		jmp 	#OSXReadJoystick
 		
@@ -127,6 +124,5 @@
 .OSWordLength
 		jmp 	#OSXWordLength
 
-.OSManager
-		ret
-
+.OSSystemManager
+		jmp 	#OSXSystemManager

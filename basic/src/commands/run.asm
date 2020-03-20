@@ -47,17 +47,8 @@
 		;				Next command.
 		;
 ._RPNewCommand		
-		ldm 	r0,#checkCount 				; Carry set every 64 commands
-		add 	r0,#1024
-		stm 	r0,#checkCount
-		skc
-		jmp 	#_RPNoCheck
-		;
-		;				Period checks - update sound (may be interrupt) and check break.
-		;
-		jsr		#OSManager 					; call service manager routine.
-		jsr 	#OSCheckBreak 				; check break
-		skz 	r0
+		jsr		#OSSystemManager 			; call system manager routine no break
+		skz 	r0 							; exit on break
 		jmp 	#BreakError 				; error if broken.
 		;
 		;				New instruction at R11

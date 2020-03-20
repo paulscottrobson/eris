@@ -13,7 +13,7 @@
 .bootPrompt
 	string "[10,0F,16,0C]*** Eris RetroComputer ***[0D,0D,13]Written by Paul Robson 2020[0D,0D]"
 .kernelPrompt
-	string "Kernel[3A] 0.11[0D]"
+	string "Kernel[3A] 0.12[0D]"
 
 ; *****************************************************************************
 ;
@@ -79,7 +79,12 @@
 		mov 	r0,#charHeight
 		stm 	r0,r1,#6
 		mov 	r0,#spriteDefaultImageCount
-		stm 	r0,r1,#4			
+		stm 	r0,r1,#4	
+;
+;		Reset the next time event
+;
+		ldm 	r0,#hwTimer
+		stm 	r0,#nextManagerEvent		
 ;
 ;		Initialise the plane usage/clear screen
 ;

@@ -104,3 +104,34 @@
 		stm 	r0,#blitterCmd
 		pop 	link
 		ret						
+
+
+; *****************************************************************************
+;
+;						Palette <colour>,<plane>,<rgb>
+;
+; *****************************************************************************
+
+.Command_Palette 	;; [palette]
+		push 	link
+		jsr 	#EvaluateInteger 			; colour -> R2
+		mov 	r2,r0,#0
+		jsr 	#CheckComma
+		jsr 	#EvaluateInteger 			; target -> R3
+		mov 	r3,r0,#0
+		and 	r0,#$FFFE 					; check target is 0 or 1
+		skz 	r0
+		jmp 	#BadNumberError
+		jsr 	#CheckComma
+		jsr 	#EvaluateInteger 			; palette -> R1
+		mov 	r1,r0,#0
+		and 	r1,#$3F
+		;
+		mov 	r0,r2,#0 					; colour in R2, RGB value in R3
+		sknz 	r3 							; if target = 0 do back plane		
+		jsr 	#OSXSetBackPlanePalette
+		skz 	r3 							; if target = 1 do front plane		
+		jsr 	#OSXSetFrontPlanePalette
+		pop 	link
+		ret
+

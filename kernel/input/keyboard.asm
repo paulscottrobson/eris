@@ -18,7 +18,7 @@
 
 .OSXGetKeyboard
 		push 	r1,r2,r3,r4,r5,link
-		jsr		#OSManager 						; call keyboard manager routine.
+		jsr		#OSSystemManager 				; call system manager routine no break
 		mov 	r1,#KeyboardMapping+5*8 		; R1 points to keyboard mapping table.
 		mov 	r2,#currentRowStatus+5 			; R2 points to the current row status, starts at $20
 		mov 	r3,#$20 						; R3 is the current row selectw word. Shift is always up to date

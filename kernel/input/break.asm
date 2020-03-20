@@ -16,7 +16,7 @@
 ;
 ; *****************************************************************************
 
-.OSXCheckBreak
+.OSICheckBreak
 		;
 		;		This is a fast hard-coded test for control-space
 		;		

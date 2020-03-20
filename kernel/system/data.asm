@@ -93,7 +93,9 @@
 .functionKeyDefinitions 					; 6 definitions, stored as pairs terminated by zero
 		fill 	6 * functionKeySize 		; *without* a leading size.
 
-
+.nextManagerEvent 							; next system manager event 	
+		fill 	1
+		
 .initialisedEnd		
 ;
 ;		This data is not initialised.
