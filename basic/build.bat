@@ -10,6 +10,7 @@ python program.py
 rem python gentokentest.py
 rem python systests.py Comparison
 copy basiccode.prg ..\..\emulator\bin >NUL
+copy basiccode.prg ..\..\emulator\storage\demo >NUL
 popd
 pushd messages >NUL
 python msgconv.py

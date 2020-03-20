@@ -84,4 +84,4 @@ spriteDefaultImageCount = 16
 ;		Time in centiseconds between monitor events, so for 20 per second
 ;		this is 100/20 = 5
 ;
-timerRate = 5
+timerRate = 5	

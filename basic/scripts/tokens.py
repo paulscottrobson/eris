@@ -49,6 +49,7 @@ class Tokens(object):
 					assert tokenID < 512 									# too many tokens.
 					newToken = { "name":w,"token":0x2000+currentType*512+tokenID }
 					tokenID += 1
+					assert w not in Tokens.TOKENS,"Duplicate "+w
 					Tokens.TOKENS[w] = newToken								# store in hash and list
 					Tokens.TOKENLIST.append(w)
 	#
@@ -114,16 +115,29 @@ class Tokens(object):
 		return """
 
 // *****************************************************************************
+// *****************************************************************************
 //
 //									Tokens in LC3 BASIC
 //
 // *****************************************************************************
+// *****************************************************************************
 
 //
-//		Expression token
+//		Assembler operations first. Some of these (and, xor) are dual purpose
+//		The first 16 are the standard set, the remainder popular macros.
+//		(see assembler.py)
+//
+		[Syntax] 	mov ldm stm add adc sub 
+		[1] 		and xor 
+		[Syntax] 	mult ror brl skeq skne skse sksn skcm 
+		[Syntax]	jmp jsr ret skz sknz skp skm skc sknc
+//
+//		Expression token. Note that AND and XOR are defined in the
+//		assembler keywords, as they are "dual purpose", so if you renumber
+//		the precedences don't forget those.
 //
 [1]
-	and	or 	xor 
+	or 
 [2]	
 	> >= < <= = <>
 [3]	
@@ -137,9 +151,9 @@ class Tokens(object):
 //
 [Unary]
 	( 	&	% 	|constshift
-	abs(	asc(	chr$(	false	get( 	get$( 	inkey( 	inkey$( 	
-	joyx( 	joyy( 	joyb(	left$(	len(	mid$(	page	peek(	
-	right$(	rnd(	sgn(	str$(	sysvar(	true 	val(	
+	abs(	asc(	chr$(	exists(	false	get( 	get$( 	inkey( 	
+	inkey$( joyx( 	joyy( 	joyb(	left$(	len(	mid$(	page	
+	peek(	right$(	rnd(	sgn(	str$(	sysvar(	true 	val(	
 //
 //		Synonyms
 //
