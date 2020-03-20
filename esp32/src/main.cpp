@@ -43,8 +43,8 @@ SoundGenerator soundGen;
 SquareWaveformGenerator square1,square2;
 NoiseWaveformGenerator noise1;
 
-static RGB888 pColours[64];
-static uint8_t rawPixels[64];
+static RGB888 pColours[8];
+static uint8_t rawPixels[8];
 static int fsOpen,size;
 
 // indicate VGA GPIOs to use for selected color configuration
@@ -183,7 +183,7 @@ void HWWritePixelToScreen(WORD16 x,WORD16 y,BYTE8 colour) {
 	//Canvas.setPixel(x,y,pColours[colour & 0x3F]);					// Slow
 	//BYTE8 *pLine = DisplayController.getScanline(y);
 	//pLine[x^2] = x;
-	BYTE8 rp = rawPixels[colour & 0x3F];							// Quicker
+	BYTE8 rp = rawPixels[colour & 7];								// Quicker
 	VGAController.setRawPixel(x,y,rp);
 }
 
@@ -224,7 +224,7 @@ void HWSetAudio(BYTE8 channel,WORD16 freq) {
 //
 // ****************************************************************************
 
-#define CONVCOL(n) 	((n) == 3) ? 255 : ((n) * 80)
+#define CONVCOL(n) 	(((n) == 0) ? 0 : 255)
 
 void setup()
 {
@@ -244,10 +244,10 @@ void setup()
 	//
 	//		Create 64 colour palette
 	//
-	for (int i = 0;i < 64;i++) {
-		pColours[i].R = CONVCOL((i & 3));
-		pColours[i].G = CONVCOL(((i >> 2) & 3));
-		pColours[i].B = CONVCOL(((i >> 4) & 3));
+	for (int i = 0;i < 8;i++) {
+		pColours[i].R = CONVCOL((i & 1));
+		pColours[i].G = CONVCOL(((i >> 1) & 1));
+		pColours[i].B = CONVCOL(((i >> 2) & 1));
 
 		//BYTE8 r = ((i & 3)) >> 2;
 		//BYTE8 g = ((colours[i] >> 4) & 0x0F) >> 2;

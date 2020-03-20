@@ -125,7 +125,7 @@
 		jsr 	#CheckComma
 		jsr 	#EvaluateInteger 			; palette -> R1
 		mov 	r1,r0,#0
-		and 	r1,#$3F
+		and 	r1,#7
 		;
 		mov 	r0,r2,#0 					; colour in R2, RGB value in R3
 		sknz 	r3 							; if target = 0 do back plane		

@@ -23,9 +23,7 @@
 #define DBGC_DATA 		(0x0FF)														// (Background is in main.c)
 #define DBGC_HIGHLIGHT 	(0xFF0)
 
-static int colours[64]; 
-
-static const int colourLevel[4] = { 0,0x6,0xB,0xF };
+static int colours[8]; 
 
 static const char *opCodes[16] = { "mov","ldm","stm","add","adc","sub","and","xor",
 								   "mult","ror","brl","skeq","skne","skse","sksn","skcm" };
@@ -87,11 +85,11 @@ void DBGXRender(int *address,int showDisplay) {
 				  isBrk ? 0xF00 : -1);
 	}
 
-	#define CMAP(x,s) (colourLevel[(x) & 3] << s)
+	#define CMAP(x,s) ((((x) & 1) ? 0xF:0x0) << (s))
 
 	if (showDisplay) {
-		for (int i = 0;i < 64;i++) {
-			colours[i] = CMAP(i,8) + CMAP(i >> 2,4) + CMAP(i >> 4,0);
+		for (int i = 0;i < 8;i++) {
+			colours[i] = CMAP(i >> 2,0)+CMAP(i >> 1,4)+CMAP(i,8);
 		}
 		int scale = 3;
 		SDL_Rect rc;rc.w = DWIDTH * scale;rc.h = DHEIGHT * scale;

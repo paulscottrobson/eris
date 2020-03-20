@@ -65,8 +65,6 @@
 ._spSetBgrAll
 		mov 	r1,r0,#0					; get the colour to update
 		and 	r1,#7 						; read the colour to use -> R1
-		add 	r1,#_spPaletteTable 		
-		ldm 	r1,r1,#0		
 		jsr 	#OSSetBackPlanePalette 		; update back palette
 		dec 	r0
 		skm 	r0
@@ -82,8 +80,6 @@
 		mov 	r0,r3,#0 					; R0 = foreground palette colour.
 		mov 	r1,r3,#0
 		and 	r1,#7 						; read the colour to use -> R1
-		add 	r1,#_spPaletteTable 		
-		ldm 	r1,r1,#0		
 		jsr 	#OSSetFrontPlanePalette 	; update front palette
 		dec 	r3
 		skm 	r3
@@ -97,18 +93,6 @@
 		;
 		pop 	r0,r1,r2,r3,link
 		ret
-;
-;		Palette table default colours for lower 3 bits of any plane
-;
-._spPaletteTable
-		word 	0*16+0*4+0
-		word 	0*16+0*4+3
-		word 	0*16+3*4+0
-		word 	0*16+3*4+3
-		word 	3*16+0*4+0
-		word 	3*16+0*4+3
-		word 	3*16+3*4+0
-		word 	3*16+3*4+3
 
 ; *****************************************************************************
 ;
