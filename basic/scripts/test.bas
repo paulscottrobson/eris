@@ -10,3 +10,6 @@ for i = 0 to 16
 blit i*18+2,j*18+2,1,&0F00+i,16
 next i
 next j
+print exists("demo")
+print exists("demo2")
+print exists("")

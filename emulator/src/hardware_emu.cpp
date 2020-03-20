@@ -83,6 +83,19 @@ void HWWriteAudio(BYTE8 channel,WORD16 freq) {
 }
 
 // ****************************************************************************
+//							  Check file exists
+// ****************************************************************************
+
+WORD16 HWFileExists(char *fileName) {
+	char fullName[128];
+	if (fileName[0] == 0) return 0;
+	sprintf(fullName,"%sstorage%c%s",SDL_GetBasePath(),FILESEP,fileName);
+	FILE *f = fopen(fullName,"rb");
+	if (f != NULL) fclose(f);
+	return (f != NULL);
+}
+
+// ****************************************************************************
 //								Load file in
 // ****************************************************************************
 

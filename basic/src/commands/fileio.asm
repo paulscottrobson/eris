@@ -12,6 +12,24 @@
 
 ; *****************************************************************************
 ;
+;							  EXISTS(<filename>)
+;
+; *****************************************************************************
+
+.Unary_Exists 	;; [exists(]
+		push 	link
+		jsr 	#EvaluateString 			; name of file to load
+		jsr 	#CheckRightBracket
+		mov 	r1,r0,#0 					; save in R1
+		mov 	r0,#5 						; check exists.
+		jsr 	#OSFileOperation 			; do load
+		pop 	link 						; restore link
+		sknz 	r0 							; false if error
+		jmp 	#Unary_True
+		jmp 	#Unary_False
+
+; *****************************************************************************
+;
 ;								LOAD <procname>
 ;
 ; *****************************************************************************

@@ -84,6 +84,9 @@ WORD16 HWFileOperation(WORD16 R0,WORD16 R1,WORD16 R2,WORD16 R3) {
 	if (R0 == 4) {
 		HWLoadDirectory(R1);
 	}
+	if (R0 == 5) {
+		r = HWFileExists(fileName) ? 0 : 1;
+	}
 	return r;
 }
 
@@ -94,3 +97,4 @@ WORD16 HWFileOperation(WORD16 R0,WORD16 R1,WORD16 R2,WORD16 R3) {
 #ifdef ESP32
 #include "hardware_esp.cpp"
 #endif
+

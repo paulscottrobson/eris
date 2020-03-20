@@ -19,7 +19,7 @@ typedef unsigned int   LONG32;														// 32 bit type.
 #define DEFAULT_BUS_VALUE (0xFF)													// What's on the bus if it's not memory.
 
 #define RAM_START 		(0x4000)													// ROM/RAM/HW split
-#define RAM_END 		(0x8000)
+#define RAM_END 		(0x9000)
 
 void CPUReset(void);
 BYTE8 CPUExecuteInstruction(void);

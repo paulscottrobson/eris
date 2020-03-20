@@ -83,3 +83,29 @@
 		sub 	r0,#2 						; 0 or -1
 		jmp 	#_JoyExit
 
+
+; *****************************************************************************
+;
+;							Allocate low memory
+;
+; *****************************************************************************
+
+.Unary_Alloc ;; [alloc(]
+		push 	link
+		jsr 	#EvaluateInteger 			; how much ?
+		jsr 	#CheckRightBracket
+		ldm 	r1,#memAllocBottom 			; R1 = address
+		add 	r0,r1,#0 					; add to and update low memory
+		stm 	r0,#memAllocBottom
+		stm 	r1,r10,#esValue1 			; set return
+		stm 	r14,r10,#esType1 			; make integer constant
+		stm 	r14,r10,#esReference1			
+		sknc 	
+		jmp 	#MemoryError
+		ldm	 	r2,#memAllocTop 			; check hit top memory
+		sub 	r1,r2,#0
+		sklt 	
+		jmp 	#MemoryError
+		;
+		pop 	link
+		ret

@@ -45,10 +45,10 @@
 	word	Unary_Bin                ; $3028 %
 	word	ConstShiftHandler        ; $3029 |CONSTSHIFT
 	word	Unary_Abs                ; $302a ABS(
-	word	SyntaxError              ; $302b ALLOC(
+	word	Unary_Alloc              ; $302b ALLOC(
 	word	Unary_Asc                ; $302c ASC(
 	word	Unary_Chr                ; $302d CHR$(
-	word	SyntaxError              ; $302e EXISTS(
+	word	Unary_Exists             ; $302e EXISTS(
 	word	Unary_False              ; $302f FALSE
 	word	Unary_Get                ; $3030 GET(
 	word	Unary_GetString          ; $3031 GET$(

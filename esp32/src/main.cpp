@@ -90,6 +90,21 @@ void HWWriteCharacter(BYTE8 x,BYTE8 y,BYTE8 ch) {
 
 // ****************************************************************************
 //
+//							  Check file exists
+//
+// ****************************************************************************
+
+WORD16 HWFileExists(char *fileName) {
+	char fullName[64];
+	sprintf(fullName,"/%s",fileName);								// SPIFFS doesn't do dirs
+	fabgl::suspendInterrupts();										// And doesn't like interrupts
+	WORD16 exists = SPIFFS.exists(fullName);						// If file exitst
+	fabgl::resumeInterrupts();
+	return exists;
+}
+
+// ****************************************************************************
+//
 //							Load file from SPIFFS
 //
 // ****************************************************************************
