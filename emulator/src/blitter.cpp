@@ -38,9 +38,8 @@ void BlitterInitialise(void) {
 	}
 	for (int x = 0;x < DWIDTH;x++) {
 		for (int y = 0;y < DHEIGHT;y++) {
-			int n = (rand() & 0x1F) ? 0 : (rand() & 0x0F);
-			BlitterWritevRAM(x,y,n);
-			HWWritePixel(x,y,paletteMap[n & 0x0F]);
+			BlitterWritevRAM(x,y,0);
+			HWWritePixel(x,y,0);
 		}
 	}
 }
