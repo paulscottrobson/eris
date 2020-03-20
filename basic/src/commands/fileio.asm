@@ -19,10 +19,16 @@
 .Command_Load	;; [load]
 		push 	link
 		jsr 	#FileLoader					; do the load
+		skz 	r0
+		jmp 	#_CLExit
 		jsr 	#Command_Clear 				; clear because program spaced has changed
+		jmp 	#WarmStart 					; and warm start.
+._CLExit		
 		pop 	link
 		ret
-
+;
+;		Load file, R0 = 0 on exit if BASIC
+;
 .FileLoader
 		push 	link
 		jsr 	#EvaluateString 			; name of file to load
@@ -41,6 +47,9 @@
 		jsr 	#OSFileOperation 			; do load
 		skz 	r0 				
 		jmp 	#LoadError 					; error if failed
+		;
+		ldm 	r0,#programCode 			; XOR the load address with program base
+		xor 	r0,r2,#0
 		pop 	link
 		ret
 

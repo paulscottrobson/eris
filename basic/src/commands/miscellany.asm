@@ -102,6 +102,24 @@
 
 ; *****************************************************************************
 ;
+;								Renumber program
+;
+; *****************************************************************************
+
+.RenumberProgram ;; [renumber]
+		mov 	r1,#1000 					; current line number
+		ldm 	r0,#programCode 			; R0 is current program
+._RPLoop
+		ldm 	r2,r0,#0 					; read offset to R2
+		sknz 	r2 							; exit if offset zero
+		ret		
+		stm 	r1,r0,#1 					; overwrite line number
+		add 	r1,#10 						; update line number
+		add 	r0,r2,#0 					; next line
+		jmp 	#_RPLoop
+
+; *****************************************************************************
+;
 ;			Code for non-executable, stops the build squawking
 ;
 ; *****************************************************************************

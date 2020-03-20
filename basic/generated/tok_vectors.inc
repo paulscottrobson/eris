@@ -117,7 +117,7 @@
 	word	CommandPoke              ; $3c70 POKE
 	word	Command_Print            ; $3c71 PRINT
 	word	CommentCommand2          ; $3c72 REM
-	word	SyntaxError              ; $3c73 RENUMBER
+	word	RenumberProgram          ; $3c73 RENUMBER
 	word	Command_RETURN           ; $3c74 RETURN
 	word	RunProgram               ; $3c75 RUN
 	word	Command_Save             ; $3c76 SAVE
