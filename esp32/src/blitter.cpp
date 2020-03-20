@@ -34,8 +34,7 @@ static void blitterRow(WORD16 cmd,WORD16 pixels);
 
 void BlitterInitialise(void) {
 	for (int i = 0;i < 16;i++) {
-		int c = (i & 1)+(i & 2)*2+(i & 4)*4;
-		paletteMap[i] = c * 3;
+		paletteMap[i] = (i == 0) ? 0 : 0x3F;
 	}
 	for (int x = 0;x < DWIDTH;x++) {
 		for (int y = 0;y < DHEIGHT;y++) {
@@ -104,6 +103,7 @@ BYTE8 BlitterGetPixel(WORD16 x,WORD16 y) {
 void HWWritePalette(BYTE8 port,WORD16 data) {
 	BYTE8 colour = (data >> 8) & 0x0F;
 	paletteMap[colour] = data & 0x3F;
+	//printf("%d %d,%d,%d\n",colour,(data >> 4) & 3,(data >> 2) & 3,data & 3);
 }
 
 // ****************************************************************************

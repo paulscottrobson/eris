@@ -69,7 +69,7 @@
 	word	ColonHandler             ; $3c40 :
 	word	Command_Print2           ; $3c41 ?
 	word	CommandAssert            ; $3c42 ASSERT
-	word	SyntaxError              ; $3c43 BLIT
+	word	Command_Blit             ; $3c43 BLIT
 	word	Command_Call             ; $3c44 CALL
 	word	Command_Clear            ; $3c45 CLEAR
 	word	Command_Cls              ; $3c46 CLS

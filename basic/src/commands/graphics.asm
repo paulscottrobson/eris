@@ -70,3 +70,37 @@
 		jsr 	#OSSetPlanes 				; set plane sizes
 		pop 	link
 		ret
+
+; *****************************************************************************
+;
+;								BLIT command
+;
+; *****************************************************************************
+
+.Command_Blit 	;; [blit]
+		push 	link
+		jsr 	#OSWaitBlitter 				; check it's not busy.
+		jsr 	#EvaluateInteger  			; x
+		stm 	r0,#blitterX
+		jsr 	#CheckComma
+		jsr 	#EvaluateInteger 			; y
+		stm 	r0,#blitterY
+		jsr 	#CheckComma
+		jsr 	#EvaluateInteger  			; data or index
+		mov 	r1,r0,#0
+		and 	r1,#$FF00 					; is it 0-255 if so use sprite image.
+		skz		r1
+		jmp 	#_CBlitData
+		ror 	r0,#12 						; multiply by 16
+		ldm 	r1,#spriteImageMemory		; and sprite image memory address
+		add 	r0,r1,#0
+._CBlitData		
+		stm 	r0,#blitterData
+		jsr 	#CheckComma
+		jsr 	#EvaluateInteger 
+		stm 	r0,#blitterCMask
+		jsr 	#CheckComma
+		jsr 	#EvaluateInteger 			; cmd
+		stm 	r0,#blitterCmd
+		pop 	link
+		ret						
