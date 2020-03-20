@@ -103,7 +103,7 @@ BYTE8 BlitterGetPixel(WORD16 x,WORD16 y) {
 void HWWritePalette(BYTE8 port,WORD16 data) {
 	BYTE8 colour = (data >> 8) & 0x0F;
 	paletteMap[colour] = data & 0x3F;
-	printf("%d %d,%d,%d\n",colour,(data >> 4) & 3,(data >> 2) & 3,data & 3);
+	//printf("%d %d,%d,%d\n",colour,(data >> 4) & 3,(data >> 2) & 3,data & 3);
 }
 
 // ****************************************************************************

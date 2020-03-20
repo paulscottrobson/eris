@@ -108,7 +108,7 @@ fontData = [
     [  4,   4,   4,   4,   4,   4,   4, ], # [92] '|'
     [  8,   4,   4,   2,   4,   4,   8, ], # [93] '}'
     [  10, 21,  10,  21,  10,  21,  10, ], # [94] cursor
-    [  31, 31,  31,  31,  31,  31,  31, ]  # [95] solid block
+    [  -1, -1,  -1,  -1,  -1,  -1,  -1, ]  # [95] solid block (-1 => $FC00)
   ]
 
 for x in fontData:                                                      # for each line
@@ -119,6 +119,6 @@ h = open("font.inc","w")                                                # genera
 h.write("\torg KernelEnd-8*96\n")
 h.write(".FontData\n")
 for i in range(0,len(fontData)):
-    cd = ",".join(["${0:04x}".format(c << 11) for c in fontData[i]])
+    cd = ",".join(["${0:04x}".format((c << 11) if c >= 0 else 0xFC00) for c in fontData[i]])
     h.write("\tword\t{0} ; ${1:02x} {2}\n".format(cd,i+32,chr(i+32)))
 h.close()    

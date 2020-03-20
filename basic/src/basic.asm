@@ -20,7 +20,7 @@
 
 		jmp 	#ColdStart
 .basicPrompt
-		string "Basic[3A]  0.11[0D,0D]"
+		string "Basic[3A]  0.11[0D,0D,12]"
 
 ; *****************************************************************************
 ;
@@ -61,8 +61,6 @@
 
 .WarmStart 
 		ldm 	sp,#initialSP 				; reset the stack
-		mov 	r0,#$12 					; go green
-		jsr 	#OSPrintCharacter
 		jsr 	#OSLineInput 				; read a line off the screen
 		;
 		jsr 	#TokeniseString 			; try to tokenise and error if failed.

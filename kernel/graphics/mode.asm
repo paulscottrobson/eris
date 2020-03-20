@@ -14,6 +14,7 @@
 ;
 ;				Set Mode to R0. High is the number of sprite planes
 ;				Low is the number of background planes
+;				Clear the display
 ;
 ; *****************************************************************************
 ;
@@ -86,8 +87,14 @@
 		jsr 	#OSSetFrontPlanePalette 	; update front palette
 		dec 	r3
 		skm 	r3
-		jmp 	#_spSetBgrAll
+		jmp 	#_spSetFgrAll
 ._spSetFgrEnd
+		;
+		;		Erase the whole display using colour 0 mask $FF
+		;
+		mov 	r0,#$FF00 					
+		jsr 	#OSIFillScreen
+		;
 		pop 	r0,r1,r2,r3,link
 		ret
 ;
@@ -113,8 +120,9 @@
 		push 	r0,r1,r2
 		mov 	r2,r0,#0					; build <colour>:<bgr> in R2
 		ror 	r2,#8	
-		add 	r2,r1,#0 					; check colour < colourMask+1
-		ldm 	r1,#colourMask
+		and 	r1,#$3F 					; mask the colour
+		add 	r2,r1,#0 					
+		ldm 	r1,#colourMask				; check colour < colourMask+1
 		inc 	r1
 		sub 	r0,r1,#0
 		skge
@@ -127,12 +135,39 @@
 ;				  Set front plane palette colour R0, BGR R1
 ;
 ; *****************************************************************************
-
+;
+;		Comments are based on 3 sprite planes, 2 background planes,
+;		setting colour 5.
+;
 .OSXSetFrontPlanePalette
 		sknz 	r0 							; you cannot set colour 0, it is transparent.
 		ret
 		;
 		push 	r0,r1,r2,r3
+		;
+		ldm 	r3,#spriteRotate 			; rotate the colour into position : 101 to be 10100
+		ror 	r0,r3,#0 					; then into the upper half of the word (hence the 8)
+		;
+		ldm 	r2,#spriteMask 				; must be <= sprite mask : this will be 11100 - this is the
+		sub 	r2,r0,#0  					; value of the highest colour in this plane (e.g. 7)
+		skp 	r2							; e.g largest - required >= 0
+		jmp 	#_OSSFPPExit
+		;
+		ror 	r0,#8 						; put the colour number into the MSB 10100 0000000
+		and 	r1,#$3F 					; mask the colour
+		add 	r0,r1,#0 					; make the word to write 10100 00bbggrr
+		;
+		mov 	r2,#1 						; the count to do is 1 << spriteRotate (e.g. 4)
+		ror 	r2,r3,#0
+		;
+		;		So at this point R3 is 4 and R0 is 10100 00bbggrr
+		;		
+._OSSFPPLoop
+		stm 	r0,#paletteRegister 		; set colour
+		add 	r0,#$100 					; increment upper byte of colour e.g. colour number -> 10101
+		dec 	r2 							; do R3 times so will do 10100 10101 10110 10111
+		skz 	r2
+		jmp 	#_OSSFPPLoop
 ._OSSFPPExit
 		pop 	r0,r1,r2,r3
 		ret

@@ -81,15 +81,10 @@
 		mov 	r0,#spriteDefaultImageCount
 		stm 	r0,r1,#4			
 ;
-;		Initialise the plane usage
+;		Initialise the plane usage/clear screen
 ;
-		mov 	r0,#$0202					; 4 backplanes no sprite plane
+		mov 	r0,#$0004					; 4 backplanes no sprite plane
 		jsr 	#OSSetPlanes
-;
-;		Erase the whole display using colour 0 mask $FF
-;
-		mov 	r0,#$FF00 					
-		jsr 	#OSIFillScreen
 ;
 ;		Show the boot prompt, free memory and kernel version
 ;

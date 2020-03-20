@@ -72,7 +72,7 @@
 	word	SyntaxError              ; $3c43 BLIT
 	word	Command_Call             ; $3c44 CALL
 	word	Command_Clear            ; $3c45 CLEAR
-	word	SyntaxError              ; $3c46 CLS
+	word	Command_Cls              ; $3c46 CLS
 	word	Command_DIM              ; $3c47 DIM
 	word	Command_Dir              ; $3c48 DIR
 	word	Command_ELSE             ; $3c49 ELSE
@@ -80,7 +80,7 @@
 	word	Command_FKey             ; $3c4b FKEY
 	word	Command_GOSUB            ; $3c4c GOSUB
 	word	Command_GOTO             ; $3c4d GOTO
-	word	SyntaxError              ; $3c4e INK
+	word	Command_Ink              ; $3c4e INK
 	word	Command_Input            ; $3c4f INPUT
 	word	Command_Let              ; $3c50 LET
 	word	Command_List             ; $3c51 LIST
@@ -88,7 +88,7 @@
 	word	Command_New              ; $3c53 NEW
 	word	Command_Old              ; $3c54 OLD
 	word	SyntaxError              ; $3c55 PALETTE
-	word	SyntaxError              ; $3c56 PAPER
+	word	Command_Paper            ; $3c56 PAPER
 	word	CommandPoke              ; $3c57 POKE
 	word	Command_Print            ; $3c58 PRINT
 	word	CommentCommand2          ; $3c59 REM
