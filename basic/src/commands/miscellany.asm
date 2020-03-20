@@ -113,7 +113,27 @@
 .Dummy5 		;; [step]
 .Dummy6 		;; [then]
 
-;
-;	Note then is a command because if...then is a structure, but it doesn't
-;	execute in its own right.
-;
+.Dummy7 		;; [adc]
+.Dummy8 		;; [add]
+.Dummy9 		;; [brl]
+.Dummy10 		;; [jmp]
+.Dummy11		;; [jsr]
+.Dummy12 		;; [ldm]
+.Dummy13 		;; [mov]
+.Dummy14 		;; [mult]
+.Dummy15 		;; [ret]
+.Dummy16 		;; [ror]
+.Dummy17 		;; [skc]
+.Dummy18 		;; [skcm]
+.Dummy19 		;; [skeq]
+.Dummy20 		;; [skm]
+.Dummy21 		;; [sknc]
+.Dummy22 		;; [skne]
+.Dummy23 		;; [sknz]
+.Dummy24 		;; [skp]
+.Dummy25 		;; [skse]
+.Dummy26 		;; [sksn]
+.Dummy27 		;; [skz]
+.Dummy28 		;; [stm]
+.Dummy29 		;; [sub]
+				jmp 	#SyntaxError

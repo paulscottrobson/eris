@@ -81,7 +81,7 @@ h.close()
 #
 #		If any aren't implemented output a warning.
 #
-#if len(undefined) > 0:
-#	undefined.sort()
-#	print("TODO : "+" ".join(undefined).lower())
+if len(undefined) > 0:
+	undefined.sort()
+	print("TODO : "+" ".join(undefined).lower())
 				

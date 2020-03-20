@@ -2,31 +2,31 @@
 ;	Automatically generated
 ;
 .TokenVectors
-	word	SyntaxError              ; $3200 MOV
-	word	SyntaxError              ; $3201 LDM
-	word	SyntaxError              ; $3202 STM
-	word	SyntaxError              ; $3203 ADD
-	word	SyntaxError              ; $3204 ADC
-	word	SyntaxError              ; $3205 SUB
+	word	Dummy13                  ; $3200 MOV
+	word	Dummy12                  ; $3201 LDM
+	word	Dummy28                  ; $3202 STM
+	word	Dummy8                   ; $3203 ADD
+	word	Dummy7                   ; $3204 ADC
+	word	Dummy29                  ; $3205 SUB
 	word	BinaryOp_And             ; $2206 AND
 	word	BinaryOp_Xor             ; $2207 XOR
-	word	SyntaxError              ; $3208 MULT
-	word	SyntaxError              ; $3209 ROR
-	word	SyntaxError              ; $320a BRL
-	word	SyntaxError              ; $320b SKEQ
-	word	SyntaxError              ; $320c SKNE
-	word	SyntaxError              ; $320d SKSE
-	word	SyntaxError              ; $320e SKSN
-	word	SyntaxError              ; $320f SKCM
-	word	SyntaxError              ; $3210 JMP
-	word	SyntaxError              ; $3211 JSR
-	word	SyntaxError              ; $3212 RET
-	word	SyntaxError              ; $3213 SKZ
-	word	SyntaxError              ; $3214 SKNZ
-	word	SyntaxError              ; $3215 SKP
-	word	SyntaxError              ; $3216 SKM
-	word	SyntaxError              ; $3217 SKC
-	word	SyntaxError              ; $3218 SKNC
+	word	Dummy14                  ; $3208 MULT
+	word	Dummy16                  ; $3209 ROR
+	word	Dummy9                   ; $320a BRL
+	word	Dummy19                  ; $320b SKEQ
+	word	Dummy22                  ; $320c SKNE
+	word	Dummy25                  ; $320d SKSE
+	word	Dummy26                  ; $320e SKSN
+	word	Dummy18                  ; $320f SKCM
+	word	Dummy10                  ; $3210 JMP
+	word	Dummy11                  ; $3211 JSR
+	word	Dummy15                  ; $3212 RET
+	word	Dummy27                  ; $3213 SKZ
+	word	Dummy23                  ; $3214 SKNZ
+	word	Dummy24                  ; $3215 SKP
+	word	Dummy20                  ; $3216 SKM
+	word	Dummy17                  ; $3217 SKC
+	word	Dummy21                  ; $3218 SKNC
 	word	BinaryOp_Or              ; $2219 OR
 	word	BinaryOp_Greater         ; $241a >
 	word	BinaryOp_GreaterEqual    ; $241b >=
@@ -92,33 +92,35 @@
 	word	CommentCommand1          ; $3c57 '
 	word	ColonHandler             ; $3c58 :
 	word	Command_Print2           ; $3c59 ?
-	word	CommandAssert            ; $3c5a ASSERT
-	word	Command_Blit             ; $3c5b BLIT
-	word	Command_Call             ; $3c5c CALL
-	word	Command_Clear            ; $3c5d CLEAR
-	word	Command_Cls              ; $3c5e CLS
-	word	Command_DIM              ; $3c5f DIM
-	word	Command_Dir              ; $3c60 DIR
-	word	Command_ELSE             ; $3c61 ELSE
-	word	Command_End              ; $3c62 END
-	word	Command_FKey             ; $3c63 FKEY
-	word	Command_GOSUB            ; $3c64 GOSUB
-	word	Command_GOTO             ; $3c65 GOTO
-	word	Command_Ink              ; $3c66 INK
-	word	Command_Input            ; $3c67 INPUT
-	word	Command_Let              ; $3c68 LET
-	word	Command_List             ; $3c69 LIST
-	word	Command_Load             ; $3c6a LOAD
-	word	Command_New              ; $3c6b NEW
-	word	Command_Old              ; $3c6c OLD
-	word	Command_Palette          ; $3c6d PALETTE
-	word	Command_Paper            ; $3c6e PAPER
-	word	CommandPoke              ; $3c6f POKE
-	word	Command_Print            ; $3c70 PRINT
-	word	CommentCommand2          ; $3c71 REM
-	word	Command_RETURN           ; $3c72 RETURN
-	word	RunProgram               ; $3c73 RUN
-	word	Command_Save             ; $3c74 SAVE
-	word	Command_Screen           ; $3c75 SCREEN
-	word	Command_Stop             ; $3c76 STOP
-	word	CommandSys               ; $3c77 SYS
+	word	SyntaxError              ; $3c5a ASSEMBLE
+	word	CommandAssert            ; $3c5b ASSERT
+	word	Command_Blit             ; $3c5c BLIT
+	word	Command_Call             ; $3c5d CALL
+	word	Command_Clear            ; $3c5e CLEAR
+	word	Command_Cls              ; $3c5f CLS
+	word	Command_DIM              ; $3c60 DIM
+	word	Command_Dir              ; $3c61 DIR
+	word	Command_ELSE             ; $3c62 ELSE
+	word	Command_End              ; $3c63 END
+	word	Command_FKey             ; $3c64 FKEY
+	word	Command_GOSUB            ; $3c65 GOSUB
+	word	Command_GOTO             ; $3c66 GOTO
+	word	Command_Ink              ; $3c67 INK
+	word	Command_Input            ; $3c68 INPUT
+	word	Command_Let              ; $3c69 LET
+	word	Command_List             ; $3c6a LIST
+	word	Command_Load             ; $3c6b LOAD
+	word	Command_New              ; $3c6c NEW
+	word	Command_Old              ; $3c6d OLD
+	word	Command_Palette          ; $3c6e PALETTE
+	word	Command_Paper            ; $3c6f PAPER
+	word	CommandPoke              ; $3c70 POKE
+	word	Command_Print            ; $3c71 PRINT
+	word	CommentCommand2          ; $3c72 REM
+	word	SyntaxError              ; $3c73 RENUMBER
+	word	Command_RETURN           ; $3c74 RETURN
+	word	RunProgram               ; $3c75 RUN
+	word	Command_Save             ; $3c76 SAVE
+	word	Command_Screen           ; $3c77 SCREEN
+	word	Command_Stop             ; $3c78 STOP
+	word	CommandSys               ; $3c79 SYS
