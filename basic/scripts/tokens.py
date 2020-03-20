@@ -151,9 +151,10 @@ class Tokens(object):
 //
 [Unary]
 	( 	&	% 	|constshift
-	abs(	asc(	chr$(	exists(	false	get( 	get$( 	inkey( 	
-	inkey$( joyx( 	joyy( 	joyb(	left$(	len(	mid$(	page	
-	peek(	right$(	rnd(	sgn(	str$(	sysvar(	true 	val(	
+	abs(	alloc(	asc(	chr$(	exists(	false	get( 	get$( 	
+	inkey( 	inkey$( joyx( 	joyy( 	joyb(	left$(	len(	mid$(	
+	page	peek(	right$(	rnd(	sgn(	str$(	sysvar(	true 	
+	val(	
 //
 //		Synonyms
 //
