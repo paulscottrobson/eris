@@ -37,6 +37,9 @@
 .StrlenError
 	jsr	#GenErrorHandler
 	string	"String Size"
+.LocalParamError
+	jsr	#GenErrorHandler
+	string	"Parameters or Locals"
 .StructureError
 	jsr	#GenErrorHandler
 	string	"Structures wrong"

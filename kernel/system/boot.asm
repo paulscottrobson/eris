@@ -80,6 +80,8 @@
 		stm 	r0,r1,#6
 		mov 	r0,#spriteDefaultImageCount
 		stm 	r0,r1,#4	
+		mov		r0,#fontDataDefault
+		stm 	r0,r1,#7
 ;
 ;		Reset the next time event
 ;

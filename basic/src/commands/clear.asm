@@ -30,6 +30,7 @@
 		stm 	r0,#memAllocBottom 			; set as memory to be allocated up
 		;
 		jsr 	#StackReset 				; reset the basic stack
+		jsr 	#LocalReset					; reset the locals stack
 		jsr 	#ScanForProcedures 			; scan for procedures so CALL can find them fast.
 		;
 		pop 	link

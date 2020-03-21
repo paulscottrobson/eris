@@ -116,8 +116,7 @@ for x in fontData:                                                      # for ea
         x.append(0)
 
 h = open("font.inc","w")                                                # generate word data
-h.write("\torg KernelEnd-8*96\n")
-h.write(".FontData\n")
+h.write(".FontDataDefault\n")
 for i in range(0,len(fontData)):
     cd = ",".join(["${0:04x}".format((c << 11) if c >= 0 else 0xFC00) for c in fontData[i]])
     h.write("\tword\t{0} ; ${1:02x} {2}\n".format(cd,i+32,chr(i+32)))

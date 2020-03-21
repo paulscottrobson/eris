@@ -42,7 +42,9 @@
 		;		Successful search !
 		;		
 		mov 	r11,r4,#0 					; update R11 with caller address - address after CALL <ident>
+		jsr 	#LocalNewFrame		 		; start a new local variable frame for locals/parameters
 		jsr 	#CheckRightBracket 			; check that it is using () to call
+		;
 		jsr 	#StackPushPosition 			; push current position/line offset
 		jsr 	#StackPushMarker 			; push a 'C' marker
 		word 	'C'
@@ -76,6 +78,7 @@
 		jsr 	#StackPopPosition 			; restore position from stack.
 		mov 	r0,#1+stackPosSize 			; and reclaim that many words off the stack
 		jsr 	#StackPopWords
+		jsr 	#LocalRestoreFrame 			; unpick the stack.
 		pop 	link
 		ret
 

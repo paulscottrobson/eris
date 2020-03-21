@@ -70,8 +70,8 @@
 		stm 	r2,#blitterCMask 			; that's the colour.high mask.low
 		;
 		ror 	r0,#13 						; multiply (char# - 33) result by 8 the character height
-		mov 	r1,#FontData+8 				; make R1 point to the font data. +8 because of space.
-		add 	r1,r0,#0
+		ldm 	r1,#defaultFont 			; make R1 point to the font data
+		add 	r1,r0,#8					; +8 because we do not print space hence sub r0,#33
 		stm 	r1,#blitterData 			; which is also the blitter data source.
 		mov 	r0,#8 						; and write out 8 bytes, no background
 		stm 	r0,#blitterCmd
