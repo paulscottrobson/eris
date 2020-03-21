@@ -104,7 +104,7 @@
 		jsr 	#LocalPush 					; push value first
 		mov 	r0,r1,#0
 		jsr 	#LocalPush 					; push reference
-		mov 	r0,#1						; push 1 indicating integer
+		mov 	r0,#$7FFF					; push $7FFF indicating integer
 		jsr 	#LocalPush
 		stm 	r14,r1,#0 					; set the new local variable to zero
 		jmp 	#_LPRSExit
@@ -112,11 +112,34 @@
 		;		Push string
 		;
 ._LPRSString
-		break
-
+		ldm 	r0,r10,#esValue1 			; get address of string in R1
+		ldm 	r1,r0,#0 					; as it is a reference.
+		mov 	r0,r1,#0 					; get the word length
+		jsr 	#OSWordLength 				; number of words to write into R2, also the marker.
+		mov 	r2,r0,#1 					; and also R3 as a count - must be > 0
+		mov 	r3,r0,#1 					; we add one to allow for the length word which goes too.
+._LPRSSaveString
+		ldm 	r0,r1,#0 					; save a value
+		jsr 	#LocalPush
+		inc 	r1
+		dec		r3
+		skz 	r3
+		jmp 	#_LPRSSaveString
+		mov 	r0,r2,#0 					; book end it with the string.
+		jsr 	#LocalPush
+		;
+		ldm 	r0,r10,#esValue1 			; address of string variable
+		jsr 	#LocalPush 					; e.g. where the string has come from
+		mov 	r1,#_LPRSNulLString 		; default string value
+		stm 	r1,r0,#0
+		;
+		ldm 	r0,#localStackPtr
 ._LPRSExit		
 		pop 	link
 		ret
+
+._LPRSNulLString
+		word 	0
 
 ; *****************************************************************************
 ;
@@ -132,7 +155,7 @@
 		stm 	r8,#localStackPtr
 		sknz 	r0 							; if found 0, e.g. the zero marker, then complete
 		ret
-		dec 	r0 	
+		xor 	r0,#$7FFF 					; check for integer marker ($7FFF)
 		skz 	r0
 		jmp 	#_LRFTryString
 		;
@@ -147,4 +170,22 @@
 		;		Pop a string off the local stack.
 		;
 ._LRFTryString
+		dec 	r8
+		ldm 	r3,r8,#0 					; get the target address into R3.
+		ldm 	r3,r3,#0 					; de reference it
+		ldm 	r1,r8,#1 					; get the count to copy into R1
+		mov 	r2,r8,#0 					; get the first word to copy into R2
+		add 	r2,r1,#1 					; we wrote it out backwards
+		add 	r8,r1,#2 					; make R8 point to the next element.
+._LRFSCopy
+		ldm 	r0,r2,#0 					; get the next character, going backwards		
+		stm 	r0,r3,#0 					; write out
+		dec 	r2
+		inc 	r3
+		dec 	r1
+		skz 	r1
+		jmp 	#_LRFSCopy 					; until the whole string is done.
+		jmp 	#_LRFLoop 					; go do the next one
+
+
 		break		
