@@ -11,18 +11,21 @@
 ; *****************************************************************************
 
 		org 	FreeMemory
+
+; *****************************************************************************
+;								Stock Register Usage
 ;		
 ;		R9 		Precedence level
 ;		R10 	Evaluation stack pointer
 ; 		R11		Program code pointer.
 ;
-;
-		
-.initialSP									; stack pointer value on BASIC start up.
-		fill 	1
+; *****************************************************************************
 
-.currentLine 								; current line address (address of pointer)
-		fill 	1
+; *****************************************************************************
+;
+;								  Basic Variables
+;
+; *****************************************************************************
 		
 .programCode 								; where the Basic code starts.
 		fill 	1		
@@ -36,15 +39,29 @@
 .memAllocBottom 							; memory allocated from bottom
 		fill 	1
 
+.returnStackTop 							; top and bottom of return stack
+		fill 	1
+.returnStackBottom
+		fill 	1
+
+.localStackTop 								; top and bottom of local stack
+		fill 	1
+.localStackBottom
+		fill 	1
+
+.initialSP									; stack pointer value on BASIC start up.
+		fill 	1
+
+.currentLine 								; current line address (address of pointer)
+		fill 	1
+		
 .procTable 									; list of procedure line addresses, ends with $0000
 		fill 	1
 		
 .tempStringAlloc 							; allocate interim string
 		fill 	1	
 
-.returnStackTop 							; top and bottom of return stack
-		fill 	1
-.returnStackBottom
+.localStackPtr 								; local variable/parameter stack pointer
 		fill 	1
 		
 .returnStackPtr 							; return stack pointer
@@ -53,6 +70,7 @@
 .lastListToken 								; last listed token (for base conversion)
 		fill 	1		
 
+; *****************************************************************************
 ;
 ;		Evaluation stack.
 ;			+0 	data 	(either pointer to a string, or integer)
@@ -60,18 +78,44 @@
 ;			+2 	ref 	(0 if value,#0 if reference)
 ;	
 ;	
+; *****************************************************************************
+
 .evalStack									; stack for evaluation
 		fill 	StackSize * stackElementSize
 
+; *****************************************************************************
+;
+;							Fixed variables A-Z
+;
+; *****************************************************************************
+
 .fixedVariables								; the 26 permanent variables A-Z
 		fill 	26 
+
+; *****************************************************************************
+;
+;				   4 Hash table for the 4 type combinations
+;
+; *****************************************************************************
 		
 .variableHashTable							; hash tables for 4 variable types
 		fill 	hashTableSize*4
 
+; *****************************************************************************
+;
+;						Buffer used for tokenising text
+;
+; *****************************************************************************
+
 .tokenBuffer 								; tokenisation buffer.
 		fill 	256
 .tokenBufferEnd
+
+; *****************************************************************************
+;
+;						  Buffer used during INPUT
+;
+; *****************************************************************************
 
 .inputBuffer	 							; buffer for INPUT
 		fill 	(charWidth >> 1)+3	 				
@@ -82,5 +126,5 @@
 ;
 ;					We put the basic program on a page boundary
 ;
-freeBasicCode = ramStart + $200
+freeBasicCode = ramStart + $300
 

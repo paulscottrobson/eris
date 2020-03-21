@@ -71,7 +71,7 @@ class Program(object):
 
 		h = open("basiccode.prg","wb")										# output as a .PRG
 		h.write(bytes([0])) 												# note hard coded $4200 address here
-		h.write(bytes([0x42]))
+		h.write(bytes([0x43]))
 		for i in self.code:													# program words LSB first
 			h.write(bytes([i & 0xFF]))
 			h.write(bytes([i >> 8]))

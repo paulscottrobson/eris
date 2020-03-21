@@ -122,7 +122,12 @@ class Assembler(object):
 		h = open(tgt+"a.lbl","w")
 		self.worker.dumpLabels(h)
 		h.close()		
-
+	#
+	#		Get size
+	#
+	def getSize(self):
+		return self.highWord-self.lowWord+1
+		
 if __name__ == "__main__":
 	code = """	
 	;

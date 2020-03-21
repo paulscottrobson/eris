@@ -42,11 +42,14 @@
 		;		Successful search !
 		;		
 		mov 	r11,r4,#0 					; update R11 with caller address - address after CALL <ident>
+		jsr 	#CheckRightBracket 			; check that it is using () to call
 		jsr 	#StackPushPosition 			; push current position/line offset
 		jsr 	#StackPushMarker 			; push a 'C' marker
 		word 	'C'
 		mov 	r11,r3,#0 					; new code address after PROC <identifier>
 		stm 	r2,#currentLine 			; set current line
+		;
+		jsr 	#CheckRightBracket 			; check a right bracket follows the PROC definition
 		pop 	link
 		ret
 

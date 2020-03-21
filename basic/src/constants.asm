@@ -15,6 +15,14 @@
 ;
 cpuStackSize = 256
 ;
+;		Size of return stack for CALL, REPEAT etc.
+;
+returnStackSize = 256
+;
+;		Size of local variable stack
+;
+localStackSize = 512
+;
 ;		Max size of string
 ;
 maxStringSize = 255
@@ -42,10 +50,7 @@ esReference1 = 2
 esValue2 = 0+stackElementSize
 esType2 = 1+stackElementSize
 esReference2 = 2+stackElementSize
-;
-;		Size of return stack for CALL, REPEAT etc.
-;
-returnStackSize = 256
+
 ;
 ; 		Words required to store the stack position (line address, code address)
 ;

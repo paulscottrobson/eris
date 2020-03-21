@@ -29,10 +29,17 @@
 ; *****************************************************************************
 
 .ColdStart	
+		;
+		;		Firstly just allocate memory for the three stacks (return, local and CPU)
+		;
 		dec 	sp 							; high memory address -> first free word
 		stm 	sp,#returnStackTop 			; allocate space for BASIC return stack
 		sub 	sp,#returnStackSize
 		stm 	sp,#returnStackBottom 		; save the bottom position
+		;
+		stm 	sp,#localStackTop 			; now do the same for the local stack
+		sub 	sp,#localStackSize 			
+		stm 	sp,#localStackBottom
 		;
 		stm 	sp,#initialSP 				; save initial stack pointer.
 		;
