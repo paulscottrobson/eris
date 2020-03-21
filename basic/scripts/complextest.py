@@ -35,6 +35,7 @@ class ComplexVariable(TestProgram):
 					size.append(random.randint(2,4))
 				self.variables[v] = { "name":v, "value":self.makeValue(size,defValue),"type":"array","size":size }
 				self.add("dim {0}({1})".format(v,",".join([str(x) for x in size])))				
+		self.add("repeat")				
 	#
 	def makeValue(self,size,default):				
 		if len(size) == 0:
@@ -75,6 +76,8 @@ class ComplexVariable(TestProgram):
 					for i in range(0,v["size"][0]+1):
 						for j in range(0,v["size"][1]+1):
 							self.validate(v,str(i)+","+str(j),v["value"][i][j])
+		self.add('print "Low",!&4073,"High",!&4072')
+		self.add("until false")				
 	#
 	def validate(self,rec,index,val):
 		self.add("assert {0}({1}) = {2}".format(rec["name"],index,val))

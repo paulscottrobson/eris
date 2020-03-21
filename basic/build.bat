@@ -8,7 +8,7 @@ pushd scripts >NUL
 python tables.py
 python program.py
 rem python gentokentest.py
-rem python systests.py Comparison
+python systests.py ComplexVariable
 copy basiccode.prg ..\..\emulator\bin >NUL
 copy basiccode.prg ..\..\emulator\storage\demo >NUL
 popd
