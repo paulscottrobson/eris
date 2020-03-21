@@ -98,7 +98,7 @@ class Tokens(object):
 	#
 	def encodePunctuation(self,s):
 		assert len(s) <= 2 and s != "","Bad "+s 							# rubbish validation but works
-		assert re.match("^[\\!\\+\\-\\*\\>\\<\\=\\/\\(\\)\\:\\,\\;\\&\\%\\'\\?]+$",s) is not None,"Bad "+s
+		assert re.match("^[\\.\\!\\+\\-\\*\\>\\<\\=\\/\\(\\)\\:\\,\\;\\&\\%\\'\\?]+$",s) is not None,"Bad "+s
 		s = s + chr(0)
 		return [ 0x8000 + ord(s[0]) + (ord(s[1]) << 8)]
 	#
@@ -124,13 +124,14 @@ class Tokens(object):
 
 //
 //		Assembler operations first. Some of these (and, xor) are dual purpose
-//		The first 16 are the standard set, the remainder popular macros.
+//		The first 16 are the standard set, the remainder popular macros or
+//		other assembler functionality
 //		(see assembler.py)
 //
 		[Syntax] 	mov ldm stm add adc sub 
 		[1] 		and xor 
-		[Syntax] 	mult ror brl skeq skne skse sksn skcm 
-		[Syntax]	jmp jsr ret skz sknz skp skm skc sknc
+		[Syntax] 	mult ror brl skeq skne skse sksn skcm 	
+		[Cmd]		jmp jsr ret skz sknz skp skm skc sknc code word .
 //
 //		Expression token. Note that AND and XOR are defined in the
 //		assembler keywords, as they are "dual purpose", so if you renumber
@@ -179,10 +180,10 @@ class Tokens(object):
 //
 [Cmd]
 	' 		:		? 		
-	assemble assert blit 	call 	clear 	cls 	crunch 	dim 	dir 	else 	
-	end 	fkey	gosub 	goto 	ink 	input 	let 	list 	load 	local 	
-	new 	old		palette	paper	poke 	print 	rem 	renumber 		return 	
-	run 	save 	screen	stop 	sys 	
+	assert blit 	call 	clear 	cls 	crunch 	dim 	dir 	else 	
+	end 	fkey	gosub 	goto 	ink 	input 	let 	list 	load 	
+	local 	new 	old		palette	paper	poke 	print 	rem 	renumber 		
+	return 	run 	save 	screen	stop 	sys 	
 """
 
 Tokens.TOKENS = None		

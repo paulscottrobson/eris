@@ -74,6 +74,10 @@
 		;
 		;		Identify whether it is punctuation, identifier (A-Z/.) or digit
 		;
+		mov 	r0,r3,#0 					; check for '.', which is tokenised as punct first
+		xor 	r0,#'.'
+		sknz 	r0
+		jmp 	#TokenisePunctuation
 		mov 	r0,r3,#0 					; get character
 		jsr 	#GetCharacterType 			; 0 punctuation 1 alphabet 2 number
 		add 	r0,#_TEHandlerTable 		; address to jump to
