@@ -16,7 +16,7 @@
 ;
 ; *****************************************************************************
 
-.Command_Local
+.Command_Local		;; [local]
 		push 	link
 ._CLLoop
 		jsr 	#LocalPushReference 		; push a variable reference
@@ -81,7 +81,40 @@
 
 .LocalPushReference
 		push 	link
+		ldm 	r0,r11,#0 					; check it is an identifier and not an array
+		and 	r0,#$4800 					; 01 is identifier, bit 11 is array flag
+		xor 	r0,#$4000
+		skz 	r0
+		jmp 	#TypeMismatchError
+		;
+		mov 	r9,#(TOK_PLING & 0x1E00)-0x400
+		jsr 	#Evaluator 					; get the lhs, which should be a reference
+		ldm 	r0,r10,#esReference1 		; check it is a reference
+		sknz 	r0
+		jmp	 	#TypeMismatchError
+		;
+		ldm 	r0,r10,#esType1 			; is it a string or an integer ?
+		skz 	r0
+		jmp 	#_LPRSString
+		;
+		;		Push integer and set old to zero.
+		;
+		ldm 	r1,r10,#esValue1 			; this is a reference
+		ldm 	r0,r1,#0 					; get value at reference
+		jsr 	#LocalPush 					; push value first
+		mov 	r0,r1,#0
+		jsr 	#LocalPush 					; push reference
+		mov 	r0,#1						; push 1 indicating integer
+		jsr 	#LocalPush
+		stm 	r14,r1,#0 					; set the new local variable to zero
+		jmp 	#_LPRSExit
+		;
+		;		Push string
+		;
+._LPRSString
 		break
+
+._LPRSExit		
 		pop 	link
 		ret
 
@@ -99,4 +132,19 @@
 		stm 	r8,#localStackPtr
 		sknz 	r0 							; if found 0, e.g. the zero marker, then complete
 		ret
-		jmp 	#LocalParamError		
+		dec 	r0 	
+		skz 	r0
+		jmp 	#_LRFTryString
+		;
+		;		Pop an integer off the local stack.
+		;		
+		ldm 	r1,r8,#0 					; address
+		ldm 	r0,r8,#1 					; data
+		stm 	r0,r1,#0 					; set data back
+		add 	r8,#2 						; pop off stack
+		jmp 	#_LRFLoop
+		;
+		;		Pop a string off the local stack.
+		;
+._LRFTryString
+		break		

@@ -112,7 +112,7 @@
 	word	Command_Let              ; $3c6b LET
 	word	Command_List             ; $3c6c LIST
 	word	Command_Load             ; $3c6d LOAD
-	word	SyntaxError              ; $3c6e LOCAL
+	word	Command_Local            ; $3c6e LOCAL
 	word	Command_New              ; $3c6f NEW
 	word	Command_Old              ; $3c70 OLD
 	word	Command_Palette          ; $3c71 PALETTE
