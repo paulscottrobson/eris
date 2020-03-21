@@ -46,7 +46,7 @@
 		
 ;*****************************************************************************
 ;
-;					Write string at R0 to addres R1
+;					Write string at R0 to address R1
 ;					This *concretes* it if required
 ;
 ;	Concreted strings (e.g. those above memAllocTop) have a maximum length 

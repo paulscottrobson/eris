@@ -77,6 +77,9 @@
 ;			a non array. Identify it, push its current value on the locals
 ;			stack and set it to either "" or 0 according to type.
 ;
+;			On exit R10, the evaluation stack, holds the reference/type/value
+;			as normal.
+;
 ; *****************************************************************************
 
 .LocalPushReference

@@ -39,10 +39,15 @@
 		skm 	r5 							; go back if not the end.
 		jmp 	#_CCACheck
 		;
-		;		Successful search !
+		;		Successful search ! R4 is the token after the identifier( in the call and R3 is the 
+		;		token after the identifier( in the target
 		;		
-		mov 	r11,r4,#0 					; update R11 with caller address - address after CALL <ident>
 		jsr 	#LocalNewFrame		 		; start a new local variable frame for locals/parameters
+		ldm 	r0,r4,#0 					; are there any parameters
+		xor 	r0,#TOK_RPAREN
+		skz 	r0
+		jsr 	#_CCADoParameters
+		mov 	r11,r4,#0 					; update R11 with caller address - address after CALL <ident>
 		jsr 	#CheckRightBracket 			; check that it is using () to call
 		;
 		jsr 	#StackPushPosition 			; push current position/line offset
@@ -53,6 +58,42 @@
 		;
 		jsr 	#CheckRightBracket 			; check a right bracket follows the PROC definition
 		pop 	link
+		ret
+		;
+		;		Parameters. R4 is the call, and R3 the definition.
+		;
+._CCADoParameters
+		push 	r0,r1,r2,link
+._CCADPLoop
+		mov 	r11,r3,#0 					; put the definition into the current slot, 
+		jsr 	#LocalPushReference 		; localise it, (push on stack and set to default value).
+		mov 	r3,r11,#0
+		;
+		ldm 	r2,r10,#esType1 			; get type, integer or string
+		ldm 	r1,r10,#esValue1 			; get the reference to the variable in the parameter.
+		;
+		mov 	r11,r4,#0 					; evaluate the parameter passed in.
+		;
+		sknz 	r2 							; use the type of the target to type check the parameter value
+		jsr 	#EvaluateInteger
+		skz 	r2
+		jsr 	#EvaluateString
+		mov 	r4,r11,#0 					; put the pointer back.
+		;
+		sknz 	r2
+		stm 	r0,r1,#0 					; save the value if integer
+		skz 	r2
+		jsr 	#StringAssign  				; assign string if err. string
+._CCADPNotString		
+		ldm 	r0,r4,#0 					; followed by comma ?
+		inc 	r3
+		inc 	r4
+		xor 	r0,#TOK_COMMA
+		sknz 	r0
+		jmp 	#_CCADPLoop
+		dec 	r4 							; undo the comma - get
+		dec 	r3
+		pop 	r0,r1,r2,link
 		ret
 
 ; *****************************************************************************
