@@ -18,15 +18,23 @@
 
 .Command_Local		;; [local]
 		push 	link
-._CLLoop
+._CLOLoop
+		mov 	r2,r11,#0 					; save start of identifier.
 		mov 	r0,#1 						; clear local variable
 		jsr 	#LocalPushReference 		; push a variable reference
 		ldm 	r0,r11,#0 					; are we followed by a comma
 		inc 	r11 						; skip over it - may be undone.
 		xor 	r0,#TOK_COMMA
 		sknz 	r0 							; if not get another variable
-		jmp 	#_CLLoop
+		jmp 	#_CLOLoop
+		xor 	r0,#TOK_COMMA^TOK_EQUAL 	; check for =
 		dec 	r11 						; undo the comma increment
+		skz 	r0
+		jmp 	#_CLOExit
+		;	
+		mov 	r11,r2,#0 					; should now be x = 42
+		jsr 	#Command_Let 				; use the LET code.
+._CLOExit		
 		pop 	link
 		ret
 

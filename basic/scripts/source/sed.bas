@@ -13,10 +13,9 @@ end
 '
 proc mainloop()
 	if !systemTimer-nextMove >= 0
-		nextMove = !systemTimer + 20
-		local x,y
-		x = (cursor.x+joyx()) and 15
-		y = (cursor.y+joyy()) and 15
+		nextMove = !systemTimer + 12
+		local x = (cursor.x+joyx()) and 15
+		local y = (cursor.y+joyy()) and 15
 		if x <> cursor.x or y <> cursor.y 
 			local oldY:oldY = cursor.y
 			cursor.x = x:cursor.y = y
@@ -38,6 +37,7 @@ proc setPixel(x,y,isSet)
 		!addr = !addr and (bits(x) xor &FFFF)
 	endif
 	call redrawLine(y)
+	call redrawOneSelector(sprites.current)
 endproc
 '
 '	"Redraw main selector"
@@ -45,9 +45,14 @@ endproc
 proc redrawSelector()
 	local i
 	for i = 0 to sprites.count-1
-		if i = sprites.current col = 6 else col = 2 endif
-		blit i/8*24,i mod 8*24,sprites.addr+i*16,&F00+col,16
+		call redrawOneSelector(i)
 	next i
+endproc
+'
+proc redrawOneSelector(i)
+	blit i/8*24,i mod 8*24,blockGfx,&F04,&8010
+	if i = sprites.current col = 7 else col = 2 endif
+	blit i/8*24,i mod 8*24,sprites.addr+i*16,&F00+col,16
 endproc
 '
 '	"Redraw whole display"
@@ -73,10 +78,10 @@ proc initialise()
 	dim bits(16):j = &8000:for i = 0 to 15:bits(i) = j:j = (j / 2) and &7FFF:next i
 	sprites.addr = sysvar(3):sprites.count = sysvar(4):sprites.current = 2
 	cursor.x = 8:cursor.y = 8
-	solidGfx = alloc(8):cursorGfx = alloc(8)
+	solidGfx = alloc(8):cursorGfx = alloc(8):blockGfx = alloc(1)
 	systemTimer = &FF30:nextMove = !systemTimer
 	for i = 0 to 7:solidGfx!i = &FF00:cursorGfx!i = &8100:next
-	cursorGfx!0 = &FF00:cursorGfx!7 = &FF00
+	cursorGfx!0 = &FF00:cursorGfx!7 = &FF00:!blockGfx=&FFFF
 endproc
 '
 '	"Fast blit routine"
