@@ -55,8 +55,8 @@
 ._AILongFormat
 		jsr 	#CheckHash 					; check the hash follows.
 		jsr 	#EvaluateInteger 			; get the parameter.
-		sknz 	r0 							; this cannot be zero, because if it is it might be
-		jmp 	#BadNumberError 			; autoinitialised
+		sknz 	r0 							; if zero, check pass and assume long format
+		jmp 	#_ATICheckZero
 		mov 	r1,r0,#0 					; check if 1-15
 		and 	r1,#$FFF0
 		skz 	r1
@@ -67,6 +67,11 @@
 		jsr 	#AsmWord 					; write it out
 		jmp 	#_AIExit 					; and exit
 		;
+._ATICheckZero		
+		ldm 	r1,#asmMode 				; cannot have 2nd pass zero
+		and 	r1,#1
+		sknz 	r1
+		jmp 	#BadNumberError 			; autoinitialised
 ._AITwoByteLongFormat
 		mov 	r1,r0,#0 					; save value in R1
 		mov 	r0,r2,#0 					; get opcode back

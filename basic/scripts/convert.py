@@ -112,3 +112,4 @@ if __name__ == "__main__":
 	tk.test("az09.q")
 	tk.test("axxx(")
 	tk.test(".abcd")
+	tk.test("ra rf r0 r9")

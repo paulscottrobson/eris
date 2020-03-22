@@ -85,4 +85,13 @@ h.close()
 if len(undefined) > 0:
 	undefined.sort()
 	print("TODO : "+" ".join(undefined).lower())
-				
+#
+#		Generate tables for tokenised R0-RF for the assembler as a look up.
+#				
+h = open(".."+os.sep+"generated"+os.sep+"tok_asmreg.inc","w")
+h.write(";\n;\tAutomatically generated\n;\n")
+h.write(".AsmRegisters\n")
+for i in range(0,16):
+	word = tokens.encode("R{0:X}".format(i))
+	h.write("\tword\t${0:X} ; R{1:X}\n".format(word[0],i))
+h.close()	

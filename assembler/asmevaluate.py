@@ -22,7 +22,8 @@ class AssemblerEvaluator(object):
 	def __init__(self):
 		self.identifiers = { "LINK":13,"SP":12,"DEF":14,"PC":15 }
 		for i in range(0,16):
-			self.define("R"+str(i),i)
+			self.define("R{0}".format(i),i)
+			self.define("R{0:X}".format(i),i)
 		self.defaultIdentifiers = {}
 		for id in self.identifiers:
 			self.defaultIdentifiers[id] = id

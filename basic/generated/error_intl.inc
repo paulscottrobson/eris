@@ -49,6 +49,9 @@
 .BadRegisterError
 	jsr	#GenErrorHandler
 	string	"Bad CPU Register"
+.BadLabelError
+	jsr	#GenErrorHandler
+	string	"Bad Label"
 .StructureError
 	jsr	#GenErrorHandler
 	string	"Structures wrong"
