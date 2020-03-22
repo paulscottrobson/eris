@@ -55,7 +55,25 @@
 ._AILongFormat
 		jsr 	#CheckHash 					; check the hash follows.
 		jsr 	#EvaluateInteger 			; get the parameter.
-		mov 	r1,r0,#0
+		sknz 	r0 							; this cannot be zero, because if it is it might be
+		jmp 	#BadNumberError 			; autoinitialised
+		mov 	r1,r0,#0 					; check if 1-15
+		and 	r1,#$FFF0
+		skz 	r1
+		jmp 	#_AITwoByteLongFormat
+		;
+		add 	r0,r2,#0 					; make OP R,#n OP R,R14,#n as short constant
+		add 	r0,#$E0 					; this is R14 as 2nd register
+		jsr 	#AsmWord 					; write it out
+		jmp 	#_AIExit 					; and exit
+		;
+._AITwoByteLongFormat
+		mov 	r1,r0,#0 					; save value in R1
+		mov 	r0,r2,#0 					; get opcode back
+		add 	r0,#$F0 					; make OP R,#n OP R,R15,#0 : word n
+		jsr 	#AsmWord
+		mov 	r0,r1,#0 					; e.g. a 2 word instruction
+		jsr 	#AsmWord
 ._AIExit
 		pop 	link
 		ret
