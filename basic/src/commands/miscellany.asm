@@ -130,7 +130,11 @@
 .Dummy4 		;; [to]
 .Dummy5 		;; [step]
 .Dummy6 		;; [then]
+.Dummy7 		;; [crunch] 			
 
+;
+;		This lot are not commands per se, but are handled in RUN as token values.
+;
 .Dummy10 		;; [adc]
 .Dummy11		;; [add]
 .Dummy12		;; [brl]

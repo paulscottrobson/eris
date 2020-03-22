@@ -131,7 +131,7 @@ class Tokens(object):
 		[Syntax] 	mov ldm stm add adc sub 
 		[1] 		and xor 
 		[Syntax] 	mult ror brl skeq skne skse sksn skcm 	
-		[Cmd]		clr jmp jsr ret skz sknz skp skm skc sknc push pop code word .
+		[Cmd]		clr jmp jsr ret skz sknz skp skm skc sknc skge sklt push pop code word .
 //
 //		Expression token. Note that AND and XOR are defined in the
 //		assembler keywords, as they are "dual purpose", so if you renumber

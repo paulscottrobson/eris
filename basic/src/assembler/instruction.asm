@@ -90,11 +90,27 @@
 ; *****************************************************************************
 
 .AssembleGetRegister
-		push 	r1,link
+		push 	r1,r2,r3,link
+		mov 	r1,#AsmRegisters+15 		; check the R0-RF values in the LUT
+		mov 	r0,#15
+._AGRCheck
+		ldm 	r2,r1,#0 					; table entry
+		ldm 	r3,r11,#0 					; token
+		inc 	r11 						; pre-emptive bump
+		xor 	r2,r3,#0 					; if the same
+		sknz 	r2
+		jmp 	#_AGRExit 					; exit with const in R0
+		dec 	r11 						; unpick
+		dec 	r1 							; check backwards
+		dec 	r0
+		skm 	r0 							; until done the whole table
+		jmp 	#_AGRCheck
+		;
 		jsr 	#EvaluateInteger
 		mov 	r1,r0,#0 					; must be 0-15
 		and 	r1,#$FFF0
 		skz 	r1
 		jmp 	#BadRegisterError
-		pop 	r1,link
+._AGRExit		
+		pop 	r1,r2,r3,link
 		ret
