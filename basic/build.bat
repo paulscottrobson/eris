@@ -10,7 +10,7 @@ python tables.py
 rem python gentokentest.py
 rem python systests.py ComplexVariable
 
-python makeprogram.py source\locals.bas prg\autoexec.prg
+python makeprogram.py source\sed.bas prg\autoexec.prg
 python makeprogram.py source\test.bas prg\test.prg
 
 copy prg\test.prg ..\..\emulator\bin >NUL

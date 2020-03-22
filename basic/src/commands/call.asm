@@ -66,7 +66,8 @@
 		push 	r0,r1,r2,link
 ._CCADPLoop
 		mov 	r11,r3,#0 					; put the definition into the current slot, 
-		jsr 	#LocalPushReference 		; localise it, (push on stack and set to default value).
+		clr 	r0 							; do not clear default value
+		jsr 	#LocalPushReference 		; localise it, (push on stack and do not set to default value).
 		mov 	r3,r11,#0
 		;
 		ldm 	r2,r10,#esType1 			; get type, integer or string

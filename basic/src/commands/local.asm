@@ -19,6 +19,7 @@
 .Command_Local		;; [local]
 		push 	link
 ._CLLoop
+		mov 	r0,#1 						; clear local variable
 		jsr 	#LocalPushReference 		; push a variable reference
 		ldm 	r0,r11,#0 					; are we followed by a comma
 		inc 	r11 						; skip over it - may be undone.
@@ -83,7 +84,8 @@
 ; *****************************************************************************
 
 .LocalPushReference
-		push 	link
+		push 	r4,link
+		mov 	r4,r0,#0 					; save clear flag in R4
 		ldm 	r0,r11,#0 					; check it is an identifier and not an array
 		and 	r0,#$4800 					; 01 is identifier, bit 11 is array flag
 		xor 	r0,#$4000
@@ -109,6 +111,8 @@
 		jsr 	#LocalPush 					; push reference
 		mov 	r0,#$7FFF					; push $7FFF indicating integer
 		jsr 	#LocalPush
+		;
+		skz 	r4 							; only if clearing new local
 		stm 	r14,r1,#0 					; set the new local variable to zero
 		jmp 	#_LPRSExit
 		;
@@ -134,11 +138,12 @@
 		ldm 	r0,r10,#esValue1 			; address of string variable
 		jsr 	#LocalPush 					; e.g. where the string has come from
 		mov 	r1,#_LPRSNulLString 		; default string value
+		skz 	r4 							; only if clearing new local
 		stm 	r1,r0,#0
 		;
 		ldm 	r0,#localStackPtr
 ._LPRSExit		
-		pop 	link
+		pop 	r4,link
 		ret
 
 ._LPRSNulLString
