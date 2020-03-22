@@ -55,10 +55,19 @@
 		;
 		;		Uncomment this to automatically run the loaded program in the emulator.
 		;
-		mov 	r11,#$6000
-		jmp 	#RunProgram					; run program code.
+		mov 	r0,#5 						; does file autoexec.prg exist
+		mov 	r1,#CSBootProgram
+		jsr 	#OSFileOperation
+		skz 	r0
+		jsr 	#Command_New 				; New program if not
 
-		jsr 	#Command_New 				; New program.
+		mov 	r0,#2						; load program to program code address
+		ldm 	r2,#programCode
+		jsr 	#OSFileOperation
+		jmp 	#RunProgramNoLoad			; run program code from there.
+
+.CSBootProgram
+		string 	"autoexec.prg"
 
 ; *****************************************************************************
 ;

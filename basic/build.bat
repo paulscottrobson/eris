@@ -5,12 +5,14 @@ rem popd >NUL
 rem
 del /Q generated\token_test.inc 2>NUL
 pushd scripts >NUL
+del prg\autoexec.prg >NUL
 python tables.py
 rem python gentokentest.py
 rem python systests.py ComplexVariable
 
-python makeprogram.py source\locals.bas prg\locals.prg
+python makeprogram.py source\locals.bas prg\autoexec.prg
 python makeprogram.py source\test.bas prg\test.prg
+
 copy prg\test.prg ..\..\emulator\bin >NUL
 copy prg\*.* ..\..\emulator\storage >NUL
 popd
