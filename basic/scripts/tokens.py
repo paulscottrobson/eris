@@ -180,10 +180,10 @@ class Tokens(object):
 //
 [Cmd]
 	' 		:		? 		
-	assert 	blit 	call 	clear 	cls 	crunch 	dim 	dir 	else 	
-	end 	fkey	gosub 	goto 	ink 	input 	let 	list 	load 	
-	local 	new 	old		palette	paper	poke 	print 	rem 	renumber 		
-	return 	run 	save 	screen	stop 	sys 	
+	assert 	blit 	call 	clear 	cls 	crunch 	cursor	dim 	dir 	
+	else 	end 	fkey	gosub 	goto 	ink 	input 	let 	list 	
+	load 	local 	new 	old		palette	paper	poke 	print 	rem 	
+	renumber 		return 	run 	save 	screen	stop 	sys 	
 """
 
 Tokens.TOKENS = None		

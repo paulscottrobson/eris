@@ -95,12 +95,38 @@
 
 ; *****************************************************************************
 ;
+;					  				Move cursor
+;
+; *****************************************************************************
+
+.Command_Cursor 	;; [cursor]
+		push 	link
+		jsr 	#EvaluateInteger
+		mov 	r1,r0,#0
+		sub 	r0,#CharWidth
+		sklt
+		jmp 	#BadNumberError
+		jsr 	#CheckComma
+		jsr 	#EvaluateInteger
+		mov 	r2,r0,#0
+		sub 	r0,#CharHeight
+		sklt
+		jmp 	#BadNumberError
+		;
+		stm 	r1,#xTextPos
+		stm 	r2,#yTextPos
+		pop 	link
+		ret
+
+; *****************************************************************************
+;
 ;					  Code for colon, which does nothing
 ;
 ; *****************************************************************************
 
 .ColonHandler 	;; [:]
 		ret
+
 
 ; *****************************************************************************
 ;
