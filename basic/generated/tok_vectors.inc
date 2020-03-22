@@ -30,8 +30,8 @@
 	word	Macro_Sknc               ; $3c19 SKNC
 	word	Macro_Skge               ; $3c1a SKGE
 	word	Macro_Sklt               ; $3c1b SKLT
-	word	SyntaxError              ; $3c1c PUSH
-	word	SyntaxError              ; $3c1d POP
+	word	Macro_Push               ; $3c1c PUSH
+	word	Macro_Pop                ; $3c1d POP
 	word	Command_Code             ; $3c1e CODE
 	word	Command_Word             ; $3c1f WORD
 	word	Command_Label            ; $3c20 .
@@ -82,7 +82,7 @@
 	word	Unary_Str2               ; $304d TO.STRING$(
 	word	Unary_Val2               ; $304e TO.NUMBER(
 	word	Unary_Sgn2               ; $304f SIGN(
-	word	SyntaxError              ; $3250 #
+	word	Dummy7                   ; $3250 #
 	word	Dummy1                   ; $3251 )
 	word	Dummy2                   ; $3252 ,
 	word	Dummy3                   ; $3253 ;
@@ -107,7 +107,7 @@
 	word	Command_Call             ; $3c66 CALL
 	word	Command_Clear            ; $3c67 CLEAR
 	word	Command_Cls              ; $3c68 CLS
-	word	Dummy7                   ; $3c69 CRUNCH
+	word	Dummy8                   ; $3c69 CRUNCH
 	word	Command_DIM              ; $3c6a DIM
 	word	Command_Dir              ; $3c6b DIR
 	word	Command_ELSE             ; $3c6c ELSE

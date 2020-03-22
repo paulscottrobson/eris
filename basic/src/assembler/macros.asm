@@ -85,14 +85,81 @@
 ;
 ; *****************************************************************************
 
-;			rList = self.evaluator.evaluateOperands(parts.group(2).strip().split(","),True)
-;			rList.sort()
-;			code = []
-;			if isPush:															# make space
-;				code = code + self.assemble("sub sp,r14,#{0}".format(len(rList)),True)
-;			for i in range(0,len(rList)):										# read/write in frame
-;				cmd = "stm" if isPush else "ldm"
-;				code = code + self.assemble("{0} {1},sp,#{2}".format(cmd,rList[i],i),True)
-;			if not isPush:														# restore sp
-;				code = code + self.assemble("add sp,r14,#{0}".format(len(rList)),True)
+.Macro_Push 	;; [push]
+		clr 	r1 							; R1 = 0 (push) 1 (pull)
+		skz 	r14
+.Macro_Pop 		;; [pop]
+		mov 	r1,#1
+		clr 	r2 							; R2 is what registers. bit 15 = R0 etc.
+		push 	link
+._MacPGet	
+		jsr 	#AssembleGetRegister 		; get a register
+		mov 	r3,r0,#0 					; save it
+		and 	r0,#$FFF0 					; check 0-15
+		skz 	r0
+		jmp 	#BadRegisterError
+		;
+		mov 	r4,#$8000 					; R4 is the bitmask.
+		ror 	r4,r3,#0 					; this is the bit to set
+		mov 	r0,r2,#0 					; check if it is already set in R2
+		and 	r0,r4,#0 
+		skz 	r0
+		jmp 	#BadRegisterError
+		xor 	r2,r4,#0 					; set that bit
+		ldm 	r0,r11,#0 					; get next and bump pre-emptively
+		inc 	r11
+		xor 	r0,#TOK_COMMA 				; if , then go back
+		sknz 	r0
+		jmp 	#_MacPGet
+		dec 	r11 						; undo pre-emptive bump.
+		sknz 	r2 							; check any registers ?
+		jmp 	#BadRegisterError
+		;
+		mov 	r0,#$5CE0 					; this is the base for subtracting in advance
+		sknz 	r1 							; if R1 = 0 e.g. push
+		jsr 	#_MacPAdjustSP 				; change the stack pointer.
 
+		clr 	r4 							; R4 is the current offset.
+		clr 	r5 							; R5 is the register number
+		mov 	r3,r2,#0 					; R3 is the bits we destroy to check.
+._MACStoreLoad
+		add 	r3,r3,#0 					; shift bits into carry
+		skc
+		jmp 	#_MACSLNext
+		;
+		mov		r0,r5,#0 					; register number into bits 8..11 of R0
+		ror 	r0,#8
+		add 	r0,r4,#0 					; add offset now 0<reg>0<offset>
+		;
+		sknz 	r1 							; if PUSH
+		add 	r0,#$20C0 					; stm Rx,R12,offset
+		skz 	r1 							; if PULL
+		add 	r0,#$10C0 					; ldm Rx,R12,offset
+		jsr 	#AsmWord 					; write it out
+		inc 	r4 							; bump frame offset
+		;
+._MACSLNext		
+		inc 	r5 							; increment the current register number
+		skz 	r3 							; go back if we haven't done everything.
+		jmp 	#_MACStoreLoad
+		;
+		mov 	r0,#$3CE0 					; this is the base for adding afterwards
+		skz 	r1 							; if R1 != 0 e.g. pop
+		jsr 	#_MacPAdjustSP 				; change the stack pointer.
+		pop 	link
+		ret
+;
+;		Adjust SP (12) by the number of bits set in R2. Instruction Base is in R0.
+;
+._MACPAdjustSP
+		push 	r0,r1,link
+		mov 	r1,r2,#0 					; R1 we use to count the bits
+._MACPACount
+		add 	r1,r1,#0 					; shift left into carry
+		sknc
+		inc 	r0 							; adjust instructions using carry
+		skz 	r1 							; until all bits shifted out
+		jmp 	#_MACPACount		
+		jsr 	#AsmWord 					; write the modified instruction
+		pop 	r0,r1,link
+		ret

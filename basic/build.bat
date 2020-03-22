@@ -6,11 +6,13 @@ rem
 del /Q generated\token_test.inc 2>NUL
 pushd scripts >NUL
 python tables.py
-python program.py
 rem python gentokentest.py
 rem python systests.py ComplexVariable
-copy basiccode.prg ..\..\emulator\bin >NUL
-copy basiccode.prg ..\..\emulator\storage\demo >NUL
+
+python makeprogram.py source\locals.bas prg\locals.prg
+python makeprogram.py source\test.bas prg\test.prg
+copy prg\test.prg ..\..\emulator\bin >NUL
+copy prg\*.* ..\..\emulator\storage >NUL
 popd
 pushd messages >NUL
 python msgconv.py

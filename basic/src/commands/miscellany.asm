@@ -69,7 +69,9 @@
 		jsr 	#EvaluateInteger 			; address -> R1
 		mov 	r1,r0,#0 
 		mov 	r0,#fixedVariables 			; pass variables in R0 e.g. the address of A-Z block
+		push 	r11 						; R11 is the program position, don't want that changed.
 		brl 	link,r1,#0 					; call the routine
+		pop 	r11
 		pop 	link
 		ret
 
@@ -130,7 +132,8 @@
 .Dummy4 		;; [to]
 .Dummy5 		;; [step]
 .Dummy6 		;; [then]
-.Dummy7 		;; [crunch] 			
+.Dummy7 		;; [#]
+.Dummy8 		;; [crunch] 			
 
 ;
 ;		This lot are not commands per se, but are handled in RUN as token values.
