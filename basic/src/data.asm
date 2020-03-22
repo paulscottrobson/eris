@@ -70,6 +70,12 @@
 .lastListToken 								; last listed token (for base conversion)
 		fill 	1		
 
+.asmPointer 								; next assembly address
+		fill 	1
+
+.asmMode 									; assembler mode bit 0 = Pass bit 1 = List
+		fill 	1
+
 ; *****************************************************************************
 ;
 ;		Evaluation stack.

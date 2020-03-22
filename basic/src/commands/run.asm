@@ -83,13 +83,24 @@
 		jmp 	#_RPDoLet
 		;
 		ldm 	r0,r11,#0 					; get token back
-		and 	r1,#$C000 					; is it an identifier e.g. 4000-7FFF
-		xor 	r1,#$4000 					; then if so this may be a default LET
-		skz 	r1
-		jmp 	#SyntaxError 				; if not, it's constant or string constant, syntax error.
+		and 	r0,#$C000 					; is it an identifier e.g. 4000-7FFF
+		xor 	r0,#$4000 					; then if so this may be a default LET
+		skz 	r0
+		jmp 	#_RPCheckAsm 				; if not, check for assembler
 ._RPDoLet		
 		jsr 	#Command_Let 				; try it as a 'let'
 		jmp 	#_RPNewCommand 				; and go round again.
+		;
+		;		Check for assembler token, which is one of the first 16
+		;
+._RPCheckAsm
+		ldm 	r0,r11,#0 					; get token back
+		and 	r0,#$21F0 					; this checks for tokens from 0-15
+		xor 	r0,#$2000 					
+		skz 	r10
+		jmp 	#SyntaxError
+		jsr 	#AssembleInstruction 		; assemble it
+		jmp 	#_RPNewCommand 				; go round again.
 		;
 		;		Advance to next line. If running from CLI offset will be zero so will not
 		;		change lines with the 'add'

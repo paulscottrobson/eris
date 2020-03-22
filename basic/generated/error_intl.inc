@@ -40,6 +40,9 @@
 .LocalParamError
 	jsr	#GenErrorHandler
 	string	"Parameters or Locals"
+.NoAddressError
+	jsr	#GenErrorHandler
+	string	"Assembler not initialised"
 .StructureError
 	jsr	#GenErrorHandler
 	string	"Structures wrong"

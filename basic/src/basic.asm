@@ -55,8 +55,8 @@
 		;
 		;		Uncomment this to automatically run the loaded program in the emulator.
 		;
-		;mov 	r11,#$6000
-		;jmp 	#RunProgram					; run program code.
+		mov 	r11,#$6000
+		jmp 	#RunProgram					; run program code.
 
 		jsr 	#Command_New 				; New program.
 

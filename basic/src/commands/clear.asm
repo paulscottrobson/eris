@@ -31,6 +31,7 @@
 		;
 		jsr 	#StackReset 				; reset the basic stack
 		jsr 	#LocalReset					; reset the locals stack
+		jsr 	#AsmReset 					; reset the inline assembler
 		jsr 	#ScanForProcedures 			; scan for procedures so CALL can find them fast.
 		;
 		pop 	link
