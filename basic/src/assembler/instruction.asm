@@ -17,5 +17,61 @@
 ; *****************************************************************************
 
 .AssembleInstruction
-		break
+		push 	link
+		ldm 	r2,r11,#0 					; first get the instruction into R2
+		and 	r2,#15 						; which is the lower 4 bits of the token
+		ror 	r2,#4 						; put into bits 15..12
+		inc 	r11 						; step past the instruction
+		;
+		jsr 	#AssembleGetRegister 		; get a register
+		ror 	r0,#8 						; put into bits 11..8 and add to instruction in R2
+		add 	r2,r0,#0
+		jsr 	#CheckComma 				; skip the comma which must follow.
+		;
+		ldm 	r0,r11,#0 					; if what follows is a # then it is the long form
+		xor 	r0,#TOK_HASH
+		sknz 	r0
+		jmp 	#_AILongFormat
+		;
+		;		Short format 	opcode r1,r2,#const
+		;
+		jsr 	#AssembleGetRegister 		; get another register
+		ror 	r0,#12 						; put into bits 7..4
+		add 	r2,r0,#0
+		jsr 	#CheckComma 				; skip the comma which must follow.
+		;
+		jsr 	#CheckHash 					; check the hash follows.
+		jsr 	#EvaluateInteger 			; and the parameter which must be 0-15
+		mov 	r1,r0,#0
+		and 	r1,#$FFF0
+		skz 	r1
+		jmp 	#BadNumberError
+		add 	r0,r2,#0 					; build final opcode
+		jsr 	#AsmWord 					; write it out
+		jmp 	#_AIExit 					; and exit
+		;
+		;		Long format 	opcode r1,#const - const can be 1-15 or more than that.
+		;
+._AILongFormat
+		jsr 	#CheckHash 					; check the hash follows.
+		jsr 	#EvaluateInteger 			; get the parameter.
+		mov 	r1,r0,#0
+._AIExit
+		pop 	link
+		ret
+
+; *****************************************************************************
+;
+;							Get a register reference
+;
+; *****************************************************************************
+
+.AssembleGetRegister
+		push 	r1,link
+		jsr 	#EvaluateInteger
+		mov 	r1,r0,#0 					; must be 0-15
+		and 	r1,#$FFF0
+		skz 	r1
+		jmp 	#BadRegisterError
+		pop 	r1,link
 		ret

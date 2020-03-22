@@ -27,7 +27,7 @@
 		;
 		add 	r2,r2,#0 						; shift A left
 		add 	r0,r0,#0 						; shift Q left
-		adc 	r2,#0 							; add the carry from Q shift into A		
+		adc 	r2,r14,#0 						; add the carry from Q shift into A		
 		;
 		;		Check A-M >= 0, if so save in A and set Q bit 0.
 		;

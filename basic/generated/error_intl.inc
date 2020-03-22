@@ -13,6 +13,9 @@
 .MissingCommaError
 	jsr	#GenErrorHandler
 	string	"Missing ,"
+.MissingHashError
+	jsr	#GenErrorHandler
+	string	"Missing #"
 .TypeMismatchError
 	jsr	#GenErrorHandler
 	string	"Wrong type"
@@ -43,6 +46,9 @@
 .NoAddressError
 	jsr	#GenErrorHandler
 	string	"Assembler not initialised"
+.BadRegisterError
+	jsr	#GenErrorHandler
+	string	"Bad CPU Register"
 .StructureError
 	jsr	#GenErrorHandler
 	string	"Structures wrong"

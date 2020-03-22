@@ -72,6 +72,8 @@ class AssemblerWorker(object):
 			newInst = [x for x in m.groups()]									# create it.
 			newInst.insert(2,"14")												# add default r14 param
 			const = self.evaluator.evaluate(newInst[3],reportUndefined)			# value of constant
+			if const == 0:														# short form cannot be zero
+				raise AssemblerException("Short form cannot have constant zero")
 			if const >= 0 and const <= 15:										# short format
 				return [ self.buildInstruction(newInst,reportUndefined)]		# use short constant
 			newInst[2] = "15" 													# fix up instruction

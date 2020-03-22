@@ -54,7 +54,7 @@
 		add 	r1,#$8000
 		;
 		sub 	r0,r1,#0 					; compare unsigned
-		mov 	r0,#0 						
+		clr 	r0 						
 		sklt
 		mov 	r0,#-1
 		stm 	r0,r10,#esValue1

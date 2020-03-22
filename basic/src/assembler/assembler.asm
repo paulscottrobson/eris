@@ -102,7 +102,7 @@
 		mov 	r1,#16 						; print address
 		jsr 	#OSIntToStr
 		jsr 	#OSPrintString
-		mov 	r0,#' '
+		mov 	r0,#58 						; print colon
 		jsr 	#OSPrintCharacter
 		ldm 	r0,r2,#0 					; get word back
 		jsr 	#OSIntToStr

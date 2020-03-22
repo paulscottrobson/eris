@@ -97,7 +97,7 @@
 		ldm 	r0,r11,#0 					; get token back
 		and 	r0,#$21F0 					; this checks for tokens from 0-15
 		xor 	r0,#$2000 					
-		skz 	r10
+		skz 	r0
 		jmp 	#SyntaxError
 		jsr 	#AssembleInstruction 		; assemble it
 		jmp 	#_RPNewCommand 				; go round again.
