@@ -84,13 +84,10 @@
 
 .CommentCommand1 	;; [']
 .CommentCommand2 	;; [rem]
-		ldm 	r0,r11,#0 					; is there a string there e.g. 01xx ?
-		mov 	r1,r0,#0 					; length in R1
-		and 	r1,#$00FF
-		and 	r0,#$FF00 					; msb of token in R0 					
-		xor 	r0,#$0100 					; if it is $0100 then 
-		sknz 	r0
-		add 	r11,r1,#0 					; add the length to R11. skipping string
+		ldm 	r11,#currentLine 			; get current line
+		ldm 	r0,r11,#0 					; read offset of current line
+		add 	r11,r0,#0 					; add to take to next line.
+		dec 	r11 						; last token of line $0000 will force next line.
 		ret
 
 ; *****************************************************************************

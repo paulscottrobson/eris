@@ -1,5 +1,6 @@
 '
-'		"First go at a sprite editor. This is very much dog food."
+'	First go at a sprite editor. 
+'	This is very much dog food.
 '	
 screen 4,0:cls
 call initialise():call codeRoutine()
@@ -9,7 +10,7 @@ repeat
 until false
 end
 '
-'	"Main loop code"
+'	Main loop code
 '
 proc mainloop()
 	if !systemTimer-nextMove >= 0
@@ -27,7 +28,7 @@ proc mainloop()
 	endif
 endproc
 '
-'	"Set or clear pixel"
+'	Set or clear pixel
 '
 proc setPixel(x,y,isSet)
 	local addr:addr = sprites.addr+sprites.current*16+y
@@ -40,7 +41,7 @@ proc setPixel(x,y,isSet)
 	call redrawOneSelector(sprites.current)
 endproc
 '
-'	"Redraw main selector"
+'	Redraw main selector
 '
 proc redrawSelector()
 	local i
@@ -55,7 +56,7 @@ proc redrawOneSelector(i)
 	blit i/8*24,i mod 8*24,sprites.addr+i*16,&F00+col,16
 endproc
 '
-'	"Redraw whole display"
+'	Redraw whole display
 '
 proc redrawDisplay()
 	local i
@@ -64,14 +65,14 @@ proc redrawDisplay()
 	next i
 endproc
 '
-'	"Redraw one line"
+'	Redraw one line
 '
 proc redrawLine(y)
 	local a,b,c:b = 128:c = y*8+32:a = !(sprites.addr+sprites.current*16+y):sys fastDraw
 	if y = cursor.y then blit b+cursor.x*8,c,cursorGfx,&F07,8
 endproc
 '
-'	"Initialisation"
+'	Initialisation
 '
 proc initialise()
 	local i,j
@@ -84,7 +85,7 @@ proc initialise()
 	cursorGfx!0 = &FF00:cursorGfx!7 = &FF00:!blockGfx=&FFFF
 endproc
 '
-'	"Fast blit routine"
+'	Fast blit routine
 '
 proc codeRoutine()
 	fastDraw = alloc(64)

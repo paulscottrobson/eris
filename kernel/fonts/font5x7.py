@@ -114,6 +114,7 @@ fontData = [
 for x in fontData:                                                      # for each line
     while len(x) < 8:                                                   # pad out to 8 bytes
         x.append(0)
+fontData[95][7] = -1
 
 h = open("font.inc","w")                                                # generate word data
 h.write(".FontDataDefault\n")

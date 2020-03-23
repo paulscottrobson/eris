@@ -102,8 +102,8 @@
 		jsr 	#DecodeToken 				; decode one token
 		jmp 	#_LOLLoop
 ._LOLExit				
-		mov 	r0,#13 						; print new line erasing rest of line
-		jsr 	#OSPrintCharacter
+		jsr 	#OSPrintInline 				; black background and new line
+		string 	"[10][0F][12][0D]"		
 
 		mov 	r0,#indentStep 	 			; do up indents after
 		mov 	r1,#15<<9
@@ -199,8 +199,15 @@
 		;		It's a token
 		;
 ._DTIsToken
-		mov 	r0,#theme_keyword+$10
+		mov 	r0,#theme_keyword+$10 		; print quote in reverse blue
 		jsr 	#OSPrintCharacter
+		ldm 	r0,r11,#0
+		xor 	r0,#TOK_QUOTE
+		skz 	r0
+		jmp 	#_DTNoReverse
+		jsr 	#OSPrintInline
+		string 	"[14][0F]"
+._DTNoReverse		
 		ldm 	r1,r11,#0 					; get the token
 		and 	r1,#$01FF 					; this is the token ID, lower 9 bits
 		mov 	r2,#TokeniserWords 			; this is the table address
