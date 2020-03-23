@@ -25,7 +25,27 @@
 		xor 	r0,#TOK_COLON 				; if : start from 0
 		sknz 	r0
 		jmp 	#_CLHaveLine
-		jsr 	#EvaluateInteger 			; get start line into R6
+		;
+		ldm 	r0,r11,#0 					; get next token again
+		and 	r0,#$C000 					; is it an identifier
+		xor 	r0,#$4000
+		skz 	r0
+		jmp 	#_CLDoAsInteger
+		;
+		mov 	r1,r11,#0 					; we have to convert the identifier so it is a array
+._CLMakeArray 								; because that's how it's stored.		
+		ldm 	r0,r1,#0 					; set array bit
+		add 	r0,#$0800
+		stm 	r0,r1,#0
+		inc 	r1  						; bump
+		ror 	r0,#14 						; until end bit set
+		skm 	r0
+		jmp 	#_CLMakeArray
+		jsr 	#ProcedureSearch 			; find procedure
+		ldm 	r6,r2,#1 					; line number in R6
+		jmp 	#_CLHaveLine
+._CLDoAsInteger
+		jsr 	#EvaluateInteger 			; get start line into R6		
 		mov 	r6,r0,#0 	
 ._CLHaveLine
 		;

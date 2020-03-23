@@ -18,30 +18,7 @@
 
 .Command_Call 	;; [call]
 		push 	link
-		ldm 	r1,#procTable 				; R1 is the list of address of lines that begin PROC <ident>
-		;
-._CCALoop
-		ldm 	r2,r1,#0 					; R2 is the one being checked now.
-		inc 	r1 							; bump the list pointer
-		sknz 	r2 							; end of list if zero.
-		jmp 	#CallError
-		mov 	r3,r2,#3 					; R3 is the target being checked, skip offset and PROC
-		mov 	r4,r11,#0 					; R4 is the caller being checked
-._CCACheck
-		ldm 	r0,r3,#0 					; get the two.
-		ldm 	r5,r4,#0
-		inc 	r3 							; bump pointers.
-		inc 	r4		
-		xor 	r0,r5,#0 					; if they don't match, try the next entry in the table
-		skz 	r0
-		jmp 	#_CCALoop
-		ror 	r5,#14 						; rotate end bit into sign position
-		skm 	r5 							; go back if not the end.
-		jmp 	#_CCACheck
-		;
-		;		Successful search ! R4 is the token after the identifier( in the call and R3 is the 
-		;		token after the identifier( in the target
-		;		
+		jsr 	#ProcedureSearch			; try to find it.
 		jsr 	#LocalNewFrame		 		; start a new local variable frame for locals/parameters
 		ldm 	r0,r4,#0 					; are there any parameters
 		xor 	r0,#TOK_RPAREN
@@ -60,7 +37,7 @@
 		pop 	link
 		ret
 		;
-		;		Parameters. R4 is the call, and R3 the definition.
+		;		Parameters. R4 is the call, and R3 the definition
 		;
 ._CCADoParameters
 		push 	r0,r1,r2,link
@@ -95,6 +72,32 @@
 		dec 	r4 							; undo the comma - get
 		dec 	r3
 		pop 	r0,r1,r2,link
+		ret
+		;
+		;		Find the identifier at R11. On exit R4 is the token after the identifier in the
+		;		call, and R3 the token after the identifier in the target , current line in R2
+		;
+.ProcedureSearch
+		ldm 	r1,#procTable 				; R1 is the list of address of lines that begin PROC <ident>
+		;
+._PSELoop
+		ldm 	r2,r1,#0 					; R2 is the one being checked now.
+		inc 	r1 							; bump the list pointer
+		sknz 	r2 							; end of list if zero.
+		jmp 	#CallError
+		mov 	r3,r2,#3 					; R3 is the target being checked, skip offset and PROC
+		mov 	r4,r11,#0 					; R4 is the caller being checked
+._PSECheck
+		ldm 	r0,r3,#0 					; get the two.
+		ldm 	r5,r4,#0
+		inc 	r3 							; bump pointers.
+		inc 	r4		
+		xor 	r0,r5,#0 					; if they don't match, try the next entry in the table
+		skz 	r0
+		jmp 	#_PSELoop
+		ror 	r5,#14 						; rotate end bit into sign position
+		skm 	r5 							; go back if not the end.
+		jmp 	#_PSECheck
 		ret
 
 ; *****************************************************************************
