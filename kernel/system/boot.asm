@@ -13,7 +13,7 @@
 .bootPrompt
 	string "[10,0F,16,0C]*** Eris RetroComputer ***[0D,0D,13]Written by Paul Robson 2020[0D,0D]"
 .kernelPrompt
-	string "Kernel[3A] 0.30[0D]"
+	string "Kernel[3A] 0.33[0D]"
 
 ; *****************************************************************************
 ;
@@ -127,54 +127,5 @@
 		ror 	r0,#1 						; halve it e.g. A3 for 0.25s
 		ror 	r1,#1
 ;		jsr 	#OSBeep
-
-		mov 	r0,#220
-		mov 	r1,#52
-		jsr 	#OSGraphicsMove
-		mov 	r0,#240
-		mov 	r1,#52
-		jsr 	#OSDrawLine
-
-		mov 	r0,#140
-		mov 	r1,#52
-		jsr 	#OSGraphicsMove
-		mov 	r0,#120
-		mov 	r1,#52
-		jsr 	#OSDrawLine
-
-		mov 	r0,#200
-		mov 	r1,#52
-		jsr 	#OSGraphicsMove
-		mov 	r0,#220
-		mov 	r1,#230
-		jsr 	#OSDrawLine
-
-		mov 	r0,#200
-		mov 	r1,#52
-		jsr 	#OSGraphicsMove
-		mov 	r0,#300
-		mov 	r1,#230
-		jsr 	#OSDrawLine
-
-		mov 	r0,#200
-		mov 	r1,#52
-		jsr 	#OSGraphicsMove
-		mov 	r0,#200
-		mov 	r1,#230
-		jsr 	#OSDrawLine
-
-		mov 	r0,#200
-		mov 	r1,#52
-		jsr 	#OSGraphicsMove
-		mov 	r0,#100
-		mov 	r1,#230
-		jsr 	#OSDrawLine
-
-		mov 	r0,#200
-		mov 	r1,#52
-		jsr 	#OSGraphicsMove
-		mov 	r0,#190
-		mov 	r1,#230
-		jsr 	#OSDrawLine
 
 		jmp 	#KernelEnd 					; this is the end of the "kernel ROM"

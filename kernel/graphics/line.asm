@@ -2,9 +2,9 @@
 ; *****************************************************************************
 ;
 ;		Name:		line.asm
-;		Purpose:	Draw Line
+;		Purpose:	Draw Line (Bresenham)
 ;		Created:	25th March 2020
-;		Reviewed: 	20th March 2020
+;		Reviewed: 	TODO
 ;		Author:		Paul Robson (paul@robsons.org.uk)
 ;
 ; *****************************************************************************

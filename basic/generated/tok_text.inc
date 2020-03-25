@@ -114,26 +114,31 @@
 	word	$0e02,$41e5,$60db                ; $3c6d ELSE
 	word	$0e02,$4235,$6004                ; $3c6e END
 	word	$0e02,$41be,$63ed                ; $3c6f FKEY
-	word	$0e03,$425f,$435b,$6002          ; $3c70 GOSUB
-	word	$0e02,$425f,$626c                ; $3c71 GOTO
-	word	$0e02,$4239,$600b                ; $3c72 INK
-	word	$0e03,$4239,$4358,$6014          ; $3c73 INPUT
-	word	$0e02,$40d4,$6014                ; $3c74 LET
-	word	$0e02,$4174,$6333                ; $3c75 LIST
-	word	$0e02,$4264,$60a1                ; $3c76 LOAD
-	word	$0e03,$4264,$402b,$600c          ; $3c77 LOCAL
-	word	$0e02,$40d6,$6017                ; $3c78 NEW
-	word	$0e02,$41ef,$6004                ; $3c79 OLD
-	word	$0e04,$4038,$40d4,$4334,$6005    ; $3c7a PALETTE
-	word	$0e03,$4038,$40d8,$6012          ; $3c7b PAPER
-	word	$0e02,$4268,$60d3                ; $3c7c POKE
-	word	$0e03,$42e0,$4239,$6014          ; $3c7d PRINT
-	word	$0e02,$40da,$600d                ; $3c7e REM
-	word	$0e04,$40da,$4356,$405d,$62d5    ; $3c7f RENUMBER
-	word	$0e03,$40da,$435c,$6242          ; $3c80 RETURN
-	word	$0e02,$435a,$600e                ; $3c81 RUN
-	word	$0e02,$403b,$60de                ; $3c82 SAVE
-	word	$0e03,$408b,$40da,$6235          ; $3c83 SCREEN
-	word	$0e02,$4333,$628f                ; $3c84 STOP
-	word	$0e02,$43fb,$6013                ; $3c85 SYS
+	word	$0e03,$42d6,$4209,$6005          ; $3c70 FRAME
+	word	$0e03,$425f,$435b,$6002          ; $3c71 GOSUB
+	word	$0e02,$425f,$626c                ; $3c72 GOTO
+	word	$0e02,$4239,$600b                ; $3c73 INK
+	word	$0e03,$4239,$4358,$6014          ; $3c74 INPUT
+	word	$0e02,$40d4,$6014                ; $3c75 LET
+	word	$0e02,$4174,$60d6                ; $3c76 LINE
+	word	$0e02,$4174,$6333                ; $3c77 LIST
+	word	$0e02,$4264,$60a1                ; $3c78 LOAD
+	word	$0e03,$4264,$402b,$600c          ; $3c79 LOCAL
+	word	$0e02,$4265,$60de                ; $3c7a MOVE
+	word	$0e02,$40d6,$6017                ; $3c7b NEW
+	word	$0e02,$41ef,$6004                ; $3c7c OLD
+	word	$0e04,$4038,$40d4,$4334,$6005    ; $3c7d PALETTE
+	word	$0e03,$4038,$40d8,$6012          ; $3c7e PAPER
+	word	$0e02,$41f0,$632f                ; $3c7f PLOT
+	word	$0e02,$4268,$60d3                ; $3c80 POKE
+	word	$0e03,$42e0,$4239,$6014          ; $3c81 PRINT
+	word	$0e02,$40da,$6323                ; $3c82 RECT
+	word	$0e02,$40da,$600d                ; $3c83 REM
+	word	$0e04,$40da,$4356,$405d,$62d5    ; $3c84 RENUMBER
+	word	$0e03,$40da,$435c,$6242          ; $3c85 RETURN
+	word	$0e02,$435a,$600e                ; $3c86 RUN
+	word	$0e02,$403b,$60de                ; $3c87 SAVE
+	word	$0e03,$408b,$40da,$6235          ; $3c88 SCREEN
+	word	$0e02,$4333,$628f                ; $3c89 STOP
+	word	$0e02,$43fb,$6013                ; $3c8a SYS
 	word	$0000

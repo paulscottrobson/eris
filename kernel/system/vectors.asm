@@ -82,9 +82,15 @@
 .OSGraphicsMove
 		jmp 	#OSXGraphicsMove
 
+.OSPlotPixel
+		jmp 	#OSXPlotPixel
+
 .OSDrawLine
 		jmp 	#OSXDrawLine
 
+.OSDrawRectangle
+		jmp 	#OSXDrawRectangle
+		
 .OSFillRectangle
 		jmp 	#OSXFillRectangle
 		

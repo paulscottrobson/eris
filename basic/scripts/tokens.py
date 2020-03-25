@@ -117,7 +117,7 @@ class Tokens(object):
 // *****************************************************************************
 // *****************************************************************************
 //
-//									Tokens in LC3 BASIC
+//								Tokens in ERIS BASIC
 //
 // *****************************************************************************
 // *****************************************************************************
@@ -181,9 +181,10 @@ class Tokens(object):
 [Cmd]
 	' 		:		? 		
 	assert 	blit 	call 	clear 	cls 	crunch 	cursor	dim 	dir 	
-	else 	end 	fkey	gosub 	goto 	ink 	input 	let 	list 	
-	load 	local 	new 	old		palette	paper	poke 	print 	rem 	
-	renumber 		return 	run 	save 	screen	stop 	sys 	
+	else 	end 	fkey	frame 	gosub 	goto 	ink 	input 	let 	
+	line	list 	load 	local 	move	new 	old		palette	paper	
+	plot 	poke 	print 	rect 	rem 	renumber		return 	run 	
+	save 	screen	stop 	sys 	
 """
 
 Tokens.TOKENS = None		
