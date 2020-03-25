@@ -42,13 +42,27 @@
 		mov 	r5,r1,#0 					; DY = Y0-Y1
 		sub 	r5,r3,#0
 
-		mov 	r6,r4,#0 					; ERR = DX + DY
-		add 	r6,r5,#0
-
 		mov 	r9,#1 						; X STEP is 1.
+
+		;
+		;		At this point we use X2 and Y2 as counters, so we put DX and -DY in there
+		;
+		mov 	r2,r4,#0
+		clr 	r3
+		sub 	r3,r5,#0
+		skm 	r2 							; if DX < 0 
+		jmp 	#_OSXNotFlipped
+		clr 	r4 							; fix up DX so it's positive
+		sub 	r4,r2,#0
+		mov 	r2,r4,#0 					; and make it counter and dx
+		mov 	r9,#-1 						; draw r->l
 		;
 		;		The main Loop
 		;
+._OSXNotFlipped		
+		mov 	r6,r4,#0 					; ERR = DX + DY
+		add 	r6,r5,#0
+
 ._OSXDrawLineLoop		
 		jsr 	#OSWaitBlitter 				; draw the pixel. already set colour/mask and data
 		stm 	r0,#blitterX
@@ -56,16 +70,11 @@
 		mov 	r7,#$8001 					; one vertical no increment
 		stm 	r7,#blitterCmd
 
-		mov 	r7,r0,#0 					; continue if not finished the line (x0 = x1 & y0 = y1)
-		xor 	r7,r2,#0
-		skz 	r7
-		jmp 	#_OSXDrawLineAdjust
-		mov 	r7,r1,#0 		
-		xor 	r7,r3,#0
+		mov 	r7,r2,#0 					; keep going till counters are zero
+		add 	r7,r3,#0
 		sknz 	r7
 		jmp 	#_OSXDrawLineExit
 ._OSXDrawLineAdjust
-	
 		mov 	r7,r6,#0 					; check E2 (2 x ERR) >= DY
 		add 	r7,r7,#0
 		mov 	r8,r7,#0 					; save E2 in R8
@@ -74,6 +83,7 @@
 		jmp 	#_OSXDLA1
 		add 	r6,r5,#0 					; ERR = ERR + DY
 		add 	r0,r9,#0  					; X0 += X DIR
+		dec 	r2 							; adjust counter in X2
 ._OSXDLA1		
 	
 		mov 	r7,r4,#0 					; check DX >= E2
@@ -83,6 +93,7 @@
 
 		add 	r6,r4,#0 					; ERR = ERR + DX
 		inc 	r1 							; Y0 ++
+		dec 	r3 							; adjust counter in Y2
 ._OSXDLA2
 		jmp 	#_OSXDrawLineLoop
 
