@@ -97,7 +97,7 @@ void DBGXRender(int *address,int showDisplay) {
 		SDL_Rect rc2;rc2.w = rc.w + 64;rc2.h = rc.h + 64;
 		rc2.x = WIN_WIDTH/2-rc2.w/2;rc2.y = WIN_HEIGHT/2-rc2.h/2;
 		SDL_Rect rp;rp.w = rp.h = scale;
-		GFXRectangle(&rc2,0x000);
+		GFXRectangle(&rc,0x000);
 		//GFXRectangle(&rc,0x000);
 		for (int y = 0;y < DHEIGHT;y++) {
 			rp.x = rc.x;rp.y = rc.y + y * scale;

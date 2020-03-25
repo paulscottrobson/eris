@@ -38,38 +38,50 @@
 
 .systemVariables
 
-.lowmemory 									; lowest memory address [$SYS+0]
+.lowmemory 									; lowest memory address [sysvar(0)]
 		fill 	1
 
-.highmemory									; first memory address after the end of [$SYS+1]
+.highmemory									; first memory address after the end of [sysvar(1)]
 		fill 	1							; RAM (e.g. if RAM is $4000-$BFFF,$C000)
 
-.textMemory 								; address of 40x30 character text buffer [$SYS+2]
+.textMemory 								; address of 53x30 character text buffer [sysvar(2)]
 		fill 	1
 
-.spriteImageMemory 							; available sprite image memory [$SYS+3]
+.spriteImageMemory 							; available sprite image memory [sysvar(3)]
 		fill 	1
 
-.spriteImageCount  							; sprite image maximum number [$SYS+4]
+.spriteImageCount  							; sprite image maximum number [sysvar(4)]
 		fill 	1
 
-.xTextExtent								; screen width, characters [$SYS+5]
+.xTextExtent								; screen width, characters [sysvar(5)]
 		fill 	1
 
-.yTextExtent 								; screen height, characters [$SYS+6]
+.yTextExtent 								; screen height, characters [sysvar(6)]
 		fill 	1
 
-.defaultFont 								; standard 5 x 7 font [$SYS+7]
+.defaultFont 								; standard 5 x 7 font [sysvar(7)]
 		fill 	1
+
+.xTextPos 									; x text position [sysvar(8)]
+		fill 	1
+.yTextPos									; y text position [sysvar(9)]
+		fill 	1
+
+.xGraphic 									; x graphic cursor position. [sysvar(10)]
+		fill 	1
+.yGraphic 									; y graphic cursor position. [sysvar(11)]
+		fill 	1
+
+.fgrColour 									; foreground colour [sysvar(12)]
+		fill 	1		
+.bgrColour 									; background colour [sysvar(13)]
+		fill 	1		
+
 
 ; *****************************************************************************
 ;				(these can be accessed by assembler and so on)
 ; *****************************************************************************
 
-.xGraphic 									; graphic cursor position.
-		fill 	1
-.yGraphic 	
-		fill 	1
 
 .colourMask 								; colour mask for background
 		fill 	1		
@@ -78,15 +90,6 @@
 .spriteRotate 								; value to rotate to convert a colour to a sprite colour
 		fill 	1
 
-.fgrColour 									; foreground colour
-		fill 	1		
-.bgrColour 									; background colour
-		fill 	1		
-
-.xTextPos 									; text position
-		fill 	1
-.yTextPos
-		fill 	1
 				
 .currentKey									; character code of current key, 0 if none pressed
 		fill 	1 							
@@ -118,4 +121,7 @@
 .convBuffer 								; buffer for string conversion. Up to 17 characters
 		fill 	maxIStrSize					; (a sign and 16 digits)
 
+.blitterTemp 								; work word for blitter
+		fill 	1
+		
 .freeMemory		

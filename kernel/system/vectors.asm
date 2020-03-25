@@ -79,6 +79,15 @@
 .OSDrawSolidCharacter
 		jmp 	#OSXDrawSolidCharacter
 
+.OSGraphicsMove
+		jmp 	#OSXGraphicsMove
+
+.OSDrawLine
+		jmp 	#OSXDrawLine
+
+.OSFillRectangle
+		jmp 	#OSXFillRectangle
+		
 ; *****************************************************************************
 ;
 ;								Sound group

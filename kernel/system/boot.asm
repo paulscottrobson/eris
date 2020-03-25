@@ -128,4 +128,28 @@
 		ror 	r1,#1
 ;		jsr 	#OSBeep
 
+		mov 	r0,#200
+		mov 	r1,#52
+		jsr 	#OSGraphicsMove
+		mov 	r0,#220
+		mov 	r1,#230
+		jsr 	#OSDrawLine
+
+		mov 	r0,#200
+		mov 	r1,#52
+		jsr 	#OSGraphicsMove
+		mov 	r0,#300
+		mov 	r1,#230
+		jsr 	#OSDrawLine
+
+		mov 	r0,#200
+		mov 	r1,#52
+		jsr 	#OSGraphicsMove
+		mov 	r0,#200
+		mov 	r1,#230
+		jsr 	#OSDrawLine
+		break
+
+.h1 	jmp 	#h1
+
 		jmp 	#KernelEnd 					; this is the end of the "kernel ROM"
