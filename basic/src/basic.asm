@@ -53,8 +53,12 @@
 		;
 		;jmp 	#TestTokeniserRoutine		
 		;
-		;		Uncomment this to automatically run the loaded program in the emulator.
+		;		Check for autoexec.prg
 		;
+		jsr 	#OSReadJoystick				; is joystick fire 
+		and 	r0,#$20 					; is the shift key presse
+		skz 	r0
+		jmp 	#Command_New 				; if it is, do not autoexec.boot
 		mov 	r0,#5 						; does file autoexec.prg exist
 		mov 	r1,#CSBootProgram
 		jsr 	#OSFileOperation

@@ -12,7 +12,7 @@
 
 ; *****************************************************************************
 ;
-;		Get Joystick. R0 = Joystick# (even though only one is supported)
+;	 Get Joystick. R0 = Joystick# (even though only one is supported 0 first)
 ;	Returns set bits as per hardware in R0 (Left/Right/Up Down/Fire 1/Fire 2)
 ;
 ; *****************************************************************************
