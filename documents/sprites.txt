@@ -20,12 +20,10 @@ SPRITE 1 DRAW 12 		- set graphic #
 SPRITE 1 INK 4 			- set colour #
 SPRITE 1 FLIP n 		- set sprite flip bits
 
-Sprite Repaint
-==============
+Sprite Repaint (if enabled)
+===========================
 
 1) Erase / Check phase
-
-	Clear all sprites current repaint bits.
 
 	Look through each sprite in turn.
 		If new Values anded together are not $FFFF, something has changed and
@@ -38,11 +36,13 @@ Sprite Repaint
 					it doesn't change.
 			- 	Copy the new X/Y/Status over as appropriate (e.g. if not $FFFF)					
 			-	Set the redraw bit in the current status 
-			- 	Reset the new values to $FFFF
 
 2) Repaint Phase
 
 	Look through each sprite in turn.
 		If the repaint bit is set, then repaint it.
 
+3) Completion Phase		
+
+	Clear all repaint bits and reset all new values to $FFFF
 	

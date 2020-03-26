@@ -77,7 +77,7 @@ maxIStrSize = 10
 ;
 functionKeySize = 12
 ;
-;		Default # of sprites
+;		Default # of sprite images
 ;
 spriteDefaultImageCount = 16
 ;
@@ -85,3 +85,17 @@ spriteDefaultImageCount = 16
 ;		this is 100/20 = 5
 ;
 timerRate = 5	
+;
+;		Sprite constants
+;
+spriteObjectCount = 16 						; Number of sprites
+spriteRecordSize = 6 						; words per sprite.
+;
+spX = 0 									; current settings
+spY = 1
+spStatus = 2
+spNewX = 3									; New values
+spNewY = 4
+spNewStatus = 5
+
+

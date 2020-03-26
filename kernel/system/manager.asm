@@ -37,7 +37,9 @@
 		;
 		;		Actual event code, R0 is elapsed time in centiseconds
 		;
-
+		ldm 	r1,#SpritesEnabled			; sprites enabled ?
+		skz 	r1
+		jsr 	#OSISpriteUpdate 			; if so do the update code.
 		jsr 	#OSICheckBreak 				; check if break is pressed.
 		pop 	r1,link
 		ret

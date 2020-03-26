@@ -17,8 +17,12 @@
 ; *****************************************************************************
 
 .Command_Cls		;; [cls]
+		push 	link
 		mov 	r0,#12
-		jmp 	#OSPrintCharacter
+		jsr 	#OSPrintCharacter
+		jsr 	#OSSpriteReset
+		pop 	link
+		ret
 
 .Command_Ink 		;; [ink]
 		push	link

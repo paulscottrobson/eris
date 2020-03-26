@@ -82,16 +82,21 @@
 		stm 	r0,r1,#4	
 		mov		r0,#fontDataDefault
 		stm 	r0,r1,#7
+		mov 	r0,#spriteDataArea
+		stm 	r0,r1,#14
+		mov 	r0,#spriteObjectCount
+		stm 	r0,r1,#15
 ;
 ;		Reset the next time event
 ;
 		ldm 	r0,#hwTimer
 		stm 	r0,#nextManagerEvent		
 ;
-;		Initialise the plane usage/clear screen
+;		Initialise the plane usage/clear screen/reset sprites
 ;
 		mov 	r0,#$0004					; 4 backplanes no sprite plane
 		jsr 	#OSSetPlanes
+		jsr 	#OSSpriteReset
 ;
 ;		Show the boot prompt, free memory and kernel version
 ;
@@ -127,5 +132,14 @@
 		ror 	r0,#1 						; halve it e.g. A3 for 0.25s
 		ror 	r1,#1
 ;		jsr 	#OSBeep
+	
+		mov 	r0,#$0202					; 4 backplanes no sprite plane
+		jsr 	#OSSetPlanes
+
+		mov 	r0,#1
+		jsr 	#OSSpriteSelect
+		ldm 	r1,#spriteSelect 			
+		mov 	r0,#$0100
+		stm 	r0,r1,#spNewStatus
 
 		jmp 	#KernelEnd 					; this is the end of the "kernel ROM"

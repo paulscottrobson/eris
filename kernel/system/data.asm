@@ -77,11 +77,15 @@
 .bgrColour 									; background colour [sysvar(13)]
 		fill 	1		
 
+.spriteAddress 								; sprite data location [sysvar(14)]
+		fill 	1
+
+.spriteCount 								; sprite count [sysvar(15)]
+		fill 	1		
 
 ; *****************************************************************************
 ;				(these can be accessed by assembler and so on)
 ; *****************************************************************************
-
 
 .colourMask 								; colour mask for background
 		fill 	1		
@@ -123,5 +127,14 @@
 
 .blitterTemp 								; work word for blitter
 		fill 	1
+
+.spritesEnabled 							; non-zero if sprites are enabled.
+		fill 	1
+
+.spriteSelect								; address of currently selected sprite
+		fill 	1
+
+.spriteDataArea 							; sprite Memory address
+		fill 	spriteObjectCount *spriteRecordSize
 		
 .freeMemory		
