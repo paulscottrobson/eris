@@ -19,7 +19,7 @@
 .Command_Local		;; [local]
 		push 	link
 ._CLOLoop
-		mov 	r2,r11,#0 					; save start of identifier.
+		mov 	r4,r11,#0 					; save start of identifier.
 		mov 	r0,#1 						; clear local variable
 		jsr 	#LocalPushReference 		; push a variable reference
 		ldm 	r0,r11,#0 					; are we followed by a comma
@@ -32,7 +32,7 @@
 		skz 	r0
 		jmp 	#_CLOExit
 		;	
-		mov 	r11,r2,#0 					; should now be x = 42
+		mov 	r11,r4,#0 					; should now be x = 42
 		jsr 	#Command_Let 				; use the LET code.
 ._CLOExit		
 		pop 	link

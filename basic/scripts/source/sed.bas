@@ -1,3 +1,4 @@
+
 '
 '	First go at a sprite editor. 
 '	This is very much dog food.
@@ -6,11 +7,56 @@ screen 4,0:cls
 call initialise():call codeRoutine()
 if exists("sprites.dat") then load "sprites.dat",sprites.addr
 call redrawSelector():call redrawDisplay()
+prompt$ = "Next Back Copy Paste Quit XFlip YFlip Invert"
+cursor 26-len(prompt$)/2,28
+for i = 1 to len(prompt$)
+	c$ = mid$(prompt$,i,1)
+	if c$ <= "Z" ink 3 else ink 2 endif
+	print c$;
+next i
+ink 6:a$ = "Sprite Editor 1.0 (Dogfood version)"
+cursor 27-len(a$)/2,29:print a$;
 repeat
 	call mainLoop()
 	command$ = upper$(inkey$())
+	if command$ = "N" then sprites.current=(sprites.current+1) and 15:call redrawSelector():call redrawDisplay()
+	if command$ = "B" then sprites.current=(sprites.current-1) and 15:call redrawSelector():call redrawDisplay()
+	if command$ = "C" 
+		for i = 0 to 15:clip(i) = !(sprites.addr+sprites.current*16+i):next i
+	endif
+	if command$ = "P" 
+		for i = 0 to 15:!(sprites.addr+sprites.current*16+i) = clip(i):next i
+		call redrawDisplay()
+		call redrawSelector()
+	endif
+	if command$ = "X":
+		for i = 0 to 15
+			v = !(sprites.addr+sprites.current*16+i):w = 0
+			for b = 0 to 15
+				if (v and bits(b)) <> 0 then w = w or bits(15-b)
+			next b
+			!(sprites.addr+sprites.current*16+i) = w
+		next i
+		call redrawDisplay()
+		call redrawSelector()
+	endif
+	if command$ = "I":
+		for i = 0 to 15
+			v = !(sprites.addr+sprites.current*16+i)
+			!(sprites.addr+sprites.current*16+i) = v xor &FFFF
+		next i
+		call redrawDisplay()
+		call redrawSelector()
+	endif
+	if command$ = "Y"
+		for i = 0 to 15:temp(i) = !(sprites.addr+sprites.current*16+i):next i
+		for i = 0 to 15:!(sprites.addr+sprites.current*16+i) = temp(15-i):next i
+		call redrawDisplay()
+		call redrawSelector()
+	endif	
 until command$ = "Q"
 save "sprites.dat",sprites.addr,256
+cls
 end
 '
 '	Main loop code
@@ -51,6 +97,8 @@ proc redrawSelector()
 	for i = 0 to sprites.count-1
 		call redrawOneSelector(i)
 	next i
+	local a$:a$ = " Sprite #"+str$(sprites.current)+" "
+	ink 7:cursor 26-len(a$)/2,1:print a$
 endproc
 '
 proc redrawOneSelector(i)
@@ -69,13 +117,12 @@ proc redrawDisplay()
 	for i = 0 to 15
 		call redrawLine(i)
 	next i
-	ink 7:cursor 20,1:print "Sprite : ";sprites.current;"  "
 endproc
 '
 '	Redraw one line
 '
 proc redrawLine(y)
-	local a,b,c:b = 128:c = y*8+32:a = !(sprites.addr+sprites.current*16+y):sys fastDraw
+	local a,b,c:b = 96:c = y*8+32:a = !(sprites.addr+sprites.current*16+y):sys fastDraw
 	if y = cursor.y then blit b+cursor.x*8,c,cursorGfx,&F07,8
 endproc
 '
@@ -83,8 +130,9 @@ endproc
 '
 proc initialise()
 	local i,j
-	dim bits(16):j = &8000:for i = 0 to 15:bits(i) = j:j = (j / 2) and &7FFF:next i
-	sprites.addr = sysvar(3):sprites.count = sysvar(4):sprites.current = 2
+	dim bits(16),clip(16),temp(16)
+	j = &8000:for i = 0 to 15:bits(i) = j:j = (j / 2) and &7FFF:next i
+	sprites.addr = sysvar(3):sprites.count = sysvar(4):sprites.current = 0
 	cursor.x = 8:cursor.y = 8
 	solidGfx = alloc(8):cursorGfx = alloc(8):blockGfx = alloc(1)
 	systemTimer = &FF30:nextMove = !systemTimer
