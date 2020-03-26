@@ -91,6 +91,7 @@
 		stm 	r1,r0,#1 					; write the character out.
 		mov 	r1,#1 						; set the length
 		stm 	r1,r0,#0
+.UnaryReturnR0		
 		stm 	r0,r10,#esValue1 			; make it a constant string
 		stm 	r15,r10,#esType1
 		stm 	r14,r10,#esReference1
@@ -113,8 +114,13 @@
 		push 	link
 		jsr 	#Unary_Inkey
 		ldm 	r0,r10,#esValue1
+		skz 	r0 							; no character available return ""
 		jmp 	#UnaryReturnCharacter
-		
+		mov 	r0,#_UISNullString
+		jmp 	#UnaryReturnR0
+._UISNullString
+		word 	0
+
 ; *****************************************************************************
 ;
 ;							Convert Integer to String

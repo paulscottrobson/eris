@@ -134,12 +134,16 @@
 .CompareStrings
 		stm 	r14,r10,#esType1 			; we're going to return an integer.
 		;
+		push 	link
+		jsr 	#DereferenceBinary			; make sure they aren't references.
+		pop 	link
 		ldm 	r1,r10,#esValue1 			; r1, r2 are the two strings.
 		ldm 	r2,r10,#esValue2
+
 		ldm 	r3,r1,#0 					; get the two lengths
 		ldm 	r4,r2,#0
-		mov 	r5,r3,#0 					; put the shortest length into R5
-		sub 	r5,r4,#0
+		mov 	r5,r3,#0 					; put the shortest length into R3
+		sub 	r5,r4,#0 					; and the length difference in R5
 		skm 	r5 							; skip if r3 < r4
 		mov 	r3,r4,#0 					; r4 -> r3
 		;

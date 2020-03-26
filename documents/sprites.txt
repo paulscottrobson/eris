@@ -1,0 +1,48 @@
+Each sprite has:
+
+current X,Y    (offset by 8,8)
+current Status (if 0 sprite is not operational)
+	bit 15 : 	set if needs redrawing
+	bit 14 : 	horizontal flip
+	bit 13 : 	vertical flip
+	bit 8..11 : colour
+	bit 0..7 : 	sprite graphic #
+
+new X,Y,Status
+	these are set to $FFFF when no change is made. When one is updated
+	they are copied to current (except the redraw bit 15)
+
+CLS turns sprites off. Sprite drawing is enabled by the SPRITE command which errors
+if there is no sprite bitmaps.
+
+SPRITE 1 TO x,y 		- move sprite
+SPRITE 1 DRAW 12 		- set graphic #
+SPRITE 1 INK 4 			- set colour #
+SPRITE 1 FLIP n 		- set sprite flip bits
+
+Sprite Repaint
+==============
+
+1) Erase / Check phase
+
+	Clear all sprites current repaint bits.
+
+	Look through each sprite in turn.
+		If new Values anded together are not $FFFF, something has changed and
+		that sprite needs redrawing.
+			- 	If the sprite is actually on the screen
+				-	Erase the sprite at its current position.
+				- 	For every other sprite, check to see if it overlaps this one
+					(don't bother if it is already marked for redrawing)
+				-	If it does, set the redraw bit but we don't have to erase it if
+					it doesn't change.
+			- 	Copy the new X/Y/Status over as appropriate (e.g. if not $FFFF)					
+			-	Set the redraw bit in the current status 
+			- 	Reset the new values to $FFFF
+
+2) Repaint Phase
+
+	Look through each sprite in turn.
+		If the repaint bit is set, then repaint it.
+
+	

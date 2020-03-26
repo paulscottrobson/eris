@@ -7,7 +7,9 @@ call initialise():call codeRoutine()
 call redrawSelector():call redrawDisplay()
 repeat
 	call mainLoop()
-until false
+	command$ = inkey$()
+	if command$ <> "" then print command$
+until command$ = "Q"
 end
 '
 '	Main loop code
@@ -51,9 +53,12 @@ proc redrawSelector()
 endproc
 '
 proc redrawOneSelector(i)
-	blit i/8*24,i mod 8*24,blockGfx,&F04,&8010
+	local x = i/8*24+10
+	local y = i mod 8*24+10
+	if i = sprites.current col = 1 else col = 4 endif
+	blit x,y,blockGfx,&F00+col,&8010
 	if i = sprites.current col = 7 else col = 2 endif
-	blit i/8*24,i mod 8*24,sprites.addr+i*16,&F00+col,16
+	blit x,y,sprites.addr+i*16,&F00+col,16
 endproc
 '
 '	Redraw whole display
@@ -63,6 +68,7 @@ proc redrawDisplay()
 	for i = 0 to 15
 		call redrawLine(i)
 	next i
+	ink 7:cursor 20,1:print "Sprite : ";sprite.current;"  "
 endproc
 '
 '	Redraw one line
