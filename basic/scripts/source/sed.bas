@@ -7,8 +7,7 @@ call initialise():call codeRoutine()
 call redrawSelector():call redrawDisplay()
 repeat
 	call mainLoop()
-	command$ = inkey$()
-	if command$ <> "" then print command$
+	command$ = upper$(inkey$())
 until command$ = "Q"
 end
 '
@@ -68,7 +67,7 @@ proc redrawDisplay()
 	for i = 0 to 15
 		call redrawLine(i)
 	next i
-	ink 7:cursor 20,1:print "Sprite : ";sprite.current;"  "
+	ink 7:cursor 20,1:print "Sprite : ";sprites.current;"  "
 endproc
 '
 '	Redraw one line
