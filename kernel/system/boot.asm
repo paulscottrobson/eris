@@ -133,13 +133,7 @@
 		ror 	r1,#1
 ;		jsr 	#OSBeep
 	
-		mov 	r0,#$0202					; 4 backplanes no sprite plane
-		jsr 	#OSSetPlanes
-
 		mov 	r0,#1
 		jsr 	#OSSpriteSelect
-		ldm 	r1,#spriteSelect 			
-		mov 	r0,#$0100
-		stm 	r0,r1,#spNewStatus
 
 		jmp 	#KernelEnd 					; this is the end of the "kernel ROM"
