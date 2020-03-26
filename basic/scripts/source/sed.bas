@@ -4,11 +4,13 @@
 '	
 screen 4,0:cls
 call initialise():call codeRoutine()
+if exists("sprites.dat") then load "sprites.dat",sprites.addr
 call redrawSelector():call redrawDisplay()
 repeat
 	call mainLoop()
 	command$ = upper$(inkey$())
 until command$ = "Q"
+save "sprites.dat",sprites.addr,256
 end
 '
 '	Main loop code

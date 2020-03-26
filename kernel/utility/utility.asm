@@ -18,8 +18,8 @@
 
 .OSXUpperCase
 		push 	r1
+		and 	r0,#$00FF 					; get the character code
 		mov		r1,r0,#0 					; copy character
-		and 	r1,#$00FF 					; get the character code
 		sub 	r1,#'a'						; check in range a-z
 		skge
 		jmp 	#_OSUCExit
@@ -38,8 +38,8 @@
 
 .OSXLowerCase
 		push 	r1
+		and 	r0,#$00FF 					; get the character code
 		mov		r1,r0,#0 					; copy character
-		and 	r1,#$00FF 					; get the character code
 		sub 	r1,#65						; check in range A-Z
 		skge
 		jmp 	#_OSLCExit

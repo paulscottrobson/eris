@@ -41,7 +41,13 @@
 		sub 	r4,r0,#0
 		mov 	r5,r1,#0 					; DY = Y0-Y1
 		sub 	r5,r3,#0
-
+		;
+		;		If R4/R5 (e.g. dx or dy) is zero use the rectangle drawer.
+		; 
+		sknz 	r4
+		jmp 	#_OSXDrawLineOptimise
+		sknz 	r5
+		jmp 	#_OSXDrawLineOptimise
 		mov 	r9,#1 						; X STEP is 1.
 
 		;
@@ -96,6 +102,10 @@
 		dec 	r3 							; adjust counter in Y2
 ._OSXDLA2
 		jmp 	#_OSXDrawLineLoop
+
+._OSXDrawLineOptimise
+		pop 	r0,r1,r2,r3,r4,r5,r6,r7,r8,r9,link
+		jmp 	#OSFillRectangle
 
 ._OSXDrawLineExit
 		pop 	r0,r1,r2,r3,r4,r5,r6,r7,r8,r9,link

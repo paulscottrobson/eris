@@ -154,3 +154,54 @@
 		pop 	link 						; and exit
 		ret
 
+; *****************************************************************************
+;
+;							Upper/Lower case functions
+;
+; *****************************************************************************
+
+.Unary_Upper 	;; [upper$(]
+		clr 	r2 							; R2 = 0 => U/C
+		skz 	r14
+.Unary_Lower 	;; [lower$(]
+		mov 	r2,#1
+		push 	link
+		jsr 	#EvaluateString 			; R0 = string address
+		jsr 	#CheckRightBracket
+		mov 	r1,r0,#0 					; copy to R1
+		jsr 	#OSWordLength 				; number of words in string.
+		mov 	r3,r0,#0  					; save in R3
+		inc 	r0 							; add one to allow for length word
+		jsr 	#AllocateTempMemory 		; allocate space for it
+		mov 	r4,r0,#0 					; put in R4
+		stm 	r4,r10,#esValue1 			; save as return value
+		;
+		ldm 	r0,r1,#0 					; copy length
+		stm 	r0,r4,#0
+._UCaseLoop
+		sknz 	r3 							; finished ?
+		jmp 	#_UCaseExit
+		dec 	r3 							; decrement count.
+		inc 	r1 							; next characters
+		inc 	r4		
+		;
+		ldm 	r0,r1,#0 					; do lower character
+		sknz 	r2
+		jsr 	#OSUpperCase
+		skz 	r2
+		jsr 	#OSLowerCase
+		mov 	r5,r0,#0 					; save in R5
+		;
+		ldm 	r0,r1,#0 					; do upper character
+		ror 	r0,#8
+		sknz 	r2
+		jsr 	#OSUpperCase
+		skz 	r2
+		jsr 	#OSLowerCase
+		ror 	r0,#8 						; back into position
+		add 	r0,r5,#0 					; build compressed string
+		stm 	r0,r4,#0
+		jmp 	#_UCaseLoop 				; and go around.
+._UCaseExit
+		pop 	link
+		ret

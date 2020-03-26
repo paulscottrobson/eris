@@ -67,7 +67,7 @@
 	word	Command_JButton          ; $303e JOYB(
 	word	Unary_Left               ; $303f LEFT$(
 	word	Unary_Len                ; $3040 LEN(
-	word	SyntaxError              ; $3041 LOWER$(
+	word	Unary_Lower              ; $3041 LOWER$(
 	word	Unary_Mid                ; $3042 MID$(
 	word	Command_Page             ; $3043 PAGE
 	word	Unary_Peek               ; $3044 PEEK(
@@ -77,7 +77,7 @@
 	word	Unary_Str                ; $3048 STR$(
 	word	Command_SysVar           ; $3049 SYSVAR(
 	word	Unary_True               ; $304a TRUE
-	word	SyntaxError              ; $304b UPPER$(
+	word	Unary_Upper              ; $304b UPPER$(
 	word	Unary_Val                ; $304c VAL(
 	word	Unary_Len2               ; $304d LENGTH(
 	word	Unary_Rnd2               ; $304e RANDOM(
@@ -116,7 +116,7 @@
 	word	Command_ELSE             ; $3c6f ELSE
 	word	Command_End              ; $3c70 END
 	word	Command_FKey             ; $3c71 FKEY
-	word	SyntaxError              ; $3c72 FLIP
+	word	Dummy9                   ; $3c72 FLIP
 	word	Command_Frame            ; $3c73 FRAME
 	word	Command_GOSUB            ; $3c74 GOSUB
 	word	Command_GOTO             ; $3c75 GOTO

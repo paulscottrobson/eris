@@ -22,7 +22,6 @@
 		jmp		#RunProgramNoLoad
 		xor 	r0,#TOK_COLON
 		skz 	r0
-		break
 		jsr 	#FileLoader 				; if not EOL or colon try loading.
 .RunProgramNoLoad
 		jsr 	#Command_Clear 				; clear command, erase variables etc.

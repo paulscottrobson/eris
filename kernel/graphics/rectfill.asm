@@ -21,7 +21,7 @@
 		jsr 	#OSISetInkColourMask 		; set colour/mask
 		jsr 	#OSIGraphicBoxCoordinates 	; (R0,R1) -> (R2,R3)
 		sub 	r3,r1,#0 					; R3 is the height (difference + 1)
-		add 	r3,#$8000 					; make it a non incrementing data command
+		add 	r3,#$8001 					; make it a non incrementing data command
 		sub 	r2,r0,#0  					; R2 is the horizontal size.
 		inc 	r2
 ._OSXFRLoop
