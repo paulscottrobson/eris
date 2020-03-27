@@ -9,8 +9,10 @@ current Status (if 0 sprite is not operational)
 	bit 0..7 : 	sprite graphic #
 
 new X,Y,Status
-	these are set to $FFFF when no change is made. When one is updated
+	these are set to $4000 when no change is made. When one is updated
 	they are copied to current (except the redraw bit 15)
+	the test is to add them together and get $C000. Very weird values
+	could fail an update test once in a blue moon
 
 CLS turns sprites off and erases ; this is also done on reset. 
 Sprite drawing is enabled by the SPRITE command which errors if there is no sprite bitmaps.
@@ -26,7 +28,7 @@ Sprite Repaint (if enabled)
 1) Erase / Check phase
 
 	Look through each sprite in turn.
-		If new Values anded together are not $FFFF, something has changed and
+		If new Values added together are not $C000, something has changed and
 		that sprite needs redrawing.
 			- 	If the sprite is actually on the screen
 				-	Erase the sprite at its current position.
@@ -35,7 +37,8 @@ Sprite Repaint (if enabled)
 				-	If it does, set the redraw bit but we don't have to erase it if
 					it doesn't change.
 			- 	Copy the new X/Y/Status over as appropriate (e.g. if not $FFFF)					
-			-	Set the redraw bit in the current status 
+				making sure the redraw bit is set whether you copy or not.
+				(technically wastes a repaint if moving off screen)
 
 2) Repaint Phase
 
@@ -44,5 +47,6 @@ Sprite Repaint (if enabled)
 
 3) Completion Phase		
 
-	Clear all repaint bits and reset all new values to $FFFF
+	Clear all repaint bits and reset all new values to $4000.
+
 	

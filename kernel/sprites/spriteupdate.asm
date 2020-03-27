@@ -18,8 +18,8 @@
 
 .OSISpriteUpdate
 		push 	r0,r1,r2,r3,r4,link
-		jsr 	#SpritePhase1
-
+		jsr 	#SpritePhase1 				; phase 1 ; erase and check what we redraw
+		jsr 	#SpritePhase2 				; phase 2 ; redraw
 		jsr 	#OSIResetStatus 			; phase 3 is reset everything for next time
 		pop 	r0,r1,r2,r3,r4,link
 		ret
@@ -33,37 +33,88 @@
 .SpritePhase1
 		push 	link
 		ldm 	r1,#spriteAddress 			; current sprite being checked
-		ldm 	r2,#spriteCount 			; count to checl
+		ldm 	r2,#spriteCount 			; count to check
 ._SP1Loop
+		;
+		;		Check sprite is active and one of the new values has changed
+		;
 		ldm 	r4,r1,#spNewStatus			; check status, if zero go to next
 		sknz 	r4
 		jmp 	#_SP1Next
-		ldm 	r0,r1,#spNewX 				; check if X,Y status has changed from $FFFF
+		ldm 	r0,r1,#spNewX 				; check if X,Y status has changed from $4000
 		ldm 	r3,r1,#spNewY
-		and 	r0,r3,#0 					; and them together. If the result is changed.
-		and 	r0,r4,#0
-		inc 	r0 							; will be zero if $FFFF
+		add 	r0,r3,#0 					; and them together. If the result is changed.
+		add 	r0,r4,#0
+		xor 	r0,#$C000 					; will be zero if $C000
 		sknz 	r0
 		jmp 	#_SP1Next
 		;
-		ldm 	r0,r1,#spStatus 			; set the status flag, which means we must redraw it.
-		skm 	r4 							; might be already set
-		add 	r0,#$8000
-		stm 	r0,r1,#spStatus
+		;		Try to erase old sprite.
+		;	
 		clr 	r0							; erase old sprite.
 		jsr 	#SpriteDraw
-		skz 	r0 							; if it wasn't on screen then go to the next one.
-		jmp 	#_SP1Next
+		skz 	r0 							; if it wasn't on screen then go to the update
+		jmp 	#_SP1Update 				; it doesn't matter about offscreen collisions.
 
 		;
 		;		TODO look for sprites this might collide with and set their redraw bits
 		;
+
+		;
+		;		Update sprites setting redraw bit if new status
+		;
+._SP1Update
+		ldm 	r3,r1,#spNewX 				; update X
+		mov 	r4,r3,#0
+		xor 	r4,#$4000
+		skz 	r4
+		stm 	r3,r1,#spX
+
+		ldm 	r3,r1,#spNewY 				; update Y
+		mov 	r4,r3,#0
+		xor 	r4,#$4000
+		skz 	r4
+		stm 	r3,r1,#spY
+
+		ldm 	r3,r1,#spNewStatus 			; update Status - sets redraw bit.
+		mov 	r4,r3,#0
+		xor 	r4,#$4000
+		sknz 	r4 							; we get the old value if it was $4000
+		ldm 	r3,r1,#spStatus 			; because we set it anyway.
+		skm 	r3 							; already set, no set it and write back
+		add 	r3,#$8000
+		stm 	r3,r1,#spStatus
 
 ._SP1Next		
 		add 	r1,#spriteRecordSize 		; do them all
 		dec 	r2
 		skz 	r2
 		jmp 	#_SP1Loop
+		pop 	link
+		ret
+
+; *****************************************************************************
+;
+;		Sprite update Phase 2 - redraw those marked as needing redrawing
+;
+; *****************************************************************************
+
+.SpritePhase2
+		push 	link
+		ldm 	r1,#spriteAddress 			; current sprite being checked
+		ldm 	r2,#spriteCount 			; count to check
+._SP2Loop
+		ldm 	r0,r1,#spStatus 			; skip if not set for repaint
+		skm 	r0
+		jmp 	#_SP2Next
+		ror 	r0,#8 						; get sprite colour
+		and 	r0,#15
+		jsr 	#SpriteDraw 				; and redraw
+._SP2Next		
+		add 	r1,#spriteRecordSize 		; do them all
+		dec 	r2
+		skz 	r2
+		jmp 	#_SP2Loop
 		pop 	link
 		ret
 
@@ -112,7 +163,7 @@
 		add 	r0,r3,#0 					; add the colour
 		stm 	r0,#blitterCMask
 		;
-		mov 	r0,r1,#spStatus 			; get status bits
+		ldm 	r0,r1,#spStatus 			; get status bits
 		and 	r0,#$6000 					; get flip bits
 		add 	r0,#$10 					; 16 rows to draw
 		stm 	r0,#blitterCmd
