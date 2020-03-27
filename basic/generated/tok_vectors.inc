@@ -142,7 +142,7 @@
 	word	RunProgram               ; $3c89 RUN
 	word	Command_Save             ; $3c8a SAVE
 	word	Command_Screen           ; $3c8b SCREEN
-	word	SyntaxError              ; $3c8c SPRITE
+	word	Command_Sprite           ; $3c8c SPRITE
 	word	Command_Stop             ; $3c8d STOP
 	word	CommandSys               ; $3c8e SYS
 	word	CommandWait              ; $3c8f WAIT

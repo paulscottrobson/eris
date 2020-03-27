@@ -1,8 +1,9 @@
 rm generated/token_test.inc >/dev/null
+rm prg/autoexec.prg >/dev/null
+
 set -e
 
 pushd scripts 
-rm prg/autoexec.prg 
 python tables.py
 # python gentokentest.py
 # python systests.py ComplexVariable

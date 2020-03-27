@@ -18,9 +18,11 @@
 
 .Command_Cls		;; [cls]
 		push 	link
-		mov 	r0,#12
+		mov 	r0,#$FF00 					; erase the whole graphics memory				
+		jsr 	#OSIFillScreen		
+		mov 	r0,#12						; text cls
 		jsr 	#OSPrintCharacter
-		jsr 	#OSSpriteReset
+		jsr 	#OSSpriteReset 				; reset sprites
 		pop 	link
 		ret
 
