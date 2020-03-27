@@ -52,6 +52,9 @@
 .BadLabelError
 	jsr	#GenErrorHandler
 	string	"Bad Label"
+.NoSpritePlaneError
+	jsr	#GenErrorHandler
+	string	"No Sprite Plane"
 .StructureError
 	jsr	#GenErrorHandler
 	string	"Structures wrong"

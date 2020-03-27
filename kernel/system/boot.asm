@@ -94,7 +94,7 @@
 ;
 ;		Initialise the plane usage/clear screen/reset sprites
 ;
-		mov 	r0,#$0004					; 4 backplanes no sprite plane
+		mov 	r0,#$0103					; 3 backplanes 1 sprite plane
 		jsr 	#OSSetPlanes
 		jsr 	#OSSpriteReset
 ;
@@ -133,7 +133,4 @@
 		ror 	r1,#1
 ;		jsr 	#OSBeep
 	
-		mov 	r0,#1
-		jsr 	#OSSpriteSelect
-
 		jmp 	#KernelEnd 					; this is the end of the "kernel ROM"

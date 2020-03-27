@@ -106,6 +106,18 @@
 .OSSpriteReset		
 		jmp 	#OSXSpriteReset
 
+.OSSpriteMove
+		jmp 	#OSXSpriteMove
+
+.OSSpriteSetImage
+		jmp 	#OSXSpriteSetImage
+
+.OSSpriteSetColour
+		jmp 	#OSXSpriteSetColour
+
+.OSSpriteSetOrientation
+		jmp 	#OSXSpriteSetOrientation
+
 ; *****************************************************************************
 ;
 ;								Sound group

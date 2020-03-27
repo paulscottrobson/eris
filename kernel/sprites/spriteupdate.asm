@@ -160,6 +160,7 @@
 		jmp 	#_SP2Next
 		ror 	r0,#8 						; get sprite colour
 		and 	r0,#15
+		skz 	r0 							; don't draw if colour 0.
 		jsr 	#SpriteDraw 				; and redraw
 ._SP2Next		
 		add 	r1,#spriteRecordSize 		; do them all
