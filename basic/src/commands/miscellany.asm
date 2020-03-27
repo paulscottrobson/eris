@@ -153,7 +153,7 @@
 ;
 ; *****************************************************************************
 
-.RenumberProgram ;; [renumber]
+.RenumberProgram ;; [renum]
 		mov 	r1,#1000 					; current line number
 		ldm 	r0,#programCode 			; R0 is current program
 ._RPLoop

@@ -153,9 +153,9 @@ class Tokens(object):
 [Unary]
 	( 	&	% 	|constshift
 	abs(	alloc(	asc(	chr$(	exists(	false	get( 	get$( 	
-	inkey( 	inkey$( joyx( 	joyy( 	joyb(	left$(	len(	lower$(
-	mid$(	page	peek(	right$(	rnd(	sgn(	str$(	sysvar(	
-	true 	upper$(	val(	
+	hit(	inkey( 	inkey$( joyx( 	joyy( 	joyb(	left$(	len(	
+	lower$(	mid$(	page	peek(	right$(	rnd(	sgn(	str$(	
+	sysvar(	true 	upper$(	val(	
 //
 //		Synonyms
 //
@@ -183,8 +183,8 @@ class Tokens(object):
 	assert 	blit 	call 	clear 	cls 	crunch 	cursor	dim 	dir 	
 	draw	else 	end 	fkey	flip	frame 	gosub 	goto 	ink 	
 	input 	let 	line	list 	load 	local 	move	new 	old		
-	palette	paper	plot 	poke 	print 	rect 	rem 	renumber		
-	return 	run 	save 	screen	sprite 	stop 	sys 	wait
+	palette	paper	plot 	poke 	print 	rect 	rem 	renum	return 	
+	run 	save 	screen	sound	sprite 	stop 	sys 	wait
 	
 """
 
