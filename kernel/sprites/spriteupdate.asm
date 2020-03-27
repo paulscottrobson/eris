@@ -17,11 +17,11 @@
 ; *****************************************************************************
 
 .OSISpriteUpdate
-		push 	r0,r1,r2,r3,r4,link
+		push 	r0,r1,r2,r3,r4,r5,link
 		jsr 	#SpritePhase1 				; phase 1 ; erase and check what we redraw
 		jsr 	#SpritePhase2 				; phase 2 ; redraw
 		jsr 	#OSIResetStatus 			; phase 3 is reset everything for next time
-		pop 	r0,r1,r2,r3,r4,link
+		pop 	r0,r1,r2,r3,r4,r5,link
 		ret
 
 ; *****************************************************************************
@@ -45,7 +45,7 @@
 		ldm 	r3,r1,#spNewY
 		add 	r0,r3,#0 					; and them together. If the result is changed.
 		add 	r0,r4,#0
-		xor 	r0,#$C000 					; will be zero if $C000
+		xor 	r0,#$3000 					; will be zero if $3000
 		sknz 	r0
 		jmp 	#_SP1Next
 		;
@@ -53,12 +53,9 @@
 		;	
 		clr 	r0							; erase old sprite.
 		jsr 	#SpriteDraw
-		skz 	r0 							; if it wasn't on screen then go to the update
-		jmp 	#_SP1Update 				; it doesn't matter about offscreen collisions.
-
-		;
-		;		TODO look for sprites this might collide with and set their redraw bits
-		;
+		sknz 	r0 							; if it wasn't on screen then go to the update
+							 				; it doesn't matter about offscreen collisions.
+		jsr 	#Phase1CollideCheck							 					
 
 		;
 		;		Update sprites setting redraw bit if new status
@@ -66,20 +63,20 @@
 ._SP1Update
 		ldm 	r3,r1,#spNewX 				; update X
 		mov 	r4,r3,#0
-		xor 	r4,#$4000
+		xor 	r4,#$1000
 		skz 	r4
 		stm 	r3,r1,#spX
 
 		ldm 	r3,r1,#spNewY 				; update Y
 		mov 	r4,r3,#0
-		xor 	r4,#$4000
+		xor 	r4,#$1000
 		skz 	r4
 		stm 	r3,r1,#spY
 
 		ldm 	r3,r1,#spNewStatus 			; update Status - sets redraw bit.
 		mov 	r4,r3,#0
-		xor 	r4,#$4000
-		sknz 	r4 							; we get the old value if it was $4000
+		xor 	r4,#$1000
+		sknz 	r4 							; we get the old value if it was $1000
 		ldm 	r3,r1,#spStatus 			; because we set it anyway.
 		skm 	r3 							; already set, no set it and write back
 		add 	r3,#$8000
@@ -91,6 +88,60 @@
 		skz 	r2
 		jmp 	#_SP1Loop
 		pop 	link
+		ret
+
+; *****************************************************************************
+;
+;		Check the sprite at R1 for collisions with all others, if so set
+;		their status bits. Must preserve R1/R2
+;
+; *****************************************************************************
+
+.Phase1CollideCheck
+		push 	link
+		ldm 	r3,#spriteAddress 			; sprite to check
+		ldm 	r4,#spriteCount
+._P1CCLoop
+		ldm 	r0,r3,#spStatus 			; sprite enabled, or redrawing ?
+		sknz 	r0
+		jmp 	#_P1CCNext
+		skp 	r0
+		jmp 	#_P1CCNext
+		;
+		mov 	r0,r1,#0 					; is this the current one ?
+		xor 	r0,r3,#0
+		sknz 	r0
+		jmp 	#_P1CCNext
+		;
+		ldm 	r0,r1,#spX 					; check X
+		ldm 	r5,r3,#spX
+		jsr 	#_P1CCCompare
+		sklt
+		jmp 	#_P1CCNext
+		;
+		ldm 	r0,r1,#spY 					; check Y
+		ldm 	r5,r3,#spY
+		jsr 	#_P1CCCompare
+		sklt
+		jmp 	#_P1CCNext
+
+		ldm 	r0,r3,#spStatus 			; set the status flag
+		skm 	r0
+		add 	r0,#$8000
+		stm 	r0,r3,#spStatus
+
+._P1CCNext
+		add 	r3,#spriteRecordSize
+		dec 	r4
+		skz 	r4
+		jmp 	#_P1CCLoop				
+		pop 	link
+		ret
+
+._P1CCCompare
+		sub 	r0,r5,#0 					; difference, we want it to be -15 .. 15
+		add 	r0,#15 						; so now 0..30 unsigned
+		sub 	r0,#30	 					; check if less than.
 		ret
 
 ; *****************************************************************************

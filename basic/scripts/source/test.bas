@@ -9,7 +9,7 @@ repeat
 	for i = 1 to 320
 		t1 = !&FF30:repeat:until !&FF30<>t1
 		sp!3 = i:sp!4 = 38
-		sp2!3 = i+52:sp2!4 = i
+		sp2!3 = i+32:sp2!4 = i
 	next i
 until false
 

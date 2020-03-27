@@ -5,18 +5,20 @@ current Status (if 0 sprite is not operational)
 	bit 15 : 	set if needs redrawing
 	bit 14 : 	horizontal flip
 	bit 13 : 	vertical flip
+	bit 12 : 	check test
 	bit 8..11 : colour
 	bit 0..7 : 	sprite graphic #
 
 new X,Y,Status
-	these are set to $4000 when no change is made. When one is updated
+	these are set to $1000 when no change is made. When one is updated
 	they are copied to current (except the redraw bit 15)
-	the test is to add them together and get $C000. Very weird values
+	the test is to add them together and get $3000. Very weird values
 	could fail an update test once in a blue moon
 
 CLS turns sprites off and erases ; this is also done on reset. 
 Sprite drawing is enabled by the SPRITE command which errors if there is no sprite bitmaps.
 
+SPRITE LOAD "" 			- load sprite data
 SPRITE 1 TO x,y 		- move sprite
 SPRITE 1 DRAW 12 		- set graphic #
 SPRITE 1 INK 4 			- set colour #
@@ -36,7 +38,7 @@ Sprite Repaint (if enabled)
 					(don't bother if it is already marked for redrawing)
 				-	If it does, set the redraw bit but we don't have to erase it if
 					it doesn't change.
-			- 	Copy the new X/Y/Status over as appropriate (e.g. if not $FFFF)					
+			- 	Copy the new X/Y/Status over as appropriate (e.g. if not $1000)					
 				making sure the redraw bit is set whether you copy or not.
 				(technically wastes a repaint if moving off screen)
 
@@ -47,6 +49,6 @@ Sprite Repaint (if enabled)
 
 3) Completion Phase		
 
-	Clear all repaint bits and reset all new values to $4000.
+	Clear all repaint bits and reset all new values to $1000.
 
 	

@@ -48,7 +48,7 @@
 		and 	r0,#$7FFF
 		stm 	r0,r2,#spStatus
 		;
-		mov 	r0,#$4000 					; and set all the new values to $4000
+		mov 	r0,#$1000 					; and set all the new values to $1000
 		stm 	r0,r2,#spNewX
 		stm 	r0,r2,#spNewY
 		stm 	r0,r2,#spNewStatus
