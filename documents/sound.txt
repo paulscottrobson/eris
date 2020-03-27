@@ -1,0 +1,38 @@
+Sound system
+============
+
+Each sound channel operates similarly.
+
+There is a queue of sound operators, each 1 word.
+
+0tttttff fffffff
+
+		Play note frequency setting fffffffff * 64 for ttttt / 20ths of a second.
+
+
+1tttttff fffffff
+
+		Add ffffffffff sign extended * 64 every 20th of a second for ttttt 20ths of a second
+
+Experimentally these may change.		
+
++0 	time when this elapses. If zero then this is stopped, so if calculated
+	time is 0 bodge it to 1 which is technically an error of 1/100s :)
++1 	current pitch, preserved if silent (e.g. zero)
++2 	current adjustment per 20th second.
++3	queue head offset
++4 	queue tail offset
++5 	start of queue
+	end of queue
+
+Delete beep and replace with 
+
+	OSSoundConstant   t,f
+	OSSoundVariable   t,f
+
+	Add queue to manager
+
+	Sound channel,time,frequency
+	Slide channel,time,change
+
+We *might* lose the noise channel :)

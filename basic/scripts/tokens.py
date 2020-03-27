@@ -184,7 +184,7 @@ class Tokens(object):
 	draw	else 	end 	fkey	flip	frame 	gosub 	goto 	ink 	
 	input 	let 	line	list 	load 	local 	move	new 	old		
 	palette	paper	plot 	poke 	print 	rect 	rem 	renum	return 	
-	run 	save 	screen	sound	sprite 	stop 	sys 	wait
+	run 	save 	screen	slide	sound	sprite 	stop 	sys 	wait
 	
 """
 
