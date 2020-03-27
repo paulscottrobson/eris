@@ -145,3 +145,4 @@
 	word	SyntaxError              ; $3c8c SPRITE
 	word	Command_Stop             ; $3c8d STOP
 	word	CommandSys               ; $3c8e SYS
+	word	CommandWait              ; $3c8f WAIT

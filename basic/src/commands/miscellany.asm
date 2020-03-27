@@ -117,6 +117,28 @@
 
 ; *****************************************************************************
 ;
+;					  Wait for a given number of 1/100 sec
+;
+; *****************************************************************************
+
+.CommandWait 	;; [wait]
+		push 	link
+		jsr 	#EvaluateInteger 			; how long to wait
+		ldm 	r1,#hwTimer					; add current value
+		add 	r1,r0,#0
+._CWTLoop
+		jsr 	#OSSystemManager 			; keep stuff going
+		skz 	r0 							; exit on break
+		jmp 	#BreakError 				; error if broken.
+		ldm 	r0,#hwTimer
+		sub 	r0,r1,#0 					; until timer >= end signed
+		skp 	r0
+		jmp 	#_CWTLoop
+		pop 	link
+		ret
+
+; *****************************************************************************
+;
 ;					  Code for colon, which does nothing
 ;
 ; *****************************************************************************

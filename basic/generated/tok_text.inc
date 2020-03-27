@@ -145,4 +145,5 @@
 	word	$0e03,$4293,$417a,$60dc          ; $3c8c SPRITE
 	word	$0e02,$4333,$628f                ; $3c8d STOP
 	word	$0e02,$43fb,$6013                ; $3c8e SYS
+	word	$0e02,$403f,$6329                ; $3c8f WAIT
 	word	$0000

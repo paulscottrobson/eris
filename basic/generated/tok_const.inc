@@ -144,3 +144,4 @@ TOK_SCREEN = $3c8b
 TOK_SPRITE = $3c8c
 TOK_STOP = $3c8d
 TOK_SYS = $3c8e
+TOK_WAIT = $3c8f
