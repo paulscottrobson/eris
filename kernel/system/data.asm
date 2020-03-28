@@ -83,6 +83,9 @@
 .spriteCount 								; sprite count [sysvar(15)]
 		fill 	1		
 
+.soundQueueBase 							; sound queue memory [sysvar(16)]
+		fill 	1
+		
 ; *****************************************************************************
 ;				(these can be accessed by assembler and so on)
 ; *****************************************************************************
@@ -134,7 +137,4 @@
 .spriteSelect								; address of currently selected sprite
 		fill 	1
 
-.spriteDataArea 							; sprite Memory address
-		fill 	spriteObjectCount *spriteRecordSize
-		
 .freeMemory		

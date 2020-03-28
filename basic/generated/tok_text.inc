@@ -144,9 +144,10 @@
 	word	$0e02,$435a,$600e                ; $3c8b RUN
 	word	$0e02,$403b,$60de                ; $3c8c SAVE
 	word	$0e03,$408b,$40da,$6235          ; $3c8d SCREEN
-	word	$0e03,$426b,$4245,$6004          ; $3c8e SOUND
-	word	$0e03,$4293,$417a,$60dc          ; $3c8f SPRITE
-	word	$0e02,$4333,$628f                ; $3c90 STOP
-	word	$0e02,$43fb,$6013                ; $3c91 SYS
-	word	$0e02,$403f,$6329                ; $3c92 WAIT
+	word	$0e03,$41f3,$40a9,$6005          ; $3c8e SLIDE
+	word	$0e03,$426b,$4245,$6004          ; $3c8f SOUND
+	word	$0e03,$4293,$417a,$60dc          ; $3c90 SPRITE
+	word	$0e02,$4333,$628f                ; $3c91 STOP
+	word	$0e02,$43fb,$6013                ; $3c92 SYS
+	word	$0e02,$403f,$6329                ; $3c93 WAIT
 	word	$0000

@@ -53,13 +53,23 @@
 		add 	r0,#$100 					; next 1/4 on.
 		jmp 	#_bcCheckMemory
 ;
-;		Save memory end, allocate memory for the sprite images, screen mirror and initialise the stack & PRNG
+;		Save memory end, allocate memory for :
+;			(1) sprite / blit images
+;			(2) sprite objects
+;			(3) sound queues
+;			(4) the text screen
 ;
 ._bcFoundEnd
 		stm 	r0,#highMemory 				; save high memory
 		sub 	r0,#spriteDefaultImageCount * 16 ; allow space for sprites
 		and 	r0,#$FFF0 					; put on 16 word boundary
 		stm 	r0,#spriteImageMemory
+		;
+		sub 	r0,#spriteObjectCount *spriteRecordSize
+		stm 	r0,#spriteAddress 			; allocate memory for sprites
+		;
+		sub 	r0,#sndRecordSize * sndChannels
+		stm 	r0,#soundQueueBase 			; allocate sound queue memory
 		;
 		sub 	r0,#(charWidth*charHeight)	; allocate text screen space
 		stm 	r0,#textMemory
@@ -82,8 +92,6 @@
 		stm 	r0,r1,#4	
 		mov		r0,#fontDataDefault
 		stm 	r0,r1,#7
-		mov 	r0,#spriteDataArea
-		stm 	r0,r1,#14
 		mov 	r0,#spriteObjectCount
 		stm 	r0,r1,#15
 ;
@@ -128,9 +136,9 @@
 ;
 		mov 	r0,#22726 					; play A4 for 0.5s
 		mov 	r1,#50
-;		jsr 	#OSBeep
+		jsr 	#OSBeep
 		ror 	r0,#1 						; halve it e.g. A3 for 0.25s
 		ror 	r1,#1
-;		jsr 	#OSBeep
+		jsr 	#OSBeep
 	
 		jmp 	#KernelEnd 					; this is the end of the "kernel ROM"

@@ -144,8 +144,9 @@
 	word	RunProgram               ; $3c8b RUN
 	word	Command_Save             ; $3c8c SAVE
 	word	Command_Screen           ; $3c8d SCREEN
-	word	SyntaxError              ; $3c8e SOUND
-	word	Command_Sprite           ; $3c8f SPRITE
-	word	Command_Stop             ; $3c90 STOP
-	word	CommandSys               ; $3c91 SYS
-	word	CommandWait              ; $3c92 WAIT
+	word	SyntaxError              ; $3c8e SLIDE
+	word	SyntaxError              ; $3c8f SOUND
+	word	Command_Sprite           ; $3c90 SPRITE
+	word	Command_Stop             ; $3c91 STOP
+	word	CommandSys               ; $3c92 SYS
+	word	CommandWait              ; $3c93 WAIT

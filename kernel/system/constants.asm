@@ -88,7 +88,7 @@ timerRate = 5
 ;
 ;		Sprite constants
 ;
-spriteObjectCount = 16 						; Number of sprites
+spriteObjectCount = 32 						; Number of sprites
 spriteRecordSize = 6 						; words per sprite.
 ;
 spX = 0 									; current settings
@@ -97,5 +97,20 @@ spStatus = 2
 spNewX = 3									; New values
 spNewY = 4
 spNewStatus = 5
+;
+;		Sound constants
+;
+sndChannels = 3 							; # of sound channels
+;
+sndElapseTime = 0							; time when current sound/slide ends
+sndPitch = 1 								; current pitch (in div 64 form)
+sndSlide = 2 								; sound slide (in div 64, per 20th seconds)
+sndQueueHead = 3 							; offset to queue head
+sndQueueTail = 4							; offset to queue tail
+sndQueueStart = 5 							; queue
+;
+sndQueueSize = 32 							; size of the sound queue per channel
+;
+sndRecordSize = sndQueueStart+sndQueueSize 	; size of one record
 
 
