@@ -122,10 +122,7 @@
 ;
 ;		Turn the audio off.
 ;
-._bcSilence
-		stm 	r14,#sndNoise 				; turn sound off.
-		stm 	r14,#sndTone1
-		stm 	r14,#sndTone2
+		jsr 	#OSIResetAllChannels
 ;
 ;		Initialise file I/O
 ;
@@ -134,11 +131,16 @@
 ;
 ;		Sound the startup beep
 ;
-		mov 	r0,#22726 					; play A4 for 0.5s
-		mov 	r1,#50
-		jsr 	#OSBeep
-		ror 	r0,#1 						; halve it e.g. A3 for 0.25s
-		ror 	r1,#1
-		jsr 	#OSBeep
-	
+		mov 	r0,#1 						; channel # 1
+		mov 	r1,#50 						; play for 0.5s 
+		mov 	r2,#22726 					; play A4
+		clr 	r3 							; static value
+		jsr 	#OSSoundPlay
+		mov 	r0,#1 						; channel # 1 (OSSoundPlay returns error in R0)
+		ror 	r1,#1 						; play for half as long.
+		ror 	r2,#1 						; double pitch by halving divisor
+		jsr 	#OSSoundPlay 				; and play A5
+;
+;		Boot the main ROM.
+;	
 		jmp 	#KernelEnd 					; this is the end of the "kernel ROM"

@@ -56,9 +56,10 @@ hwTimer = $FF30
 ;		Sound channels
 ;
 audioClock = 5000000
-sndNoise = $FF40
-sndTone1 = $FF41
-sndTone2 = $FF42
+sndChannelBase = $FF40
+sndNoise = sndChannelBase+0
+sndTone1 = sndChannelBase+2
+sndTone2 = sndChannelBase+2
 ;
 ;		Keyboard delay and repeat time in 1/100s
 ;
@@ -102,9 +103,9 @@ spNewStatus = 5
 ;
 sndChannels = 3 							; # of sound channels
 ;
-sndElapseTime = 0							; time when current sound/slide ends
+sndElapseTime = 0							; time when current sound/slide event ends
 sndPitch = 1 								; current pitch (in div 64 form)
-sndSlide = 2 								; sound slide (in div 64, per 20th seconds)
+sndSlide = 2 								; sound slide (in div 64, per 20th seconds tick)
 sndQueueHead = 3 							; offset to queue head
 sndQueueTail = 4							; offset to queue tail
 sndQueueStart = 5 							; queue
@@ -112,5 +113,3 @@ sndQueueStart = 5 							; queue
 sndQueueSize = 32 							; size of the sound queue per channel
 ;
 sndRecordSize = sndQueueStart+sndQueueSize 	; size of one record
-
-

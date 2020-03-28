@@ -127,6 +127,12 @@
 .OSBeep
 		jmp 	#OSXBeep
 
+.OSSoundResetChannel
+		jmp 	#OSXSoundResetChannel
+
+.OSSoundPlay
+		jmp 	#OSXSoundPlay
+
 ; *****************************************************************************
 ;
 ;								Utility Group

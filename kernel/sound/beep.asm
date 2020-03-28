@@ -13,6 +13,7 @@
 ; *****************************************************************************
 ;
 ;		Play synchronously a beep on channel 1, pitch R0, duration R1.
+; 			Very primitive but left in for backwards compatibility
 ;
 ; *****************************************************************************
 
