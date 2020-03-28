@@ -180,6 +180,7 @@
 .Dummy7 		;; [#]
 .Dummy8 		;; [crunch] 			
 .Dummy9 		;; [flip] 
+.Dummy109 		;; [draw] 
 ;
 ;		This lot are not commands per se, but are handled in RUN as token values.
 ;
@@ -197,4 +198,10 @@
 .Dummy21 		;; [sksn]
 .Dummy22 		;; [stm]
 .Dummy23 		;; [sub]
+
+.Dummy201 		;; [ellipse]
+.Dummy202 		;; [after]
+.Dummy203 		;; [every]
+.Dummy204 		;; [mon]
 				jmp 	#SyntaxError
+

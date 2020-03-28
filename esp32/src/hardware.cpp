@@ -69,7 +69,7 @@ WORD16 HWFileOperation(WORD16 R0,WORD16 R1,WORD16 R2,WORD16 R3) {
 	if (R0 != 0 && R0 != 4) {
 		fileName[0] = 0;
 		int length = CPUReadMemory(R1);
-		if (length > 16) return 1;
+		if (length > sizeof(fileName)-1) return 1;
 		for (int i = 0;i < length;i++) {
 			int d = CPUReadMemory(R1+1+i/2);
 			fileName[i] = tolower((i & 1) ? (d >> 8) : (d & 0xFF));

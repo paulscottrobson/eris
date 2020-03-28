@@ -60,7 +60,7 @@
 	word	Unary_False              ; $3037 FALSE
 	word	Unary_Get                ; $3038 GET(
 	word	Unary_GetString          ; $3039 GET$(
-	word	SyntaxError              ; $303a HIT(
+	word	Unary_Hit                ; $303a HIT(
 	word	Unary_Inkey              ; $303b INKEY(
 	word	Unary_InkeyString        ; $303c INKEY$(
 	word	Command_Jx               ; $303d JOYX(
@@ -105,48 +105,52 @@
 	word	CommentCommand1          ; $3c64 '
 	word	ColonHandler             ; $3c65 :
 	word	Command_Print2           ; $3c66 ?
-	word	CommandAssert            ; $3c67 ASSERT
-	word	Command_Blit             ; $3c68 BLIT
-	word	Command_Call             ; $3c69 CALL
-	word	Command_Clear            ; $3c6a CLEAR
-	word	Command_Cls              ; $3c6b CLS
-	word	Dummy8                   ; $3c6c CRUNCH
-	word	Command_Cursor           ; $3c6d CURSOR
-	word	Command_DIM              ; $3c6e DIM
-	word	Command_Dir              ; $3c6f DIR
-	word	SyntaxError              ; $3c70 DRAW
-	word	Command_ELSE             ; $3c71 ELSE
-	word	Command_End              ; $3c72 END
-	word	Command_FKey             ; $3c73 FKEY
-	word	Dummy9                   ; $3c74 FLIP
-	word	Command_Frame            ; $3c75 FRAME
-	word	Command_GOSUB            ; $3c76 GOSUB
-	word	Command_GOTO             ; $3c77 GOTO
-	word	Command_Ink              ; $3c78 INK
-	word	Command_Input            ; $3c79 INPUT
-	word	Command_Let              ; $3c7a LET
-	word	Command_Line             ; $3c7b LINE
-	word	Command_List             ; $3c7c LIST
-	word	Command_Load             ; $3c7d LOAD
-	word	Command_Local            ; $3c7e LOCAL
-	word	Command_Move             ; $3c7f MOVE
-	word	Command_New              ; $3c80 NEW
-	word	Command_Old              ; $3c81 OLD
-	word	Command_Palette          ; $3c82 PALETTE
-	word	Command_Paper            ; $3c83 PAPER
-	word	Command_Plot             ; $3c84 PLOT
-	word	CommandPoke              ; $3c85 POKE
-	word	Command_Print            ; $3c86 PRINT
-	word	Command_Rect             ; $3c87 RECT
-	word	CommentCommand2          ; $3c88 REM
-	word	RenumberProgram          ; $3c89 RENUM
-	word	Command_RETURN           ; $3c8a RETURN
-	word	RunProgram               ; $3c8b RUN
-	word	Command_Save             ; $3c8c SAVE
-	word	Command_Screen           ; $3c8d SCREEN
-	word	SyntaxError              ; $3c8e SLIDE
-	word	SyntaxError              ; $3c8f SOUND
-	word	Command_Sprite           ; $3c90 SPRITE
-	word	Command_Stop             ; $3c91 STOP
-	word	CommandSys               ; $3c92 SYS
-	word	CommandWait              ; $3c93 WAIT
+	word	Dummy202                 ; $3c67 AFTER
+	word	CommandAssert            ; $3c68 ASSERT
+	word	Command_Blit             ; $3c69 BLIT
+	word	Command_Call             ; $3c6a CALL
+	word	Command_Clear            ; $3c6b CLEAR
+	word	Command_Cls              ; $3c6c CLS
+	word	Dummy8                   ; $3c6d CRUNCH
+	word	Command_Cursor           ; $3c6e CURSOR
+	word	Command_DIM              ; $3c6f DIM
+	word	Command_Dir              ; $3c70 DIR
+	word	Dummy109                 ; $3c71 DRAW
+	word	Dummy201                 ; $3c72 ELLIPSE
+	word	Command_ELSE             ; $3c73 ELSE
+	word	Command_End              ; $3c74 END
+	word	Dummy203                 ; $3c75 EVERY
+	word	Command_FKey             ; $3c76 FKEY
+	word	Dummy9                   ; $3c77 FLIP
+	word	Command_Frame            ; $3c78 FRAME
+	word	Command_GOSUB            ; $3c79 GOSUB
+	word	Command_GOTO             ; $3c7a GOTO
+	word	Command_Ink              ; $3c7b INK
+	word	Command_Input            ; $3c7c INPUT
+	word	Command_Let              ; $3c7d LET
+	word	Command_Line             ; $3c7e LINE
+	word	Command_List             ; $3c7f LIST
+	word	Command_Load             ; $3c80 LOAD
+	word	Command_Local            ; $3c81 LOCAL
+	word	Dummy204                 ; $3c82 MON
+	word	Command_Move             ; $3c83 MOVE
+	word	Command_New              ; $3c84 NEW
+	word	Command_Old              ; $3c85 OLD
+	word	Command_Palette          ; $3c86 PALETTE
+	word	Command_Paper            ; $3c87 PAPER
+	word	Command_Plot             ; $3c88 PLOT
+	word	CommandPoke              ; $3c89 POKE
+	word	Command_Print            ; $3c8a PRINT
+	word	Command_Rect             ; $3c8b RECT
+	word	CommentCommand2          ; $3c8c REM
+	word	RenumberProgram          ; $3c8d RENUM
+	word	Command_RETURN           ; $3c8e RETURN
+	word	RunProgram               ; $3c8f RUN
+	word	Command_Save             ; $3c90 SAVE
+	word	Command_Screen           ; $3c91 SCREEN
+	word	SyntaxError              ; $3c92 SLIDE
+	word	SyntaxError              ; $3c93 SOUND
+	word	Command_Sprite           ; $3c94 SPRITE
+	word	Command_Stop             ; $3c95 STOP
+	word	CommandSys               ; $3c96 SYS
+	word	CommandWait              ; $3c97 WAIT

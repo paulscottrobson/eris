@@ -180,10 +180,10 @@ class Tokens(object):
 //
 [Cmd]
 	' 		:		? 		
-	assert 	blit 	call 	clear 	cls 	crunch 	cursor	dim 	dir 	
-	draw	else 	end 	fkey	flip	frame 	gosub 	goto 	ink 	
-	input 	let 	line	list 	load 	local 	move	new 	old		
-	palette	paper	plot 	poke 	print 	rect 	rem 	renum	return 	
+	after 	assert 	blit 	call 	clear 	cls 	crunch 	cursor	dim 	dir 	
+	draw	ellipse	else 	end 	every	fkey	flip	frame 	gosub 	goto 	
+	ink 	input 	let 	line	list 	load 	local 	mon		move	new 	
+	old		palette	paper	plot 	poke 	print 	rect 	rem 	renum	return 	
 	run 	save 	screen	slide	sound	sprite 	stop 	sys 	wait
 	
 """
@@ -196,4 +196,3 @@ if __name__ == "__main__":
 	print(tk.getList())
 	print(tk.getInfo("DIM"))	
 	print(tk.getInfo("DIMX"))		
-	
