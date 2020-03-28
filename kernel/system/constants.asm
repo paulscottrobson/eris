@@ -80,7 +80,7 @@ functionKeySize = 12
 ;
 ;		Default # of sprite images
 ;
-spriteDefaultImageCount = 16
+spriteDefaultImageCount = 32
 ;
 ;		Time in centiseconds between monitor events, so for 20 per second
 ;		this is 100/20 = 5
@@ -102,8 +102,9 @@ spNewStatus = 5
 ;		Sound constants
 ;
 sndChannels = 3 							; # of sound channels
+;											; very specific code in sndupdate.asm if you change this
 ;
-sndElapseTime = 0							; time when current sound/slide event ends
+sndCompleteTime = 0							; time when current sound/slide event ends
 sndPitch = 1 								; current pitch (in div 64 form)
 sndSlide = 2 								; sound slide (in div 64, per 20th seconds tick)
 sndQueueHead = 3 							; offset to queue head

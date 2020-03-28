@@ -19,8 +19,8 @@ cursor 27-len(a$)/2,29:print a$;
 repeat
 	call mainLoop()
 	command$ = upper$(inkey$())
-	if command$ = "N" then sprites.current=(sprites.current+1) and 15:call redrawSelector():call redrawDisplay()
-	if command$ = "B" then sprites.current=(sprites.current-1) and 15:call redrawSelector():call redrawDisplay()
+	if command$ = "N" then sprites.current=(sprites.current+1) mod sprites.count:call redrawSelector():call redrawDisplay()
+	if command$ = "B" then sprites.current=(sprites.current+sprites.count-1) mod sprites.count:call redrawSelector():call redrawDisplay()
 	if command$ = "C" 
 		for i = 0 to 15:clip(i) = !(sprites.addr+sprites.current*16+i):next i
 	endif
@@ -122,7 +122,7 @@ endproc
 '	Redraw one line
 '
 proc redrawLine(y)
-	local a,b,c:b = 96:c = y*8+32:a = !(sprites.addr+sprites.current*16+y):sys fastDraw
+	local a,b,c:b = 128:c = y*8+32:a = !(sprites.addr+sprites.current*16+y):sys fastDraw
 	if y = cursor.y then blit b+cursor.x*8,c,cursorGfx,&F07,8
 endproc
 '

@@ -20,16 +20,18 @@
 ; *****************************************************************************
 
 .OSXSystemManager
-		ldm 	r14,#hwTimer 				; read timer.
-		ldm 	r0,#nextManagerEvent 		; read next manager event into R14.
+		ldm 	r0,#hwTimer 				; read timer.
+		ldm 	r14,#nextManagerEvent 		; read next manager event into R14.
 		sub 	r0,r14,#0  			 		; carry clear if time out.
-		xor 	r0,r0,#0 					; zero R0
 		xor 	r14,r14,#0 					; zero R14, the standard state
-		sknc 
+		skm 	r0
+		jmp 	#_OSXSMCode
+		clr 	r0 
 		ret 	
 		;
 		;		At this point, R0 has the elapsed time in centiseconds.
 		;
+._OSXSMCode		
 		push 	r1,link
 		ldm 	r1,#hwTimer 				; reset the next event.
 		add 	r1,#timerRate 				; to timer + event time.
@@ -39,8 +41,8 @@
 		;
 		ldm 	r1,#SpritesEnabled			; sprites enabled ?
 		skz 	r1
-		jsr 	#OSIUpdateSound 			; update the sound system
 		jsr 	#OSISpriteUpdate 			; if so do the update code.
+		jsr 	#OSIUpdateSound 			; update the sound system
 		jsr 	#OSICheckBreak 				; check if break is pressed.
 		pop 	r1,link
 		ret

@@ -1,18 +1,19 @@
 rm generated/token_test.inc >/dev/null
-rm prg/autoexec.prg >/dev/null
-
+rm scripts/prg/autoexec.prg >/dev/null
+rm ../emulator/storage/autoexec.prg >/dev/null
 set -e
 
 pushd scripts 
 python tables.py
 # python gentokentest.py
 # python systests.py ComplexVariable
-
-python makeprogram.py source/test.bas prg/autoexec.prg
+#
+python makeprogram.py source/sed.bas prg/autoexec.prg
 python makeprogram.py source/sed.bas prg/sed
+python makeprogram.py source/test.bas prg/test.prg
 
 cp prg/test.prg ../../emulator/bin 
-cp prg/*.* ../../emulator/storage 
+cp prg/*.* ../../emulator/storage -v 
 popd
 
 pushd messages 

@@ -35,7 +35,7 @@
 		sklt
 		jmp 	#_OSXSPFail2 					
 		;
-		mov 	r4,r0,#0					; check the /10th sec length. This fits
+		mov 	r4,r1,#0					; check the /10th sec length. This fits
 		sub 	r4,#32 						; into a 5 bit space, so must be 0-31. 
 		sklt 
 		jmp 	#_OSXSPFail2 					
@@ -43,6 +43,7 @@
 		ror 	r2,#6 						; divide the pitch divisor value by 64 unsigned.
 		and 	r2,#$03FF 					; as we fit it into 10 bits.
 		;
+		and 	r1,#31 						; throw anything else away.
 		ror 	r1,#6 						; rotate the time right by 6 (left by 10)
 		mov 	r4,r1,#0 					; add time (R1) to pitch (R2)
 		add 	r4,r2,#0

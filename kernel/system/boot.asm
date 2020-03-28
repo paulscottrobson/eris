@@ -13,7 +13,7 @@
 .bootPrompt
 	string "[10,0F,16,0C]*** Eris RetroComputer ***[0D,0D,13]Written by Paul Robson 2020[0D,0D]"
 .kernelPrompt
-	string "Kernel[3A] 0.42[0D]"
+	string "Kernel[3A] 0.50[0D]"
 
 ; *****************************************************************************
 ;
@@ -132,18 +132,13 @@
 ;		Sound the startup beep
 ;
 		mov 	r0,#1 						; channel # 1
-		mov 	r1,#5 						; play for 5/10th seconds.
+		mov 	r1,#6 						; play for 6/10th seconds.
 		mov 	r2,#22726 					; play A4
 		clr 	r3 							; static value
 		jsr 	#OSSoundPlay
 		mov 	r0,#1 						; channel # 1 (OSSoundPlay returns error in R0)
-		ror 	r1,#1 						; play for half as long.
+		mov 	r1,#3						; play for half as long.
 		ror 	r2,#1 						; double pitch by halving divisor
-
-		mov 	r1,#10						; test code.
-		mov 	r2,#64
-		mov 	r3,#1
-
 		jsr 	#OSSoundPlay 				; and play A5
 ;
 ;		Boot the main ROM.

@@ -97,6 +97,11 @@
 		and 	r1,#$FF00 					; is it 0-255 if so use sprite image.
 		skz		r1
 		jmp 	#_CBlitData
+		mov 	r1,r0,#0 					; check legitimate value.
+		ldm 	r2,#spriteImageCount 		
+		sub 	r1,r2,#0
+		sklt
+		jmp 	#BadNumberError
 		ror 	r0,#12 						; multiply by 16
 		ldm 	r1,#spriteImageMemory		; and sprite image memory address
 		add 	r0,r1,#0
