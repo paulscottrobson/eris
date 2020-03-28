@@ -132,7 +132,7 @@
 ;		Sound the startup beep
 ;
 		mov 	r0,#1 						; channel # 1
-		mov 	r1,#50 						; play for 0.5s 
+		mov 	r1,#5 						; play for 5/10th seconds.
 		mov 	r2,#22726 					; play A4
 		clr 	r3 							; static value
 		jsr 	#OSSoundPlay

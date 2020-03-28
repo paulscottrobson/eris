@@ -110,6 +110,6 @@ sndQueueHead = 3 							; offset to queue head
 sndQueueTail = 4							; offset to queue tail
 sndQueueStart = 5 							; queue
 ;
-sndQueueSize = 32 							; size of the sound queue per channel
+sndQueueSize = 32 							; size of the sound queue per channel (POWER OF 2!)
 ;
 sndRecordSize = sndQueueStart+sndQueueSize 	; size of one record

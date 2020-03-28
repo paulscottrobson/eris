@@ -43,7 +43,7 @@
 		add 	r1,r0,#0
 		mov 	r0,#sndRecordSize 			; clear all values to zero
 ._OSXSRCLoop
-		stm 	r15,r1,#0
+		stm 	r14,r1,#0
 		inc 	r1
 		dec 	r0
 		skz 	r0
