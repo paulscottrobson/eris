@@ -139,6 +139,11 @@
 		mov 	r0,#1 						; channel # 1 (OSSoundPlay returns error in R0)
 		ror 	r1,#1 						; play for half as long.
 		ror 	r2,#1 						; double pitch by halving divisor
+
+		mov 	r1,#10						; test code.
+		mov 	r2,#64
+		mov 	r3,#1
+
 		jsr 	#OSSoundPlay 				; and play A5
 ;
 ;		Boot the main ROM.

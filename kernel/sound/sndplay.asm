@@ -43,10 +43,12 @@
 		ror 	r2,#6 						; divide the pitch divisor value by 64 unsigned.
 		and 	r2,#$03FF 					; as we fit it into 10 bits.
 		;
-		sknz 	r3 							; now convert the data into a sound or a slide.
-		jsr 	#SoundPlayCompileStatic
-		skz 	r3
-		jsr 	#SoundPlayCompileVariable
+		ror 	r1,#6 						; rotate the time right by 6 (left by 10)
+		mov 	r4,r1,#0 					; add time (R1) to pitch (R2)
+		add 	r4,r2,#0
+		and 	r3,#1 						; put bit 0 of type in bit 15
+		ror 	r3,#1
+		add 	r4,r3,#0 					; add to it 
 		;
 		mult 	r0,#sndRecordSize			; now add to queue. R4 contains word to write
 		ldm 	r1,#soundQueueBase
@@ -73,21 +75,4 @@
 		mov 	r0,#2
 ._OSXSPExit		
 		pop 	r1,r2,r3,r4,link
-		ret
-
-; *****************************************************************************
-;
-;			Sound word compilers. R1 time, R2 scaled pitch unsigned
-;
-;					Preserve R0,R3. Returns R4. R1,R2 can break
-;
-; *****************************************************************************
-
-.SoundPlayCompileStatic
-		ror 	r1,#6 						; rotate the time right by 6 (left by 10)
-		mov 	r4,r1,#0 					; add time (R1) to pitch (R2)
-		add 	r4,r2,#0
-		ret
-		
-.SoundPlayCompileVariable
 		ret
