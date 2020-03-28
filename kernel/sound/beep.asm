@@ -2,7 +2,7 @@
 ; *****************************************************************************
 ;
 ;		Name:		beep.asm
-;		Purpose:	Simple Beeper
+;		Purpose:	Simple Beeper (DISABLED)
 ;		Created:	8th March 2020
 ;		Reviewed: 	16th March 2020
 ;		Author:		Paul Robson (paul@robsons.org.uk)
@@ -13,7 +13,6 @@
 ; *****************************************************************************
 ;
 ;		Play synchronously a beep on channel 1, pitch R0, duration R1.
-; 			Very primitive but left in for backwards compatibility
 ;
 ; *****************************************************************************
 

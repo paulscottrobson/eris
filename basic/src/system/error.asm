@@ -35,4 +35,5 @@
 ._ehExit
 		jsr 	#OSPrintInline 				; print CR and make green
 		string 	"[0D][12]"					
+		jsr 	#OSResetAllChannels
 		jmp 	#WarmStart

@@ -106,7 +106,7 @@
 ._OSISoundPlaying
 		ldm 	r0,r4,#sndPitch 			; add slide to pitch
 		ldm 	r1,r4,#sndSlide
-		add 	r0,r1,#0
+		sub 	r0,r1,#0
 		stm 	r0,r4,#sndPitch
 		stm 	r0,r5,#0 					; and set the tone pitch out.
 		ret

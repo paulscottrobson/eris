@@ -122,7 +122,7 @@
 ;
 ;		Turn the audio off.
 ;
-		jsr 	#OSIResetAllChannels
+		jsr 	#OSResetAllChannels
 ;
 ;		Initialise file I/O
 ;

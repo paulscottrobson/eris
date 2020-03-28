@@ -106,6 +106,9 @@
 .OSSpriteReset		
 		jmp 	#OSXSpriteReset
 
+.OSSpriteUpdate
+		jmp 	#OSXSpriteUpdate
+		
 .OSSpriteMove
 		jmp 	#OSXSpriteMove
 
@@ -124,8 +127,8 @@
 ;
 ; *****************************************************************************
 
-.OSBeep
-		jmp 	#OSXBeep
+.OSResetAllChannels
+		jmp 	#OSXResetAllChannels
 
 .OSSoundResetChannel
 		jmp 	#OSXSoundResetChannel

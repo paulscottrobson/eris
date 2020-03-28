@@ -55,6 +55,9 @@
 .NoSpritePlaneError
 	jsr	#GenErrorHandler
 	string	"No Sprite Plane"
+.SoundQueueError
+	jsr	#GenErrorHandler
+	string	"Sound Queue Full"
 .StructureError
 	jsr	#GenErrorHandler
 	string	"Structures wrong"

@@ -41,7 +41,7 @@
 		;
 		ldm 	r1,#SpritesEnabled			; sprites enabled ?
 		skz 	r1
-		jsr 	#OSISpriteUpdate 			; if so do the update code.
+		jsr 	#OSXSpriteUpdate 			; if so do the update code.
 		jsr 	#OSIUpdateSound 			; update the sound system
 		jsr 	#OSICheckBreak 				; check if break is pressed.
 		pop 	r1,link

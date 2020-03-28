@@ -121,6 +121,7 @@
 
 .Unary_Hit		;; [hit(]
 		push 	link
+		jsr 	#OSSpriteUpdate 			; update sprites.
 		jsr 	#_UHGetOneSprite 			; get first sprite ato R2
 		mov 	r2,r1,#0
 		jsr 	#CheckComma 				; skip comma

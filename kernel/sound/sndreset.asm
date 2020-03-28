@@ -16,7 +16,7 @@
 ;
 ; *****************************************************************************
 
-.OSIResetAllChannels
+.OSXResetAllChannels
 		push 	r0,link
 		mov 	r0,#sndChannels-1
 ._OSIRACLoop 								; reset each channel.

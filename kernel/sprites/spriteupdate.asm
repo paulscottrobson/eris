@@ -16,7 +16,7 @@
 ;
 ; *****************************************************************************
 
-.OSISpriteUpdate
+.OSXSpriteUpdate
 		push 	r0,r1,r2,r3,r4,r5,link
 		jsr 	#SpritePhase1 				; phase 1 ; erase and check what we redraw
 		jsr 	#SpritePhase2 				; phase 2 ; redraw
