@@ -8,9 +8,10 @@ python tables.py
 # python gentokentest.py
 # python systests.py ComplexVariable
 #
-python makeprogram.py source/sed.bas prg/autoexec.prg
+#python makeprogram.py source/sed.bas prg/autoexec.prg
 python makeprogram.py source/sed.bas prg/sed
-python makeprogram.py source/test.bas prg/test.prg
+python makeprogram.py source/test.bas prg/autoexec.prg
+python makeprogram.py source/sprites.bas prg/sprites.prg
 
 cp prg/test.prg ../../emulator/bin 
 cp prg/*.* ../../emulator/storage -v 

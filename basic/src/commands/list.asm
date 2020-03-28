@@ -266,8 +266,10 @@
 ; *****************************************************************************
 
 .ListCheckAdjustIndent
-		push 	r0,r1,r2,r10
+		push 	r0,r1,r2,r3,r4,r10
 		inc 	r10
+		clr 	r3 							; count all indents
+		mov 	r4,r7,#0 					; save original indent
 ._LCAILoop
 		inc 	r10 						; pre inc
 ._LCAILoopNoInc		
@@ -287,6 +289,8 @@
 		;
 		ldm 	r2,r10,#0 					; get token back
 		and 	r2,#15<<9 					; isolate type
+		add 	r3,r2,#0 					; add to total indents
+		sub 	r3,#14<<9 					; adjust it back.
 		xor 	r2,r1,#0 					; found it ?
 		sknz 	r2
 		add 	r7,r0,#0 					; add indent adjustment
@@ -299,7 +303,9 @@
 		jmp 	#_LCAILoopNoInc		
 
 ._LCAIExit		
-		pop 	r0,r1,r2,r10
+		sknz 	r3 							; if the balance is zero do not adjust indentation
+		mov 	r7,r4,#0
+		pop 	r0,r1,r2,r3,r4,r10
 		ret
 
 

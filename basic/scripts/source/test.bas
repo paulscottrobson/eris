@@ -1,18 +1,10 @@
-screen 2,2
+cls:screen 2,2
 sprite load "sprites.dat"
-
-sp = sysvar(14):sp2 = sp+6:sp3 = sp+12
-sprite 0 ink 3:sprite 0 draw 0
-sprite 1 ink 2 draw 2
-sprite 2 draw 1:sprite 2 ink 1
-sprite 2 to 50,30
-
-repeat
-	for i = 1 to 320
-		wait 1
-		sprite 0 to i,38
-		sprite 1 to i,(i mod 240)
-		sprite 1 flip i and 2 ink random(1,3)
-	next i
-until false
-
+sprite 0 to 10,10 ink 1 draw 1
+sprite 1 to 310,10 ink 2 draw 1
+for i = 0 to 200 step 4
+	wait 1
+	sprite 0 to i+10,10
+	sprite 1 to 310-i,10
+	if hit(0,1) then stop
+next i
