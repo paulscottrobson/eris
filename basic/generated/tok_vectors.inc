@@ -77,7 +77,7 @@
 	word	Unary_Sgn                ; $3048 SGN(
 	word	Unary_Str                ; $3049 STR$(
 	word	Command_SysVar           ; $304a SYSVAR(
-	word	SyntaxError              ; $304b TIMER(
+	word	Unary_Timer              ; $304b TIMER(
 	word	Unary_True               ; $304c TRUE
 	word	Unary_Upper              ; $304d UPPER$(
 	word	Unary_Val                ; $304e VAL(

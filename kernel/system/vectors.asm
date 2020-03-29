@@ -124,6 +124,9 @@
 .OSSpriteSetOrientation
 		jmp 	#OSXSpriteSetOrientation
 
+.OSSpriteCollision
+		jmp 	#OSXSpriteCollision	
+
 ; *****************************************************************************
 ;
 ;								Sound group

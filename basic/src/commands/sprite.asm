@@ -121,63 +121,31 @@
 
 .Unary_Hit		;; [hit(]
 		push 	link
-		jsr 	#OSSpriteUpdate 			; update sprites.
-		jsr 	#_UHGetOneSprite 			; get first sprite ato R2
-		mov 	r2,r1,#0
-		jsr 	#CheckComma 				; skip comma
-		jsr 	#_UHGetOneSprite 			; get second sprite 
-		sknz 	r1 							; exit if either not activated
-		jmp 	#_UHFail
+		jsr 	#EvaluateInteger 			; first sprite
+		mov 	r3,r0,#0 					; save in R3
+		jsr 	#CheckComma
+		jsr 	#EvaluateInteger 			; second sprite
+		mov 	r1,r0,#0 					; -> R1
+		mov 	r2,#15 						; default box size 
+		;
+		ldm 	r0,r11,#0 					; check if followed by comma
+		xor 	r0,#TOK_COMMA
+		skz 	r0
+		jmp 	#_UHHaveParameters 			; if not use default parameters
+		inc 	r11							; step over comma
+		jsr 	#EvaluateInteger 			; get box size -> R2
+		mov 	r2,r0,#0
+._UHHaveParameters
+		jsr 	#CheckRightBracket 			; right bracket
+		mov 	r0,r3,#0 					; R0 R1 sprites, R2 box size.
+		jsr 	#OSSpriteCollision 			; check sprite collision.		
+		mov 	r2,r0,#0 					; check for error
+		xor 	r2,#1 						; which is 1.
 		sknz 	r2
-		jmp 	#_UHFail
-		;
-		;		Check if r1 collides with r2.
-		;
-		ldm 	r0,r1,#spX 					; check difference + 8 < 16
-		ldm 	r3,r2,#spX
-		sub 	r0,r3,#0
-		add 	r0,#8
-		sub 	r0,#16
-		sklt
-		jmp 	#_UHFail
-		;
-		ldm 	r0,r1,#spY
-		ldm 	r3,r2,#spY
-		sub 	r0,r3,#0
-		add 	r0,#8
-		sub 	r0,#16
-		sklt
-		jmp 	#_UHFail
-		;
-		mov 	r0,#-1						; return -1 if hit
-		sknz 	r0
-._UHFail									; return 0 if missed
-		clr 	r0
-		stm 	r0,r10,#esValue1
+		jmp 	#BadNumberError 			; bad values.
+
+		stm 	r0,r10,#esValue1 			; return the collision result
 		stm 	r14,r10,#esType1
 		stm 	r14,r10,#esReference1
-		jsr 	#CheckRightBracket 			; right bracket
 		pop 	link
-		ret
-		;
-		;		Get one parameter, check legal sprite #, check if active. Return R1 = 0 if not in use
-		;		or address in R1
-		;
-._UHGetOneSprite
-		push 	r2,link		
-		jsr 	#EvaluateInteger
-		mov 	r1,r0,#0 					; put sprite number in R1
-		ldm 	r2,#spriteCount 			; check < sprite count
-		sub 	r0,r2,#0
-		sklt
-		jmp 	#BadNumberError 			; error if not.
-		;
-		mult 	r1,#spriteRecordSize 		; multiply by spriterecord size and add address
-		ldm 	r0,#spriteAddress
-		add 	r1,r0,#0
-		ldm 	r0,r1,#spStatus				; read status, exit if zero
-		sknz 	r0 							; if zero clear R1 as its not in use
-		clr 	r1
-._UHGOSExit
-		pop 	r2,link	
 		ret
