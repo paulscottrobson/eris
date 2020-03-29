@@ -65,6 +65,7 @@
 		skz 	r0
 		jsr 	#Command_New 				; New program if not
 
+		jsr 	#OSResetAllChannels			; silence boot beep
 		mov 	r0,#2						; load program to program code address
 		ldm 	r2,#programCode
 		jsr 	#OSFileOperation
