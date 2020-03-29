@@ -51,6 +51,9 @@
 
 .OSReadJoystick
 		jmp 	#OSXReadJoystick
+	
+.OSDefineFKey
+		jmp 	#OSXDefineFKey		
 		
 ; *****************************************************************************
 ;

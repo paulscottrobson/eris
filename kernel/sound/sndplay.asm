@@ -29,7 +29,6 @@
 .OSXSoundPlay
 		push	r1,r2,r3,r4,link
 
-
 		mov 	r4,r0,#0 					; check the channel #
 		sub 	r4,#sndChannels
 		sklt
@@ -42,6 +41,8 @@
 		;
 		ror 	r2,#6 						; divide the pitch divisor value by 64 unsigned.
 		and 	r2,#$03FF 					; as we fit it into 10 bits.
+		sknz 	r0 							; if channel zero
+		mov 	r2,#15 						; ignore the pitch parameter as it doesn't work.
 		;
 		and 	r1,#31 						; throw anything else away.
 		ror 	r1,#6 						; rotate the time right by 6 (left by 10)
