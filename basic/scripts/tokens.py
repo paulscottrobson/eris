@@ -180,11 +180,12 @@ class Tokens(object):
 //
 [Cmd]
 	' 		:		? 		
-	after 	assert 	blit 	call 	clear 	cls 	crunch 	cursor	dim 	dir 	
-	draw	ellipse	else 	end 	every	fkey	flip	frame 	gosub 	goto 	
-	ink 	input 	let 	line	list 	load 	local 	mon		move	new 	
-	old		palette	paper	plot 	poke 	print 	rect 	rem 	renum	return 	
-	run 	save 	screen	slide	sound	sprite 	stop 	sys 	wait
+	after 	assert 	blit 	call 	clear 	cls 	crunch 	cursor	curve	dim 	
+	dir 	draw	ellipse	else 	end 	every	fkey	flip	frame 	gosub 	
+	goto 	ink 	input 	let 	line	list 	load 	local 	mon		move	
+	new 	old		palette	paper	plot 	poke 	print 	rect 	rem 	renum	
+	return 	run 	save 	screen	slide	sound	sprite 	stop 	sys 	tilemap	
+	wait
 	
 """
 
