@@ -20,18 +20,63 @@
 .Unary_Val2		;; [to.number(]
 		push 	link
 		jsr 	#EvaluateString 			; get string into R0.
+		jsr 	#ValStrGetBase 				; optional base default 10
 		jsr 	#CheckRightBracket 			; check there's a right bracket
 		;
-		mov 	r1,#10 						; base 10
 		jsr 	#CompactStringToInteger		; convert to integer
 		skz 	r1 							; error
 		jmp 	#BadNumberError
 		;
+._ValExit		
 		stm 	r0,r10,#esValue1 			; save value
 		stm 	r14,r10,#esType1 			; it's an integer constant
 		stm	 	r14,r10,#esReference1
 		;
 		pop 	link
+		ret
+
+; *****************************************************************************
+;
+;					Check if number, similar code to val()
+;
+; *****************************************************************************
+
+.Unary_IsNumber 	;; [is.number(]
+		push 	link
+		jsr 	#EvaluateString 			; get string into R0.
+		jsr 	#ValStrGetBase 				; optional base default 10
+		jsr 	#CheckRightBracket 			; check there's a right bracket
+		;
+		jsr 	#CompactStringToInteger		; convert to integer
+		clr 	r0
+		sknz 	r1 							; zero if error
+		mov 	r0,#-1
+		jmp 	#_ValExit
+
+; *****************************************************************************
+;
+;		Support function which returns base in R1 10 or n if ,n in tokens
+;
+; *****************************************************************************
+
+.ValStrGetBase
+		push	r0,link
+		ldm 	r0,r11,#0 					; check comma
+		xor 	r0,#TOK_COMMA
+		mov 	r1,#10 						; 10 if nothing
+		skz 	r0
+		jmp 	#_VSGBExit		
+		inc 	r11 						; skip comma
+		jsr 	#EvaluateInteger 			; get the base
+		mov 	r1,r0,#0 
+		sub 	r0,#2 						; range 2..17
+		skge
+		jmp 	#BadNumberError
+		sub 	r0,#15
+		sklt 	
+		jmp 	#BadNumberError
+._VSGBExit
+		pop 	r0,link
 		ret
 
 ; *****************************************************************************
@@ -131,8 +176,13 @@
 .Unary_Str2		;; [to.string$(]
 		push 	link
 		jsr 	#EvaluateInteger 			; get integer into R0.
+		jsr 	#ValStrGetBase 				; optional base default 10
 		jsr 	#CheckRightBracket 			; check there's a right bracket
-		mov 	r1,#$800A 					; convert to signed integer string
+
+		mov 	r2,r1,#0 					; if base 10 print as signed
+		xor 	r2,#10
+		sknz 	r2
+		add 	r1,#$8000 					
 		jsr 	#OSIntToStr
 		;
 		mov 	r1,r0,#0 					; source to copy in R1 - copy so str$(x)+str$(x) works :)
@@ -205,3 +255,5 @@
 ._UCaseExit
 		pop 	link
 		ret
+
+		

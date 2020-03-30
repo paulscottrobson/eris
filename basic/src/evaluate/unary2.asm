@@ -109,3 +109,37 @@
 		;
 		pop 	link
 		ret
+
+; *****************************************************************************
+;
+;								Key press check
+;
+; *****************************************************************************
+
+.Unary_Key 	;; [key(]
+		push 	link
+		jsr 	#EvaluateInteger 			; key to check.
+		jsr 	#CheckRightBracket 
+
+		mov 	r1,r0,#0 					; R1 is rotation of $8000 for the row on diagram
+		ror 	r1,#4
+		and 	r1,#15
+		xor 	r1,#15
+
+		and 	r0,#15 						; R0 is rotation of $8000 for the col on diagram
+		xor 	r0,#15
+
+		mov 	r2,#$8000 					; put the bit to write out in R2, the mask in R3
+		mov 	r3,r2,#0
+		ror 	r2,r1,#0
+		ror 	r3,r0,#0
+
+		stm 	r2,#keyboardPort 			; read the keyboard
+		ldm 	r0,#keyboardPort
+		and 	r0,r3,#0 					; check if pressed
+		skz 	r0
+		mov 	r0,#-1 						; return -1
+		stm 	r0,r10,#esValue1 			; set return value in R0, type already int val.
+		pop 	link
+		ret
+
