@@ -116,11 +116,11 @@
 	word	Command_Cls              ; $3c6f CLS
 	word	Dummy8                   ; $3c70 CRUNCH
 	word	Command_Cursor           ; $3c71 CURSOR
-	word	SyntaxError              ; $3c72 CURVE
+	word	Command_Curve            ; $3c72 CURVE
 	word	Command_DIM              ; $3c73 DIM
 	word	Command_Dir              ; $3c74 DIR
 	word	Dummy109                 ; $3c75 DRAW
-	word	Dummy201                 ; $3c76 ELLIPSE
+	word	Command_Ellipse          ; $3c76 ELLIPSE
 	word	Command_ELSE             ; $3c77 ELSE
 	word	Command_End              ; $3c78 END
 	word	Dummy203                 ; $3c79 EVERY

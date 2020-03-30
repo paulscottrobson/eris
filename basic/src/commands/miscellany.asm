@@ -199,7 +199,6 @@
 .Dummy22 		;; [stm]
 .Dummy23 		;; [sub]
 
-.Dummy201 		;; [ellipse]
 .Dummy202 		;; [after]
 .Dummy203 		;; [every]
 .Dummy204 		;; [mon]

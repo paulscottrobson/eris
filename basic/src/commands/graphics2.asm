@@ -51,6 +51,20 @@
 		pop 	link
 		ret
 
+.Command_Ellipse ;; [ellipse]
+		push 	link
+		jsr 	#GetCoordinatePair	
+		jsr 	#OSFillEllipse
+		pop 	link
+		ret		
+
+.Command_Curve ;; [curve]
+		push 	link
+		jsr 	#GetCoordinatePair	
+		jsr 	#OSDrawEllipse
+		pop 	link
+		ret		
+
 ; *****************************************************************************
 ;
 ;					  	Get a coordinate pair in R0,R1

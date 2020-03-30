@@ -100,6 +100,12 @@
 .OSFillRectangle
 		jmp 	#OSXFillRectangle
 		
+.OSDrawEllipse
+		jmp 	#OSXDrawEllipse
+
+.OSFillEllipse
+		jmp 	#OSXFillEllipse
+
 ; *****************************************************************************
 ;
 ;								Sprite Group
