@@ -43,12 +43,14 @@
 .OSXSpriteMove
 		push 	r2 							; save temp register
 		;
-		mov 	r2,r0,#8					; -8 ... width + 8
-		sub 	r2,#pixelWidth+16
+		mov 	r2,r0,#0					; -32 ... width + 32
+		add 	r2,#32
+		sub 	r2,#pixelWidth+64
 		sklt
 		jmp 	#_OSXSMFail
-		mov 	r2,r1,#8 					; -8 ... height + 8
-		sub 	r2,#pixelHeight+16
+		mov 	r2,r1,#0 					; -32 ... height + 32
+		add 	r2,#32
+		sub 	r2,#pixelHeight+64
 		sklt
 		jmp 	#_OSXSMFail
 		;
@@ -104,6 +106,31 @@
 		clr 	r0 							; exit with zero.
 		skz 	r0
 ._OSXSSOFail
+		mov 	r0,#1
+		pop 	r1,link
+		ret
+
+; *****************************************************************************
+;
+;								Set size to 1-2
+;
+; *****************************************************************************
+
+.OSXSpriteSetSize
+		push 	r1,link
+		dec 	r0 							; now 0-1
+		mov 	r1,r0,#0 					; size-1 -> R1
+		and 	r0,#$FFFE 					; exit if 0 or 1
+		skz 	r0
+		jmp 	#_OSXSSSFail 				; set size fail.
+
+		ror 	r1,#4 						; put into bit 12
+		mov 	r0,#$EFFF 					; mask
+		jsr 	#OSIUpdateStatus
+
+		clr 	r0 							; exit with zero.
+		skz 	r0
+._OSXSSSFail
 		mov 	r0,#1
 		pop 	r1,link
 		ret

@@ -137,12 +137,15 @@ void BlitterWrite(BYTE8 port,WORD16 data) {
 
 static void BlitterCommand(WORD16 cmd) {
 	for (int row = 0;row < (cmd & 0xFF);row++) { 						// Do this many rows.
-		if (blitterY < DHEIGHT) {										// Legitimate row ?
-			WORD16 address = (cmd & 0x2000) ? 							// Calculate source address
-									(blitterData ^ 0x0F):blitterData;
-			blitterRow(cmd,CPUReadMemory(address));						// Do one row of pixels.									
+		int count = (cmd & 0x1000) ? 2 : 1;								// Number of rows
+		while (count-- > 0) {
+			if (blitterY < DHEIGHT) {									// Legitimate row ?
+				WORD16 address = (cmd & 0x2000) ? 						// Calculate source address
+										(blitterData ^ 0x0F):blitterData;
+				blitterRow(cmd,CPUReadMemory(address));					// Do one row of pixels.									
+			}										
+			blitterY++;													// Always increment Y
 		}
-		blitterY++;														// Always increment Y
 		if ((cmd & 0x8000) == 0) blitterData++;							// Default is to increment data
 	}
 }
@@ -154,10 +157,12 @@ static void BlitterCommand(WORD16 cmd) {
 // ****************************************************************************
 
 static void blitterRow(WORD16 cmd,WORD16 pixels) {
-	if (blitterX >= DWIDTH && blitterX <= 0xFFF0) return; 				// Cannot be drawn.
+	if (blitterX >= DWIDTH && blitterX <= 0xFFE0) return; 				// Cannot be drawn.
 
-	for (int n = 0;n < 16;n++) { 										// Work through the pixel.
-		WORD16 x = blitterX+n;											// Calculate horizontal pos
+	WORD16 x = blitterX;												// horizontal pos
+	int count = (cmd & 0x1000) ? 2 : 1;									// Number of rows
+
+	for (int n = 0;n < 16*count;n++) { 									// Work through the pixel.
 		WORD16 isSet = (cmd & 0x4000) ? (pixels & 0x0001) 				// Is the pixel set ?
 									  : (pixels & 0x8000);
 		if ((isSet || (cmd & 0x0800) != 0) && (x < DWIDTH)) { 			// If set or writing background.
@@ -173,6 +178,8 @@ static void blitterRow(WORD16 cmd,WORD16 pixels) {
 				}
 			}
 		}
-		pixels = (cmd & 0x4000) ? (pixels >> 1) : (pixels << 1);		// Shift pixels
+		x++;
+		if (count == 1 || (n & 1) != 0)									// if scale 1 or odd column
+			pixels = (cmd & 0x4000) ? (pixels >> 1) : (pixels << 1);	// Shift pixels
 	}
 }

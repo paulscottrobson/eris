@@ -181,24 +181,30 @@
 		mov 	r3,r0,#0 					; colour into R3
 		mov 	r0,#1 						; return value if offscreen
 		;
-		ldm 	r2,r1,#spX 					; must be -8 .. 328 and -8 .. 248
-		add 	r2,#8 						; as orientated on centre
-		sub 	r2,#pixelWidth+16
+		ldm 	r2,r1,#spX 					; must be -32 .. 320+32 and -32 .. 240+32
+		add 	r2,#32 						; as orientated on centre
+		sub 	r2,#pixelWidth+64
 		sklt
 		jmp 	#_SDExit
 		ldm		r2,r1,#spY
-		add 	r2,#8
-		sub 	r2,#pixelHeight+16
+		add 	r2,#32
+		sub 	r2,#pixelHeight+64
 		sklt
 		jmp 	#_SDExit
+		;
+		ldm 	r2,r1,#spStatus 			; get status bit
+		ror 	r2,#13 						; size bit in MSB
+		mov 	r0,#8 						; radius of normal sprite
+		skp 	r2
+		add 	r0,r0,#0					; radius of double size sprite
 		;
 		jsr 	#OSWaitBlitter 				; wait for blitter
 		;
 		ldm 	r2,r1,#spX 					; set X and Y positions allowing for offset
-		sub 	r2,#8 
+		sub 	r2,r0,#0
 		stm 	r2,#blitterX
 		ldm 	r2,r1,#spY 
-		sub 	r2,#8
+		sub 	r2,r0,#0
 		stm 	r2,#blitterY
 		;
 		ldm 	r0,r1,#spStatus 			; get the graphic to draw
@@ -216,7 +222,7 @@
 		stm 	r0,#blitterCMask
 		;
 		ldm 	r0,r1,#spStatus 			; get status bits
-		and 	r0,#$6000 					; get flip bits
+		and 	r0,#$7000 					; get flip bits and size bits
 		add 	r0,#$10 					; 16 rows to draw
 		stm 	r0,#blitterCmd
 

@@ -63,6 +63,9 @@
 		xor 	r0,#TOK_FLIP^TOK_INK 		; sprite set flip
 		sknz 	r0
 		jmp 	#_CSpriteFlip
+		xor 	r0,#TOK_FLIP^TOK_DIM 		; sprite set size.
+		sknz 	r0
+		jmp 	#_CSpriteDim
 		jmp 	#SyntaxError
 		;
 		;		MOVE x,y
@@ -106,12 +109,20 @@
 		jsr 	#EvaluateInteger
 		jsr 	#OSSpriteSetOrientation
 		jmp 	#_CSpriteCheckExit
+		;
+		;		DIM n
+		;
+._CSpriteDim		
+		jsr 	#EvaluateInteger
+		jsr 	#OSSpriteSetSize
+		jmp 	#_CSpriteCheckExit
 
-;SPRITE LOAD "" 			- load sprite data
+;SPRITE LOAD "" 		- load sprite data
 ;SPRITE 1 TO x,y 		- move sprite
 ;SPRITE 1 DRAW 12 		- set graphic #
-;SPRITE 1 INK 4 			- set colour #
+;SPRITE 1 INK 4 		- set colour #
 ;SPRITE 1 FLIP n 		- set sprite flip bits
+;SPRITE 1 DIM n 		- set size 1/2
 
 ; *****************************************************************************
 ;

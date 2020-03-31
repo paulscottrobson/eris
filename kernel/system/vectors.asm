@@ -130,6 +130,9 @@
 .OSSpriteSetOrientation
 		jmp 	#OSXSpriteSetOrientation
 
+.OSSpriteSetSize
+		jmp 	#OSXSpriteSetSize
+
 .OSSpriteCollision
 		jmp 	#OSXSpriteCollision	
 
