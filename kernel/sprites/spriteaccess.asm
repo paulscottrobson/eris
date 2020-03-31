@@ -144,7 +144,7 @@
 		push 	r2,r3
 		ldm 	r2,#spriteSelect 			; currently selected sprite
 		ldm 	r3,r2,#spNewStatus 			; has the new status changed, e.g. new value set.
-		xor 	r3,#$1000
+		xor 	r3,#spNoChange
 		skz 	r3  						; if R3 is zero copy the old status to the new
 		jmp 	#_OSIUSChanged 				; one as a basis.
 		ldm 	r3,r2,#spStatus

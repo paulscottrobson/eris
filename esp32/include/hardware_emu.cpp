@@ -14,6 +14,7 @@
 #include "gfxkeys.h"
 #include <stdio.h>
 #include <sys/types.h>
+#include <sys/stat.h>
 #include <dirent.h>
 
 #include <stdlib.h>
@@ -89,6 +90,7 @@ void HWWriteAudio(BYTE8 channel,WORD16 freq) {
 WORD16 HWFileExists(char *fileName) {
 	char fullName[128];
 	if (fileName[0] == 0) return 0;
+	mkdir("storage", S_IRWXU);
 	sprintf(fullName,"%sstorage%c%s",SDL_GetBasePath(),FILESEP,fileName);
 	FILE *f = fopen(fullName,"rb");
 	if (f != NULL) fclose(f);
@@ -102,6 +104,7 @@ WORD16 HWFileExists(char *fileName) {
 WORD16 HWLoadFile(char * fileName,WORD16 override) {
 	char fullName[128];
 	if (fileName[0] == 0) return 1;
+	mkdir("storage", S_IRWXU);
 	sprintf(fullName,"%sstorage%c%s",SDL_GetBasePath(),FILESEP,fileName);
 	FILE *f = fopen(fullName,"rb");
 	if (f != NULL) {
@@ -126,6 +129,7 @@ WORD16 HWLoadFile(char * fileName,WORD16 override) {
 
 WORD16 HWSaveFile(char *fileName,WORD16 start,WORD16 size) {
 	char fullName[128];
+	mkdir("storage", S_IRWXU);
 	sprintf(fullName,"%sstorage%c%s",SDL_GetBasePath(),FILESEP,fileName);
 	FILE *f = fopen(fullName,"wb");
 	if (f != NULL) {
@@ -151,6 +155,7 @@ void HWLoadDirectory(WORD16 target) {
 	DIR *dp;
 	struct dirent *ep;
 	char fullName[128];
+	mkdir("storage", S_IRWXU);
 	sprintf(fullName,"%sstorage",SDL_GetBasePath());
 	dp = opendir(fullName);
 	if (dp != NULL) {

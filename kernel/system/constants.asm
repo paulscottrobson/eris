@@ -98,6 +98,8 @@ spStatus = 2
 spNewX = 3									; New values
 spNewY = 4
 spNewStatus = 5
+
+spNoChange = $0800 							; value in new values indicating unchanged.
 ;
 ;		Sound constants
 ;

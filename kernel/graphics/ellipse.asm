@@ -165,6 +165,14 @@
 		mov 	r2,r4,#0 					; R2 = XC+X
 		stm 	r2,#xGraphic 				; set the 'last place'
 		stm 	r3,#yGraphic
+		skp 	r0
+		clr 	r0
+		skp 	r1
+		clr 	r1
+		skp 	r2
+		clr 	r2
+		skp 	r3
+		clr 	r3
 		jsr 	#OSFillRectangle 			; this is quicker than calling line which calls it anyway
 		pop 	r0,r1,r2,r3,r4,r5,link
 		ret
@@ -185,9 +193,13 @@
 		jsr 	#OSWaitBlitter
 		mov 	r10,r5,#0 					; set blitterX to XC+X
 		add 	r10,r0,#0
+		skp 	r10
+		clr 	r10
 		stm 	r10,#blitterX
 		mov 	r10,r6,#0 					; set blitterY to YC+Y
 		add 	r10,r1,#0
+		skp 	r10
+		clr 	r10
 		stm 	r10,#blitterY
 		mov 	r10,#_OSXEllipsePixel 		; set ellipse pixel 
 		stm 	r10,#blitterData

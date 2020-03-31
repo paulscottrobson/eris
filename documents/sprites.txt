@@ -5,12 +5,13 @@ current Status (if 0 sprite is not operational)
 	bit 15 : 	set if needs redrawing
 	bit 14 : 	horizontal flip
 	bit 13 : 	vertical flip
-	bit 12 : 	check test
-	bit 8..11 : colour
+	bit 12 : 	reserved zero
+	bit 11 : 	check test
+	bit 8..10 : colour
 	bit 0..7 : 	sprite graphic #
 
 new X,Y,Status
-	these are set to $1000 when no change is made. When one is updated
+	these are set to $0800 when no change is made. When one is updated
 	they are copied to current (except the redraw bit 15)
 	the test is to add them together and get $3000. Very weird values
 	could fail an update test once in a blue moon
@@ -38,7 +39,7 @@ Sprite Repaint (if enabled)
 					(don't bother if it is already marked for redrawing)
 				-	If it does, set the redraw bit but we don't have to erase it if
 					it doesn't change.
-			- 	Copy the new X/Y/Status over as appropriate (e.g. if not $1000)					
+			- 	Copy the new X/Y/Status over as appropriate (e.g. if not $0800)					
 				making sure the redraw bit is set whether you copy or not.
 				(technically wastes a repaint if moving off screen)
 
@@ -49,6 +50,6 @@ Sprite Repaint (if enabled)
 
 3) Completion Phase		
 
-	Clear all repaint bits and reset all new values to $1000.
+	Clear all repaint bits and reset all new values to $0800.
 
 	

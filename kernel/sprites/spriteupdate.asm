@@ -45,7 +45,7 @@
 		ldm 	r3,r1,#spNewY
 		add 	r0,r3,#0 					; and them together. If the result is changed.
 		add 	r0,r4,#0
-		xor 	r0,#$3000 					; will be zero if $3000
+		xor 	r0,#spNoChange*3 			; will be zero if 3 lots of unchanged.
 		sknz 	r0
 		jmp 	#_SP1Next
 		;
@@ -63,20 +63,20 @@
 ._SP1Update
 		ldm 	r3,r1,#spNewX 				; update X
 		mov 	r4,r3,#0
-		xor 	r4,#$1000
+		xor 	r4,#spNoChange
 		skz 	r4
 		stm 	r3,r1,#spX
 
 		ldm 	r3,r1,#spNewY 				; update Y
 		mov 	r4,r3,#0
-		xor 	r4,#$1000
+		xor 	r4,#spNoChange
 		skz 	r4
 		stm 	r3,r1,#spY
 
 		ldm 	r3,r1,#spNewStatus 			; update Status - sets redraw bit.
 		mov 	r4,r3,#0
-		xor 	r4,#$1000
-		sknz 	r4 							; we get the old value if it was $1000
+		xor 	r4,#spNoChange
+		sknz 	r4 							; we get the old value if it was spNoChange
 		ldm 	r3,r1,#spStatus 			; because we set it anyway.
 		skm 	r3 							; already set, no set it and write back
 		add 	r3,#$8000

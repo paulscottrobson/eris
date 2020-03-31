@@ -79,14 +79,14 @@
 ;
 ._OSXSCCheck
 		ldm 	r3,r0,#spNewX				; new R0.X in R3
-		mov 	r5,r3,#0 					; if it is &1000 e.g. no change
-		xor 	r5,#$1000
+		mov 	r5,r3,#0 					; if it is spNoChange e.g. no change
+		xor 	r5,#spNoChange
 		sknz 	r5
 		ldm 	r3,r0,#spX 					; load in the changed value
 
 		ldm 	r4,r1,#spNewX				; new R1.X in R3
-		mov 	r5,r4,#0 					; if it is &1000 e.g. no change
-		xor 	r5,#$1000
+		mov 	r5,r4,#0 					; if it is spNoChange e.g. no change
+		xor 	r5,#spNoChange
 		sknz 	r5
 		ldm 	r4,r1,#spX 					; load in the changed value
 
