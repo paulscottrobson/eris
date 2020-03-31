@@ -19,7 +19,7 @@ for pass = 0 to 1
 		stm 	r3,#&FF20:stm r4,#&FF21
 		mov 	r0,#sysvar(3):stm r0,#&FF22
 		mov 	r0,r3,#0:and r0,#3:add r0,#&0F01:stm r0,#&FF23
-		mov 	r0,#&1010:stm r0,#&FF24
+		mov 	r0,#&0810:stm r0,#&FF24
 		add 	r3,#16
 		mov 	r0,r3,#0:sub r0,#300:skge:jmp #loop1
 		add 	r4,#16

@@ -10,6 +10,7 @@ python tables.py
 #
 #python makeprogram.py source/sed.bas prg/autoexec.prg
 python makeprogram.py source/sed.bas prg/sed
+python makeprogram.py source/bgr.bas prg/bgr.prg
 python makeprogram.py source/test.bas prg/autoexec.prg
 python makeprogram.py source/sprites.bas prg/sprites.prg
 python makeprogram.py source/spritecoll.bas prg/spritecoll.prg

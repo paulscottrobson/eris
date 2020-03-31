@@ -160,7 +160,7 @@ static void blitterRow(WORD16 cmd,WORD16 pixels) {
 		WORD16 x = blitterX+n;											// Calculate horizontal pos
 		WORD16 isSet = (cmd & 0x4000) ? (pixels & 0x0001) 				// Is the pixel set ?
 									  : (pixels & 0x8000);
-		if ((isSet || (cmd & 0x1000) != 0) && (x < DWIDTH)) { 			// If set or writing background.
+		if ((isSet || (cmd & 0x0800) != 0) && (x < DWIDTH)) { 			// If set or writing background.
 			BYTE8 update = isSet ? (blitterColour & blitterMask) : 0;	// Value to update.
 			BYTE8 current = BlitterReadvRAM(x,blitterY);				// Current value
 			BYTE8 newVal = (current & (~blitterMask)) | update; 		// Set the bits masked.
