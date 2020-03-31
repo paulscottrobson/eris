@@ -184,7 +184,7 @@ class Tokens(object):
 	dir 	draw	ellipse	else 	end 	every	fkey	flip	frame 	gosub 	
 	goto 	ink 	input 	let 	line	list 	load 	local 	mon		move	
 	new 	old		palette	paper	plot 	poke 	print 	rect 	rem 	renum	
-	return 	run 	save 	screen	slide	sound	sprite 	stop 	sys 	tilemap	
+	return 	run 	save 	screen	slide	sound	sprite 	stop 	sys 	tile	
 	wait
 	
 """

@@ -157,5 +157,5 @@
 	word	Command_Sprite           ; $3c98 SPRITE
 	word	Command_Stop             ; $3c99 STOP
 	word	CommandSys               ; $3c9a SYS
-	word	SyntaxError              ; $3c9b TILEMAP
+	word	Command_Tile             ; $3c9b TILE
 	word	CommandWait              ; $3c9c WAIT

@@ -99,3 +99,45 @@
 		pop 	r2,link
 		ret
 		
+; *****************************************************************************
+;
+;								TILE command
+;
+; *****************************************************************************
+
+.Command_Tile 	;; [tile]
+		push 	link
+		jsr 	#EvaluateInteger 			; xdraw
+		mov 	r7,r0,#0
+		jsr 	#CheckComma
+		jsr 	#EvaluateInteger 			; ydraw
+		mov 	r1,r0,#0
+		jsr 	#CheckComma
+		jsr 	#EvaluateInteger 			; xoffset
+		mov 	r2,r0,#0
+		jsr 	#CheckComma
+		jsr 	#EvaluateInteger			; yoffset
+		mov 	r3,r0,#0
+		jsr 	#CheckComma
+		jsr 	#EvaluateInteger 			; xsize
+		mov 	r4,r0,#0
+		jsr 	#CheckComma
+		jsr 	#EvaluateInteger 			; ysize
+		mov 	r5,r0,#0
+		jsr 	#CheckComma
+		jsr 	#EvaluateInteger 			; data pointer.
+		mov 	r6,r0,#0
+		mov 	r0,r7,#0
+
+		ldm 	r7,r6,#0 					; check it is a tilemap
+		xor 	r7,#$ABCD
+		skz 	r7
+		jmp 	#BadNumberError
+
+		jsr 	#OSDrawTileMap
+		
+		pop 	link
+		ret
+
+
+		pop 	link

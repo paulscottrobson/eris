@@ -38,51 +38,54 @@ void DBGXRender(int *address,int showDisplay) {
 
 	int n = 0;
 	char buffer[32];
-	CPUSTATUS *s = CPUGetStatus();
-	BlitterGetStatus(s);
 
-	GFXSetCharacterSize(36,24);
-	DBGVerticalLabel(24,0,labels,DBGC_ADDRESS,-1);									// Draw the labels for the register
-	#define DN(v,w) GFXNumber(GRID(28,n++),v,16,w,GRIDSIZE,DBGC_DATA,-1)			// Helper macro
-	DN(s->pc,4);DN(s->carry,1);
-	DN(s->blitterX,4);DN(s->blitterY,4);DN(s->blitterData,4);
-	DN(s->blitterMask,2);DN(s->blitterColour,2);
-	DN(s->cycles,4);
-	DN(HWGetSystemClock(),4);
-	DN(address[3],4);
+	if (!showDisplay) {
+		CPUSTATUS *s = CPUGetStatus();
+		BlitterGetStatus(s);
 
-	for (int n = 0;n < 16;n++) {
-		sprintf(buffer,"R%d",n);
-		GFXString(GRID(36,n),buffer,GRIDSIZE,DBGC_ADDRESS,-1);
-		GFXNumber(GRID(40,n),s->r[n],16,4,GRIDSIZE,DBGC_DATA,-1);
-	}
-	int a = address[1];																// Dump Memory.
-	for (int row = 17;row < 23;row++) {
-		GFXNumber(GRID(0,row),a,16,4,GRIDSIZE,DBGC_ADDRESS,-1);
-		for (int col = 0;col < 8;col++) {
-			GFXNumber(GRID(5+col*5,row),CPUReadMemory(a),16,4,GRIDSIZE,DBGC_DATA,-1);
-			a = (a + 1) & 0xFFFF;
-		}		
-	}
+		GFXSetCharacterSize(36,24);
+		DBGVerticalLabel(24,0,labels,DBGC_ADDRESS,-1);									// Draw the labels for the register
+		#define DN(v,w) GFXNumber(GRID(28,n++),v,16,w,GRIDSIZE,DBGC_DATA,-1)			// Helper macro
+		DN(s->pc,4);DN(s->carry,1);
+		DN(s->blitterX,4);DN(s->blitterY,4);DN(s->blitterData,4);
+		DN(s->blitterMask,2);DN(s->blitterColour,2);
+		DN(s->cycles,4);
+		DN(HWGetSystemClock(),4);
+		DN(address[3],4);
 
-	int p = address[0];																// Dump program code. 
-	int opc;
-
-	for (int row = 0;row < 16;row++) {
-		int isPC = (p == ((s->pc) & 0xFFFF));										// Tests.
-		int isBrk = (p == address[3]);
-		GFXNumber(GRID(0,row),p,16,4,
-				  GRIDSIZE,isPC ? DBGC_HIGHLIGHT:DBGC_ADDRESS,	
-				  isBrk ? 0xF00 : -1);
-		int n = CPUReadMemory(p++);
-		sprintf(buffer,"%s r%d,r%d,#%d",opCodes[n >> 12],(n >> 8) & 15,(n >> 4) & 15,n & 15);
-		if ((n & 0x00F0) == 0x00F0) {
-			sprintf(buffer,"%s r%d,#$%04x",opCodes[n >> 12],(n >> 8) & 15,CPUReadMemory(p++));
+		for (int n = 0;n < 16;n++) {
+			sprintf(buffer,"R%d",n);
+			GFXString(GRID(36,n),buffer,GRIDSIZE,DBGC_ADDRESS,-1);
+			GFXNumber(GRID(40,n),s->r[n],16,4,GRIDSIZE,DBGC_DATA,-1);
 		}
-		if (n == 0) strcpy(buffer,"break");
-		GFXString(GRID(5,row),buffer,
-				  GRIDSIZE,isPC ? DBGC_HIGHLIGHT:DBGC_DATA,	
-				  isBrk ? 0xF00 : -1);
+		int a = address[1];																// Dump Memory.
+		for (int row = 17;row < 23;row++) {
+			GFXNumber(GRID(0,row),a,16,4,GRIDSIZE,DBGC_ADDRESS,-1);
+			for (int col = 0;col < 8;col++) {
+				GFXNumber(GRID(5+col*5,row),CPUReadMemory(a),16,4,GRIDSIZE,DBGC_DATA,-1);
+				a = (a + 1) & 0xFFFF;
+			}		
+		}
+
+		int p = address[0];																// Dump program code. 
+		int opc;
+
+		for (int row = 0;row < 16;row++) {
+			int isPC = (p == ((s->pc) & 0xFFFF));										// Tests.
+			int isBrk = (p == address[3]);
+			GFXNumber(GRID(0,row),p,16,4,
+					  GRIDSIZE,isPC ? DBGC_HIGHLIGHT:DBGC_ADDRESS,	
+					  isBrk ? 0xF00 : -1);
+			int n = CPUReadMemory(p++);
+			sprintf(buffer,"%s r%d,r%d,#%d",opCodes[n >> 12],(n >> 8) & 15,(n >> 4) & 15,n & 15);
+			if ((n & 0x00F0) == 0x00F0) {
+				sprintf(buffer,"%s r%d,#$%04x",opCodes[n >> 12],(n >> 8) & 15,CPUReadMemory(p++));
+			}
+			if (n == 0) strcpy(buffer,"break");
+			GFXString(GRID(5,row),buffer,
+					  GRIDSIZE,isPC ? DBGC_HIGHLIGHT:DBGC_DATA,	
+					  isBrk ? 0xF00 : -1);
+		}
 	}
 
 	#define CMAP(x,s) ((((x) & 1) ? 0xF:0x0) << (s))

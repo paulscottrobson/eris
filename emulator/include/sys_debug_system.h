@@ -16,9 +16,9 @@
 #include "sys_processor.h"
 
 #define WIN_TITLE 		"Eris Emulator"									// Initial Window stuff
-#define WIN_WIDTH		(46*8*4)
+#define WIN_WIDTH		(42*8*4)
 #define WIN_HEIGHT		(28*8*4)
-#define WIN_BACKCOLOUR	0x004
+#define WIN_BACKCOLOUR	0x008
 
 // ****************************************************************************
 //							These functions need to be implemented by the dependent debugger.

@@ -1,10 +1,18 @@
 cls
-sprite load "sprites.dat"
+xSize = 12
+ySize = 8
+map = alloc(xSize*ySize+4)
 
-sprite 0 to 50,100 ink 3 draw 1
-sprite 1 to 150,100 ink 3 draw 1 dim 2
-
-ink 4
-line 50,50 to 50,200
-line 150,50 to 150,200
-line 0,100 to 319,100
+!map = &ABCD
+map!1 = 16
+map!2 = xSize
+map!3 = ySize
+for x = 0 to xSize-1
+	for y = 0 to ySize-1
+		map!(x+y*xSize+4) = (x mod 3)+x/3*256
+	next y
+next x
+print str$(map,16)
+tile 32,32,0,0,6,4,map
+ink 5
+frame 32,32 to 32+6*16,32+4*16

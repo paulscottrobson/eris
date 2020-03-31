@@ -136,6 +136,9 @@
 .OSSpriteCollision
 		jmp 	#OSXSpriteCollision	
 
+.OSDrawTileMap
+		jmp 	#OSXDrawTileMap
+		
 ; *****************************************************************************
 ;
 ;								Sound group

@@ -157,6 +157,6 @@
 	word	$0e03,$4293,$417a,$60dc          ; $3c98 SPRITE
 	word	$0e02,$4333,$628f                ; $3c99 STOP
 	word	$0e02,$43fb,$6013                ; $3c9a SYS
-	word	$0e04,$417c,$40d4,$4035,$6010    ; $3c9b TILEMAP
+	word	$0e02,$417c,$60d4                ; $3c9b TILE
 	word	$0e02,$403f,$6329                ; $3c9c WAIT
 	word	$0000
