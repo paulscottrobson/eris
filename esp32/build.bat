@@ -7,7 +7,7 @@ copy ..\emulator\bin\*.h include
 copy ..\emulator\framework\gfxkeys.h include
 copy ..\emulator\src\hardware_*.cpp include
 copy ..\emulator\cpu\*.h src\include
-del data\*.*
+del /Q data\*.*
 copy ..\emulator\storage\* data
 rem  === FabGL Library ===
 pio lib install 6143 	
