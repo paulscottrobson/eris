@@ -105,7 +105,7 @@ void DBGXRender(int *address,int showDisplay) {
 		for (int y = 0;y < DHEIGHT;y++) {
 			rp.x = rc.x;rp.y = rc.y + y * scale;
 			for (int x = 0;x < DWIDTH;x++) {
-				BYTE8 p = BlitterGetPixel(x,y);
+				BYTE8 p = HWGetPixel(x,y);
 				//p = (x >> 4) & 0x0F;
 				if (p != 0) {
 					GFXRectangle(&rp,colours[p & 0x3F]);

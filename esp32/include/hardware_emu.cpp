@@ -29,6 +29,8 @@
 #define MKSTORAGE()	mkdir("storage")
 #endif
 
+static BYTE8 displayRAM[DWIDTH*DHEIGHT];
+
 // ****************************************************************************
 //
 //							Key codes for the ports
@@ -66,11 +68,22 @@ int HWGetKeyboardRow(int row) {
 }
 
 // ****************************************************************************
+//								Get display Pixel
+// ****************************************************************************
+
+
+BYTE8 HWGetPixel(WORD16 x,WORD16 y) {
+	return displayRAM[x+y*DWIDTH];
+}
+
+
+
+// ****************************************************************************
 //							Set a display pixel
 // ****************************************************************************
 
 void HWWritePixel(WORD16 x,WORD16 y,BYTE8 colour) {
-	//printf("[%d %d] <- %d\n",x,y,colour);
+	displayRAM[x+y*DWIDTH] = colour;
 }
 
 // ****************************************************************************

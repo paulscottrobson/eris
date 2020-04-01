@@ -16,6 +16,7 @@
 
 static BYTE8 vRAM[DWIDTH*DHEIGHT/2];
 static BYTE8 paletteMap[16];
+static WORD16 blitterInvalid;
 static WORD16 blitterX,blitterY;
 static WORD16 blitterData;
 static BYTE8 blitterMask;
@@ -36,10 +37,10 @@ void BlitterInitialise(void) {
 	for (int i = 0;i < 16;i++) {
 		paletteMap[i] = (i == 0) ? 0 : 7;
 	}
+	blitterInvalid = 1;
 	for (int x = 0;x < DWIDTH;x++) {
 		for (int y = 0;y < DHEIGHT;y++) {
 			BlitterWritevRAM(x,y,0);
-			HWWritePixel(x,y,0);
 		}
 	}
 }
@@ -82,19 +83,6 @@ void BlitterGetStatus(CPUSTATUS *s) {
 
 // ****************************************************************************
 //
-//					 Read/Write Pixel at a given coordinate
-//							  Returns BBGGRR format
-//
-// ****************************************************************************
-
-
-BYTE8 BlitterGetPixel(WORD16 x,WORD16 y) {
-	return paletteMap[BlitterReadvRAM(x,y)];
-}
-
-
-// ****************************************************************************
-//
 //								Update the palette
 //
 // ****************************************************************************
@@ -102,6 +90,7 @@ BYTE8 BlitterGetPixel(WORD16 x,WORD16 y) {
 void HWWritePalette(BYTE8 port,WORD16 data) {
 	BYTE8 colour = (data >> 8) & 0x0F;
 	paletteMap[colour] = data & 7;
+	blitterInvalid = 1;
 	// printf("%d %d,%d,%d\n",colour,(data >> 4) & 3,(data >> 2) & 3,data & 3);
 }
 
@@ -112,6 +101,14 @@ void HWWritePalette(BYTE8 port,WORD16 data) {
 // ****************************************************************************
 
 void BlitterWrite(BYTE8 port,WORD16 data) {
+	if (blitterInvalid != 0) {
+		blitterInvalid = 0;
+		for (int x = 0;x < DWIDTH;x++) {
+			for (int y = 0;y < DHEIGHT;y++) {
+				HWWritePixel(x,y,paletteMap[BlitterReadvRAM(x,y)]);
+			}
+		}
+	}
 	switch (port & 7) {
 		case 0:
 			blitterX = data;break;
@@ -171,8 +168,8 @@ static void blitterRow(WORD16 cmd,WORD16 pixels) {
 			BYTE8 newVal = (current & (~blitterMask)) | update; 		// Set the bits masked.
 			if (current != newVal) { 									// Has it changed ?
 				BlitterWritevRAM(x,blitterY,newVal);					// Update it.
-				BYTE8 newPalette = paletteMap[newVal & 0x3F];			// What physical colours ?
-				BYTE8 oldPalette = paletteMap[current & 0x3F];
+				BYTE8 newPalette = paletteMap[newVal & 15];				// What physical colours ?
+				BYTE8 oldPalette = paletteMap[current & 15];
 				if (newPalette != oldPalette) {							// Update if physical colour changed
 					HWWritePixel(x,blitterY,newPalette);					
 				}
