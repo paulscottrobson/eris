@@ -1,15 +1,16 @@
 Tilemap Records
 ===============
 
-$ABCD 			tilemap marker and record word
-tile Size 		the tile size is n x n
-x size 			size in elements (total size = x*y+4)
-y size
++0 	$ABCD 			tilemap marker and record word
++1	tile Size 		the tile size is n x n (only 16 supported for now)
++2	x size 			size in elements (total size = x*y+5)
++3	y size
++4 	misc 			bits 0..2 background colour off grid
+
 1 word per element
-	0<flip>0 0bbbffff iiiiiiii
+	0<flip>00fff iiiiiiii
 
 	<flip> 		are the standard flip bits
-	<bbb>  		background colour. If non-zero colour bbb is drawn as a 16x16 solid block.
 	<ffff> 		foreground colour for blit.
 	<i..i>		image index
 
@@ -19,6 +20,3 @@ tile x,y,xp,yp,xs,ys,data
 	xp,yp 		pixel offset of top left.
 	xs,ys		number of tiles to draw in each direction
 	data 		point to tilemap record.	
-
-if goes past the beginning/end just draws black blocks ?	
-
