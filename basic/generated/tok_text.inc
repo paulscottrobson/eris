@@ -140,23 +140,24 @@
 	word	$0e02,$4265,$60de                ; $3c87 MOVE
 	word	$0e02,$40d6,$6017                ; $3c88 NEW
 	word	$0e02,$41ef,$6004                ; $3c89 OLD
-	word	$0e04,$4038,$40d4,$4334,$6005    ; $3c8a PALETTE
-	word	$0e03,$4038,$40d8,$6012          ; $3c8b PAPER
-	word	$0e02,$41f0,$632f                ; $3c8c PLOT
-	word	$0e02,$4268,$60d3                ; $3c8d POKE
-	word	$0e03,$42e0,$4239,$6014          ; $3c8e PRINT
-	word	$0e02,$40da,$6323                ; $3c8f RECT
-	word	$0e02,$40da,$600d                ; $3c90 REM
-	word	$0e03,$40da,$4356,$600d          ; $3c91 RENUM
-	word	$0e03,$40da,$435c,$6242          ; $3c92 RETURN
-	word	$0e02,$435a,$600e                ; $3c93 RUN
-	word	$0e02,$403b,$60de                ; $3c94 SAVE
-	word	$0e03,$408b,$40da,$6235          ; $3c95 SCREEN
-	word	$0e03,$41f3,$40a9,$6005          ; $3c96 SLIDE
-	word	$0e03,$426b,$4245,$6004          ; $3c97 SOUND
-	word	$0e03,$4293,$417a,$60dc          ; $3c98 SPRITE
-	word	$0e02,$4333,$628f                ; $3c99 STOP
-	word	$0e02,$43fb,$6013                ; $3c9a SYS
-	word	$0e02,$417c,$60d4                ; $3c9b TILE
-	word	$0e02,$403f,$6329                ; $3c9c WAIT
+	word	$0e01,$623f                      ; $3c8a ON
+	word	$0e04,$4038,$40d4,$4334,$6005    ; $3c8b PALETTE
+	word	$0e03,$4038,$40d8,$6012          ; $3c8c PAPER
+	word	$0e02,$41f0,$632f                ; $3c8d PLOT
+	word	$0e02,$4268,$60d3                ; $3c8e POKE
+	word	$0e03,$42e0,$4239,$6014          ; $3c8f PRINT
+	word	$0e02,$40da,$6323                ; $3c90 RECT
+	word	$0e02,$40da,$600d                ; $3c91 REM
+	word	$0e03,$40da,$4356,$600d          ; $3c92 RENUM
+	word	$0e03,$40da,$435c,$6242          ; $3c93 RETURN
+	word	$0e02,$435a,$600e                ; $3c94 RUN
+	word	$0e02,$403b,$60de                ; $3c95 SAVE
+	word	$0e03,$408b,$40da,$6235          ; $3c96 SCREEN
+	word	$0e03,$41f3,$40a9,$6005          ; $3c97 SLIDE
+	word	$0e03,$426b,$4245,$6004          ; $3c98 SOUND
+	word	$0e03,$4293,$417a,$60dc          ; $3c99 SPRITE
+	word	$0e02,$4333,$628f                ; $3c9a STOP
+	word	$0e02,$43fb,$6013                ; $3c9b SYS
+	word	$0e02,$417c,$60d4                ; $3c9c TILE
+	word	$0e02,$403f,$6329                ; $3c9d WAIT
 	word	$0000

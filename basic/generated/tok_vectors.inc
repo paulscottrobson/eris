@@ -140,22 +140,23 @@
 	word	Command_Move             ; $3c87 MOVE
 	word	Command_New              ; $3c88 NEW
 	word	Command_Old              ; $3c89 OLD
-	word	Command_Palette          ; $3c8a PALETTE
-	word	Command_Paper            ; $3c8b PAPER
-	word	Command_Plot             ; $3c8c PLOT
-	word	CommandPoke              ; $3c8d POKE
-	word	Command_Print            ; $3c8e PRINT
-	word	Command_Rect             ; $3c8f RECT
-	word	CommentCommand2          ; $3c90 REM
-	word	RenumberProgram          ; $3c91 RENUM
-	word	Command_RETURN           ; $3c92 RETURN
-	word	RunProgram               ; $3c93 RUN
-	word	Command_Save             ; $3c94 SAVE
-	word	Command_Screen           ; $3c95 SCREEN
-	word	Command_Slide            ; $3c96 SLIDE
-	word	Command_Sound            ; $3c97 SOUND
-	word	Command_Sprite           ; $3c98 SPRITE
-	word	Command_Stop             ; $3c99 STOP
-	word	CommandSys               ; $3c9a SYS
-	word	Command_Tile             ; $3c9b TILE
-	word	CommandWait              ; $3c9c WAIT
+	word	SyntaxError              ; $3c8a ON
+	word	Command_Palette          ; $3c8b PALETTE
+	word	Command_Paper            ; $3c8c PAPER
+	word	Command_Plot             ; $3c8d PLOT
+	word	CommandPoke              ; $3c8e POKE
+	word	Command_Print            ; $3c8f PRINT
+	word	Command_Rect             ; $3c90 RECT
+	word	CommentCommand2          ; $3c91 REM
+	word	RenumberProgram          ; $3c92 RENUM
+	word	Command_RETURN           ; $3c93 RETURN
+	word	RunProgram               ; $3c94 RUN
+	word	Command_Save             ; $3c95 SAVE
+	word	Command_Screen           ; $3c96 SCREEN
+	word	Command_Slide            ; $3c97 SLIDE
+	word	Command_Sound            ; $3c98 SOUND
+	word	Command_Sprite           ; $3c99 SPRITE
+	word	Command_Stop             ; $3c9a STOP
+	word	CommandSys               ; $3c9b SYS
+	word	Command_Tile             ; $3c9c TILE
+	word	CommandWait              ; $3c9d WAIT

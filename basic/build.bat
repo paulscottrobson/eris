@@ -15,6 +15,7 @@ python makeprogram.py source\bgr.bas prg\bgr.prg
 python makeprogram.py source\test.bas prg\autoexec.prg
 python makeprogram.py source\sprites.bas prg\sprites.prg
 python makeprogram.py source\spritecoll.bas prg\spritecoll.prg
+python makeprogram.py source\tilemap.bas prg\tilemap.prg
 
 copy prg\test.prg ..\..\emulator\bin >NUL
 copy prg\*.* ..\..\emulator\storage >NUL
