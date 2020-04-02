@@ -1,0 +1,25 @@
+#!/bin/bash
+set -e
+#
+#		Convert BASIC to programs
+#
+python ../basic/scripts/makeprogram.py squash.bas storage/squash.prg
+#
+#		cp one file (current working) as autoexec.prg
+#
+cp storage/squash.prg storage/autoexec.prg
+#
+#		cp current binary
+#
+cp ../emulator/eris .
+#
+#		Build graphics and cp to storage
+#
+pushd graphics
+python ../../basic/scripts/gfxconv.py
+cp *.spr ../storage
+popd
+#
+#		Run emulator
+#
+./eris

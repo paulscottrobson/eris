@@ -390,11 +390,11 @@ void Beeper::generateSamples(Sint16 *stream, int length)
     for (int n = 0;n < length;n++) stream[n] = 0;
     while (i < length) {
     	if (freq1 != 0) {
-    		stream[i] += AMPLITUDE * ((((int)v1*2/FREQUENCY) % 2) ? -1 : 1);
+    		stream[i] += AMPLITUDE * ((((int)(v1*2/FREQUENCY)) % 2) ? -1 : 1);
     	    v1 += freq1;
         }
     	if (freq2 != 0) {
-    		stream[i] += AMPLITUDE * ((((int)v2*2/FREQUENCY) % 2) ? -1 : 1);
+    		stream[i] += AMPLITUDE * ((((int)(v2*2/FREQUENCY)) % 2) ? -1 : 1);
     	    v2 += freq2;
         }
         if (noise != 0) {
