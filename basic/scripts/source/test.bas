@@ -1,23 +1,53 @@
-screen 2,2
-palette 1,0,1
-palette 2,0,2
-palette 3,0,4
+'
+'		File system basic soak test.
+'
+count = 24:iteration = 0
+store = alloc(4200)
+dim filename$(count),dstart(count),dstep(count),dsize(count)
+repeat
+	iteration = iteration+1
+	for i = 1 to count
+		filename$(i) = "file"+str$(i)+".test"
+		dstart(i) = random(0,65535)
+		dstep(i) = random(0,65535)
+		dsize(i) = random(10,4000)
+		print filename$(i),dstart(i),dstep(i),dsize(i)
+	next i
 
-palette 1,1,3
-palette 2,1,5
-palette 3,1,6	
+	for i = 1 to count
+		print "Creating ",i
+		call create(i)
+		print "Saving as "+fileName$(i)
+		save fileName$(i),store,dsize(i)
+	next i
 
-draw on 0
+	total = 0
+	for i = 1 to count * 3
+		n = random(1,count)
+		total = total + 1
+		cls:print iteration,total,"Checking ",n,filename$(n)
+		load filename$(n),store
+		print "    Loaded, verifying ..."
+		call verify(n)
+	next i
+until false
+end
 
-ink 1:rect 10,10 to 80,100
-ink 2:rect 110,10 to 180,100
-ink 3:rect 210,10 to 280,100
-ink 2:text 100,150,"Hello, world ! 1"
+proc create(n)
+	local i
+	value = dstart(n)
+	for i = 0 to dsize(n)-1
+		store!i = value
+		value = value + dstep(n)
+	next i
+endproc	
 
-draw on 1
-
-ink 1:rect 20,20 to 90,110
-ink 2:rect 120,20 to 190,110
-ink 3:rect 220,20 to 290,110
-ink 2:text 200,180,"Hello, world ! 2"
+proc verify(n)
+	local i
+	value = dstart(n)
+	for i = 0 to dsize(n)-1
+		if value <> store!i then stop
+		value = value + dstep(n)
+	next i
+endproc	
 

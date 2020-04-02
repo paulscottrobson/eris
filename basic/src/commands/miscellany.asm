@@ -187,6 +187,7 @@
 .Dummy114 		;; [outport] 
 .Dummy115 		;; [case] 
 .Dummy116 		;; [endcase] 
+.Dummy117 		;; [connect] 
 ;
 ;		This lot are not commands per se, but are handled in RUN as token values.
 ;
