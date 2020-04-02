@@ -1,0 +1,33 @@
+#!/bin/bash
+set -e
+
+rm -f generated/token_test.inc  
+rm -f ../emulator/storage/autoexec.prg 
+
+pushd scripts 
+rm prg/autoexec.prg 
+python tables.py
+
+python makeprogram.py source/sed.bas prg/sed
+python makeprogram.py source/bgr.bas prg/bgr.prg
+python makeprogram.py source/test.bas prg/autoexec.prg
+python makeprogram.py source/sprites.bas prg/sprites.prg
+python makeprogram.py source/spritecoll.bas prg/spritecoll.prg
+python makeprogram.py source/tilemap.bas prg/tilemap.prg
+
+cp prg/test.prg ../../emulator/bin 
+cp prg/*.* ../../emulator/storage 
+
+popd
+
+pushd messages 
+python msgconv.py
+popd
+
+cp ../kernel/bin/a.lbl generated/kernel.labels 
+
+python ../assembler/easm.zip
+
+cp bin/a.prg ../emulator/bin/basic.prg 
+cp bin/_binary.h ../emulator/bin/_basic.h 
+

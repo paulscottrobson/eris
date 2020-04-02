@@ -119,7 +119,7 @@
 	word	Command_Curve            ; $3c72 CURVE
 	word	Command_DIM              ; $3c73 DIM
 	word	Command_Dir              ; $3c74 DIR
-	word	Dummy109                 ; $3c75 DRAW
+	word	SyntaxError              ; $3c75 DRAW
 	word	Command_Ellipse          ; $3c76 ELLIPSE
 	word	Command_ELSE             ; $3c77 ELSE
 	word	Command_End              ; $3c78 END
@@ -140,7 +140,7 @@
 	word	Command_Move             ; $3c87 MOVE
 	word	Command_New              ; $3c88 NEW
 	word	Command_Old              ; $3c89 OLD
-	word	SyntaxError              ; $3c8a ON
+	word	Dummy109                 ; $3c8a ON
 	word	Command_Palette          ; $3c8b PALETTE
 	word	Command_Paper            ; $3c8c PAPER
 	word	Command_Plot             ; $3c8d PLOT
