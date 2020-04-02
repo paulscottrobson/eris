@@ -86,19 +86,3 @@
 		pop 	r4
 		ret
 
-; *****************************************************************************
-;
-;				Set colour/mask to draw in current foreground colour
-;
-; *****************************************************************************
-
-.OSISetInkColourMask		
-		push 	r0,r1,link
-		jsr 	#OSWaitBlitter
-		ldm 	r0,#colourMask 				; get the colour mask
-		ror 	r0,#8 						; put in MSB
-		ldm 	r1,#fgrColour 				; add colour
-		add 	r0,r1,#0 
-		stm 	r0,#blitterCMask
-		pop 	r0,r1,link
-		ret

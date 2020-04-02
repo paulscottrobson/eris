@@ -155,3 +155,43 @@
 ._OSSFPPExit
 		pop 	r0,r1,r2,r3
 		ret
+
+; *****************************************************************************
+;
+;			Set currently active plane - 0 = background 1 = sprite
+;
+; *****************************************************************************
+
+.OSXSetActivePlane
+		push	r0
+		and 	r0,#1
+		stm 	r0,#activePlane
+		pop 	r0
+		ret
+
+; *****************************************************************************
+;
+;				Set colour/mask to draw in current foreground colour
+;
+; *****************************************************************************
+
+.OSISetInkColourMask		
+		push 	r0,r1,r2,link
+		jsr 	#OSWaitBlitter
+		ldm 	r2,#activePlane 			; active plane to R2
+		ldm 	r0,#colourMask 				; get the colour mask or sprite mask accordingly.
+		skz 	r2
+		ldm 	r0,#spriteMask
+		ror 	r0,#8 						; put in MSB
+		ldm 	r1,#fgrColour 				; add colour
+		sknz 	r2
+		jmp 	#_OSISICMBuild
+		;
+		ldm 	r2,#spriteRotate 			; if it is sprite plane rotate to sprite colour pos
+		ror 	r1,r2,#0
+		;
+._OSISICMBuild
+		add 	r0,r1,#0  					; build colour/mask word
+		stm 	r0,#blitterCMask
+		pop 	r0,r1,r2,link
+		ret

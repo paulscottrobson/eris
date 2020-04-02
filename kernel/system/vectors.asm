@@ -73,6 +73,9 @@
 .OSSetPlanes
 		jmp		#OSXSetPlanes
 
+.OSSetActivePlane
+		jmp 	#OSXSetActivePlane
+		
 .OSSetBackPlanePalette
 		jmp 	#OSXSetBackPlanePalette
 

@@ -96,7 +96,8 @@
 		fill	1
 .spriteRotate 								; value to rotate to convert a colour to a sprite colour
 		fill 	1
-
+.activePlane 								; where graphics ops are targeted, 0 bgr, 1 sprite
+		fill 	1
 				
 .currentKey									; character code of current key, 0 if none pressed
 		fill 	1 							

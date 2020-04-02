@@ -146,3 +146,24 @@
 		pop 	link
 		ret
 
+; *****************************************************************************
+;
+;							Set drawing plane
+;
+; *****************************************************************************
+
+.Command_Draw 	;; [draw]
+		push 	link
+		ldm 	r0,r11,#0					; check ON
+		inc 	r11
+		xor 	r0,#TOK_ON
+		skz 	r0
+		jmp 	#SyntaxError
+		jsr 	#EvaluateInteger
+		jsr 	#OSSetActivePlane
+		and 	r0,#$FFFE 					
+		skz 	r0
+		jmp 	#BadNumberError
+		pop 	link
+		ret
+				

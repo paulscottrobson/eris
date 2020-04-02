@@ -138,6 +138,3 @@
 		
 		pop 	link
 		ret
-
-
-		pop 	link

@@ -2,7 +2,7 @@
 ; *****************************************************************************
 ;
 ;		Name:		drawtext.asm
-;		Purpose:	Draw character on display
+;		Purpose:	Draw character on display (the text screen handler)
 ;		Created:	8th March 2020
 ;		Reviewed: 	16th March 2020
 ;		Author:		Paul Robson (paul@robsons.org.uk)

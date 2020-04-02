@@ -119,7 +119,7 @@
 	word	Command_Curve            ; $3c72 CURVE
 	word	Command_DIM              ; $3c73 DIM
 	word	Command_Dir              ; $3c74 DIR
-	word	SyntaxError              ; $3c75 DRAW
+	word	Command_Draw             ; $3c75 DRAW
 	word	Command_Ellipse          ; $3c76 ELLIPSE
 	word	Command_ELSE             ; $3c77 ELSE
 	word	Command_End              ; $3c78 END
