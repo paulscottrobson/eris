@@ -153,9 +153,10 @@ class Tokens(object):
 [Unary]
 	( 	&	% 	|constshift
 	abs(	alloc(	asc(	chr$(	exists(	false	get( 	get$( 	
-	hit(	inkey( 	inkey$( is.number(		joyx( 	joyy( 	joyb(	
-	key(	left$(	len(	lower$(	mid$(	page	peek(	right$(	
-	rnd(	sgn(	str$(	sysvar(	timer(	true 	upper$(	val(	
+	hit(	inkey( 	inkey$( inport(	is.number(		joyx( 	joyy( 	
+	joyb(	key(	left$(	len(	lower$(	mid$(	page	peek(	
+	right$(	rnd(	sgn(	str$(	sysvar(	timer(	true 	upper$(	
+	val(	
 //
 //		Synonyms
 //
@@ -169,23 +170,24 @@ class Tokens(object):
 //		Structure enter
 //
 [Cmd+]
-		for if repeat while proc
+		for if repeat while proc case
 //
 //		Structure exit
 //		
 [Cmd-]
-		endif  next then until wend endproc
+		endif  next then until wend endproc endcase
 //
 //		Commands
 //
 [Cmd]
 	' 		:		? 		
-	after 	assert 	blit 	call 	clear 	cls 	crunch 	cursor	curve	dim 	
-	dir 	draw	ellipse	else 	end 	every	fkey	flip	frame 	gosub 	
-	goto 	ink 	input 	let 	line	list 	load 	local 	mon		move	
-	new 	old		on 		palette	paper	plot 	poke 	print 	rect 	rem 	
-	renum	return 	run 	save 	screen	slide	sound	sprite 	stop 	sys 	
-	tile	wait
+	after 	assert 	blit 	call 	clear 	cls 	crunch 	cursor	curve	
+	default	dim 	dir 	draw	ellipse	else 	end 	every	fkey	
+	flip	frame 	gosub 	goto 	ink 	input 	let 	line	list 	
+	load 	local 	mon		move	new 	old		on 		outport	palette	
+	paper	plot 	poke 	print 	rect 	rem 	renum	return 	run 	
+	save 	screen	slide	sound	sprite 	stop 	sys 	text	tile	
+	wait	when
 	
 """
 

@@ -64,7 +64,7 @@
 		add 	r0,#$077E 					; with a white cursor.
 ._OSSCGSCBShow		
 		jsr 	#_OSSetCharDrawPos 			; set blitter position
-		jsr 	#OSXDrawSolidCharacter 		; draw cursor
+		jsr 	#OSIDrawSolidCharacter 		; draw cursor
 		pop 	link
 		ret
 		;

@@ -180,7 +180,13 @@
 .Dummy7 		;; [#]
 .Dummy8 		;; [crunch] 			
 .Dummy9 		;; [flip] 
-.Dummy109 		;; [on] 
+.Dummy110 		;; [on] 
+.Dummy111 		;; [when] 
+.Dummy112 		;; [default] 
+.Dummy113 		;; [inport(] 
+.Dummy114 		;; [outport] 
+.Dummy115 		;; [case] 
+.Dummy116 		;; [endcase] 
 ;
 ;		This lot are not commands per se, but are handled in RUN as token values.
 ;

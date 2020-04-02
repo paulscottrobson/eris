@@ -82,12 +82,6 @@
 .OSSetFrontPlanePalette
 		jmp 	#OSXSetFrontPlanePalette
 
-.OSDrawCharacter
-		jmp 	#OSXDrawCharacter
-
-.OSDrawSolidCharacter
-		jmp 	#OSXDrawSolidCharacter
-
 .OSGraphicsMove
 		jmp 	#OSXGraphicsMove
 
@@ -109,6 +103,9 @@
 .OSFillEllipse
 		jmp 	#OSXFillEllipse
 
+.OSDrawString
+		jmp 	#OSXDrawString
+		
 ; *****************************************************************************
 ;
 ;								Sprite Group

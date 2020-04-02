@@ -65,6 +65,18 @@
 		pop 	link
 		ret		
 
+.Command_Text 	;; [text]
+		push 	link
+		jsr 	#GetCoordinatePair	
+		mov 	r3,r0,#0
+		jsr 	#CheckComma
+		jsr 	#EvaluateString
+		mov 	r2,r0,#0
+		mov 	r0,r3,#0
+		jsr 	#OSDrawString
+		pop 	link
+		ret
+
 ; *****************************************************************************
 ;
 ;					  	Get a coordinate pair in R0,R1

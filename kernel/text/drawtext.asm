@@ -16,15 +16,15 @@
 ;
 ; *****************************************************************************
 
-.OSXDrawSolidCharacter
+.OSIDrawSolidCharacter
 		push 	r0,r1,link
 		mov 	r1,r0,#0 					; save draw character
 		and 	r0,#$F000 					; isolate background bits 12..15
 		ror 	r0,#4 						; put into foreground slot 8..11
 		add 	r0,#$7F 					; reverse-space solid block
-		jsr 	#OSDrawCharacter 			; draw background solid block
+		jsr 	#OSIDrawCharacter 			; draw background solid block
 		mov 	r0,r1,#0 					; get old character/colour back
-		jsr 	#OSDrawCharacter 			; draw foreground over it
+		jsr 	#OSIDrawCharacter 			; draw foreground over it
 		pop 	r0,r1,link
 		ret
 
@@ -38,7 +38,7 @@
 ;
 ; *****************************************************************************
 
-.OSXDrawCharacter
+.OSIDrawCharacter
 		push 	r0,r1,r2,link
 		mov 	r2,r0,#0 					; save in R2 to get colour out of bits 8..11
 		and 	r0,#$FF 					; mask character code out of bits 0..7

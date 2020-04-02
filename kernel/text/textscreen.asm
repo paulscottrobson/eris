@@ -222,7 +222,7 @@
 		ror 	r1,#4
 		add 	r0,r1,#0 						; R0 now is the character bgr/fgr/cpde
 		jsr 	#_OSSetCharDrawPos 				; set the blitter position
-		jsr 	#OSDrawSolidCharacter			; draw the character
+		jsr 	#OSIDrawSolidCharacter			; draw the character
 
 		jsr 	#_OSCurrentTextR1				; get address of current char in text buffer
 		stm 	r0,r1,#0 						; write into buffer.
@@ -314,7 +314,7 @@
 		stm 	r1,#yGraphic 
 		ldm 	r0,r2,#0 						; read character to output to the display
 		inc 	r2 								; bump that pointer
-		jsr 	#OSXDrawSolidCharacter 			; display it
+		jsr 	#OSIDrawSolidCharacter 			; display it
 		add 	r4,#pixelCharWidth 				; advance the pixels required per character
 		dec 	r3 								; do the whole line
 		skz 	r3
