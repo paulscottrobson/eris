@@ -22,6 +22,7 @@ ink 2:rect 0,0 to 319,3:rect 0,236 to 319,239:Rect 316,0 to 319,239
 score = 0
 ball.x = 40:ball.y = random(20,220):ball.xi = 2:ball.yi = random(0,1)*4-2:ball.radius = 3
 bat.x = 20:bat.y = 120:bat.size = 32:bat.speed = 4
+cursor 4,2:ink 3:print "Score ";score;
 '
 '			Main loop
 '
@@ -39,6 +40,7 @@ while ball.x >= 0
 		ball.xi = abs(ball.xi)
 		diff = ball.y-bat.y
 		ball.yi = (abs(diff*4/bat.size)+1)*sgn(diff)
+		if ball.yi = 0 then ball.yi = random(0,1)*2-1
 		score = score + 1
 		cursor 4,2:ink 3:print "Score ";score;
 		sound 1,28888,1

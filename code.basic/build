@@ -3,23 +3,18 @@ set -e
 #
 #		Convert BASIC to programs
 #
-python ../basic/scripts/makeprogram.py squash.bas storage/squash.prg
+python ../basic/scripts/makeprogram.py $1/$1.bas $1/$1.prg
+python ../basic/scripts/gfxconv.py $1/$1.png
 #
-#		cp one file (current working) as autoexec.prg
+#		Copy to storage and make it the autoexec.
 #
-cp storage/squash.prg storage/autoexec.prg
+cp $1/$1.prg $1/$1.spr storage
+cp $1/$1.prg storage/autoexec.prg
 #
-#		cp current binary
+#		Copy all the storage to emulator, where it will go to esp32 and javascript
 #
-cp ../emulator/eris .
-#
-#		Build graphics and cp to storage
-#
-pushd graphics
-python ../../basic/scripts/gfxconv.py
-cp *.spr ../storage
-popd
+cp storage/* ../emulator/storage
 #
 #		Run emulator
 #
-./eris
+../emulator/eris
