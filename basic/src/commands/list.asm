@@ -225,6 +225,10 @@
 		xor 	r0,#TOK_QUOTE
 		skz 	r0
 		jmp 	#_DTNoReverse
+		ldm 	r0,#colourMask 				; can we support reverse ?
+		sub 	r0,#4 						; need at least 3 planes.
+		skge
+		jmp 	#_DTNoReverse
 		jsr 	#OSPrintInline
 		string 	"[14][0F]"
 ._DTNoReverse		

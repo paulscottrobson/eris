@@ -256,7 +256,7 @@ static void CPULoadChunk(FILE *f,WORD16* memory,int count) {
 	while (count != 0 && !feof(f)) {
 		WORD16 w = fgetc(f);
 		*memory = w + (fgetc(f) << 8);
-		count = count--;
+		count--;
 		memory++;
 	}
 }
