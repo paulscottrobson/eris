@@ -46,7 +46,7 @@
 		;
 		ldm 	r0,r4,#sndQueueTail			; if not check if there is something in the queue
 		ldm 	r1,r4,#sndQueueHead
-		xor 	r0,r1,#0 					; which there is if these are differend
+		xor 	r0,r1,#0 					; which there is if these are different
 		sknz 	r0
 		ret
 		;
@@ -58,6 +58,7 @@
 		add 	r0,r4,#0 					
 		ldm		r0,r0,#0 					; read the word.
 		inc 	r1 							; update the head forward
+		and 	r1,#sndQueueSize-1 			; wrap the head round.
 		stm 	r1,r4,#sndQueueHead
 		;
 		mov 	r1,r0,#0 					; mask out the time from bits 14..10

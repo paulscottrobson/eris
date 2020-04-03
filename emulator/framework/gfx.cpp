@@ -420,4 +420,5 @@ void audio_callback(void *_beeper, Uint8 *_stream, int _length)
 
 void GFXSetFrequency(int freq,int channel) {
 	beeper.setFrequency(freq,channel);
+	//printf("%d %d\n",channel,freq);
 }

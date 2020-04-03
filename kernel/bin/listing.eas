@@ -125,25 +125,25 @@
 004c :                               .ossoundplay
 004c : aff0 0a56                     jmp  #osxsoundplay
 004e :                               .osreadsystemvariable
-004e : aff0 0c0f                     jmp  #osxreadsystemvariable
+004e : aff0 0c11                     jmp  #osxreadsystemvariable
 0050 :                               .osfileoperation
 0050 : aff0 0064                     jmp  #osxfileoperation
 0052 :                               .osudivide16
-0052 : aff0 0b1b                     jmp  #osxudivide16
+0052 : aff0 0b1d                     jmp  #osxudivide16
 0054 :                               .ossdivide16
-0054 : aff0 0b35                     jmp  #osxsdivide16
+0054 : aff0 0b37                     jmp  #osxsdivide16
 0056 :                               .osrandom16
-0056 : aff0 0b4e                     jmp  #osxrandom16
+0056 : aff0 0b50                     jmp  #osxrandom16
 0058 :                               .osstrtoint
-0058 : aff0 0b5e                     jmp  #osxstrtoint
+0058 : aff0 0b60                     jmp  #osxstrtoint
 005a :                               .osinttostr
-005a : aff0 0b9e                     jmp  #osxinttostr
+005a : aff0 0ba0                     jmp  #osxinttostr
 005c :                               .osuppercase
-005c : aff0 0be5                     jmp  #osxuppercase
+005c : aff0 0be7                     jmp  #osxuppercase
 005e :                               .oslowercase
-005e : aff0 0bf7                     jmp  #osxlowercase
+005e : aff0 0bf9                     jmp  #osxlowercase
 0060 :                               .oswordlength
-0060 : aff0 0c09                     jmp  #osxwordlength
+0060 : aff0 0c0b                     jmp  #osxwordlength
 0062 :                               .ossystemmanager
 0062 : aff0 010f                     jmp  #osxsystemmanager
 0064 :                               .osxfileoperation
@@ -203,7 +203,7 @@
 00d1 : 2016                          stm  r0,r1,#6
 00d2 : 00f0 0020                     mov  r0,#spritedefaultimagecount
 00d4 : 2014                          stm  r0,r1,#4
-00d5 : 00f0 0c57                     mov  r0,#fontdatadefault
+00d5 : 00f0 0c59                     mov  r0,#fontdatadefault
 00d7 : 2017                          stm  r0,r1,#7
 00d8 : 00f0 0020                     mov  r0,#spriteobjectcount
 00da : 201f                          stm  r0,r1,#15
@@ -371,7 +371,7 @@
 01ce :                               .osxgetkeyboard
 01ce : 5ce6 21c0 22c1 23c2 24c3      push  r1,r2,r3,r4,r5,link
 01d5 : adf0 0062                     jsr  #ossystemmanager
-01d7 : 01f0 0c3b                     mov  r1,#keyboardmapping+5*8
+01d7 : 01f0 0c3d                     mov  r1,#keyboardmapping+5*8
 01d9 : 02f0 401b                     mov  r2,#currentrowstatus+5
 01db : 03f0 0020                     mov  r3,#$20
 01dd : 7440                          clr  r4
@@ -468,7 +468,7 @@
 0258 : 50f0 0020                     sub  r0,#32
 025a : afd0                          ret
 025b :                               ._gknotalpha
-025b : 02f0 0c43                     mov  r2,#shifttable
+025b : 02f0 0c45                     mov  r2,#shifttable
 025d :                               ._gkshiftloop
 025d : 1120                          ldm  r1,r2,#0
 025e : 91e8                          ror  r1,#8
@@ -1955,7 +1955,7 @@
 0ade :                               .osiupdateonechannel
 0ade : 1040                          ldm  r0,r4,#sndcompletetime
 0adf : b0e0                          skz  r0
-0ae0 : aff0 0b0b                     jmp  #osisoundchecktime
+0ae0 : aff0 0b0d                     jmp  #osisoundchecktime
 0ae2 : 1044                          ldm  r0,r4,#sndqueuetail
 0ae3 : 1143                          ldm  r1,r4,#sndqueuehead
 0ae4 : 7010                          xor  r0,r1,#0
@@ -1966,351 +1966,352 @@
 0aea : 3040                          add  r0,r4,#0
 0aeb : 1000                          ldm  r0,r0,#0
 0aec : 31e1                          inc  r1
-0aed : 2143                          stm  r1,r4,#sndqueuehead
-0aee : 0100                          mov  r1,r0,#0
-0aef : 91ea                          ror  r1,#10
-0af0 : 61f0 001f                     and  r1,#31
-0af2 : 81ea                          mult  r1,#10
-0af3 : 12f0 ff30                     ldm  r2,#hwtimer
-0af5 : 3210                          add  r2,r1,#0
-0af6 : c2e0                          sknz  r2
-0af7 : 02e1                          mov  r2,#1
-0af8 : 2240                          stm  r2,r4,#sndcompletetime
-0af9 : 0200                          mov  r2,r0,#0
-0afa : d2e0                          skp  r2
-0afb : aff0 0b04                     jmp  #_osicreateslide
-0afd : 60f0 03ff                     and  r0,#$03ff
-0aff : 90ea                          ror  r0,#10
-0b00 : 2041                          stm  r0,r4,#sndpitch
-0b01 : 2e42                          stm  r14,r4,#sndslide
-0b02 : aff0 0b08                     jmp  #_osicreateexit
-0b04 :                               ._osicreateslide
-0b04 : 60f0 03ff                     and  r0,#$03ff
-0b06 : 90ea                          ror  r0,#10
-0b07 : 2042                          stm  r0,r4,#sndslide
-0b08 :                               ._osicreateexit
-0b08 : 12c0 3ce1                     pop  r2
-0b0a : afd0                          ret
-0b0b :                               .osisoundchecktime
-0b0b : 10f0 ff30                     ldm  r0,#hwtimer
-0b0d : 1140                          ldm  r1,r4,#sndcompletetime
-0b0e : 5010                          sub  r0,r1,#0
-0b0f : d0e0                          skp  r0
-0b10 : aff0 0b15                     jmp  #_osisoundplaying
-0b12 : 2e40                          stm  r14,r4,#sndcompletetime
-0b13 : 2e50                          stm  r14,r5,#0
-0b14 : afd0                          ret
-0b15 :                               ._osisoundplaying
-0b15 : 1041                          ldm  r0,r4,#sndpitch
-0b16 : 1142                          ldm  r1,r4,#sndslide
-0b17 : 5010                          sub  r0,r1,#0
-0b18 : 2041                          stm  r0,r4,#sndpitch
-0b19 : 2050                          stm  r0,r5,#0
-0b1a : afd0                          ret
-0b1b :                               .osxudivide16
-0b1b : 5ce3 22c0 23c1 24c2           push  r2,r3,r4
-0b1f : 7220                          clr  r2
-0b20 : 03f0 0010                     mov  r3,#16
-0b22 :                               ._osxudloop1
-0b22 : 3220                          add  r2,r2,#0
-0b23 : 3000                          add  r0,r0,#0
-0b24 : 42e0                          adc  r2,r14,#0
-0b25 : 0420                          mov  r4,r2,#0
-0b26 : 5410                          sub  r4,r1,#0
-0b27 : ffe0                          sklt
-0b28 : 0240                          mov  r2,r4,#0
+0aed : 61f0 001f                     and  r1,#sndqueuesize-1
+0aef : 2143                          stm  r1,r4,#sndqueuehead
+0af0 : 0100                          mov  r1,r0,#0
+0af1 : 91ea                          ror  r1,#10
+0af2 : 61f0 001f                     and  r1,#31
+0af4 : 81ea                          mult  r1,#10
+0af5 : 12f0 ff30                     ldm  r2,#hwtimer
+0af7 : 3210                          add  r2,r1,#0
+0af8 : c2e0                          sknz  r2
+0af9 : 02e1                          mov  r2,#1
+0afa : 2240                          stm  r2,r4,#sndcompletetime
+0afb : 0200                          mov  r2,r0,#0
+0afc : d2e0                          skp  r2
+0afd : aff0 0b06                     jmp  #_osicreateslide
+0aff : 60f0 03ff                     and  r0,#$03ff
+0b01 : 90ea                          ror  r0,#10
+0b02 : 2041                          stm  r0,r4,#sndpitch
+0b03 : 2e42                          stm  r14,r4,#sndslide
+0b04 : aff0 0b0a                     jmp  #_osicreateexit
+0b06 :                               ._osicreateslide
+0b06 : 60f0 03ff                     and  r0,#$03ff
+0b08 : 90ea                          ror  r0,#10
+0b09 : 2042                          stm  r0,r4,#sndslide
+0b0a :                               ._osicreateexit
+0b0a : 12c0 3ce1                     pop  r2
+0b0c : afd0                          ret
+0b0d :                               .osisoundchecktime
+0b0d : 10f0 ff30                     ldm  r0,#hwtimer
+0b0f : 1140                          ldm  r1,r4,#sndcompletetime
+0b10 : 5010                          sub  r0,r1,#0
+0b11 : d0e0                          skp  r0
+0b12 : aff0 0b17                     jmp  #_osisoundplaying
+0b14 : 2e40                          stm  r14,r4,#sndcompletetime
+0b15 : 2e50                          stm  r14,r5,#0
+0b16 : afd0                          ret
+0b17 :                               ._osisoundplaying
+0b17 : 1041                          ldm  r0,r4,#sndpitch
+0b18 : 1142                          ldm  r1,r4,#sndslide
+0b19 : 5010                          sub  r0,r1,#0
+0b1a : 2041                          stm  r0,r4,#sndpitch
+0b1b : 2050                          stm  r0,r5,#0
+0b1c : afd0                          ret
+0b1d :                               .osxudivide16
+0b1d : 5ce3 22c0 23c1 24c2           push  r2,r3,r4
+0b21 : 7220                          clr  r2
+0b22 : 03f0 0010                     mov  r3,#16
+0b24 :                               ._osxudloop1
+0b24 : 3220                          add  r2,r2,#0
+0b25 : 3000                          add  r0,r0,#0
+0b26 : 42e0                          adc  r2,r14,#0
+0b27 : 0420                          mov  r4,r2,#0
+0b28 : 5410                          sub  r4,r1,#0
 0b29 : ffe0                          sklt
-0b2a : 30e1                          inc  r0
-0b2b : 53e1                          dec  r3
-0b2c : b3e0                          skz  r3
-0b2d : aff0 0b22                     jmp  #_osxudloop1
-0b2f : 0120                          mov  r1,r2,#0
-0b30 : 12c0 13c1 14c2 3ce3           pop  r2,r3,r4
-0b34 : afd0                          ret
-0b35 :                               .osxsdivide16
-0b35 : 5ce3 22c0 23c1 2dc2           push  r2,r3,link
-0b39 : 0300                          mov  r3,r0,#0
-0b3a : 7310                          xor  r3,r1,#0
-0b3b : 7220                          clr  r2
-0b3c : 5200                          sub  r2,r0,#0
-0b3d : d0e0                          skp  r0
-0b3e : 0020                          mov  r0,r2,#0
-0b3f : 7220                          clr  r2
-0b40 : 5210                          sub  r2,r1,#0
-0b41 : d1e0                          skp  r1
-0b42 : 0120                          mov  r1,r2,#0
-0b43 : adf0 0b1b                     jsr  #osxudivide16
-0b45 : 7220                          clr  r2
-0b46 : 5200                          sub  r2,r0,#0
-0b47 : d3e0                          skp  r3
-0b48 : 0020                          mov  r0,r2,#0
-0b49 : 12c0 13c1 1dc2 3ce3           pop  r2,r3,link
-0b4d : afd0                          ret
-0b4e :                               .osxrandom16
-0b4e : 5ce1 21c0                     push  r1
-0b50 : 10f0 4068                     ldm  r0,#randomseed
-0b52 : 90e1                          ror  r0,#1
-0b53 : d0e0                          skp  r0
-0b54 : 70f0 3400                     xor  r0,#$3400
-0b56 : 20f0 4068                     stm  r0,#randomseed
-0b58 : 11f0 ff30                     ldm  r1,#hwtimer
-0b5a : 7010                          xor  r0,r1,#0
-0b5b : 11c0 3ce1                     pop  r1
-0b5d : afd0                          ret
-0b5e :                               .osxstrtoint
-0b5e : 5ce6 22c0 23c1 24c2 25c3      push  r2,r3,r4,r5,r6,link
-0b65 : 0200                          mov  r2,r0,#0
-0b66 : 7330                          clr  r3
-0b67 : 7440                          clr  r4
-0b68 : 06e1                          mov  r6,#1
-0b69 : ad20                          brl  r13,r2,#0
-0b6a : 60f0 00ff                     and  r0,#$00ff
-0b6c : 0500                          mov  r5,r0,#0
-0b6d : 75f0 002d                     xor  r5,#'-'
-0b6f : b5e0                          skz  r5
-0b70 : aff0 0b74                     jmp  #_ossiloop
-0b72 : 34e1                          inc  r4
-0b73 : ad20                          brl  r13,r2,#0
-0b74 :                               ._ossiloop
-0b74 : adf0 005c                     jsr  #osuppercase
-0b76 : 50f0 0030                     sub  r0,#'0'
-0b78 : ffe1                          skge
-0b79 : aff0 0b90                     jmp  #_ossiexit
-0b7b : 0500                          mov  r5,r0,#0
-0b7c : 50ea                          sub  r0,#10
-0b7d : ffe1                          skge
-0b7e : aff0 0b85                     jmp  #_osshavedigit
-0b80 : 55e7                          sub  r5,#7
-0b81 : 50e7                          sub  r0,#7
-0b82 : ffe1                          skge
-0b83 : aff0 0b90                     jmp  #_ossiexit
-0b85 :                               ._osshavedigit
-0b85 : 0050                          mov  r0,r5,#0
-0b86 : 5010                          sub  r0,r1,#0
-0b87 : ffe0                          sklt
-0b88 : aff0 0b90                     jmp  #_ossiexit
-0b8a : 8310                          mult  r3,r1,#0
-0b8b : 3350                          add  r3,r5,#0
-0b8c : 7660                          clr  r6
-0b8d : ad20                          brl  r13,r2,#0
-0b8e : aff0 0b74                     jmp  #_ossiloop
-0b90 :                               ._ossiexit
-0b90 : 7550                          clr  r5
-0b91 : 5530                          sub  r5,r3,#0
-0b92 : b4e0                          skz  r4
-0b93 : 0350                          mov  r3,r5,#0
-0b94 : 0030                          mov  r0,r3,#0
-0b95 : 0160                          mov  r1,r6,#0
-0b96 : 12c0 13c1 14c2 15c3 16c4      pop  r2,r3,r4,r5,r6,link
-0b9d : afd0                          ret
-0b9e :                               .osxinttostr
-0b9e : 5ce5 21c0 22c1 23c2 24c3      push  r1,r2,r3,r4,link
-0ba4 : 02f0 4069                     mov  r2,#convbuffer
-0ba6 : 2e20                          stm  r14,r2,#0
-0ba7 : 2e21                          stm  r14,r2,#1
-0ba8 : e1e0                          skm  r1
-0ba9 : aff0 0bb6                     jmp  #_osisnotnegative
-0bab : e0e0                          skm  r0
-0bac : aff0 0bb6                     jmp  #_osisnotnegative
-0bae : 03f0 002d                     mov  r3,#'-'
-0bb0 : 2321                          stm  r3,r2,#1
-0bb1 : 03e1                          mov  r3,#1
-0bb2 : 2320                          stm  r3,r2,#0
-0bb3 : 70f0 ffff                     xor  r0,#$ffff
-0bb5 : 30e1                          inc  r0
-0bb6 :                               ._osisnotnegative
-0bb6 : 61f0 001f                     and  r1,#$001f
-0bb8 : 0310                          mov  r3,r1,#0
-0bb9 : adf0 0bc4                     jsr  #_osisrecurse
-0bbb : 00f0 4069                     mov  r0,#convbuffer
-0bbd : 11c0 12c1 13c2 14c3 1dc4      pop  r1,r2,r3,r4,link
-0bc3 : afd0                          ret
-0bc4 :                               ._osisrecurse
-0bc4 : 5ce2 21c0 2dc1                push  r1,link
-0bc7 : 0130                          mov  r1,r3,#0
-0bc8 : adf0 0052                     jsr  #osudivide16
-0bca : b0e0                          skz  r0
-0bcb : adf0 0bc4                     jsr  #_osisrecurse
-0bcd : 51ea                          sub  r1,#10
-0bce : e1e0                          skm  r1
-0bcf : 31e7                          add  r1,#7
-0bd0 : 31f0 003a                     add  r1,#58
-0bd2 : 1020                          ldm  r0,r2,#0
-0bd3 : 90e1                          ror  r0,#1
-0bd4 : d0e0                          skp  r0
-0bd5 : 91e8                          ror  r1,#8
-0bd6 : 60f0 7fff                     and  r0,#$7fff
-0bd8 : 30f0 406a                     add  r0,#convbuffer+1
-0bda : 1400                          ldm  r4,r0,#0
-0bdb : 3410                          add  r4,r1,#0
-0bdc : 2400                          stm  r4,r0,#0
-0bdd : 2e01                          stm  r14,r0,#1
-0bde : 1020                          ldm  r0,r2,#0
-0bdf : 30e1                          inc  r0
-0be0 : 2020                          stm  r0,r2,#0
-0be1 : 11c0 1dc1 3ce2                pop  r1,link
-0be4 : afd0                          ret
-0be5 :                               .osxuppercase
-0be5 : 5ce1 21c0                     push  r1
-0be7 : 60f0 00ff                     and  r0,#$00ff
-0be9 : 0100                          mov  r1,r0,#0
-0bea : 51f0 0061                     sub  r1,#'a'
-0bec : ffe1                          skge
-0bed : aff0 0bf4                     jmp  #_osucexit
-0bef : 51f0 001a                     sub  r1,#26
-0bf1 : ffe1                          skge
-0bf2 : 50f0 0020                     sub  r0,#32
-0bf4 :                               ._osucexit
-0bf4 : 11c0 3ce1                     pop  r1
-0bf6 : afd0                          ret
-0bf7 :                               .osxlowercase
-0bf7 : 5ce1 21c0                     push  r1
-0bf9 : 60f0 00ff                     and  r0,#$00ff
-0bfb : 0100                          mov  r1,r0,#0
-0bfc : 51f0 0041                     sub  r1,#65
-0bfe : ffe1                          skge
-0bff : aff0 0c06                     jmp  #_oslcexit
-0c01 : 51f0 001a                     sub  r1,#26
-0c03 : ffe1                          skge
-0c04 : 30f0 0020                     add  r0,#32
-0c06 :                               ._oslcexit
-0c06 : 11c0 3ce1                     pop  r1
-0c08 : afd0                          ret
-0c09 :                               .osxwordlength
-0c09 : 1000                          ldm  r0,r0,#0
-0c0a : 30e1                          inc  r0
-0c0b : 90e1                          ror  r0,#1
-0c0c : 60f0 7fff                     and  r0,#$7fff
-0c0e : afd0                          ret
-0c0f :                               .osxreadsystemvariable
-0c0f : 30f0 4000                     add  r0,#systemvariables
-0c11 : 1000                          ldm  r0,r0,#0
-0c12 : afd0                          ret
-0c13 :                               .keyboardmapping
-0c13 : 3231 3433 3635 3837 3039      byte 49,50,51,52,53,54,55,56,57,48,45,61,8,0,0,0
-0c1b : 7109 6577 7472 7579 6f69      byte 9,113,119,101,114,116,121,117,105,111,112,91,
-0c23 : 7361 6664 6867 6b6a 3b6c      byte 97,115,100,102,103,104,106,107,108,59,39,35,1
-0c2b : 5c20 787a 7663 6e62 2c6d      byte 32,92,122,120,99,118,98,110,109,44,46,47,0,0,
-0c33 : f1f0 f3f2 f5f4 0000 0000      byte 240,241,242,243,244,245,0,0,0,0,0,0,0,0,0,0
-0c3b : 0201 0403 0000 0000 0000      byte 1,2,3,4,0,0,0,0,0,0,0,0,0,0,0,0
-0c43 :                               .shifttable
-0c43 : 2740                          byte  64, 39
-0c44 : 2c3c                          byte  60, 44
-0c45 : 2d5f                          byte  95, 45
-0c46 : 2e3e                          byte  62, 46
-0c47 : 2f3f                          byte  63, 47
-0c48 : 3029                          byte  41, 48
-0c49 : 3121                          byte  33, 49
-0c4a : 3222                          byte  34, 50
-0c4b : 3323                          byte  35, 51
-0c4c : 3424                          byte  36, 52
-0c4d : 3525                          byte  37, 53
-0c4e : 365e                          byte  94, 54
-0c4f : 3726                          byte  38, 55
-0c50 : 382a                          byte  42, 56
-0c51 : 3928                          byte  40, 57
-0c52 : 3b3a                          byte  58, 59
-0c53 : 3d2b                          byte  43, 61
-0c54 : 5b7b                          byte 123, 91
-0c55 : 5d7d                          byte 125, 93
-0c56 : 0000                          byte  0,0
-0c57 :                               .fontdatadefault
-0c57 : 0000 0000 0000 0000 0000      word $0000,$0000,$0000,$0000,$0000,$0000,$0000,$00
-0c5f : 2000 2000 2000 2000 0000      word $2000,$2000,$2000,$2000,$0000,$0000,$2000,$00
-0c67 : 5000 5000 5000 0000 0000      word $5000,$5000,$5000,$0000,$0000,$0000,$0000,$00
-0c6f : 5000 5000 f800 5000 f800      word $5000,$5000,$f800,$5000,$f800,$5000,$5000,$00
-0c77 : 2000 7800 a000 7000 2800      word $2000,$7800,$a000,$7000,$2800,$f000,$2000,$00
-0c7f : c000 c800 1000 2000 4000      word $c000,$c800,$1000,$2000,$4000,$9800,$1800,$00
-0c87 : 6000 9000 a000 4000 a800      word $6000,$9000,$a000,$4000,$a800,$9000,$6800,$00
-0c8f : 6000 2000 4000 0000 0000      word $6000,$2000,$4000,$0000,$0000,$0000,$0000,$00
-0c97 : 1000 2000 4000 4000 4000      word $1000,$2000,$4000,$4000,$4000,$2000,$1000,$00
-0c9f : 4000 2000 1000 1000 1000      word $4000,$2000,$1000,$1000,$1000,$2000,$4000,$00
-0ca7 : 0000 2000 a800 7000 a800      word $0000,$2000,$a800,$7000,$a800,$2000,$0000,$00
-0caf : 0000 2000 2000 f800 2000      word $0000,$2000,$2000,$f800,$2000,$2000,$0000,$00
-0cb7 : 0000 0000 0000 0000 6000      word $0000,$0000,$0000,$0000,$6000,$2000,$4000,$00
-0cbf : 0000 0000 0000 f800 0000      word $0000,$0000,$0000,$f800,$0000,$0000,$0000,$00
-0cc7 : 0000 0000 0000 0000 0000      word $0000,$0000,$0000,$0000,$0000,$6000,$6000,$00
-0ccf : 0000 0800 1000 2000 4000      word $0000,$0800,$1000,$2000,$4000,$8000,$0000,$00
-0cd7 : 7000 8800 9800 a800 c800      word $7000,$8800,$9800,$a800,$c800,$8800,$7000,$00
-0cdf : 2000 6000 2000 2000 2000      word $2000,$6000,$2000,$2000,$2000,$2000,$7000,$00
-0ce7 : 7000 8800 0800 1000 2000      word $7000,$8800,$0800,$1000,$2000,$4000,$f800,$00
-0cef : f800 1000 2000 1000 0800      word $f800,$1000,$2000,$1000,$0800,$8800,$7000,$00
-0cf7 : 1000 3000 5000 9000 f800      word $1000,$3000,$5000,$9000,$f800,$1000,$1000,$00
-0cff : f800 8000 f000 0800 0800      word $f800,$8000,$f000,$0800,$0800,$8800,$7000,$00
-0d07 : 3000 4000 8000 f000 8800      word $3000,$4000,$8000,$f000,$8800,$8800,$7000,$00
-0d0f : f800 8800 0800 1000 2000      word $f800,$8800,$0800,$1000,$2000,$2000,$2000,$00
-0d17 : 7000 8800 8800 7000 8800      word $7000,$8800,$8800,$7000,$8800,$8800,$7000,$00
-0d1f : 7000 8800 8800 7800 0800      word $7000,$8800,$8800,$7800,$0800,$1000,$6000,$00
-0d27 : 0000 6000 6000 0000 6000      word $0000,$6000,$6000,$0000,$6000,$6000,$0000,$00
-0d2f : 0000 6000 6000 0000 6000      word $0000,$6000,$6000,$0000,$6000,$2000,$4000,$00
-0d37 : 1000 2000 4000 8000 4000      word $1000,$2000,$4000,$8000,$4000,$2000,$1000,$00
-0d3f : 0000 0000 f800 0000 f800      word $0000,$0000,$f800,$0000,$f800,$0000,$0000,$00
-0d47 : 4000 2000 1000 0800 1000      word $4000,$2000,$1000,$0800,$1000,$2000,$4000,$00
-0d4f : 7000 8800 0800 1000 2000      word $7000,$8800,$0800,$1000,$2000,$0000,$2000,$00
-0d57 : 7000 8800 0800 6800 a800      word $7000,$8800,$0800,$6800,$a800,$a800,$7000,$00
-0d5f : 7000 8800 8800 8800 f800      word $7000,$8800,$8800,$8800,$f800,$8800,$8800,$00
-0d67 : f000 8800 8800 f000 8800      word $f000,$8800,$8800,$f000,$8800,$8800,$f000,$00
-0d6f : 7000 8800 8000 8000 8000      word $7000,$8800,$8000,$8000,$8000,$8800,$7000,$00
-0d77 : e000 9000 8800 8800 8800      word $e000,$9000,$8800,$8800,$8800,$9000,$e000,$00
-0d7f : f800 8000 8000 f000 8000      word $f800,$8000,$8000,$f000,$8000,$8000,$f800,$00
-0d87 : f800 8000 8000 f000 8000      word $f800,$8000,$8000,$f000,$8000,$8000,$8000,$00
-0d8f : 7000 8800 8000 b800 8800      word $7000,$8800,$8000,$b800,$8800,$8800,$7800,$00
-0d97 : 8800 8800 8800 f800 8800      word $8800,$8800,$8800,$f800,$8800,$8800,$8800,$00
-0d9f : 7000 2000 2000 2000 2000      word $7000,$2000,$2000,$2000,$2000,$2000,$7000,$00
-0da7 : 3800 1000 1000 1000 1000      word $3800,$1000,$1000,$1000,$1000,$9000,$6000,$00
-0daf : 8800 9000 a000 c000 a000      word $8800,$9000,$a000,$c000,$a000,$9000,$8800,$00
-0db7 : 8000 8000 8000 8000 8000      word $8000,$8000,$8000,$8000,$8000,$8000,$f800,$00
-0dbf : 8800 d800 a800 a800 8800      word $8800,$d800,$a800,$a800,$8800,$8800,$8800,$00
-0dc7 : 8800 8800 c800 a800 9800      word $8800,$8800,$c800,$a800,$9800,$8800,$8800,$00
-0dcf : 7000 8800 8800 8800 8800      word $7000,$8800,$8800,$8800,$8800,$8800,$7000,$00
-0dd7 : f000 8800 8800 f000 8000      word $f000,$8800,$8800,$f000,$8000,$8000,$8000,$00
-0ddf : 7000 8800 8800 8800 a800      word $7000,$8800,$8800,$8800,$a800,$9000,$6800,$00
-0de7 : f000 8800 8800 f000 a000      word $f000,$8800,$8800,$f000,$a000,$9000,$8800,$00
-0def : 7800 8000 8000 7000 0800      word $7800,$8000,$8000,$7000,$0800,$0800,$f000,$00
-0df7 : f800 2000 2000 2000 2000      word $f800,$2000,$2000,$2000,$2000,$2000,$2000,$00
-0dff : 8800 8800 8800 8800 8800      word $8800,$8800,$8800,$8800,$8800,$8800,$7000,$00
-0e07 : 8800 8800 8800 8800 8800      word $8800,$8800,$8800,$8800,$8800,$5000,$2000,$00
-0e0f : 8800 8800 8800 a800 a800      word $8800,$8800,$8800,$a800,$a800,$a800,$5000,$00
-0e17 : 8800 8800 5000 2000 5000      word $8800,$8800,$5000,$2000,$5000,$8800,$8800,$00
-0e1f : 8800 8800 8800 5000 2000      word $8800,$8800,$8800,$5000,$2000,$2000,$2000,$00
-0e27 : f800 0800 1000 2000 4000      word $f800,$0800,$1000,$2000,$4000,$8000,$f800,$00
-0e2f : e000 8000 8000 8000 8000      word $e000,$8000,$8000,$8000,$8000,$8000,$e000,$00
-0e37 : 0000 8000 4000 2000 1000      word $0000,$8000,$4000,$2000,$1000,$0800,$0000,$00
-0e3f : 7000 1000 1000 1000 1000      word $7000,$1000,$1000,$1000,$1000,$1000,$7000,$00
-0e47 : 2000 5000 8800 0000 0000      word $2000,$5000,$8800,$0000,$0000,$0000,$0000,$00
-0e4f : 0000 0000 0000 0000 0000      word $0000,$0000,$0000,$0000,$0000,$0000,$f800,$00
-0e57 : 4000 2000 1000 0000 0000      word $4000,$2000,$1000,$0000,$0000,$0000,$0000,$00
-0e5f : 0000 0000 7000 0800 7800      word $0000,$0000,$7000,$0800,$7800,$8800,$7800,$00
-0e67 : 8000 8000 b000 c800 8800      word $8000,$8000,$b000,$c800,$8800,$8800,$f000,$00
-0e6f : 0000 0000 7000 8000 8000      word $0000,$0000,$7000,$8000,$8000,$8800,$7000,$00
-0e77 : 0800 0800 6800 9800 8800      word $0800,$0800,$6800,$9800,$8800,$8800,$7800,$00
-0e7f : 0000 0000 7000 8800 f800      word $0000,$0000,$7000,$8800,$f800,$8000,$7000,$00
-0e87 : 3000 4800 4000 e000 4000      word $3000,$4800,$4000,$e000,$4000,$4000,$4000,$00
-0e8f : 0000 7800 8800 8800 7800      word $0000,$7800,$8800,$8800,$7800,$0800,$7000,$00
-0e97 : 8000 8000 b000 c800 8800      word $8000,$8000,$b000,$c800,$8800,$8800,$8800,$00
-0e9f : 2000 0000 6000 2000 2000      word $2000,$0000,$6000,$2000,$2000,$2000,$7000,$00
-0ea7 : 1000 0000 3000 1000 1000      word $1000,$0000,$3000,$1000,$1000,$9000,$6000,$00
-0eaf : 8000 8000 9000 a000 c000      word $8000,$8000,$9000,$a000,$c000,$a000,$9000,$00
-0eb7 : 6000 2000 2000 2000 2000      word $6000,$2000,$2000,$2000,$2000,$2000,$7000,$00
-0ebf : 0000 0000 d000 a800 a800      word $0000,$0000,$d000,$a800,$a800,$8800,$8800,$00
-0ec7 : 0000 0000 b000 c800 8800      word $0000,$0000,$b000,$c800,$8800,$8800,$8800,$00
-0ecf : 0000 0000 7000 8800 8800      word $0000,$0000,$7000,$8800,$8800,$8800,$7000,$00
-0ed7 : 0000 0000 f000 8800 f000      word $0000,$0000,$f000,$8800,$f000,$8000,$8000,$00
-0edf : 0000 0000 6800 9800 7800      word $0000,$0000,$6800,$9800,$7800,$0800,$0800,$00
-0ee7 : 0000 0000 b000 c800 8000      word $0000,$0000,$b000,$c800,$8000,$8000,$8000,$00
-0eef : 0000 0000 7000 8000 7000      word $0000,$0000,$7000,$8000,$7000,$0800,$f000,$00
-0ef7 : 4000 4000 e000 4000 4000      word $4000,$4000,$e000,$4000,$4000,$4800,$3000,$00
-0eff : 0000 0000 8800 8800 8800      word $0000,$0000,$8800,$8800,$8800,$9800,$6800,$00
-0f07 : 0000 0000 8800 8800 8800      word $0000,$0000,$8800,$8800,$8800,$5000,$2000,$00
-0f0f : 0000 0000 8800 a800 a800      word $0000,$0000,$8800,$a800,$a800,$a800,$5000,$00
-0f17 : 0000 0000 8800 5000 2000      word $0000,$0000,$8800,$5000,$2000,$5000,$8800,$00
-0f1f : 0000 0000 8800 8800 7800      word $0000,$0000,$8800,$8800,$7800,$0800,$7000,$00
-0f27 : 0000 0000 f800 1000 2000      word $0000,$0000,$f800,$1000,$2000,$4000,$f800,$00
-0f2f : 1000 2000 2000 4000 2000      word $1000,$2000,$2000,$4000,$2000,$2000,$1000,$00
-0f37 : 2000 2000 2000 2000 2000      word $2000,$2000,$2000,$2000,$2000,$2000,$2000,$00
-0f3f : 4000 2000 2000 1000 2000      word $4000,$2000,$2000,$1000,$2000,$2000,$4000,$00
-0f47 : 5000 a800 5000 a800 5000      word $5000,$a800,$5000,$a800,$5000,$a800,$5000,$00
-0f4f : fc00 fc00 fc00 fc00 fc00      word $fc00,$fc00,$fc00,$fc00,$fc00,$fc00,$fc00,$fc
+0b2a : 0240                          mov  r2,r4,#0
+0b2b : ffe0                          sklt
+0b2c : 30e1                          inc  r0
+0b2d : 53e1                          dec  r3
+0b2e : b3e0                          skz  r3
+0b2f : aff0 0b24                     jmp  #_osxudloop1
+0b31 : 0120                          mov  r1,r2,#0
+0b32 : 12c0 13c1 14c2 3ce3           pop  r2,r3,r4
+0b36 : afd0                          ret
+0b37 :                               .osxsdivide16
+0b37 : 5ce3 22c0 23c1 2dc2           push  r2,r3,link
+0b3b : 0300                          mov  r3,r0,#0
+0b3c : 7310                          xor  r3,r1,#0
+0b3d : 7220                          clr  r2
+0b3e : 5200                          sub  r2,r0,#0
+0b3f : d0e0                          skp  r0
+0b40 : 0020                          mov  r0,r2,#0
+0b41 : 7220                          clr  r2
+0b42 : 5210                          sub  r2,r1,#0
+0b43 : d1e0                          skp  r1
+0b44 : 0120                          mov  r1,r2,#0
+0b45 : adf0 0b1d                     jsr  #osxudivide16
+0b47 : 7220                          clr  r2
+0b48 : 5200                          sub  r2,r0,#0
+0b49 : d3e0                          skp  r3
+0b4a : 0020                          mov  r0,r2,#0
+0b4b : 12c0 13c1 1dc2 3ce3           pop  r2,r3,link
+0b4f : afd0                          ret
+0b50 :                               .osxrandom16
+0b50 : 5ce1 21c0                     push  r1
+0b52 : 10f0 4068                     ldm  r0,#randomseed
+0b54 : 90e1                          ror  r0,#1
+0b55 : d0e0                          skp  r0
+0b56 : 70f0 3400                     xor  r0,#$3400
+0b58 : 20f0 4068                     stm  r0,#randomseed
+0b5a : 11f0 ff30                     ldm  r1,#hwtimer
+0b5c : 7010                          xor  r0,r1,#0
+0b5d : 11c0 3ce1                     pop  r1
+0b5f : afd0                          ret
+0b60 :                               .osxstrtoint
+0b60 : 5ce6 22c0 23c1 24c2 25c3      push  r2,r3,r4,r5,r6,link
+0b67 : 0200                          mov  r2,r0,#0
+0b68 : 7330                          clr  r3
+0b69 : 7440                          clr  r4
+0b6a : 06e1                          mov  r6,#1
+0b6b : ad20                          brl  r13,r2,#0
+0b6c : 60f0 00ff                     and  r0,#$00ff
+0b6e : 0500                          mov  r5,r0,#0
+0b6f : 75f0 002d                     xor  r5,#'-'
+0b71 : b5e0                          skz  r5
+0b72 : aff0 0b76                     jmp  #_ossiloop
+0b74 : 34e1                          inc  r4
+0b75 : ad20                          brl  r13,r2,#0
+0b76 :                               ._ossiloop
+0b76 : adf0 005c                     jsr  #osuppercase
+0b78 : 50f0 0030                     sub  r0,#'0'
+0b7a : ffe1                          skge
+0b7b : aff0 0b92                     jmp  #_ossiexit
+0b7d : 0500                          mov  r5,r0,#0
+0b7e : 50ea                          sub  r0,#10
+0b7f : ffe1                          skge
+0b80 : aff0 0b87                     jmp  #_osshavedigit
+0b82 : 55e7                          sub  r5,#7
+0b83 : 50e7                          sub  r0,#7
+0b84 : ffe1                          skge
+0b85 : aff0 0b92                     jmp  #_ossiexit
+0b87 :                               ._osshavedigit
+0b87 : 0050                          mov  r0,r5,#0
+0b88 : 5010                          sub  r0,r1,#0
+0b89 : ffe0                          sklt
+0b8a : aff0 0b92                     jmp  #_ossiexit
+0b8c : 8310                          mult  r3,r1,#0
+0b8d : 3350                          add  r3,r5,#0
+0b8e : 7660                          clr  r6
+0b8f : ad20                          brl  r13,r2,#0
+0b90 : aff0 0b76                     jmp  #_ossiloop
+0b92 :                               ._ossiexit
+0b92 : 7550                          clr  r5
+0b93 : 5530                          sub  r5,r3,#0
+0b94 : b4e0                          skz  r4
+0b95 : 0350                          mov  r3,r5,#0
+0b96 : 0030                          mov  r0,r3,#0
+0b97 : 0160                          mov  r1,r6,#0
+0b98 : 12c0 13c1 14c2 15c3 16c4      pop  r2,r3,r4,r5,r6,link
+0b9f : afd0                          ret
+0ba0 :                               .osxinttostr
+0ba0 : 5ce5 21c0 22c1 23c2 24c3      push  r1,r2,r3,r4,link
+0ba6 : 02f0 4069                     mov  r2,#convbuffer
+0ba8 : 2e20                          stm  r14,r2,#0
+0ba9 : 2e21                          stm  r14,r2,#1
+0baa : e1e0                          skm  r1
+0bab : aff0 0bb8                     jmp  #_osisnotnegative
+0bad : e0e0                          skm  r0
+0bae : aff0 0bb8                     jmp  #_osisnotnegative
+0bb0 : 03f0 002d                     mov  r3,#'-'
+0bb2 : 2321                          stm  r3,r2,#1
+0bb3 : 03e1                          mov  r3,#1
+0bb4 : 2320                          stm  r3,r2,#0
+0bb5 : 70f0 ffff                     xor  r0,#$ffff
+0bb7 : 30e1                          inc  r0
+0bb8 :                               ._osisnotnegative
+0bb8 : 61f0 001f                     and  r1,#$001f
+0bba : 0310                          mov  r3,r1,#0
+0bbb : adf0 0bc6                     jsr  #_osisrecurse
+0bbd : 00f0 4069                     mov  r0,#convbuffer
+0bbf : 11c0 12c1 13c2 14c3 1dc4      pop  r1,r2,r3,r4,link
+0bc5 : afd0                          ret
+0bc6 :                               ._osisrecurse
+0bc6 : 5ce2 21c0 2dc1                push  r1,link
+0bc9 : 0130                          mov  r1,r3,#0
+0bca : adf0 0052                     jsr  #osudivide16
+0bcc : b0e0                          skz  r0
+0bcd : adf0 0bc6                     jsr  #_osisrecurse
+0bcf : 51ea                          sub  r1,#10
+0bd0 : e1e0                          skm  r1
+0bd1 : 31e7                          add  r1,#7
+0bd2 : 31f0 003a                     add  r1,#58
+0bd4 : 1020                          ldm  r0,r2,#0
+0bd5 : 90e1                          ror  r0,#1
+0bd6 : d0e0                          skp  r0
+0bd7 : 91e8                          ror  r1,#8
+0bd8 : 60f0 7fff                     and  r0,#$7fff
+0bda : 30f0 406a                     add  r0,#convbuffer+1
+0bdc : 1400                          ldm  r4,r0,#0
+0bdd : 3410                          add  r4,r1,#0
+0bde : 2400                          stm  r4,r0,#0
+0bdf : 2e01                          stm  r14,r0,#1
+0be0 : 1020                          ldm  r0,r2,#0
+0be1 : 30e1                          inc  r0
+0be2 : 2020                          stm  r0,r2,#0
+0be3 : 11c0 1dc1 3ce2                pop  r1,link
+0be6 : afd0                          ret
+0be7 :                               .osxuppercase
+0be7 : 5ce1 21c0                     push  r1
+0be9 : 60f0 00ff                     and  r0,#$00ff
+0beb : 0100                          mov  r1,r0,#0
+0bec : 51f0 0061                     sub  r1,#'a'
+0bee : ffe1                          skge
+0bef : aff0 0bf6                     jmp  #_osucexit
+0bf1 : 51f0 001a                     sub  r1,#26
+0bf3 : ffe1                          skge
+0bf4 : 50f0 0020                     sub  r0,#32
+0bf6 :                               ._osucexit
+0bf6 : 11c0 3ce1                     pop  r1
+0bf8 : afd0                          ret
+0bf9 :                               .osxlowercase
+0bf9 : 5ce1 21c0                     push  r1
+0bfb : 60f0 00ff                     and  r0,#$00ff
+0bfd : 0100                          mov  r1,r0,#0
+0bfe : 51f0 0041                     sub  r1,#65
+0c00 : ffe1                          skge
+0c01 : aff0 0c08                     jmp  #_oslcexit
+0c03 : 51f0 001a                     sub  r1,#26
+0c05 : ffe1                          skge
+0c06 : 30f0 0020                     add  r0,#32
+0c08 :                               ._oslcexit
+0c08 : 11c0 3ce1                     pop  r1
+0c0a : afd0                          ret
+0c0b :                               .osxwordlength
+0c0b : 1000                          ldm  r0,r0,#0
+0c0c : 30e1                          inc  r0
+0c0d : 90e1                          ror  r0,#1
+0c0e : 60f0 7fff                     and  r0,#$7fff
+0c10 : afd0                          ret
+0c11 :                               .osxreadsystemvariable
+0c11 : 30f0 4000                     add  r0,#systemvariables
+0c13 : 1000                          ldm  r0,r0,#0
+0c14 : afd0                          ret
+0c15 :                               .keyboardmapping
+0c15 : 3231 3433 3635 3837 3039      byte 49,50,51,52,53,54,55,56,57,48,45,61,8,0,0,0
+0c1d : 7109 6577 7472 7579 6f69      byte 9,113,119,101,114,116,121,117,105,111,112,91,
+0c25 : 7361 6664 6867 6b6a 3b6c      byte 97,115,100,102,103,104,106,107,108,59,39,35,1
+0c2d : 5c20 787a 7663 6e62 2c6d      byte 32,92,122,120,99,118,98,110,109,44,46,47,0,0,
+0c35 : f1f0 f3f2 f5f4 0000 0000      byte 240,241,242,243,244,245,0,0,0,0,0,0,0,0,0,0
+0c3d : 0201 0403 0000 0000 0000      byte 1,2,3,4,0,0,0,0,0,0,0,0,0,0,0,0
+0c45 :                               .shifttable
+0c45 : 2740                          byte  64, 39
+0c46 : 2c3c                          byte  60, 44
+0c47 : 2d5f                          byte  95, 45
+0c48 : 2e3e                          byte  62, 46
+0c49 : 2f3f                          byte  63, 47
+0c4a : 3029                          byte  41, 48
+0c4b : 3121                          byte  33, 49
+0c4c : 3222                          byte  34, 50
+0c4d : 3323                          byte  35, 51
+0c4e : 3424                          byte  36, 52
+0c4f : 3525                          byte  37, 53
+0c50 : 365e                          byte  94, 54
+0c51 : 3726                          byte  38, 55
+0c52 : 382a                          byte  42, 56
+0c53 : 3928                          byte  40, 57
+0c54 : 3b3a                          byte  58, 59
+0c55 : 3d2b                          byte  43, 61
+0c56 : 5b7b                          byte 123, 91
+0c57 : 5d7d                          byte 125, 93
+0c58 : 0000                          byte  0,0
+0c59 :                               .fontdatadefault
+0c59 : 0000 0000 0000 0000 0000      word $0000,$0000,$0000,$0000,$0000,$0000,$0000,$00
+0c61 : 2000 2000 2000 2000 0000      word $2000,$2000,$2000,$2000,$0000,$0000,$2000,$00
+0c69 : 5000 5000 5000 0000 0000      word $5000,$5000,$5000,$0000,$0000,$0000,$0000,$00
+0c71 : 5000 5000 f800 5000 f800      word $5000,$5000,$f800,$5000,$f800,$5000,$5000,$00
+0c79 : 2000 7800 a000 7000 2800      word $2000,$7800,$a000,$7000,$2800,$f000,$2000,$00
+0c81 : c000 c800 1000 2000 4000      word $c000,$c800,$1000,$2000,$4000,$9800,$1800,$00
+0c89 : 6000 9000 a000 4000 a800      word $6000,$9000,$a000,$4000,$a800,$9000,$6800,$00
+0c91 : 6000 2000 4000 0000 0000      word $6000,$2000,$4000,$0000,$0000,$0000,$0000,$00
+0c99 : 1000 2000 4000 4000 4000      word $1000,$2000,$4000,$4000,$4000,$2000,$1000,$00
+0ca1 : 4000 2000 1000 1000 1000      word $4000,$2000,$1000,$1000,$1000,$2000,$4000,$00
+0ca9 : 0000 2000 a800 7000 a800      word $0000,$2000,$a800,$7000,$a800,$2000,$0000,$00
+0cb1 : 0000 2000 2000 f800 2000      word $0000,$2000,$2000,$f800,$2000,$2000,$0000,$00
+0cb9 : 0000 0000 0000 0000 6000      word $0000,$0000,$0000,$0000,$6000,$2000,$4000,$00
+0cc1 : 0000 0000 0000 f800 0000      word $0000,$0000,$0000,$f800,$0000,$0000,$0000,$00
+0cc9 : 0000 0000 0000 0000 0000      word $0000,$0000,$0000,$0000,$0000,$6000,$6000,$00
+0cd1 : 0000 0800 1000 2000 4000      word $0000,$0800,$1000,$2000,$4000,$8000,$0000,$00
+0cd9 : 7000 8800 9800 a800 c800      word $7000,$8800,$9800,$a800,$c800,$8800,$7000,$00
+0ce1 : 2000 6000 2000 2000 2000      word $2000,$6000,$2000,$2000,$2000,$2000,$7000,$00
+0ce9 : 7000 8800 0800 1000 2000      word $7000,$8800,$0800,$1000,$2000,$4000,$f800,$00
+0cf1 : f800 1000 2000 1000 0800      word $f800,$1000,$2000,$1000,$0800,$8800,$7000,$00
+0cf9 : 1000 3000 5000 9000 f800      word $1000,$3000,$5000,$9000,$f800,$1000,$1000,$00
+0d01 : f800 8000 f000 0800 0800      word $f800,$8000,$f000,$0800,$0800,$8800,$7000,$00
+0d09 : 3000 4000 8000 f000 8800      word $3000,$4000,$8000,$f000,$8800,$8800,$7000,$00
+0d11 : f800 8800 0800 1000 2000      word $f800,$8800,$0800,$1000,$2000,$2000,$2000,$00
+0d19 : 7000 8800 8800 7000 8800      word $7000,$8800,$8800,$7000,$8800,$8800,$7000,$00
+0d21 : 7000 8800 8800 7800 0800      word $7000,$8800,$8800,$7800,$0800,$1000,$6000,$00
+0d29 : 0000 6000 6000 0000 6000      word $0000,$6000,$6000,$0000,$6000,$6000,$0000,$00
+0d31 : 0000 6000 6000 0000 6000      word $0000,$6000,$6000,$0000,$6000,$2000,$4000,$00
+0d39 : 1000 2000 4000 8000 4000      word $1000,$2000,$4000,$8000,$4000,$2000,$1000,$00
+0d41 : 0000 0000 f800 0000 f800      word $0000,$0000,$f800,$0000,$f800,$0000,$0000,$00
+0d49 : 4000 2000 1000 0800 1000      word $4000,$2000,$1000,$0800,$1000,$2000,$4000,$00
+0d51 : 7000 8800 0800 1000 2000      word $7000,$8800,$0800,$1000,$2000,$0000,$2000,$00
+0d59 : 7000 8800 0800 6800 a800      word $7000,$8800,$0800,$6800,$a800,$a800,$7000,$00
+0d61 : 7000 8800 8800 8800 f800      word $7000,$8800,$8800,$8800,$f800,$8800,$8800,$00
+0d69 : f000 8800 8800 f000 8800      word $f000,$8800,$8800,$f000,$8800,$8800,$f000,$00
+0d71 : 7000 8800 8000 8000 8000      word $7000,$8800,$8000,$8000,$8000,$8800,$7000,$00
+0d79 : e000 9000 8800 8800 8800      word $e000,$9000,$8800,$8800,$8800,$9000,$e000,$00
+0d81 : f800 8000 8000 f000 8000      word $f800,$8000,$8000,$f000,$8000,$8000,$f800,$00
+0d89 : f800 8000 8000 f000 8000      word $f800,$8000,$8000,$f000,$8000,$8000,$8000,$00
+0d91 : 7000 8800 8000 b800 8800      word $7000,$8800,$8000,$b800,$8800,$8800,$7800,$00
+0d99 : 8800 8800 8800 f800 8800      word $8800,$8800,$8800,$f800,$8800,$8800,$8800,$00
+0da1 : 7000 2000 2000 2000 2000      word $7000,$2000,$2000,$2000,$2000,$2000,$7000,$00
+0da9 : 3800 1000 1000 1000 1000      word $3800,$1000,$1000,$1000,$1000,$9000,$6000,$00
+0db1 : 8800 9000 a000 c000 a000      word $8800,$9000,$a000,$c000,$a000,$9000,$8800,$00
+0db9 : 8000 8000 8000 8000 8000      word $8000,$8000,$8000,$8000,$8000,$8000,$f800,$00
+0dc1 : 8800 d800 a800 a800 8800      word $8800,$d800,$a800,$a800,$8800,$8800,$8800,$00
+0dc9 : 8800 8800 c800 a800 9800      word $8800,$8800,$c800,$a800,$9800,$8800,$8800,$00
+0dd1 : 7000 8800 8800 8800 8800      word $7000,$8800,$8800,$8800,$8800,$8800,$7000,$00
+0dd9 : f000 8800 8800 f000 8000      word $f000,$8800,$8800,$f000,$8000,$8000,$8000,$00
+0de1 : 7000 8800 8800 8800 a800      word $7000,$8800,$8800,$8800,$a800,$9000,$6800,$00
+0de9 : f000 8800 8800 f000 a000      word $f000,$8800,$8800,$f000,$a000,$9000,$8800,$00
+0df1 : 7800 8000 8000 7000 0800      word $7800,$8000,$8000,$7000,$0800,$0800,$f000,$00
+0df9 : f800 2000 2000 2000 2000      word $f800,$2000,$2000,$2000,$2000,$2000,$2000,$00
+0e01 : 8800 8800 8800 8800 8800      word $8800,$8800,$8800,$8800,$8800,$8800,$7000,$00
+0e09 : 8800 8800 8800 8800 8800      word $8800,$8800,$8800,$8800,$8800,$5000,$2000,$00
+0e11 : 8800 8800 8800 a800 a800      word $8800,$8800,$8800,$a800,$a800,$a800,$5000,$00
+0e19 : 8800 8800 5000 2000 5000      word $8800,$8800,$5000,$2000,$5000,$8800,$8800,$00
+0e21 : 8800 8800 8800 5000 2000      word $8800,$8800,$8800,$5000,$2000,$2000,$2000,$00
+0e29 : f800 0800 1000 2000 4000      word $f800,$0800,$1000,$2000,$4000,$8000,$f800,$00
+0e31 : e000 8000 8000 8000 8000      word $e000,$8000,$8000,$8000,$8000,$8000,$e000,$00
+0e39 : 0000 8000 4000 2000 1000      word $0000,$8000,$4000,$2000,$1000,$0800,$0000,$00
+0e41 : 7000 1000 1000 1000 1000      word $7000,$1000,$1000,$1000,$1000,$1000,$7000,$00
+0e49 : 2000 5000 8800 0000 0000      word $2000,$5000,$8800,$0000,$0000,$0000,$0000,$00
+0e51 : 0000 0000 0000 0000 0000      word $0000,$0000,$0000,$0000,$0000,$0000,$f800,$00
+0e59 : 4000 2000 1000 0000 0000      word $4000,$2000,$1000,$0000,$0000,$0000,$0000,$00
+0e61 : 0000 0000 7000 0800 7800      word $0000,$0000,$7000,$0800,$7800,$8800,$7800,$00
+0e69 : 8000 8000 b000 c800 8800      word $8000,$8000,$b000,$c800,$8800,$8800,$f000,$00
+0e71 : 0000 0000 7000 8000 8000      word $0000,$0000,$7000,$8000,$8000,$8800,$7000,$00
+0e79 : 0800 0800 6800 9800 8800      word $0800,$0800,$6800,$9800,$8800,$8800,$7800,$00
+0e81 : 0000 0000 7000 8800 f800      word $0000,$0000,$7000,$8800,$f800,$8000,$7000,$00
+0e89 : 3000 4800 4000 e000 4000      word $3000,$4800,$4000,$e000,$4000,$4000,$4000,$00
+0e91 : 0000 7800 8800 8800 7800      word $0000,$7800,$8800,$8800,$7800,$0800,$7000,$00
+0e99 : 8000 8000 b000 c800 8800      word $8000,$8000,$b000,$c800,$8800,$8800,$8800,$00
+0ea1 : 2000 0000 6000 2000 2000      word $2000,$0000,$6000,$2000,$2000,$2000,$7000,$00
+0ea9 : 1000 0000 3000 1000 1000      word $1000,$0000,$3000,$1000,$1000,$9000,$6000,$00
+0eb1 : 8000 8000 9000 a000 c000      word $8000,$8000,$9000,$a000,$c000,$a000,$9000,$00
+0eb9 : 6000 2000 2000 2000 2000      word $6000,$2000,$2000,$2000,$2000,$2000,$7000,$00
+0ec1 : 0000 0000 d000 a800 a800      word $0000,$0000,$d000,$a800,$a800,$8800,$8800,$00
+0ec9 : 0000 0000 b000 c800 8800      word $0000,$0000,$b000,$c800,$8800,$8800,$8800,$00
+0ed1 : 0000 0000 7000 8800 8800      word $0000,$0000,$7000,$8800,$8800,$8800,$7000,$00
+0ed9 : 0000 0000 f000 8800 f000      word $0000,$0000,$f000,$8800,$f000,$8000,$8000,$00
+0ee1 : 0000 0000 6800 9800 7800      word $0000,$0000,$6800,$9800,$7800,$0800,$0800,$00
+0ee9 : 0000 0000 b000 c800 8000      word $0000,$0000,$b000,$c800,$8000,$8000,$8000,$00
+0ef1 : 0000 0000 7000 8000 7000      word $0000,$0000,$7000,$8000,$7000,$0800,$f000,$00
+0ef9 : 4000 4000 e000 4000 4000      word $4000,$4000,$e000,$4000,$4000,$4800,$3000,$00
+0f01 : 0000 0000 8800 8800 8800      word $0000,$0000,$8800,$8800,$8800,$9800,$6800,$00
+0f09 : 0000 0000 8800 8800 8800      word $0000,$0000,$8800,$8800,$8800,$5000,$2000,$00
+0f11 : 0000 0000 8800 a800 a800      word $0000,$0000,$8800,$a800,$a800,$a800,$5000,$00
+0f19 : 0000 0000 8800 5000 2000      word $0000,$0000,$8800,$5000,$2000,$5000,$8800,$00
+0f21 : 0000 0000 8800 8800 7800      word $0000,$0000,$8800,$8800,$7800,$0800,$7000,$00
+0f29 : 0000 0000 f800 1000 2000      word $0000,$0000,$f800,$1000,$2000,$4000,$f800,$00
+0f31 : 1000 2000 2000 4000 2000      word $1000,$2000,$2000,$4000,$2000,$2000,$1000,$00
+0f39 : 2000 2000 2000 2000 2000      word $2000,$2000,$2000,$2000,$2000,$2000,$2000,$00
+0f41 : 4000 2000 2000 1000 2000      word $4000,$2000,$2000,$1000,$2000,$2000,$4000,$00
+0f49 : 5000 a800 5000 a800 5000      word $5000,$a800,$5000,$a800,$5000,$a800,$5000,$00
+0f51 : fc00 fc00 fc00 fc00 fc00      word $fc00,$fc00,$fc00,$fc00,$fc00,$fc00,$fc00,$fc
 13ff : 0000                          word  0
 4000 :                               .initialisedstart
 4000 :                               .systemvariables

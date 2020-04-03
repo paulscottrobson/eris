@@ -2,7 +2,7 @@
 '			Simple Squash Game
 '
 screen 2,2
-print str$(sysvar(16),16)
+soundBuffer = sysvar(16)+37:print str$(soundBuffer,16)
 '
 '			Manually create sprites by poking image memory. Not good practice normally :)
 '
@@ -27,7 +27,7 @@ while ball.x >= 0
 		ball.xi = abs(ball.xi)
 		score = score + 1
 		cursor 2,2:ink 2:print "Score ";score;
-		sound 1,28888,1
+;		sound 1,28888,1
 		reject = True
 	endif
 	if newX > 319-ball.radius then reject = True:ball.xi = -ball.xi
@@ -37,5 +37,6 @@ while ball.x >= 0
 		ball.x = newX:ball.y = newY:sprite 1 to ball.x,ball.y
 	else
 		sound 1,14444,1
+		cursor 0,0:print "H",soundBuffer!3,"T",soundBuffer!4
 	endif
 wend
