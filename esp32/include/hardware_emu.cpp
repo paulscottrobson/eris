@@ -101,7 +101,6 @@ WORD16 HWGetSystemClock(void) {
 
 void HWWriteAudio(BYTE8 channel,WORD16 freq) {
 	int aFreq = (freq == 0) ? 0 : AUDIOCLOCK / freq;
-	//printf("Write %d to channel %d = %dHz\n",freq,channel,aFreq);
 	GFXSetFrequency(aFreq,channel);
 }
 

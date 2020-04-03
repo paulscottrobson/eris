@@ -66,6 +66,9 @@
 		xor 	r0,#TOK_FLIP^TOK_DIM 		; sprite set size.
 		sknz 	r0
 		jmp 	#_CSpriteDim
+		xor 	r0,#TOK_DIM^TOK_END 		; sprite end
+		sknz 	r0
+		jmp 	#_CSpriteEnd
 		jmp 	#SyntaxError
 		;
 		;		MOVE x,y
@@ -116,6 +119,12 @@
 		jsr 	#EvaluateInteger
 		jsr 	#OSSpriteSetSize
 		jmp 	#_CSpriteCheckExit
+		;
+		;		END 
+		;
+._CSpriteEnd
+		jsr 	#OSSpriteKill
+		jmp 	#_CSpriteCheckExit
 
 ;SPRITE LOAD "" 		- load sprite data
 ;SPRITE 1 TO x,y 		- move sprite
@@ -155,6 +164,37 @@
 		sknz 	r2
 		jmp 	#BadNumberError 			; bad values.
 
+		stm 	r0,r10,#esValue1 			; return the collision result
+		stm 	r14,r10,#esType1
+		stm 	r14,r10,#esReference1
+		pop 	link
+		ret
+
+; *****************************************************************************
+;
+;							Access Sprite Information
+;	
+; *****************************************************************************
+
+.Unary_SpriteX 	;; [sprite.x(]
+		clr 	r1
+		sknz 	r15
+.Unary_SpriteY 	;; [sprite.y(]
+		mov 	r1,#spY
+		sknz 	r15
+.Unary_SpriteI 	;; [sprite.info(]
+		mov 	r1,#spStatus
+		push 	link
+		;
+		jsr 	#EvaluateInteger 			; get sprite #
+		jsr 	#CheckRightBracket
+		ldm 	r2,#spriteCount 			; check < count
+		sub 	r0,r2,#0
+		sklt 	r0
+		jmp 	#BadNumberError
+		add 	r0,r2,#0 					; fix back
+		jsr 	#OSGetSpriteInfo			; get information
+		;
 		stm 	r0,r10,#esValue1 			; return the collision result
 		stm 	r14,r10,#esType1
 		stm 	r14,r10,#esReference1

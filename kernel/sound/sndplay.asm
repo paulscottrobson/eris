@@ -67,6 +67,7 @@
 		sknz 	r3
 		jmp 	#_OSXSPFail1 				; if so exit with error 1.
 		stm 	r2,r0,#sndQueueTail 		; write it back.
+		jsr 	#OSIUpdateSound 			; start it immediately.
 		clr 	r0 							; return zero
 		jmp 	#_OSXSPExit 					
 

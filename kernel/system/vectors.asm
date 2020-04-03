@@ -136,6 +136,12 @@
 .OSSpriteCollision
 		jmp 	#OSXSpriteCollision	
 
+.OSSpriteKill
+		jmp 	#OSXSpriteKill
+
+.OSGetSpriteInfo		
+		jmp 	#OSXGetSpriteInfo
+
 .OSDrawTileMap
 		jmp 	#OSXDrawTileMap
 		

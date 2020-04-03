@@ -160,6 +160,20 @@
 
 ; *****************************************************************************
 ;
+;								Kill off a sprite
+;
+; *****************************************************************************
+
+.OSXSpriteKill
+		push 	r1,link
+		clr 	r0
+		clr 	r1
+		jsr 	#OSIUpdateStatus 
+		pop 	r1,link
+		ret
+
+; *****************************************************************************
+;
 ;					   Update status with value R1 mask R0
 ;
 ;	Required because the new Status may already have changed from the no 
@@ -182,4 +196,25 @@
 		add 	r3,r1,#0 					; add in data
 		stm 	r3,r2,#spNewStatus 			; write back
 		pop 	r2,r3
+		ret
+
+; *****************************************************************************
+;
+;					Get sprite Element R1 from Sprite # R0
+;
+; *****************************************************************************
+
+.OSXGetSpriteInfo
+		push 	r1,r2
+		mult 	r0,#spriteRecordSize 		; make point to record
+		ldm 	r2,#spriteAddress
+		add 	r2,r0,#0  					; element in record -> R1
+		add 	r2,r1,#0 			
+		;
+		ldm 	r1,r2,#spNewX-spX 			; read the updated value.
+		mov 	r0,r1,#0 					; put in R0.
+		xor 	r1,#spNoChange 				; if it is no change,
+		sknz 	r1
+		ldm 	r0,r2,#0 					; read current value
+		pop 	r1,r2
 		ret

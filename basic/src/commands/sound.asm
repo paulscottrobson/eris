@@ -31,11 +31,11 @@
 
 		jsr 	#CheckComma 				; length in deciseconds
 		jsr 	#EvaluateInteger
-		mov 	r1,r0,#0
+		mov 	r2,r0,#0
 
 		jsr 	#CheckComma 				; pitch or change
 		jsr 	#EvaluateInteger
-		mov 	r2,r0,#0
+		mov 	r1,r0,#0
 
 		mov 	r0,r4,#0 					; get channel back
 		jsr 	#OSSoundPlay				; call sound routine.

@@ -17,7 +17,7 @@
 ; *****************************************************************************
 
 .OSIUpdateSound
-		push 	r0,r1,r4,r5,link
+		push 	r0,r1,r2,r3,r4,r5,link
 		ldm 	r4,#soundQueueBase 			; it is done this way to make it quicker
 		mov		r5,#sndNoise
 		jsr 	#OSIUpdateOneChannel
@@ -29,7 +29,7 @@
 		add 	r4,#sndRecordSize
 		mov		r5,#sndTone2
 		jsr 	#OSIUpdateOneChannel
-		pop 	r0,r1,r4,r5,link		
+		pop 	r0,r1,r2,r3,r4,r5,link		
 		ret
 
 ; *****************************************************************************

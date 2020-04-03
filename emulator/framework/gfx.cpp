@@ -363,7 +363,7 @@ void Beeper::setup(void) {
     desiredSpec.freq = FREQUENCY;
     desiredSpec.format = AUDIO_S16LSB;
     desiredSpec.channels = 1;
-    desiredSpec.samples = 4096;
+    desiredSpec.samples = 512;
     desiredSpec.callback = audio_callback;
     desiredSpec.userdata = this;
 
