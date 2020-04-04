@@ -1,22 +1,31 @@
+' **************************************************************************************************
 '
 '					Breakout - based on the Atari Video Pinball version
 '
+' **************************************************************************************************
+
 screen 3,1:palette 4,0,6:palette 1,1,7
+call centretext(60,7,3,"Breakout")
+call centretext(180,2,1,"Press 1 for Breakout, 2 for Breakthru")
+repeat
+	a$ = get$()
+until a$ = "1" or a$ = "2"
 sprite load "breakout.spr"
 dim brick(13,5),yPos(5),xPos(13):brick.width = 310/14:brick.height = 8
 dim bat.width(3):bat.width(0) = 20:bat.width(1) = 32:bat.width(2) = 8:bat.width(3) = 16
-call game(7,1,true)
-end
+call game(7,1,a$ = "2")
+screen 3,1:end
 '
 '					Play one Game
 '
 proc game(balls,batInitWidth,isBreakthru)
 	score = 0
-	cls:call drawScore(score):call drawBalls(balls):call resetWall(isBreakthru)
+	cls:call drawScore(score):call resetWall(isBreakthru)
 	bat.x = 160:bat.y = 235:bat.size = batInitWidth:bat.radius = bat.width(bat.size)/2
 	sprite 0 draw bat.size+10 ink 1 dim 2 to bat.x,bat.y
-	call resetBall()
 	repeat
+		call resetBall():call drawBalls(balls)
+		wait 100
 		repeat
 			call moveBat()
 			call moveBall()
@@ -25,8 +34,6 @@ proc game(balls,batInitWidth,isBreakthru)
 			balls = balls - 1
 		else
 			call resetWall(isBreakthru)
-			call resetBall()
-			wait 100
 		endif
 	until balls = 0
 endproc
@@ -35,7 +42,7 @@ endproc
 '
 proc resetBall()
 	ball.x = random(40,280):ball.y = yPos(5)+32:ball.speed = 2
-	ball.xi = (random(0,1)*2-1)*ball.speed:ball.yi = ball.speed
+	ball.xi = 0:ball.yi = ball.speed
 	ball.hitBackWall = false:ball.hitGreen = false
 	sprite 1 draw 14 ink 1 to ball.x,ball.y
 endproc
@@ -48,7 +55,6 @@ proc moveBat()
 	if bat.x < bat.radius+5 then bat.x = bat.radius+5
 	if bat.x >= 316-bat.radius then bat.x = 316-bat.radius
 	sprite 0 to bat.x,bat.y
-
 endproc
 '
 '		Move the ball
@@ -67,7 +73,6 @@ proc moveBall()
 			ball.yi = -ball.yi
 			sound 1,5555,1
 		endif
-		ball.yi = -ball.speed
 	endif
 
 	if ball.y < 0 
@@ -142,3 +147,10 @@ proc drawBrick(x,y)
 	ink brick(x,y)
 	x = xPos(x):y = yPos(y):rect x+2,y to x+brick.width-2,y+brick.height-4
 endproc
+'
+'				Centre print
+'
+proc centreText(y,colour,size,text$)
+	ink colour
+	text 160-len(text$)*3,y,text$
+endproc	
