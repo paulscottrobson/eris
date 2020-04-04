@@ -68,11 +68,23 @@
 .Command_Text 	;; [text]
 		push 	link
 		jsr 	#GetCoordinatePair	
-		mov 	r3,r0,#0
+		mov 	r4,r0,#0
 		jsr 	#CheckComma
 		jsr 	#EvaluateString
 		mov 	r2,r0,#0
-		mov 	r0,r3,#0
+		mov 	r3,#1
+		ldm 	r0,r11,#0					; check for comma
+		xor 	r0,#TOK_COMMA
+		skz		r0
+		jmp 	#_CTXDoText
+		inc 	r11 						; skip comma, get scale
+		jsr 	#EvaluateInteger
+		mov 	r3,r0,#0
+		and 	r0,#$FFF0
+		skz 	r0
+		jmp 	#BadNumberError
+._CTXDoText		
+		mov 	r0,r4,#0
 		jsr 	#OSDrawString
 		pop 	link
 		ret

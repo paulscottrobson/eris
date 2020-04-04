@@ -1,8 +1,5 @@
-screen 2,2
-sprite load "sprites.dat"
-palette 1,0,3:palette 1,1,5
-ink 1
-draw 100,100,1
-draw on 1
-ink 1
-draw 140,140,1
+ink 5
+text 10,110,"Hello world !"
+ink 6
+text 10,140,"Hello world !",3
+
