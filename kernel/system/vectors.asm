@@ -75,6 +75,9 @@
 
 .OSSetActivePlane
 		jmp 	#OSXSetActivePlane
+	
+.OSSetInkColourMask		
+		jmp 	#OSXSetInkColourMask
 		
 .OSSetBackPlanePalette
 		jmp 	#OSXSetBackPlanePalette

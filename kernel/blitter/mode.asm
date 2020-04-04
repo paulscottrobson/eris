@@ -175,7 +175,7 @@
 ;
 ; *****************************************************************************
 
-.OSISetInkColourMask		
+.OSXSetInkColourMask		
 		push 	r0,r1,r2,link
 		jsr 	#OSWaitBlitter
 		ldm 	r2,#activePlane 			; active plane to R2

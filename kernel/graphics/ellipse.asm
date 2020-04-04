@@ -26,7 +26,7 @@
 ._OSXEllipseCommand
 		push 	r0,r1,r2,r3,r5,r6,r7,r8,r9,r10,link
 
-		jsr 	#OSISetInkColourMask 		; set colour/mask
+		jsr 	#OSSetInkColourMask 		; set colour/mask
 		jsr 	#OSIGraphicBoxCoordinates 	; (R0,R1) -> (R2,R3) top left/bottom right
 
 		

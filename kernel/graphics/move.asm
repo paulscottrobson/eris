@@ -21,7 +21,7 @@
 		stm 	r0,#xGraphic
 		stm 	r1,#yGraphic
 		;
-		jsr 	#OSISetInkColourMask 		; set colour/mask, which waits for blitter
+		jsr 	#OSSetInkColourMask 		; set colour/mask, which waits for blitter
 		stm 	r0,#blitterX
 		stm 	r1,#blitterY
 		mov 	r0,#_OSXPPData

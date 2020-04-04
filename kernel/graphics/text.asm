@@ -12,7 +12,7 @@
 
 .OSXDrawString	
 		push 	r1,r2,r3,r4,r5,link			; don't save R0 as it's updated to print
-		jsr 	#OSISetInkColourMask 		; set colour/mask
+		jsr 	#OSSetInkColourMask 		; set colour/mask
 		ldm 	r3,r2,#0 					; get count to print
 ._OSXDSLoop
 		inc 	r2

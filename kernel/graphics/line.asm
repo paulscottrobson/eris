@@ -13,7 +13,7 @@
 .OSXDrawLine
 		push 	r0,r1,r2,r3,r4,r5,r6,r7,r8,r9,link
 		;
-		jsr 	#OSISetInkColourMask 		; set colour/mask, which waits for blitter
+		jsr 	#OSSetInkColourMask 		; set colour/mask, which waits for blitter
 		mov 	r4,#_OSDLPixel 				; pixel at far left, set as data
 		stm 	r4,#blitterData
 		;

@@ -93,19 +93,7 @@
 		stm 	r0,#blitterY
 		jsr 	#CheckComma
 		jsr 	#EvaluateInteger  			; data or index
-		mov 	r1,r0,#0
-		and 	r1,#$FF00 					; is it 0-255 if so use sprite image.
-		skz		r1
-		jmp 	#_CBlitData
-		mov 	r1,r0,#0 					; check legitimate value.
-		ldm 	r2,#spriteImageCount 		
-		sub 	r1,r2,#0
-		sklt
-		jmp 	#BadNumberError
-		ror 	r0,#12 						; multiply by 16
-		ldm 	r1,#spriteImageMemory		; and sprite image memory address
-		add 	r0,r1,#0
-._CBlitData		
+		jsr 	#BlitIndexAddressProcess
 		stm 	r0,#blitterData
 		jsr 	#CheckComma
 		jsr 	#EvaluateInteger 
@@ -116,6 +104,29 @@
 		pop 	link
 		ret						
 
+; *****************************************************************************
+;
+;				Convert index or address R0 to image address in R0
+;
+; *****************************************************************************
+
+.BlitIndexAddressProcess
+		push 	r1,r2
+		mov 	r1,r0,#0
+		and 	r1,#$FF00 					; is it 0-255 if so use sprite image.
+		skz		r1
+		jmp 	#_BIAData
+		mov 	r1,r0,#0 					; check legitimate value.
+		ldm 	r2,#spriteImageCount 		
+		sub 	r1,r2,#0
+		sklt
+		jmp 	#BadNumberError
+		ror 	r0,#12 						; multiply by 16
+		ldm 	r1,#spriteImageMemory		; and sprite image memory address
+		add 	r0,r1,#0
+._BIAData		
+		pop 	r1,r2
+		ret
 
 ; *****************************************************************************
 ;
@@ -155,10 +166,26 @@
 .Command_Draw 	;; [draw]
 		push 	link
 		ldm 	r0,r11,#0					; check ON
-		inc 	r11
 		xor 	r0,#TOK_ON
-		skz 	r0
-		jmp 	#SyntaxError
+		sknz 	r0
+		jmp 	#_CDrawOn
+		;
+		jsr 	#OSSetInkColourMask			; set ink & colour
+		jsr 	#GetCoordinatePair			; draw target in R0,R1
+		stm 	r0,#blitterX
+		stm 	r1,#blitterY
+		jsr 	#CheckComma 				; comma
+		jsr 	#EvaluateInteger 			; data
+		jsr 	#BlitIndexAddressProcess 	; make address
+		stm 	r0,#blitterData
+		mov 	r0,#16 						; write a row out.
+		stm 	r0,#blitterCmd
+		pop 	link
+		ret
+
+
+._CDrawOn		
+		inc 	r11
 		jsr 	#EvaluateInteger
 		jsr 	#OSSetActivePlane
 		and 	r0,#$FFFE 					

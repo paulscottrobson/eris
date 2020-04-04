@@ -18,7 +18,7 @@
 
 .OSXFillRectangle
 		push 	r0,r1,r2,r3,r4,r5,link
-		jsr 	#OSISetInkColourMask 		; set colour/mask
+		jsr 	#OSSetInkColourMask 		; set colour/mask
 		jsr 	#OSIGraphicBoxCoordinates 	; (R0,R1) -> (R2,R3)
 		sub 	r3,r1,#0 					; R3 is the height (difference + 1)
 		add 	r3,#$8001 					; make it a non incrementing data command

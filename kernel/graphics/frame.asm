@@ -19,7 +19,7 @@
 .OSXDrawRectangle
 		push 	r0,r1,r2,r3,link
 		
-		jsr 	#OSISetInkColourMask 		; set colour/mask
+		jsr 	#OSSetInkColourMask 		; set colour/mask
 		jsr 	#OSIGraphicBoxCoordinates 	; (R0,R1) -> (R2,R3)
 
 		push 	r0,r1
