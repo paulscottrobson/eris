@@ -141,11 +141,13 @@ class Tokens(object):
 	or 
 [2]	
 	> >= < <= = <>
-[3]	
+[3]
+	>> <<
+[4]	
 	+ - 
-[4]
-	* / mod
 [5]
+	* / mod
+[6]
 	!
 //
 //		Basic Unary Functions

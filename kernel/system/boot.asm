@@ -13,13 +13,14 @@
 .bootPrompt
 	string "[10,0F,16,0C]*** Eris RetroComputer ***[0D,0D,13]Written by Paul Robson 2020[0D,0D]"
 .kernelPrompt
-	string "Kernel[3A] 0.63[0D]"
+	string "Kernel[3A] 0.64[0D]"
 
 ; *****************************************************************************
 ;
 ;							Kernel Boot code comes here
 ;
 ; *****************************************************************************
+
 .bootCode
 		clr		r14 						; default value for R14. Zero throughout
 ;

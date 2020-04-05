@@ -143,6 +143,59 @@
 
 ; *****************************************************************************
 ;
+;							 logical shift left
+;
+; *****************************************************************************
+
+.BinaryOp_Shl	;; [<<]
+		push 	link
+		jsr 	#CheckIntDereference
+		ldm 	r0,r10,#esValue1
+		ldm 	r1,r10,#esValue2
+		mov 	r2,r1,#0
+		sub 	r2,#17
+		sklt 	r2
+		mov 	r1,#17
+._BOSHLLoop
+		sknz 	r1
+		jmp 	#_BOSHLLExit
+		add 	r0,r0,#0
+		dec 	r1
+		jmp 	#_BOSHLLoop
+._BOSHLLExit				
+		stm 	r0,r10,#esValue1
+		pop 	link
+		ret
+
+; *****************************************************************************
+;
+;							 logical shift right
+;
+; *****************************************************************************
+
+.BinaryOp_Shr	;; [>>]
+		push 	link
+		jsr 	#CheckIntDereference
+		ldm 	r0,r10,#esValue1
+		ldm 	r1,r10,#esValue2
+		mov 	r2,r1,#0
+		sub 	r2,#17
+		sklt 	r2
+		mov 	r1,#17
+._BOSHRLoop
+		sknz 	r1
+		jmp 	#_BOSHRLExit
+		ror 	r0,#1
+		and 	r0,#$7FFF
+		dec 	r1
+		jmp 	#_BOSHRLoop
+._BOSHRLExit				
+		stm 	r0,r10,#esValue1
+		pop 	link
+		ret
+
+; *****************************************************************************
+;
 ;							 binary indirection
 ;
 ; *****************************************************************************

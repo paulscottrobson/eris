@@ -35,6 +35,23 @@
 
 ; *****************************************************************************
 ;
+;							Logical Not
+;
+; *****************************************************************************
+
+.Unary_Not		;; [not]
+		push 	link
+		jsr 	#EvaluateTermInteger 		; get integer into R1 - term no ()
+		mov 	r1,r0,#0
+		clr 	r0 							; calculate !R1
+		sknz 	r1 
+		dec 	r0
+		stm 	r0,r10,#esValue1 			; update value
+		pop 	link
+		ret
+
+; *****************************************************************************
+;
 ;							Absolute value
 ;
 ; *****************************************************************************
@@ -151,6 +168,9 @@
 		push 	link
 		jsr 	#CheckRightBracket 			; check there's a right bracket
 ._UGWait
+		jsr 	#OSSystemManager 			; check for break
+		skz 	r0
+		jmp 	#BreakError
 		jsr 	#UnaryInkeyNoCheck 			; inkey but wait for key press.
 		ldm 	r0,r10,#esValue1 		
 		sknz	r0
