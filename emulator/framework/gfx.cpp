@@ -84,8 +84,9 @@ void GFXStart(void) {
 static void _GFXMainLoop(void *arg) {
 	SDL_Event event;
 	while (SDL_PollEvent(&event)) {													// While events in event queue.
-		if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_ESCAPE) 		// Exit if ESC pressed.
-																		isRunning = 0;
+		if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_ESCAPE) {		// Exit if ESC pressed.
+			if ((SDL_GetModState() & KMOD_LCTRL) == 0) isRunning = 0;				// Not Ctrl+ESC
+		}
 		if (event.type == SDL_KEYDOWN || event.type == SDL_KEYUP) {					// Handle other keys.
 			_GFXUpdateKeyRecord(event.key.keysym.sym,event.type == SDL_KEYDOWN);
 		}

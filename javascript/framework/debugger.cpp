@@ -60,6 +60,7 @@ void GFXXRender(SDL_Surface *surface,int autoStart) {
 			}
 		}
 	}
+	#ifndef NODEBUGGER
 	if (currentKey != lastKey) {													// Key changed
 		lastKey = currentKey;														// Update current key.
 		currentKey = DEBUG_KEYMAP(currentKey,inRunMode != 0);						// Pass keypress to called.
@@ -118,6 +119,7 @@ void GFXXRender(SDL_Surface *surface,int autoStart) {
 			}
 		} 
 	}
+	#endif
 	if (inRunMode != 0) {															// Running a program.
 		int frameRate = DEBUG_RUN(addressSettings[3],stepBreakPoint);				// Run a frame, or try to.
 		if (frameRate == 0) {														// Run code with step breakpoint, maybe.

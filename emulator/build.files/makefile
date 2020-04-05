@@ -12,7 +12,7 @@ LIBRARY_PATHS = -LC:\sdl2\lib
 #COMPILER_FLAGS specifies the additional compilation options we're using
 # -w suppresses all warnings
 # -Wl,-subsystem,windows gets rid of the console window
-COMPILER_FLAGS = -DINCLUDE_DEBUGGING_SUPPORT -DWINDOWS
+COMPILER_FLAGS = -DINCLUDE_OS_SUPPORT -DWINDOWS
 
 #LINKER_FLAGS specifies the libraries we're linking against
 LINKER_FLAGS = -lmingw32 -lSDL2main -lSDL2

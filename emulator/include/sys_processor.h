@@ -37,7 +37,7 @@ typedef struct __CPUSTATUS {
 #define FRAME_RATE		(50)														// Frames per second (50)
 #define CYCLES_PER_FRAME (CYCLE_RATE / FRAME_RATE)									// Cycles per frame (20,000)
 
-#ifdef INCLUDE_DEBUGGING_SUPPORT													// Only required for debugging
+#ifdef INCLUDE_OS_SUPPORT								
 
 CPUSTATUS *CPUGetStatus(void);
 BYTE8 CPUExecute(WORD16 breakPoint1,WORD16 breakPoint2);

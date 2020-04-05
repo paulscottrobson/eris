@@ -51,6 +51,8 @@ static int keys[][16] = {
 // ****************************************************************************
 
 void HWSyncImplementation(LONG32 iCount) {
+	if ((SDL_GetModState() & KMOD_LCTRL) != 0 && 
+		 SDL_GetKeyboardState(NULL)[SDL_SCANCODE_ESCAPE] != 0) CPUReset();			/* Ctrl+ESC is Reset */
 }
 
 // ****************************************************************************

@@ -157,7 +157,7 @@ WORD16 CPUGetEmulatedTimer(void) {
 //								Reset the CPU
 // ****************************************************************************
 
-#ifdef INCLUDE_DEBUGGING_SUPPORT
+#ifdef INCLUDE_OS_SUPPORT
 static void CPULoadChunk(FILE *f,BYTE8* memory,int count);
 #endif
 
@@ -177,7 +177,7 @@ void CPUReset(void) {
 //		Called on exit, does nothing on ESP32 but required for compilation
 // ****************************************************************************
 
-#ifdef INCLUDE_DEBUGGING_SUPPORT
+#ifdef INCLUDE_OS_SUPPORT
 #include "gfx.h"
 void CPUExit(void) {
 	GFXExit();
@@ -216,7 +216,7 @@ void CPUWriteMemory(WORD16 address,WORD16 data) {
 	WRITE(address,data);
 }
 
-#ifdef INCLUDE_DEBUGGING_SUPPORT
+#ifdef INCLUDE_OS_SUPPORT
 
 // ****************************************************************************
 //		Execute chunk of code, to either of two break points or frame-out,
