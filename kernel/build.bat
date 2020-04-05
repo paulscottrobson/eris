@@ -1,11 +1,11 @@
 @echo off
 pushd fonts
-python font5x7.py
+python3 font5x7.py
 popd
 pushd keyboard-map 
-python keyconv.py
+python3 keyconv.py
 popd 
-python ..\assembler\easm.zip 
+python3 ..\assembler\easm.zip 
 if errorlevel 1 goto exit
 copy bin\a.out ..\emulator\bin\kernel.rom >NUL
 copy bin\a.prg ..\emulator\bin\kernel.prg >NUL

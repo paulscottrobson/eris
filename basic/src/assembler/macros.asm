@@ -52,7 +52,7 @@
 ; *****************************************************************************
 ;
 ;			The third group is take a single register as a parameter
-;			Note that clr uses R14 here, in the Python assembler it uses XOR.
+;			Note that clr uses R14 here, in the python assembler it uses XOR.
 ;
 ; *****************************************************************************
 

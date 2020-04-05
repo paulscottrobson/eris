@@ -1,3 +1,3 @@
 @echo off
-python process.py
+python3 process.py
 copy *.h ..\emulator\cpu >NUL 

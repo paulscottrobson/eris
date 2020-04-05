@@ -57,7 +57,7 @@
 		mov 	r2,r0,#0
 		pop 	r0,r1
 		;
-		;		Now in the Python code in ellipse.py 
+		;		Now in the python code in ellipse.py 
 		;
 		;		R0,R1: Centre of circle
 		;		R2: Horizontal scalar * 256

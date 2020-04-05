@@ -35,7 +35,7 @@ Hardware
 
 System Software
 
-- Python Cross Assembler, Sprite Generator, Basic tokeniser for cross development.
+- python3 Cross Assembler, Sprite Generator, Basic tokeniser for cross development.
 
 Kernel
 

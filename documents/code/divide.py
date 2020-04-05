@@ -2,7 +2,7 @@
 # *****************************************************************************
 #
 #		Name:		divide.py
-#		Purpose:	16 bit unsigned Integer Division prototype in Python
+#		Purpose:	16 bit unsigned Integer Division prototype in python3
 #		Created:	8th March 2020
 #		Author:		Paul Robson (paul@robsons.org.uk)
 #
