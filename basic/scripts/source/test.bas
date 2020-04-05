@@ -1,4 +1,2 @@
-cls
-repeat
-print get()
-until 0
+print "dir command >>"
+dir
