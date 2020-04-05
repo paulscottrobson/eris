@@ -43,7 +43,7 @@ void DBGXRender(int *address,int showDisplay) {
 		CPUSTATUS *s = CPUGetStatus();
 		BlitterGetStatus(s);
 
-		GFXSetCharacterSize(36,24);
+		GFXSetCharacterSize(DBGXCHAR,DBGYCHAR);
 		DBGVerticalLabel(24,0,labels,DBGC_ADDRESS,-1);									// Draw the labels for the register
 		#define DN(v,w) GFXNumber(GRID(28,n++),v,16,w,GRIDSIZE,DBGC_DATA,-1)			// Helper macro
 		DN(s->pc,4);DN(s->carry,1);
@@ -59,7 +59,7 @@ void DBGXRender(int *address,int showDisplay) {
 			GFXNumber(GRID(40,n),s->r[n],16,4,GRIDSIZE,DBGC_DATA,-1);
 		}
 		int a = address[1];																// Dump Memory.
-		for (int row = 17;row < 23;row++) {
+		for (int row = 17;row < 30;row++) {
 			GFXNumber(GRID(0,row),a,16,4,GRIDSIZE,DBGC_ADDRESS,-1);
 			for (int col = 0;col < 8;col++) {
 				GFXNumber(GRID(5+col*5,row),CPUReadMemory(a),16,4,GRIDSIZE,DBGC_DATA,-1);

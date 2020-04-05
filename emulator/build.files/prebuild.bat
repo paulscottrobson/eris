@@ -7,7 +7,7 @@ pushd ..\processor
 call build.bat
 popd
 if errorlevel 1 goto exit
-rem python3 uasm.py
+rem python uasm.py
 pushd ..\kernel
 call build.bat
 popd

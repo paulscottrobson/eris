@@ -16,12 +16,15 @@
 #include "sys_processor.h"
 
 #define WIN_TITLE 		"Eris Emulator 05-Apr-20"									// Initial Window stuff
+#define DBGXCHAR 		46
+#define DBGYCHAR 		32
+
 #ifdef EMSCRIPTEN
 #define WIN_WIDTH 		(320*3)
 #define WIN_HEIGHT 		(240*3)
 #else
-#define WIN_WIDTH		(42*8*4)
-#define WIN_HEIGHT		(28*8*4)
+#define WIN_WIDTH		(DBGXCHAR*8*3)
+#define WIN_HEIGHT		(DBGYCHAR*8*3)
 #endif
 #define WIN_BACKCOLOUR	0x008
 
