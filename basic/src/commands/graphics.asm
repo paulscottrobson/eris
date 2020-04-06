@@ -178,8 +178,24 @@
 		jsr 	#EvaluateInteger 			; data
 		jsr 	#BlitIndexAddressProcess 	; make address
 		stm 	r0,#blitterData
-		mov 	r0,#16 						; write a row out.
-		stm 	r0,#blitterCmd
+		clr 	r2
+		ldm 	r0,r11,#0 					; check for DIMx
+		xor 	r0,#TOK_DIM
+		skz 	r0
+		jmp		#_CDrawNoDim
+		inc 	r11
+		jsr 	#EvaluateInteger 			; get DIM
+		dec 	r0 							; make 0 or 1
+		mov 	r2,r0,#0 					; put in R2
+		and 	r2,#1 						; mask out bit 0
+		ror 	r2,#4 						; shift to bit 12
+		and 	r0,#$FFFE 					; validate 0 or 1
+		skz 	r0
+		jmp 	#BadNumberError
+		
+._CDrawNoDim		
+		add 	r2,#16 						; write a row out.
+		stm 	r2,#blitterCmd
 		pop 	link
 		ret
 
