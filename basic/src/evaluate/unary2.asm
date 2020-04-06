@@ -143,3 +143,49 @@
 		pop 	link
 		ret
 
+; *****************************************************************************
+;
+;							event(<var>,<time>)
+;
+; *****************************************************************************
+;
+;		Returns true every <time> 1/100s
+;
+.Unary_Event 	;; [event(]
+		push 	link
+		mov 	r9,#(TOK_PLING & 0x1E00)-0x400
+		jsr 	#Evaluator 					; get a reference.
+		ldm 	r0,r10,#esReference1 		; it *must* be a reference
+		sknz 	r0 							; which is a variable/array or a !expression
+		jmp 	#SyntaxError 	
+		ldm 	r0,r10,#esType1 			; and it must be an integer.
+		skz 	r0
+		jmp 	#TypeMismatchError
+		ldm 	r1,r10,#esValue1 			; get the variable address into R1
+		jsr 	#CheckComma
+		jsr 	#EvaluateInteger 			; get the time elapsed betwen into R0
+		jsr 	#CheckRightBracket
+		;
+		ldm 	r2,#hwTimer 				; get the current timer
+		ldm 	r3,r1,#0 					; get the variable
+		sknz 	r3 							; if it is zero initialise it.
+		jmp 	#_UEVStart
+		;	
+		sub 	r2,r3,#0		
+		skp 	r2 							; has it timed out e.g. timer >= variable.
+		jmp 	#_UEVFail
+		;
+		add 	r3,r0,#0 					; add the elapsed time to the variable value
+		stm 	r3,r1,#0 					; and write it back
+._UEVFire
+		mov 	r0,#-1 						; return true
+		jmp 	#_UEVExit
+._UEVStart		
+		add 	r2,r0,#0 					; add required time to timer
+		stm 	r2,r1,#0 					; write it back
+._UEVFail
+		clr 	r0 							; return zero		
+._UEVExit		
+		stm 	r0,r10,#esValue1 			; set return value in R0, type already int val.
+		pop 	link
+		ret
