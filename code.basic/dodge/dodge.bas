@@ -11,9 +11,10 @@ call createCoordinates()
 call createVehicles()
 call resetDraw()
 call resetVehicles(3)
+life.lost = false
 repeat
 	call MoveVehicles()
-until false
+until life.lost
 end
 
 
@@ -39,8 +40,10 @@ endproc
 proc createVehicles()
 	dim car.x(4),car.y(4):rem "car positions in pixels"
 	dim car.onPoint(4):rem "Car on a dot/corner last time"
+	dim car.switch(4):rem "Car switches lane this time"
 	dim car.dir(4):rem "current movement - 0 = N, 1 = E, 2 = S 3 = W"
 	dim car.clock(4):rem "+1 clockwise, -1 anticlockwise"
+	dim car.ring(4):rem "ring 1..4"
 endproc
 '
 '		Reset the vehicles to their starting positions
@@ -54,6 +57,8 @@ proc resetVehicles(total)
 		else
 			car.dir(i) = 3:car.clock(i) = 3
 		endif
+		car.switch(i) = -1
+		car.ring(i) = i
 		call drawVehicle(i)
 	next i
 endproc
@@ -63,9 +68,9 @@ endproc
 proc moveVehicles()
 	local i,mstep
 	local d,xi,yi,x1,y1,onPoint
-	if event(car.move,8) 
+	if event(car.move,6) 
 		for i = 1 to car.total
-			mstep = 3:xi = 0:yi = 0
+			mstep = 4:xi = 0:yi = 0
 			if i = 1 and joyb(1) then mstep = mstep * 2
 			if car.dir(i) = 0 then yi = -mstep
 			if car.dir(i) = 1 then xi = mstep
@@ -86,13 +91,36 @@ proc moveVehicles()
 				if grid(x1,y1) and 2
 					car.x(i) = xc(x1):car.y(i) = yc(y1)
 					car.dir(i) = (car.dir(i)+car.clock(i)) and 3
+					car.switch(i) = -1
+					if random(0,2) = 0 then car.switch(i) = random(5,6)
+				endif
+				if x1 = car.switch(i) or y1 = car.switch(i)
+					call switchLane(i)
 				endif
 			endif
 			car.onPoint(i) = onPoint
 			call drawVehicle(i)
+			if i <> 1 and hit(1,i) then life.lost = true
 		next i
 	endif
 endproc
+'
+'		Switch lanes
+'
+proc switchLane(i)
+	local mv
+	repeat
+		mv = random(0,1)*2-1
+	until mv+car.ring(i) >= 1 and mv+car.ring(i) <= 4
+	if car.dir(i) = 0 or car.dir(i) = 2
+		car.x(i) = car.x(i)-sgn(car.x(i)-160)*mv*map.xSpacing
+	else
+		car.y(i) = car.y(i)-sgn(car.y(i)-130)*mv*map.ySpacing
+	endif
+	car.ring(i) = car.ring(i)+mv
+	car.switch(i) = -1
+endproc				
+
 '
 '		Refresh vehicle n.
 '
