@@ -10,7 +10,7 @@ palette 1,1,3:palette 2,1,6
 call createCoordinates()
 call createVehicles()
 call resetDraw()
-call resetVehicles(3)
+call resetVehicles(1)
 life.lost = false
 repeat
 	call MoveVehicles()
@@ -24,7 +24,7 @@ end
 proc createCoordinates()
 	local x,y
 	map.hSize = 10:map.vSize = 10
-	map.xSpacing = 24:map.ySpacing = 20
+	map.xSpacing = 16:map.ySpacing = 16
 	dim xc(map.hSize),yc(map.vSize): rem "coordinates of grid array where corners/dots are"
 	dim grid(map.hSize,map.vSize): rem "map of grid : bit 0 = dot, bit 1 = corner"
 	for x = 1 to map.hSize
@@ -92,11 +92,20 @@ proc moveVehicles()
 					car.x(i) = xc(x1):car.y(i) = yc(y1)
 					car.dir(i) = (car.dir(i)+car.clock(i)) and 3
 					car.switch(i) = -1
-					if random(0,2) = 0 then car.switch(i) = random(5,6)
+					if random(0,2) = 0 or i = 1 then car.switch(i) = random(5,6)
 				endif
-				if x1 = car.switch(i) or y1 = car.switch(i)
-					call switchLane(i)
+				if i > 1 and (x1 = car.switch(i) or y1 = car.switch(i))
+					call switchLane(i,random(0,1)*2-1)
+					car.switch(i) = -1
 				endif
+			endif
+			if i = 1 and (x1 = car.switch(i) or y1 = car.switch(i))
+				if car.dir(i) = 1 or car.dir(i) = 3
+					d = joyy():if car.y(i) > 120 then d = -d
+				else
+					d = joyx():if car.x(i) > 160 then d = -d
+				endif
+					if d <> 0 then call switchLane(i,d):car.switch(i) = -1
 			endif
 			car.onPoint(i) = onPoint
 			call drawVehicle(i)
@@ -105,20 +114,17 @@ proc moveVehicles()
 	endif
 endproc
 '
-'		Switch lanes
+'		Switch lanes by offset
 '
-proc switchLane(i)
-	local mv
-	repeat
-		mv = random(0,1)*2-1
-	until mv+car.ring(i) >= 1 and mv+car.ring(i) <= 4
-	if car.dir(i) = 0 or car.dir(i) = 2
-		car.x(i) = car.x(i)-sgn(car.x(i)-160)*mv*map.xSpacing
-	else
-		car.y(i) = car.y(i)-sgn(car.y(i)-130)*mv*map.ySpacing
+proc switchLane(i,mv)
+	if mv+car.ring(i) >= 1 and mv+car.ring(i) <= 4
+		if car.dir(i) = 0 or car.dir(i) = 2
+			car.x(i) = car.x(i)-sgn(car.x(i)-160)*mv*map.xSpacing
+		else
+			car.y(i) = car.y(i)-sgn(car.y(i)-130)*mv*map.ySpacing
+		endif
+		car.ring(i) = car.ring(i)+mv
 	endif
-	car.ring(i) = car.ring(i)+mv
-	car.switch(i) = -1
 endproc				
 
 '
