@@ -4,186 +4,209 @@
 '
 ' **************************************************************************************************
 
+screen 3,1
+call centretext(60,3,4,"Dodge'Em")
+call centretext(180,2,1,"1 for One Chaser, 2 for Two chasers")
+repeat
+	a$ = get$()
+until a$ = "1" or a$ = "2"
 screen 2,2:sprite load "dodge.spr"
 palette 1,0,5:palette 2,0,3:palette 3,0,1
 palette 1,1,3:palette 2,1,6
-call createCoordinates()
-call createVehicles()
-call resetDraw()
-call resetVehicles(1)
-life.lost = false
+call createGameData(val(a$))
+call resetGame()
+call resetCarData(game.cars)
+
 repeat
-	call MoveVehicles()
-until life.lost
+	life.lost = false
+	repeat
+		call moveCars()
+	until life.lost or grid.count = 0
+	if life.lost 
+		call explosion(car.x(0),car.y(0))
+		call resetCarData(game.cars):game.lives = game.lives - 1:call refreshScore()
+	endif
+	if grid.count = 0 then call resetGame():call resetCarData(game.cars)
+	if game.lives > 0 then wait 200
+until game.lives = 0
 end
-
-
 '
-'		Create arrays and grid positions
+'		Create game data
 '
-proc createCoordinates()
+proc createGameData(chaserCount)
 	local x,y
-	map.hSize = 10:map.vSize = 10
-	map.xSpacing = 16:map.ySpacing = 16
-	dim xc(map.hSize),yc(map.vSize): rem "coordinates of grid array where corners/dots are"
-	dim grid(map.hSize,map.vSize): rem "map of grid : bit 0 = dot, bit 1 = corner"
-	for x = 1 to map.hSize
-		xc(x) = 160 - (map.hSize-1)*map.xSpacing/2 + (x-1) * map.xSpacing
-	next x
-	for y = 1 to map.vSize
-		yc(y) = 120 + 10 - (map.vSize-1)*map.ySpacing/2 + (y-1) * map.ySpacing
-	next y
-endproc			
-'
-'		Create vehicles
-'
-proc createVehicles()
-	dim car.x(4),car.y(4):rem "car positions in pixels"
-	dim car.onPoint(4):rem "Car on a dot/corner last time"
-	dim car.switch(4):rem "Car switches lane this time"
-	dim car.dir(4):rem "current movement - 0 = N, 1 = E, 2 = S 3 = W"
-	dim car.clock(4):rem "+1 clockwise, -1 anticlockwise"
-	dim car.ring(4):rem "ring 1..4"
-endproc
-'
-'		Reset the vehicles to their starting positions
-'
-proc resetVehicles(total)
-	car.total = total
-	for i = 1 to total
-		car.x(i) = xc(7):car.y(i) = yc(i):car.onPoint(i) = false
-		if i > 1 
-			car.dir(i) = 1:car.clock(i) = 1
-		else
-			car.dir(i) = 3:car.clock(i) = 3
-		endif
-		car.switch(i) = -1
-		car.ring(i) = i
-		call drawVehicle(i)
+	grid.size = 9:grid.cellSize = 20:grid.lanes = 4
+	x = 160-(grid.size-1)*grid.cellSize/2
+	y = 120-(grid.size-1)*grid.cellSize/2+10
+	dim grid(grid.size,grid.size):rem "bit 0 dot, bit 1 switch, bit 2 corner"
+	dim xc(grid.size),yc(grid.size):rem "coordinates of grid centre"
+	for i = 0 to grid.size
+		xc(i) = i * grid.cellSize+x
 	next i
+	for i = 0 to grid.size
+		yc(i) = i * grid.cellSize+y
+	next i
+	rem
+	dim car.x(4),car.y(4),car.xi(4),car.yi(4),car.distance(4),car.level(4)
+	car.speed = 3
+	game.score = 0
+	game.lives = 3
+	game.cars = chaserCount+1
 endproc
 '
-'		Move vehicles
+'		Move all cars.
 '
-proc moveVehicles()
-	local i,mstep
-	local d,xi,yi,x1,y1,onPoint
-	if event(car.move,6) 
-		for i = 1 to car.total
-			mstep = 4:xi = 0:yi = 0
-			if i = 1 and joyb(1) then mstep = mstep * 2
-			if car.dir(i) = 0 then yi = -mstep
-			if car.dir(i) = 1 then xi = mstep
-			if car.dir(i) = 2 then yi = mstep
-			if car.dir(i) = 3 then xi = -mstep
-			car.x(i) = car.x(i)+xi:car.y(i) = car.y(i)+yi
-			x1 = (car.x(i)-xc(1))/map.xSpacing+1
-			y1 = (car.y(i)-yc(1))/map.ySpacing+1
-			onPoint = (abs(car.x(i)-xc(x1))+abs(car.y(i)-yc(y1))) <= mstep*2 
-			if onPoint and not car.onPoint(i) 
-				if i = 1 and (grid(x1,y1) and 1)
-					game.score = game.score + 1
-					map.count = map.count - 1
-					grid(x1,y1) = grid(x1,y1)-1
-					ink 0:draw xc(x1)-8,yc(y1)-8,12
-					call refreshScore()
+proc moveCars()
+	local n,d,x,y,c
+	if event(car.event,4)
+		for n = 0 to car.count-1
+			d = car.speed:if n = 0 and joyb(1) <> 0 then d = d * 2
+			if d > car.distance(n) then d = car.distance(n)
+			car.x(n) = car.x(n) + car.xi(n) * d
+			car.y(n) = car.y(n) + car.yi(n) * d
+			car.distance(n) = car.distance(n) - d
+			call drawCar(n)
+			if car.distance(n) = 0				
+				x = (car.x(n)-xc(0)) / grid.cellSize
+				y = (car.y(n)-yc(0)) / grid.cellSize
+				if grid(x,y) <> 0
+					if grid(x,y) and 4 
+						c = 1:if n > 0 then c = -1
+						d = car.xi(n):car.xi(n) = car.yi(n)*c:car.yi(n) = -d*c
+					endif
+					if n = 0
+						call hitCellPlayer(n,x,y,grid(x,y))
+					else
+						call hitCellChaser(n,x,y,grid(x,y))
+					endif						
 				endif
-				if grid(x1,y1) and 2
-					car.x(i) = xc(x1):car.y(i) = yc(y1)
-					car.dir(i) = (car.dir(i)+car.clock(i)) and 3
-					car.switch(i) = -1
-					if random(0,2) = 0 or i = 1 then car.switch(i) = random(5,6)
-				endif
-				if i > 1 and (x1 = car.switch(i) or y1 = car.switch(i))
-					call switchLane(i,random(0,1)*2-1)
-					car.switch(i) = -1
-				endif
+				car.distance(n) = grid.cellSize
 			endif
-			if i = 1 and (x1 = car.switch(i) or y1 = car.switch(i))
-				if car.dir(i) = 1 or car.dir(i) = 3
-					d = joyy():if car.y(i) > 120 then d = -d
-				else
-					d = joyx():if car.x(i) > 160 then d = -d
-				endif
-					if d <> 0 then call switchLane(i,d):car.switch(i) = -1
-			endif
-			car.onPoint(i) = onPoint
-			call drawVehicle(i)
-			if i <> 1 and hit(1,i) then life.lost = true
-		next i
+			if n > 0 then if hit(0,n) then life.lost = true
+		next n
 	endif
 endproc
 '
-'		Switch lanes by offset
+'		Player hit element
 '
-proc switchLane(i,mv)
-	if mv+car.ring(i) >= 1 and mv+car.ring(i) <= 4
-		if car.dir(i) = 0 or car.dir(i) = 2
-			car.x(i) = car.x(i)-sgn(car.x(i)-160)*mv*map.xSpacing
-		else
-			car.y(i) = car.y(i)-sgn(car.y(i)-130)*mv*map.ySpacing
-		endif
-		car.ring(i) = car.ring(i)+mv
+proc hitCellPlayer(n,x,y,e)
+	if e and 1
+		game.score = game.score + 1:call refreshScore():sound 1,3333,1
+		ink 0:draw xc(x)-8,yc(y)-8,12
+		grid(x,y) = grid(x,y) - 1
+		grid.count = grid.count - 1
 	endif
-endproc				
-
-'
-'		Refresh vehicle n.
-'
-proc drawVehicle(n)
-	local gfx = 10:if (car.dir(n) and 1) then gfx = 11
-	local col = 2:if n = 1 then col = 1
-	sprite n to car.x(n),car.y(n) draw gfx ink col
+	if e and 2
+		if car.xi(n) <> 0
+			call shiftCarLevel(n,car.level(n)-joyy()*car.xi(n))
+		else
+			call shiftCarLevel(n,car.level(n)+joyx()*car.yi(n))
+		endif
+	endif
 endproc
 '
-'		Reset and draw map and score
+'		Chaser hit element
 '
-proc resetDraw()
-	local x,y,accept,o
-	cls:map.count = 0
-	for i = 0 to 3
-		ink 3
-		frame xc(i+1)-map.xSpacing/2,yc(i+1)-map.ySpacing/2 to xc(map.hSize-i)+map.xSpacing/2,yc(map.vSize-i)+map.ySpacing/2
+proc hitCellChaser(n,x,y,e)
+	local mv
+	if (e and 2) <> 0 then call shiftCarLevel(n,car.level(n)+(random(0,1)*2-1))
+endproc
+'
+'		Move car n to level 
+'
+proc shiftCarLevel(n,level)
+	local t
+	if level >= 0 and level < grid.lanes and level <> car.level(n)
+		if car.xi(n) <> 0
+			t = car.y(n)
+			car.y(n) = yc(level):if t >= yc(grid.size/2) then car.y(n) = yc(grid.size-1-level)
+		endif
+		if car.yi(n) <> 0
+			t = car.x(n)
+			car.x(n) = xc(level):if t >= xc(grid.size/2) then car.x(n) = xc(grid.size-1-level)
+		endif
+		car.level(n) = level
+	endif
+endproc
+'
+'		Reset car data
+'
+proc resetCarData(n)
+	car.count = n
+	for i = 0 to n-1
+		car.x(i) = xc(grid.size/2):car.y(i) = yc(i)
+		car.xi(i) = (sgn(i)*2-1):car.yi(i) = 0
+		car.distance(i) = grid.cellSize
+		car.level(i) = i
+		call drawCar(i)
 	next i
-	ink 0
-	rect xc(5)-map.xSpacing/2,0 to xc(6)+map.xSpacing/2,239
-	rect 0,yc(5)-map.ySpacing/2 to 319,yc(6)+map.ySpacing/2
-	ink 3
-	frame xc(5)-map.xSpacing/2,yc(5)-map.ySpacing/2 to xc(6)+map.xSpacing/2,yc(6)+map.ySpacing/2
-	for x = 1 to map.hSize
-		for y = 1 to map.vSize
+	car.event = 0
+endproc
+'
+'		Repaint sprite
+'
+proc drawCar(i)
+	local col = 2:if i = 0 then col = 1
+	local gfx = 11:if car.xi(i) = 0 then gfx=10
+	sprite i to car.x(i),car.y(i) draw gfx ink col
+endproc
+'
+'		Reset game data
+'
+proc resetGame()
+	local x,y,t,xsw,ysw,w
+	cls:grid.count = 0
+	xsw = grid.size/2:ysw = grid.size/2
+	for x = 0 to grid.size-1
+		for y = 0 to grid.size-1
 			grid(x,y) = 0
-			accept = x <> 5 and y <> 5 and x <> 6 and y <> 6
-			if accept
-				grid(x,y) = 1:ink 3
-				if x = y or x = map.hSize+1-y then grid(x,y) = 3
-				draw xc(x)-8,yc(y)-8,12
-				map.count = map.count + 1
+			if x < grid.lanes or y < grid.lanes or x >= grid.size-grid.lanes or y >= grid.size-grid.lanes
+				if x <> xsw and y <> ysw			
+					grid(x,y) = 1:ink 3:draw xc(x)-8,yc(y)-8,12:grid.count = grid.count + 1
+					if x = y or x = grid.size-1-y then grid(x,y) = 5
+					grid.count = grid.count + 1
+				else
+					grid(x,y) = 2
+				endif
 			endif
 		next y
 	next x
-	grid(1,1) = 3:grid(1,map.vSize) = 3
-	grid(map.hSize,1) = 3:grid(map.hSize,map.vSize) = 3
-	game.score = 0:game.lives = 3
-	call refreshLives()
+	for t = 0 to grid.lanes-1
+		ink 2:w = grid.cellSize/2
+		frame xc(t)-w,yc(t)-w to xc(grid.size-t-1)+w,yc(grid.size-t-1)+w
+	next t
+	ink 0:rect xc(xsw)-w,0 to xc(xsw)+w,239:rect 0,yc(ysw)-w to 319,yc(ysw)+w
+	t = grid.lanes:ink 2:frame xc(t)+w,yc(t)+w to xc(grid.size-t-1)-w,yc(grid.size-t-1)-w
 	call refreshScore()
 endproc
 '
-'		Refresh lives
-'
-proc refreshLives()
-	ink 0:rect 100,0 to 130,28
-	ink 1:draw 100,0,game.lives dim 2
-endproc
-'
-'		Refresh score
+'		Reset display
 '
 proc refreshScore()
-	local x = 200
-	ink 0:rect 200,0 to 290,28
-	ink 2
-	draw x,0,game.score/100 dim 2
-	draw x+24,0,game.score/10 mod 10 dim 2
-	draw x+48,0,game.score mod 10 dim 2
+	call drawDigit(120,game.lives,1)
+	call drawDigit(180,game.score/100,2)
+	call drawDigit(205,game.score/10 mod 10,2)
+	call drawDigit(230,game.score mod 10,2)
 endproc
-
+'
+proc drawDigit(x,digit,colour)
+	blit x,0,digit,&0300+colour,&1810
+endproc
+'
+'				Centre print
+'
+proc centreText(y,colour,size,text$)
+	ink colour
+	text 160-len(text$)*3*size,y,text$,size
+endproc	
+'
+'				Explosion
+'
+proc explosion(x,y)
+	t1 = timer()+50:draw on 1
+	while timer() < t1
+		ink random(0,7):draw x-8,y-8,random(256,1024)
+	wend
+	ink 0:rect x-8,y-8 to x+8,y+8
+	draw on 0
+endproc
