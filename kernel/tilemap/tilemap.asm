@@ -88,7 +88,7 @@
 		mov 	r0,r3,#0 				; Y offset
 		ldm 	r1,r6,#2 				; X Size
 		mult 	r0,r1,#0 				; Y * Width
-		add 	r0,r2,#4 				; add X + 4
+		add 	r0,r2,#5 				; add X + 5
 		add 	r0,r6,#0 				; now points into the table
 		ldm 	r0,r0,#0 				; read the tile.
 		;
@@ -99,7 +99,7 @@
 		ror 	r8,#8
 		and 	r8,#7
 		;
-		and 	r0,#15 					; tile number.
+		and 	r0,#255					; tile number.
 		ror 	r0,#12 					; multiply by 16
 		ldm 	r1,#spriteImageMemory 	; add the image memory base
 		add 	r0,r1,#0
