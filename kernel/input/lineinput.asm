@@ -49,5 +49,26 @@
 		ldm 	r1,r1,#0
 		and 	r1,#$00FF 						; the text is coloured so strip that off.
 		skz 	r1 								; if zero, R0 points to the line start.		
+		jmp 	#_OSXLIFindStart		
+		push 	r0 								; save start
+		mov 	r0,#3 							; up one so the non destructive CR is this line
+		jsr 	#OSXPrintCharacter
+		;
+		;		Now find the end so the cursor is properly positioned.
+		;		
+._OSXLIFindEnd
+		jsr 	#_OSCurrentTextR1 				; address of current line
+		add 	r1,#charWidth-1 				; last character of current line
+		ldm 	r1,r1,#0 						; check if NULL
+		and 	r1,#$00FF
+		sknz 	r1
+		jmp 	#_OSXLIExit				
+		mov 	r0,#14 							; print a non-destructive CR
+		jsr 	#OSXPrintCharacter  			; which doesn't erase to EOL.
+		jmp 	#_OSXLIFindEnd		
+._OSXLIExit		
+		mov 	r0,#14 							; print a non-destructive CR
+		jsr 	#OSXPrintCharacter  			; move to following line.
+		pop 	r0 								; restore start
 		pop 	r1,link
 		ret
