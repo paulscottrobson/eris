@@ -4,8 +4,6 @@
 '
 ' **************************************************************************************************
 '
-'		Make ghosts intelligent
-'		Add power pill code
 ' 		Add collision
 ' 		Add bonuses
 '		Add sfx
@@ -25,7 +23,8 @@ end
 proc play.game()
 	local life.lost = false
 	call reset.Objects()
-	e.pills = 0:e.move = 0:e.animate = 0
+	ox(0) = 0:oy(0) = 11*16
+	e.pills = 0:e.move = 0:e.animate = 0	
 	repeat
 		if event(e.pills,70) then call flash.pills()
 		if event(e.animate,20) then call animate.objects()
@@ -37,6 +36,7 @@ endproc
 '
 proc move.objects()
 	local i,x,y,d
+	game.frame = game.frame + 1
 	for i = 0 to ghost.count
 		d = game.speed:if d > odist(i) then d = odist(i)
 		ox(i) = ox(i)+d*oxi(i):oy(i) = oy(i)+d*oyi(i)
@@ -44,6 +44,7 @@ proc move.objects()
 		if ox(i) > map.w*16 then ox(i) = 0
 		odist(i) = odist(i)-d
 		sprite i to ox(i)+x.org+8,oy(i)+y.org+8
+		if ochase(i) then sprite i ink game.frame mod 3+1
 		if odist(i) = 0
 			x = ox(i) >> 4:y = oy(i) >> 4
 			if i = 0 
@@ -51,31 +52,43 @@ proc move.objects()
 			else
 				call redirect.Ghost(i,x,y)
 			endif					
-		else
-			rem "Todo : if joy<axis> = -dir<axis> reverse"
 		endif
 	next i
 	if oxi(0) <> 0 and joyx() = -oxi(0) then call redirect.fine(-oxi(0),0)
 	if oyi(0) <> 0 and joyy() = -oyi(0) then call redirect.fine(-oxi(0),0)
+	if chase.mode <> 0 and timer()-chase.endTime > 0
+		chase.mode = false
+		for i = 1 to ghost.count
+			sprite i ink (i mod 3)+1 draw 13:ochase(i) = false
+		next i
+	endif
 endproc
 '
 '						  Redirect player
 '
 proc redirect.player(x,y)
-	local dx,dy,erase = False:
+	local i,dx,dy:local erase = False
 	dy = joyy():dx = 0:if joyx() <> 0 then dx = joyx():dy = 0
 	call set.Direction(0,dx,dy,map(x,y))
 	if map(x,y) and 16
 		map(x,y) = map(x,y)-16
 		game.score = game.score + 10:dot.count = dot.count - 1:erase = true
-		game.score = dot.count
 		call draw.score()
+	endif
+	if map(x,y) and 32
+		map(x,y) = map(x,y)-32:game.score = game.score+250:call draw.score()
+		for i = 1 to ghost.count:ochase(i) = true:next i
+		sprite (map(x,y) >> 8) to -16,-16
+		chase.mode = true:chase.count = 0
+		chase.endTime = 1200-level*80
+		if chase.endTime < 200 then chase.endTime = 200
+		chase.endTime = timer()+chase.endTime
 	endif
 	if erase then x = x * 16+x.org:y = y*16+y.org:ink 0:rect x+1,y+1 to x+14,y+14
 	call update.player.graphic()
 endproc
 '
-'
+'					Redirect player between cells
 '
 proc redirect.fine(dx,dy)
 	if odist(0) > 0
@@ -86,7 +99,7 @@ proc redirect.fine(dx,dy)
 	endif
 endproc
 '
-'
+'					Update the player graphic
 '
 proc update.player.graphic()
 	if oxi(0) <> 0 then player.graphic = 11:player.graphic.flip = 1-oxi(0)
@@ -102,8 +115,17 @@ proc redirect.ghost(n,x,y)
 	if (c = 5 and oxi(n) <> 0) or c = 10 
 		dx = oxi(n):dy = oyi(n)
 	else
-		d = random(0,3)
-		while (c and (1<<d)):d = random(0,3):wend
+		d = -1
+		if random(0,2) > 0 or ochase(i) <> 0
+			dx = ox(0)-ox(i):dy = oy(0)-oy(i)
+			if ochase(i) then dx = -dx:dy = -dy
+			if abs(dx) > abs(dy)
+				d = 1-sgn(dx)*2
+			else
+				d = sgn(dy)*2+1
+			endif
+		endif
+		while d < 0 or (c and (1<<d)) <> 0:d = random(0,3):wend
 		dx = 0:dy = sgn(d-1):if (d and 1) then dx = sgn(2-d):dy = 0
 		oxi(n) = 0:oyi(n) = 0
 		call set.direction(n,dx,dy,c)
@@ -167,7 +189,7 @@ endproc
 '						Reset game objects
 '
 proc reset.objects()
-	game.speed = 4
+	game.speed = 4+level/2
 	chase.mode = false:player.graphic = 11:player.graphic.flip = 0
 	ox(0) = map.w/2*16:oy(0) = 11*16:oxi(0) = 0:oyi(0) = 0:odist(i) = 16
 	sprite 0 ink 1 draw player.graphic flip 0
@@ -183,6 +205,7 @@ endproc
 '
 proc reset.ghost(i)
 	ox(i) = map.w/2*16:oy(i) = 7*16-i*4:oxi(i) = 0:oyi(i) = -1:odist(i) = 16-i*4
+	ochase(i) = false
 	sprite i ink (i mod 3)+1 draw 13
 endproc
 '
@@ -192,7 +215,7 @@ proc reset.screen()
 	local i,x,y,p,x1,y1
 	cls:tile x.org,y.org,0,0,24,15,tile.map:call draw.score():call draw.lives()
 	' draw maze and fill with dots. -10 for six in tunnel, four power pills
-	dot.count = -10:ink 2
+	dot.count = -10:ink 2:game.frame = 0
 	for y = 0 to map.h-1
 		p = tile.map + 5 + 32 * y:x1 = x.org:y1 = y.org+y*16
 		for x = 0 to map.w-1
@@ -206,7 +229,7 @@ proc reset.screen()
 	' power pills
 	for i = 0 to 3
 		x = (i and 1)*(map.w-1):y = (i/2)*9+3
-		map(x,y) = map(x,y)-16+32
+		map(x,y) = map(x,y)-16+32+256*(i+16)
 		x = x * 16+x.org+8:y = y*16+y.org+8
 		ink 0:rect x-4,y-4 to x+4,y+4
 		sprite 16+i to x,y ink 0 draw 16
