@@ -63,8 +63,8 @@ sndTone2 = sndChannelBase+2
 ;
 ;		Keyboard delay and repeat time in 1/100s
 ;
-repeatDelay = 80-40
-repeatSpeed = 10-5								
+repeatDelay = 80
+repeatSpeed = 10								
 ;
 ;		Editor tab stop, must be power of 2.
 ;
