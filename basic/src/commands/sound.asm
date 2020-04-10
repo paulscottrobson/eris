@@ -47,3 +47,22 @@
 		jmp 	#BadNumberError
 		pop 	link
 		ret
+
+; *****************************************************************************
+;
+;								Quiet()
+;
+; *****************************************************************************
+
+.Unary_Quiet	;; [quiet(]
+		push 	link
+		jsr 	#EvaluateInteger 			; channel -> R1 and check
+		jsr 	#CheckRightBracket
+		mov 	r1,r0,#0
+		sub 	r1,#sndChannels 
+		sklt
+		jmp 	#BadNumberError
+		jsr 	#OSSoundComplete
+		stm 	r0,r10,#0 
+		pop 	link
+		ret

@@ -189,3 +189,35 @@
 		stm 	r0,r10,#esValue1 			; set return value in R0, type already int val.
 		pop 	link
 		ret
+
+; *****************************************************************************
+;
+;									min and max
+;
+; *****************************************************************************
+
+.Unary_Min		;; [min(]
+		clr 	r2
+		skz 	r2
+.Unary_Max 		;; [max(]
+		mov 	r2,#1
+		push	r3,r4,link
+		jsr 	#EvaluateInteger 
+		mov 	r1,r0,#0
+		jsr 	#CheckComma
+		jsr 	#EvaluateInteger 
+		jsr 	#CheckRightBracket
+		mov 	r3,r1,#0
+		mov 	r4,r0,#0
+		add 	r3,#$8000					; signed compare
+		add 	r4,#$8000
+		skz 	r2
+		sub 	r4,r3,#0
+		sknz 	r2
+		sub 	r3,r4,#0
+		stm 	r0,r10,#esValue1
+		skc
+		stm 	r1,r10,#esValue1
+		pop 	r3,r4,link
+		ret
+		

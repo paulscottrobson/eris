@@ -163,6 +163,9 @@
 .OSSoundPlay
 		jmp 	#OSXSoundPlay
 
+.OSSoundComplete
+		jmp 	#OSXSoundComplete
+		
 ; *****************************************************************************
 ;
 ;								Utility Group

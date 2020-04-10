@@ -76,12 +76,12 @@
 	word	Unary_Len                ; $3047 LEN(
 	word	Unary_Lower              ; $3048 LOWER$(
 	word	Unary_Mid                ; $3049 MID$(
-	word	SyntaxError              ; $304a MAX(
-	word	SyntaxError              ; $304b MIN(
+	word	Unary_Max                ; $304a MAX(
+	word	Unary_Min                ; $304b MIN(
 	word	Unary_Not                ; $304c NOT
 	word	Command_Page             ; $304d PAGE
 	word	Unary_Peek               ; $304e PEEK(
-	word	SyntaxError              ; $304f QUIET(
+	word	Unary_Quiet              ; $304f QUIET(
 	word	Unary_Right              ; $3050 RIGHT$(
 	word	Unary_Rnd                ; $3051 RND(
 	word	SyntaxError              ; $3052 RPL(

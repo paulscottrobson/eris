@@ -79,3 +79,30 @@
 ._OSXSPExit		
 		pop 	r1,r2,r3,r4,link
 		ret
+
+; *****************************************************************************
+;
+;					Check if sound channel R0 is quiet
+;
+; *****************************************************************************
+
+.OSXSoundComplete
+		push 	r1,r2
+		mult 	r0,#sndRecordSize			; get sound record address in R1
+		ldm 	r1,#soundQueueBase
+		add 	r1,r0,#0
+		clr 	r0 							; return no. 
+		ldm 	r2,r1,#sndCompleteTime 		; sound in progress ?
+		skz 	r2
+		jmp 	#_OSXSCOExit 				; if so, return 0
+
+		ldm 	r2,r1,#sndQueueHead 		; head to R2
+		ldm 	r1,r1,#sndQueueTail 		; tail to R1
+		xor 	r1,r2,#0 					; 0 if the same e.g. queue empty
+		sknz 	r1 							; if queue not empty return false
+		mov 	r0,#-1 						; true
+._OSXSCOExit
+		pop 	r1,r2
+		ret
+
+ret
