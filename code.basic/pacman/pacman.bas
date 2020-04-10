@@ -4,18 +4,14 @@
 '
 ' **************************************************************************************************
 '
-' 		Add collision
-' 		Add bonuses
-'		Add sfx
-'		Add levels
-' 		Fix tunnel.
-'
 screen 2,2
 palette 1,0,4:palette 2,0,3:palette 3,0,6
 palette 1,1,3:palette 2,1,1:palette 3,1,6
 call setup.data(4)
 call reset.game()
-call play.game()
+repeat
+	call play.game()
+until lives = 0
 end
 '
 '						 Play one game
@@ -23,13 +19,15 @@ end
 proc play.game()
 	local life.lost = false
 	call reset.Objects()
-	ox(0) = 0:oy(0) = 11*16
-	e.pills = 0:e.move = 0:e.animate = 0	
+	;ox(0) = 0:oy(0) = 11*16
+	e.pills = 0:e.move = 0:e.animate = 0:e.bonusOn = 0:e.bonusOff = 0
 	repeat
 		if event(e.pills,70) then call flash.pills()
 		if event(e.animate,20) then call animate.objects()
 		if event(e.move,8) then call move.objects()
 	until life.lost or dot.count = 0
+	if life.lost then call sound.dead()
+	if dot.count = 0 then level = level + 1:call reset.Screen()
 endproc
 '
 '						Move objects
@@ -44,7 +42,10 @@ proc move.objects()
 		if ox(i) > map.w*16 then ox(i) = 0
 		odist(i) = odist(i)-d
 		sprite i to ox(i)+x.org+8,oy(i)+y.org+8
-		if ochase(i) then sprite i ink game.frame mod 3+1
+		if i  
+			if ochase(i) then sprite i ink game.frame mod 3+1
+			if hit(i,0) then call collision(i)
+		endif
 		if odist(i) = 0
 			x = ox(i) >> 4:y = oy(i) >> 4
 			if i = 0 
@@ -64,6 +65,19 @@ proc move.objects()
 	endif
 endproc
 '
+'					  Ghost/Player collide
+'
+proc collision(n)
+	if ochase(n) 
+		call reset.Ghost(n)
+		chase.count = chase.count + 1
+		game.score = game.score + (1 << chase.count) * 100:call draw.Score()
+		if chase.count = ghost.count then chase.endTime = timer()
+	else
+		life.lost = true
+	endif
+endproc
+'
 '						  Redirect player
 '
 proc redirect.player(x,y)
@@ -74,18 +88,30 @@ proc redirect.player(x,y)
 		map(x,y) = map(x,y)-16
 		game.score = game.score + 10:dot.count = dot.count - 1:erase = true
 		call draw.score()
+		call sound.Pill()
 	endif
 	if map(x,y) and 32
 		map(x,y) = map(x,y)-32:game.score = game.score+250:call draw.score()
-		for i = 1 to ghost.count:ochase(i) = true:next i
+		for i = 1 to ghost.count:ochase(i) = true:sprite i draw 31:next i
 		sprite (map(x,y) >> 8) to -16,-16
 		chase.mode = true:chase.count = 0
-		chase.endTime = 1200-level*80
-		if chase.endTime < 200 then chase.endTime = 200
-		chase.endTime = timer()+chase.endTime
+		chase.endTime = pill.time.max-level+1
+		if chase.endTime < 2 then chase.endTime = 2
+		call sound.chase(chase.endTime,pill.time.max)
+		chase.endTime = timer()+chase.endTime*100
 	endif
 	if erase then x = x * 16+x.org:y = y*16+y.org:ink 0:rect x+1,y+1 to x+14,y+14
 	call update.player.graphic()
+	if bonus.visible 
+		if hit(0,15) or event(e.bonusOff,400)
+			sprite 15 ink 0:bonus.visible = false:e.bonusOn = 0
+		endif
+	else
+		if event(e.bonusOn,1000)
+			sprite 15 ink 2:bonus.visible = true:e.bonusOff = 0
+			game.score = game.score+1000:call draw.Score()
+		endif
+	endif
 endproc
 '
 '					Redirect player between cells
@@ -189,9 +215,9 @@ endproc
 '						Reset game objects
 '
 proc reset.objects()
-	game.speed = 4+level/2
+	game.speed = 4+level/2:if game.speed > 8 then game.speed = 8
 	chase.mode = false:player.graphic = 11:player.graphic.flip = 0
-	ox(0) = map.w/2*16:oy(0) = 11*16:oxi(0) = 0:oyi(0) = 0:odist(i) = 16
+	ox(0) = map.w/2*16:oy(0) = 11*16:oxi(0) = 0:oyi(0) = 0:odist(0) = 16
 	sprite 0 ink 1 draw player.graphic flip 0
 	if ghost.count > 0
 		for i = 1 to ghost.count:call reset.ghost(i):next i
@@ -199,6 +225,7 @@ proc reset.objects()
 	for i = 0 to ghost.count
 		sprite i to ox(i)+x.org+8,oy(i)+y.org+8
 	next i
+	bonus.visible = 0:sprite 15 ink 0 draw 15 to ox(0)+x.org+8,oy(0)+y.org+8
 endproc
 '
 '		Reset a ghost
@@ -215,7 +242,7 @@ proc reset.screen()
 	local i,x,y,p,x1,y1
 	cls:tile x.org,y.org,0,0,24,15,tile.map:call draw.score():call draw.lives()
 	' draw maze and fill with dots. -10 for six in tunnel, four power pills
-	dot.count = -10:ink 2:game.frame = 0
+	dot.count = -10:ink 2:game.frame = 0:pill.time.max = 12
 	for y = 0 to map.h-1
 		p = tile.map + 5 + 32 * y:x1 = x.org:y1 = y.org+y*16
 		for x = 0 to map.w-1
@@ -261,4 +288,22 @@ proc draw.lives()
 		next i
 	endif
 endproc
-
+'
+'						  Sound effects
+'
+proc sound.pill()
+	sound 1,22222,0:slide 1,444,2
+endproc
+'
+proc sound.chase(secs,max.secs)
+	local s
+	for s = max.secs-secs+1 to max.secs
+		sound 2,30000-s*2000,0:slide 2,-300,10
+	next s
+endproc
+'
+proc sound.dead()
+	sound 1,10000,0:slide 1,-1000,10
+	local t1 = timer()+100
+	while timer()-t1 < 0:sprite 0 draw random(11,12) flip random(0,3):wend
+endproc

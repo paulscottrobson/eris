@@ -156,9 +156,9 @@ class Tokens(object):
 	( 	&	% 	|constshift
 	abs(	alloc(	asc(	chr$(	exists(	false	event(	get( 	get$( 	
 	hit(	inkey( 	inkey$( inport(	is.number(		joyx( 	joyy( 	joyb(	
-	key(	left$(	len(	lower$(	mid$(	not 	page	peek(	right$(	
-	rnd(	rpl(	sgn(	sprite.x( 	sprite.y(	sprite.info(	str$(	
-	sysvar(	timer(	true 	upper$(		val(	
+	key(	left$(	len(	lower$(	mid$(	max( 	min(	not 	page	
+	peek(	quiet(	right$(	rnd(	rpl(	sgn(	sprite.x( 	sprite.y(	
+	sprite.info(	str$(	sysvar(	timer(	true 	upper$(		val(	
 //
 //		Synonyms
 //

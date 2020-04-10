@@ -34,6 +34,37 @@
 
 ; *****************************************************************************
 ;
+;						 A sound is playing, handle it.
+;
+; *****************************************************************************
+
+.OSISoundCheckTime
+		ldm 	r0,#hwTimer 				; if timer - complete >= 0 sound ends.
+		ldm 	r1,r4,#sndCompleteTime
+		sub 	r0,r1,#0
+		skp 	r0
+		jmp 	#_OSISoundPlaying
+
+		stm 	r14,r4,#sndCompleteTime 	; this means it's complete, it is zero.		
+		ldm 	r0,r4,#sndQueueTail			; if not check if there is something in the queue
+		ldm 	r1,r4,#sndQueueHead
+		xor 	r0,r1,#0 					; which there is if these are different
+		skz 	r0 							; silence and return if not.
+		jmp 	#OSIUpdateOneChannel
+
+		stm 	r14,r5,#0 				 	; silence and exit
+		ret
+
+._OSISoundPlaying
+		ldm 	r0,r4,#sndPitch 			; add slide to pitch
+		ldm 	r1,r4,#sndSlide
+		sub 	r0,r1,#0
+		stm 	r0,r4,#sndPitch
+		stm 	r0,r5,#0 					; and set the tone pitch out.
+		ret
+
+; *****************************************************************************
+;
 ;						Check update on sound channel
 ;					   (Closely tied to OSIUpdateSound)
 ;
@@ -90,25 +121,5 @@
 ._OSICreateExit
 		pop 	r2
 		ret
-		;
-		;		A sound is playing, handle it.
-		;
-.OSISoundCheckTime
-		ldm 	r0,#hwTimer 				; if timer - complete >= 0 sound ends.
-		ldm 	r1,r4,#sndCompleteTime
-		sub 	r0,r1,#0
-		skp 	r0
-		jmp 	#_OSISoundPlaying
-	
-		stm 	r14,r4,#sndCompleteTime 	; this means it's complete, it is zero.		
-		stm 	r14,r5,#0 					; turn it off and exit
-		ret
 
-._OSISoundPlaying
-		ldm 	r0,r4,#sndPitch 			; add slide to pitch
-		ldm 	r1,r4,#sndSlide
-		sub 	r0,r1,#0
-		stm 	r0,r4,#sndPitch
-		stm 	r0,r5,#0 					; and set the tone pitch out.
-		ret
 
