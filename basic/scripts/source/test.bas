@@ -1,5 +1,6 @@
-sound 1,32222,5
-sound 1,21111,5
+cls
 repeat
-	cls:print quiet(1)
-until quiet(1) 
+	for i = 1 to 10000:next i
+	n = n + 1
+	cursor 0,0:print n
+until 0
