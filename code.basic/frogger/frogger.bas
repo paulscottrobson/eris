@@ -3,50 +3,86 @@
 '											Frogger
 '
 ' **************************************************************************************************
-
-'	Diving turtles.
+'
+'	Make log speeds scalable on game.speed
+'	Diving turtles design/implement
 '	Scoring / SFX - score on DY +/- and home.
-'	Lose life/Lives display.
-'	Bonus
-'	Level up on end.
 '
 screen 3,1:palette 1,1,2
 !&FFFD = true:call initialise():!&FFFD = false
-call play.level(1)
-
-proc play.level(level)
+game.lives = 3:game.level = 1:call draw.lives()
+repeat
+	call play.level()
+until game.lives = 0
+end
+'
+'							Play one level
+'
+proc play.level()
 	local i
+	!&fffd = true:call reset.turtles():!&fffd = false
 	for i = 1 to 5:home.used(i) = false:next i
-	game.time = 6:home.count = 5
+	game.time = 7:home.count = 5:game.speed = min(4+game.level/2,14)
 	call reset.player()
 	time.nextMove = timer()
 	while not life.lost and home.count > 0
 		if timer()-time.nextMove >= 0
 			call move.tilemaps()	
 			if pl.moving call move.player() else call check.move() endif
+			if y > 8
+				call check.collide(pl.x-6,pl.y)
+				call check.collide(pl.x+6,pl.y)
+			else
+				call check.collide(pl.x,pl.y)
+			endif
 		endif
 	wend
+	if life.lost
+		game.lives = game.lives-1:call draw.lives()
+	else
+		game.level = game.level+1
+	endif
 endproc
 '
 '		Check for player move.
 '
 proc check.move()
 	local n = joyx()
-	if n <> 0 then pl.dx = n*4:sprite 0 draw 1 flip 1-n
-	if n = 0 then n = joyy():if n <> 0 then pl.dy = n*4:sprite 0 draw 0 flip (1+n) >> 1
+	if n <> 0 then pl.dx = n:sprite 0 draw 1 flip 1-n
+	if n = 0 then n = joyy():if n <> 0 then pl.dy = n:sprite 0 draw 0 flip (1+n) >> 1
+	if pl.x < 8 or pl.x >= 312 then call lose.life():pl.dx = 0:pl.dy = 0
+	if pl.y = 14*16+8 and pl.dy > 0 then pl.dy = 0
 	if pl.dx<>0 or pl.dy<>0
-		pl.moving = true:pl.count = 4
+		pl.moving = true:pl.count = 16
 	endif
 endproc
 '
 '		Move Player
 '
 proc move.player()
-	pl.x = pl.x+pl.dx:pl.y = pl.y+pl.dy:sprite 0 to pl.x,pl.y
-	pl.count = pl.count-1
+	local s = min(game.speed,pl.count)
+	pl.x = pl.x+pl.dx*s:pl.y = pl.y+pl.dy*s:sprite 0 to pl.x,pl.y
+	pl.count = pl.count-s
 	if pl.count = 0
 		pl.moving = false:pl.dx = 0:pl.dy = 0
-		if pl.y = 2*16+8 then call check.player.home()
+		if pl.y = 2*16+8 
+			call check.player.home()
+		endif
+	endif
+endproc
+'
+'		check player collisions
+'
+proc check.collide(x,y)
+	y = y >> 4
+	if map(y) <> 0	
+		x = (x + (!map(y) >> 4)) >> 4 and &1F
+		c = !(map(y)+3+5+x) and &FF
+		if y > 8
+			if c <> 0 then call lose.life()
+		else 
+			if c = 0 or c = 9 then call lose.life()
+		endif
 	endif
 endproc
 '
@@ -68,10 +104,16 @@ proc check.player.home()
 	call reset.player()
 endproc
 '
+'		Lost a life
+'
+proc lose.life()
+	life.lost = true
+endproc
+'
 '		Reset player
 '
 proc reset.player()
-	pl.x = 160:pl.y = 14*16+8:pl.dx = 0:pl.dy = 0
+	pl.x = 136:pl.y = 14*16+8:pl.dx = 0:pl.dy = 0
 	sprite 0 ink 1 to pl.x,pl.y draw 0 flip 0
 	pl.moving = false:life.lost = false
 endproc
@@ -89,9 +131,11 @@ proc move.tilemaps()
 	for p = d to d+7
 		d = map(p)
 		if d <> 0
-			n = (!d+(d!1)):!d = n and &01FFF
+			n = (!d+(d!1)):!d = n and &1FFF
 			if ((d!2 xor n) and m) 
-				if p < 8 and p = (pl.y>>4) then pl.x = pl.x-(n-d!2)/16:sprite 0 to pl.x,pl.y
+				if p < 8 and p = (pl.y>>4) 
+					pl.x = pl.x-(n-d!2)/16:sprite 0 to pl.x,pl.y
+				endif
 				d!2 = !d:tile 0,p*16,!d>>4,0,64,1,d+3
 			endif
 		endif
@@ -107,7 +151,7 @@ endproc
 '
 proc initialise()
 	sprite load "frogger.spr"
-	game.hiScore = 1000
+	game.hiScore = 0
 	dim mask(3):speed.mask = 0
 	mask(0) = &1FF0:mask(1) = &1FE0:mask(2) = &1FC0:mask(3) = &1F80
 	call draw.background()
@@ -120,7 +164,7 @@ proc draw.background()
 	local i
 	' Frame part
 	ink 3:cursor 24,0:print "HI-SCORE":cursor 12,0:print "1-UP";
-	ink 1:cursor 11,1:print "000000";:cursor 25,1:print "001000";
+	ink 1:cursor 11,1:print "000000";:cursor 25,1:print "000000";
 	for i = 0 to 304 step 16
 		ink 2:draw i,16,16:draw i,32,15
 		ink 5:draw i,128,15:draw i,224,15
@@ -131,6 +175,16 @@ proc draw.background()
 		home.x(i) = 160+n*(i-1)-2*n
 		ink 0:rect home.x(i)-home.width/2,2*16 to home.x(i)+home.width/2,2*16+15
 	next i:ink 1
+endproc
+'
+'		Draw the lives
+'
+proc draw.lives()
+	local i
+	for i = 1 to 3
+		ink 2:if i > game.lives then ink 0
+		draw 310-i*10,8,17
+	next i
 endproc
 '
 '		Create tilemaps for the lanes.
@@ -197,3 +251,18 @@ proc generate.river(map,graphic,col,size,n1,n2,bits)
 		c = c + random(n1,n2)
 	wend
 endproc
+'
+'		Reset any changed turtles in the tile map
+'
+proc reset.turtles()	
+	local i,j,n,c
+	for i = 3 to 6
+		n = map(i)	
+		if n <> 0
+			for j = 8 to 71
+				c = n!j and &FF
+				if c = 8 or c = 9 then n!j = (n!j and &FF00) or 7
+			next j
+		endif
+	next i
+endproc	
