@@ -1,11 +1,30 @@
 ' **************************************************************************************************
 '
-'											Pacman
+'											Frogger
 '
 ' **************************************************************************************************
 '
+'	TODO: Use the scrolling to define the timer and switch depending on sync.
+'
 screen 3,1
 !&FFFD = true:call create.Tilemaps():!&FFFD = false
+p = 0:e.shiftSet = 0
+
+c = 0:t1 = timer()
+
+while timer()-t1 < 500
+	if p < 15
+		p = p + 1:d = map(p)
+		if d <> 0
+			n = (!d+(d!1)) and &1FFF:!d = n
+			if ((d!2 xor n) and &FFC0) then d!2 = n:tile 0,p*16,n>>4,0,64,1,d+3
+		endif
+	else
+		if event(e.shiftSet,12) then p = 0:c = c + 1
+	endif
+wend
+
+cls:print timer()-t1,c
 end
 
 
@@ -36,7 +55,7 @@ proc create.tilemaps()
 	for i = 3 to 13
 		if i <> 8
 			a = alloc(72):map(i) = a:map.table!i = 0
-			a!0 = random(0,31*255):a!1 = 0:a!2 = -1
+			a!0 = random(0,31*16*16-1):a!1 = 0:a!2 = -1
 			t = a + 3
 			t!0=&ABCD:t!1=16:t!2=64:t!3=1:t!4 = 0
 			for n = 5 to 31+5:t!n=0:next n
@@ -52,7 +71,7 @@ proc create.tilemaps()
 			if i = 4 then call generate.river(t+5,7,1,2,3,4,&4000):speed = -2
 			if i = 3 then call generate.river(t+5,4,3,2,2,4,0):speed = 3
 
-			a!1 = speed * 256
+			a!1 = -speed * 16
 			tile 0,i*16,(a!0)>>4,0,64,1,t
 
 			a = t + 32
@@ -71,7 +90,7 @@ endproc
 '
 proc generate.river(map,graphic,col,size,n1,n2,bits)
 	local c = 0:local i
-	while c < 32
+	while c < 32-size
 		if graphic = 7
 			turtle.count = turtle.count + 1
 			turtle.addr(turtle.count) = map+c
