@@ -4,7 +4,6 @@
 '
 ' **************************************************************************************************
 '
-'	Diving turtles design/implement
 '	Sound effects : jump, home, dead.
 '
 screen 3,1:palette 1,1,2
@@ -30,6 +29,7 @@ proc play.level()
 	time.nextMove = timer()
 	while not life.lost and home.count > 0
 		if timer()-time.nextMove >= 0
+			call process.turtle()
 			call move.tilemaps()	
 			if pl.moving call move.player() else call check.move() endif
 			if y > 8
@@ -57,6 +57,7 @@ proc check.move()
 	if pl.y = 14*16+8 and pl.dy > 0 then pl.dy = 0
 	if pl.dx<>0 or pl.dy<>0
 		pl.moving = true:pl.count = 16
+		sound 1,8888,0:slide 1,555,2
 	endif
 endproc
 '
@@ -100,6 +101,7 @@ proc check.player.home()
 	if t = 0 
 		call lose.life()
 	else
+		for i = 0 to 4:sound 2,5222,1:sound 2,1,1:next i
 		ink 2:draw home.x(t)-8,32,2
 		ink 1:draw home.x(t)-8,32,3
 		home.used(t) = true
@@ -113,8 +115,9 @@ endproc
 '
 proc lose.life()
 	life.lost = true
-	local e = 0
-	while not event(e,100)
+	local i
+	for i = 1 to 4:sound 2,4444,0:slide 2,-488,2:next i
+	while not quiet(2)
 		sprite 0 draw random(0,1) flip random(0,3)
 	wend
 endproc
@@ -212,7 +215,9 @@ proc create.tilemaps()
 	dim map(15):rem "addresses +0 pos.16 +1 speed.16 +2 last.16 +3 tilemap as per spec 64 x 1"
 	dim speeds(15):rem "unadjusted speeds"
 	map.table = alloc(16)
-	dim turtle.addr(32),turtle.size(32):turtle.count = 0
+	dim turtle.addr(32),turtle.size(32),turtle.event(32),turtle.status(32)
+	dim turtle.status.time(3)
+	turtle.count = 0
 	for i = 0 to 15:map(i) = 0:map.table!i = 0:next i
 	for i = 3 to 13
 		if i <> 8
@@ -241,6 +246,40 @@ proc create.tilemaps()
 		endif
 	next i
 endproc
+'
+'		Reset any changed turtles in the tile map, reset event timers.
+'
+proc reset.turtles()	
+	local i,j,n,c
+	for i = 0 to 3
+		c = 2:if i = 0 then c = 5
+		turtle.status.time(i) = c*game.percent
+	next i
+	for i = 1 to turtle.count
+		for j = turtle.addr(i) to turtle.addr(i)+turtle.size(i)-1
+			!j = (!j and &FF00) or 7:j!32=!j
+		next j
+		turtle.event(i) = timer()+random(0,turtle.status.time(0))
+		turtle.status(i) = 0
+	next i
+endproc			
+'
+'							Process another turtle
+'
+proc process.turtle()
+	local i,n,c
+	turtle.index = (turtle.index+1) mod turtle.count
+	n = turtle.index+1
+	if timer()-turtle.event(n) >= 0
+		turtle.status(n) = (turtle.status(n)+1) and 3
+		turtle.event(n) = timer()+turtle.status.time(turtle.status(n))
+		c = turtle.status(n)+7:if c = 10 then c = 8
+		for i = turtle.addr(n) to turtle.addr(n)+turtle.size(n)-1
+			!i = (!i and &FF00) or c:i!32 = !i
+		next i
+	endif
+endproc
+'
 '
 '								Set up speeds
 '
@@ -279,14 +318,3 @@ proc generate.river(map,graphic,col,size,n1,n2,bits)
 		c = c + random(n1,n2)
 	wend
 endproc
-'
-'		Reset any changed turtles in the tile map
-'
-proc reset.turtles()	
-	local i,j,n,c
-	for i = 1 to turtle.count
-		for j = turtle.addr(i) to turtle.addr(i)+turtle.size(i)-1
-			!j = (!j and &FF00) or 7:j!32=!j
-		next j
-	next i
-endproc			

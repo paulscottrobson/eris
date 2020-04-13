@@ -110,6 +110,7 @@
 		and 	r0,#$03FF 					; this is the unscaled modifier
 		ror 	r0,#10 						; now a scaled modifier.
 		stm 	r0,r4,#sndPitch 			; this is the current pitch
+		stm 	r0,r5,#0 					; set the actual plauing tone
 		stm 	r14,r4,#sndSlide 			; clear the slide.
 		jmp 	#_OSICreateExit
 

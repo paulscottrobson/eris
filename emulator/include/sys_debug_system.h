@@ -15,7 +15,7 @@
 #define _DEBUG_SYS_H
 #include "sys_processor.h"
 
-#define WIN_TITLE 		"Eris Emulator 05-Apr-20"									// Initial Window stuff
+#define WIN_TITLE 		"Eris Emulator 13-Apr-20"									// Initial Window stuff
 #define DBGXCHAR 		46
 #define DBGYCHAR 		32
 

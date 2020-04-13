@@ -32,10 +32,11 @@ static const WORD16 romMemory[RAM_START] = {
 #endif
 
 static WORD16 ramMemory[RAM_END-RAM_START];
-static LONG32 cycles;
+static LONG32 cycles,frameCycles;
 static LONG32 iCount;
 static WORD16 instReg;
 static WORD16 timer;
+static BYTE8  turbo;
 
 // ****************************************************************************
 //							CPU Registers
@@ -102,6 +103,12 @@ static inline void WRITE(WORD16 a,WORD16 d) {
 		if (a == 0xFFFE) {													// $FFFE = File I/O system
 			R0 = HWFileOperation(R0,R1,R2,R3);
 		}
+		#if defined(WINDOWS) || defined(LINUX)
+		if (a == 0xFFFD) {													// $FFFD = turbo control
+			turbo = (d != 0);												// (Windows/Linux only)
+			frameCycles = CYCLES_PER_FRAME * ((turbo != 0) ? 10 : 1);
+		}
+		#endif
 	}
 }
 
@@ -171,6 +178,8 @@ void CPUReset(void) {
 	iCount = cycles = 0;
 	carryFlag = 0;
 	R15 = 0;
+	turbo = 0;
+	frameCycles = CYCLES_PER_FRAME;
 }
 
 // ****************************************************************************
@@ -196,10 +205,10 @@ BYTE8 CPUExecuteInstruction(void) {
 		#include "_instructions.h"
 	}
 	cycles++;
-	if (cycles < CYCLES_PER_FRAME) return 0;										// Not completed a frame.
-	cycles = cycles - CYCLES_PER_FRAME;												// Adjust this frame rate.
+	if (cycles < frameCycles) return 0;												// Not completed a frame.
+	cycles = cycles - frameCycles;													// Adjust this frame rate.
 	timer += 2;																		// Fix up 100Hz timer.
-	iCount += CYCLES_PER_FRAME;
+	iCount += frameCycles;
 	HWSync(iCount);																	// Update any hardware
 	return FRAME_RATE;																// Return frame rate.
 }

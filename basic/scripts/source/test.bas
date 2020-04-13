@@ -1,3 +1,1 @@
-
-
 run "frogger.prg"
