@@ -4,12 +4,12 @@
 '
 ' **************************************************************************************************
 '
-'	Make log speeds scalable on game.speed
 '	Diving turtles design/implement
-'	Scoring / SFX - score on DY +/- and home.
+'	Sound effects : jump, home, dead.
 '
 screen 3,1:palette 1,1,2
 !&FFFD = true:call initialise():!&FFFD = false
+game.score = 0:call add.score(0)
 game.lives = 3:game.level = 1:call draw.lives()
 repeat
 	call play.level()
@@ -20,10 +20,13 @@ end
 '
 proc play.level()
 	local i
-	!&fffd = true:call reset.turtles():!&fffd = false
+	
 	for i = 1 to 5:home.used(i) = false:next i
-	game.time = 7:home.count = 5:game.speed = min(4+game.level/2,14)
+	game.time = 7:home.count = 5
+	game.speed = 6:game.percent = 100+(game.level)*10
 	call reset.player()
+	call reset.turtles()
+	call set.lane.speed(game.percent)
 	time.nextMove = timer()
 	while not life.lost and home.count > 0
 		if timer()-time.nextMove >= 0
@@ -60,10 +63,11 @@ endproc
 '		Move Player
 '
 proc move.player()
-	local s = min(game.speed,pl.count)
+	local s = min(4*game.percent/100,pl.count)
 	pl.x = pl.x+pl.dx*s:pl.y = pl.y+pl.dy*s:sprite 0 to pl.x,pl.y
 	pl.count = pl.count-s
 	if pl.count = 0
+		if pl.dy < 0 then call add.score(1)
 		pl.moving = false:pl.dx = 0:pl.dy = 0
 		if pl.y = 2*16+8 
 			call check.player.home()
@@ -100,6 +104,7 @@ proc check.player.home()
 		ink 1:draw home.x(t)-8,32,3
 		home.used(t) = true
 		home.count = home.count - 1
+		call add.score(50)
 	endif
 	call reset.player()
 endproc
@@ -108,6 +113,10 @@ endproc
 '
 proc lose.life()
 	life.lost = true
+	local e = 0
+	while not event(e,100)
+		sprite 0 draw random(0,1) flip random(0,3)
+	wend
 endproc
 '
 '		Reset player
@@ -187,13 +196,23 @@ proc draw.lives()
 	next i
 endproc
 '
+'		Add to score (x 10)
+'
+proc add.score(n)
+	game.score = game.score+n 
+	local a$ = right$("0000"+str$(game.score),5)
+	ink 1:cursor 11,1:print a$;
+	if game.score > game.hiScore then game.hiScore = game.score:cursor 25,1:print a$;
+endproc
+'
 '		Create tilemaps for the lanes.
 '
 proc create.tilemaps()
 	local t,a,i,n
 	dim map(15):rem "addresses +0 pos.16 +1 speed.16 +2 last.16 +3 tilemap as per spec 64 x 1"
+	dim speeds(15):rem "unadjusted speeds"
 	map.table = alloc(16)
-	dim turtle.addr(32),turtle.size(32),turtle.change(32):turtle.count = 0
+	dim turtle.addr(32),turtle.size(32):turtle.count = 0
 	for i = 0 to 15:map(i) = 0:map.table!i = 0:next i
 	for i = 3 to 13
 		if i <> 8
@@ -214,12 +233,21 @@ proc create.tilemaps()
 			if i = 4 then call generate.river(t+5,4,3,2,3,4,0):speed = -2
 			if i = 3 then call generate.river(t+5,7,1,2,2,4,0):speed = 3
 
-			a!1 = -speed * 16
+			speeds(i) = -speed * 16
 			tile 0,i*16,(a!0)>>4,0,64,1,t
 
 			a = t + 32
 			for n = 5 to 36:a!n = t!n:next n
 		endif
+	next i
+endproc
+'
+'								Set up speeds
+'
+proc set.lane.speed(percent)
+	local i
+	for i = 0 to 15
+		if map(i) <> 0 then	map(i)!1 = speeds(i) * percent / 100
 	next i
 endproc
 '
@@ -256,13 +284,9 @@ endproc
 '
 proc reset.turtles()	
 	local i,j,n,c
-	for i = 3 to 6
-		n = map(i)	
-		if n <> 0
-			for j = 8 to 71
-				c = n!j and &FF
-				if c = 8 or c = 9 then n!j = (n!j and &FF00) or 7
-			next j
-		endif
+	for i = 1 to turtle.count
+		for j = turtle.addr(i) to turtle.addr(i)+turtle.size(i)-1
+			!j = (!j and &FF00) or 7:j!32=!j
+		next j
 	next i
-endproc	
+endproc			
