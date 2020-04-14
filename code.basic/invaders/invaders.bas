@@ -4,28 +4,43 @@
 '
 ' **************************************************************************************************
 '
-'	Flying saucer
-'
 screen 2,2:palette 1,1,5
 call initialise()
 call new.game()
 call new.level()
-call play.level()
-end
+repeat
+	call play.level()
+until game.lives = 0
+cls:end
 '
 '		Play one level
 '
 proc play.level()
 	life.lost = false
-	e.pMissile = 0:e.iMove = 0:e.pMove = 0:i.speed = 0:e.killExplosion = -1
+	e.pMissile = 0:e.iMove = 0:e.pMove = 0:e.sMove = 0:i.speed = 0:e.killExplosion = -1
+	e.m(1) = 0:e.m(2) = 0
 	repeat
 		if event(e.iMove,i.speed) then call move.invaders()
 		if event(e.pMove,9) then call move.player()
+		if event(e.sMove,6) then call move.saucer()
 		if pm.x > 0 then if event(e.pMissile,5) then call move.pmissile()
 		if event(e.m(1),11) then call move.emissile(1)
 		if event(e.m(2),11) then call move.emissile(2)
 		if event(e.killExplosion,20) then sprite 15 to -10,-10:e.killExplosion = -1
 	until life.lost or inv.count = 0
+	if life.lost 
+		game.lives = game.lives-1:call update.lives()
+		call reset.inv.missiles()
+		sound 0,150,10:e.pMove = 0
+		while not event(e.pMove,150)
+			sprite 0 ink random(0,3)
+		wend
+		sprite 0 ink 2
+	else
+		game.level = game.level+1
+		call new.level()
+	endif
+
 endproc
 '
 '		Move player
@@ -55,6 +70,11 @@ proc move.pMissile()
 	if pm.y >= inv.y+16 and pm.y < inv.y+inv.lowest * 16+16
 		local d = abs(pm.x-inv.x) and 15
 		if pm.x >= inv.x+inv.left*16 and pm.x < inv.x+inv.right*16+16 and d >= 3 and d <= 13 then call hit.invader()
+	endif
+	if hit(1,5) 
+		call reset.saucer()
+		game.score = game.score + 10:call update.score()
+		sound 0,1000,4
 	endif
 	sprite 1 to pm.x,pm.y
 endproc
@@ -189,6 +209,24 @@ proc new.game()
 	game.level = 1:game.score = 0:game.lives = 3
 endproc
 '
+'		Reset the saucer
+'
+proc reset.saucer()
+	saucer.x = random(500,1000):saucer.y = 24	
+	if saucer.x < 320 
+		sprite 5 ink 1 draw 9 to saucer.x,saucer.y
+	else
+		sprite 5 to -10,-10
+	endif
+endproc
+'
+'		Move saucer
+'
+proc move.saucer()
+	saucer.x = saucer.x-3:if saucer.x < 320 then sprite 5 to saucer.x,saucer.y
+	if saucer.x < 0 then call reset.saucer()
+endproc
+'
 '		New level - reset invaders, shields, score
 '
 proc new.level()
@@ -209,7 +247,7 @@ proc new.level()
 	for i = 1 to inv.width-2:col.count(i) = inv.height:next i
 	inv.count = (inv.width-2)*inv.height
 	call calc.lowest():call calc.left.right()
-	inv.x = 160-inv.width*8:inv.y = 32:inv.dx = 1
+	inv.x = 160-inv.width*8:inv.y = 16+3*game.level:inv.dx = 1
 	;tile inv.x,inv.y,0,0,inv.width,inv.height+1,inv.map
 	ink 3:cursor 26-4,0:print "HI-SCORE";:cursor 13-4,0:print "SCORE<1>";:cursor 39-4,0:print "SCORE<2>";
 	ink 1:cursor 26-3,1:print "000000";:cursor 39-3,1:print "001000";
@@ -226,6 +264,13 @@ proc new.level()
 	next i
 	player.x = 120:player.y = 224:sprite 0 ink 2 draw 8 to player.x,player.y:player.dx = 0
 	pm.x = -10:pm.y = 0:sprite 1 ink 1 draw 10 to pm.x,pm.y
+	call reset.inv.missiles()
+	call reset.saucer()
+endproc
+'
+proc reset.inv.missiles()
+	local i
 	for i = 1 to 2:mx(i) = -10:e.m(i) = 0:sprite i+2 ink 1 draw 10 to -10,0:next i
 endproc
+
 

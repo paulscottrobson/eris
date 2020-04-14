@@ -231,3 +231,21 @@
 		pop 	r3,r4,link
 		ret
 		
+; *****************************************************************************
+;
+;								variable address
+;
+; *****************************************************************************
+
+.Unary_Address	;; [@]		
+		push 	r9,link
+		mov 	r9,#(TOK_PLING & 0x1E00)-0x400
+		jsr 	#Evaluator 					; get the variable
+		ldm 	r0,r10,#esReference1 		; check it's a reference
+		sknz 	r0
+		jmp 	#TypeMismatchError
+		stm 	r14,r10,#esReference1		; return it as a value
+		pop 	r9,link
+		ret
+
+

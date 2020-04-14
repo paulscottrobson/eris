@@ -153,7 +153,7 @@ class Tokens(object):
 //		Basic Unary Functions
 //
 [Unary]
-	( 	&	% 	|constshift
+	@	( 	&	% 	|constshift
 	abs(	alloc(	asc(	chr$(	exists(	false	event(	get( 	get$( 	
 	hit(	inkey( 	inkey$( inport(	is.number(		joyx( 	joyy( 	joyb(	
 	key(	left$(	len(	lower$(	mid$(	max( 	min(	not 	page	
@@ -172,7 +172,7 @@ class Tokens(object):
 //		RPL tokens required for syntactic reasons.
 //	
 [Syntax]
-	@@		!!		&& 		@		+!
+	@@		!!		&& 		+!
 //
 //		Structure enter
 //
