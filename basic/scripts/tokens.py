@@ -98,7 +98,7 @@ class Tokens(object):
 	#
 	def encodePunctuation(self,s):
 		assert len(s) <= 2 and s != "","Bad "+s 							# rubbish validation but works
-		assert re.match("^[\\#\\.\\!\\+\\-\\*\\>\\<\\=\\/\\(\\)\\:\\,\\;\\&\\%\\'\\?]+$",s) is not None,"Bad "+s
+		assert re.match("^[\\#\\.\\!\\+\\-\\*\\>\\<\\=\\/\\(\\)\\:\\,\\;\\&\\%\\'\\?\\@]+$",s) is not None,"Bad "+s
 		s = s + chr(0)
 		return [ 0x8000 + ord(s[0]) + (ord(s[1]) << 8)]
 	#
@@ -168,6 +168,11 @@ class Tokens(object):
 //
 [Syntax]
 	#		) 		, 		; 		to 		step
+//
+//		RPL tokens required for syntactic reasons.
+//	
+[Syntax]
+	@@		!!		&& 		@		+!
 //
 //		Structure enter
 //

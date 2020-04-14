@@ -162,9 +162,15 @@
 		skz 	r0
 		jmp 	#TypeMismatchError
 		ldm 	r1,r10,#esValue1 			; get the variable address into R1
+		;
 		jsr 	#CheckComma
 		jsr 	#EvaluateInteger 			; get the time elapsed betwen into R0
 		jsr 	#CheckRightBracket
+		;
+		ldm 	r2,r1,#0 					; get current value
+		inc 	r2 							; if -1 then fail automatically, on hold.
+		sknz 	r2
+		jmp 	#_UEVFail
 		;
 		ldm 	r2,#hwTimer 				; get the current timer
 		ldm 	r3,r1,#0 					; get the variable
@@ -177,6 +183,10 @@
 		;
 		add 	r3,r0,#0 					; add the elapsed time to the variable value
 		stm 	r3,r1,#0 					; and write it back
+		inc 	r3 							; if -1, then fudge it to zero.
+		sknz 	r3
+		stm 	r3,r1,#0
+		;
 ._UEVFire
 		mov 	r0,#-1 						; return true
 		jmp 	#_UEVExit

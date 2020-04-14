@@ -3,9 +3,7 @@
 '										Space Invaders
 '
 ' **************************************************************************************************
-
-'	Player shoot fix hitting things
-'	Invaders shoot fix aiming and hitting things
+'
 '	Flying saucer
 '
 screen 2,2:palette 1,1,5
@@ -19,13 +17,14 @@ end
 '
 proc play.level()
 	life.lost = false
-	e.pMissile = 0:e.iMove = 0:e.pMove = 0:i.speed = 0
+	e.pMissile = 0:e.iMove = 0:e.pMove = 0:i.speed = 0:e.killExplosion = -1
 	repeat
 		if event(e.iMove,i.speed) then call move.invaders()
-		if event(e.pMove,12) then call move.player()
+		if event(e.pMove,9) then call move.player()
 		if pm.x > 0 then if event(e.pMissile,5) then call move.pmissile()
-		if event(e.m(1),7) then call move.emissile(1)
-		if event(e.m(2),7) then call move.emissile(2)
+		if event(e.m(1),11) then call move.emissile(1)
+		if event(e.m(2),11) then call move.emissile(2)
+		if event(e.killExplosion,20) then sprite 15 to -10,-10:e.killExplosion = -1
 	until life.lost or inv.count = 0
 endproc
 '
@@ -43,6 +42,7 @@ proc move.player()
 	sprite 0 to player.x,player.y
 	if joyb(1)<>0 and pm.x < 0 
 		pm.x = player.x:pm.y = player.y-8:sprite 1 to pm.x,pm.y:e.pMissile = 0
+		sound 2,4444,2
 	endif
 endproc
 '
@@ -51,6 +51,11 @@ endproc
 proc move.pMissile()
 	pm.y = pm.y - 8
 	if pm.y < 16 then pm.x = -10
+	if pm.y >= sh.y1 and pm.y < sh.y2 then call hit.shield(pm.x,pm.y):if hit then pm.x = -10
+	if pm.y >= inv.y+16 and pm.y < inv.y+inv.lowest * 16+16
+		local d = abs(pm.x-inv.x) and 15
+		if pm.x >= inv.x+inv.left*16 and pm.x < inv.x+inv.right*16+16 and d >= 3 and d <= 13 then call hit.invader()
+	endif
 	sprite 1 to pm.x,pm.y
 endproc
 '
@@ -58,28 +63,95 @@ endproc
 '
 proc move.eMissile(n)
 	if mx(n) < 0
-		mx(n) = random(10,310):my(n) = 40
+		if inv.count > 0 then call fire.eMissile(n)
 	else
 		my(n) = my(n)+8:if my(n) > 240 then mx(n) = -10
 	endif
+	if my(n) >= sh.y1 and my(n) < sh.y2 then call hit.shield(mx(n),my(n)):if hit then mx(n) = -10
 	sprite n+2 to mx(n),my(n)
 	if hit(0,n+2,8) then life.lost = True
 endproc	
+'
+'
+'
+proc fire.eMissile(n)
+	local r,i,t
+	repeat:r = random(1,inv.width-2):until col.count(r) <> 0
+	t = inv.map+5+r+inv.width
+	mx(n) = r*16+inv.x+8
+	for i = 1 to 5
+		if (!t and &FF) < 4 then my(n) = i*16+inv.y+16
+		t = t + inv.width
+	next i
+endproc
+'
+'		Check hit invader
+'
+proc hit.invader()
+	local x = (pm.x-inv.x) >> 4
+	local y = (pm.y-inv.y) >> 4
+	local t = inv.map+5+x+y*inv.width
+	if (!t and &FF) < 4
+		pm.x = -10:!t = &1F
+		inv.count = inv.count - 1
+		col.count(x) = col.count(x)-1:row.count(y) = row.count(y)-1
+		tile inv.x,inv.y,0,0,inv.width,inv.height+1,inv.map
+		if col.count(x) = 0  then call calc.left.right()
+		if row.count(y) = 0  then call calc.lowest()
+		game.score = game.score + 3 - y/2:call update.score()
+		sound 0,1000,4
+		sprite 15 ink 3 draw 3 to inv.x+x*16+8,inv.y+y*16+8
+		e.killExplosion = 0
+	endif	
+endproc
+'
+'		Calc lowest row
+'
+proc calc.lowest()
+	local i:inv.lowest = 0
+	for i = 1 to inv.height
+		if row.count(i) <> 0 then inv.lowest = i
+	next i
+endproc
+'
+'		Calc left/right boundaries
+'
+proc calc.left.right()
+	local i
+	inv.left = inv.width-2:inv.right = 1
+	for i = 1 to inv.width-2
+		if col.count(i) <> 0 then inv.left = min(inv.left,i):inv.right = max(inv.right,i)
+	next i
+endproc
+'
+'		Check hit shield
+'
+proc hit.shield(x,y)
+	x = x >> 3:y = (y - sh.y1) >> 3
+	hit = false
+	if shields(x,y) > 0
+		hit = true
+		local n = shields(x,y)-1
+		ink 0:shields(x,y) = n
+		x = x * 8:y = y * 8 + sh.y1:ink 0:draw x,y,n+4:ink 1
+	endif
+endproc
 '
 '		Move invaders
 '
 proc move.invaders()
 	local c,p = sysvar(3)
 	i.speed = 6+inv.count*2
-	inv.x = inv.x + inv.dx * 4
-	if inv.x+inv.left*16 < 4 or inv.x+inv.right*16 > 316
-		inv.dx = -inv.dx:inv.y = inv.y+8
-		if inv.y + inv.lowest*16 > player.y then life.lost = true
+	inv.x = inv.x + inv.dx * 4 
+	if inv.x+inv.left*16 < 4 or inv.x+inv.right*16 > 300
+		inv.dx = -inv.dx:inv.y = inv.y+8:inv.x = inv.x + inv.dx * 4
+		if inv.y + inv.lowest*16 > player.y-24 then life.lost = true
 	endif
 	inv.frame = inv.frame + 1
 	c = &420:if inv.frame and 1 then c = &1008
 	p!15 = c:p!31=c:p!47=c
-	tile inv.x,inv.y,0,0,inv.width,inv.height+1,inv.map
+	tile inv.x,inv.y,0,0,inv.width,inv.height+1,inv.map	
+	sound 1,48000+(inv.frame and 3)*2000,1
 endproc
 '
 '		Set up game
@@ -89,7 +161,7 @@ proc initialise()
 	inv.width = 13:inv.height = 5:rem "One row of spaces on left and right"
 	inv.map = alloc(inv.width*inv.height+inv.width+5)
 	!inv.map = &ABCD:inv.map!1 = 16:inv.map!2 = inv.width:inv.map!3 = inv.height+1:inv.map!4 = 0
-	dim shields(39,5),col.count(inv.width-1),mx(2),my(2),e.m(2)
+	dim shields(39,3),col.count(inv.width-1),row.count(inv.height),mx(2),my(2),e.m(2)
 	palette 1,0,6:game.hiScore = 100
 endproc
 '
@@ -126,6 +198,7 @@ proc new.level()
 	ink 3:text 255,232,"CREDIT":ink 1:text 300,232,"00"
 	for i = 0 to inv.width-1:!(inv.map+5+i) = &01F:next i
 	for y = 0 to inv.height-1
+		row.count(y+1) = inv.width-2
 		p = inv.map+5+inv.width*(y+1)
 		c = (y+1)/2
 		p!0 = &01F:p!(inv.width-1) = &01F
@@ -133,27 +206,26 @@ proc new.level()
 			p!x = &100+c*&101
 		next x
 	next y
-	for i = 1 to inv.width-2:col.count(i) = height:next i
+	for i = 1 to inv.width-2:col.count(i) = inv.height:next i
 	inv.count = (inv.width-2)*inv.height
-	inv.lowest = inv.height:inv.left = 1:inv.right = inv.width-1
+	call calc.lowest():call calc.left.right()
 	inv.x = 160-inv.width*8:inv.y = 32:inv.dx = 1
 	;tile inv.x,inv.y,0,0,inv.width,inv.height+1,inv.map
 	ink 3:cursor 26-4,0:print "HI-SCORE";:cursor 13-4,0:print "SCORE<1>";:cursor 39-4,0:print "SCORE<2>";
 	ink 1:cursor 26-3,1:print "000000";:cursor 39-3,1:print "001000";
-	sh.y1 = 180:sh.y2 = sh.y1+24
-	for x = 0 to 39:for y = 0 to 4:shields(x,y) = false:next y:next x
+	sh.y1 = 176:sh.y2 = sh.y1+32
 	for i = 1 to 3
-		x = 80*i
+		x = 80*i-8
 		for c = -1 to 1
-			d = &10:if c > 0 then d = &4010
-			blit x+c*16,sh.y1,7-abs(c)*2,&0302,d
-			blit x+c*16,sh.y1+16,6,&0302,16
+			blit x+c*16,sh.y1,7,&0302,16
+			blit x+c*16,sh.y1+16,7,&0302,16
 		next c
-		for y = 0 to 4
-			d = (x-32) >> 3:for p = 0 to 5:shields(p+d,y) = true:next p
+		for y = 0 to 3
+			d = (x-16) >> 3:for p = 0 to 5:shields(p+d,y) = 3:next p
 		next y
 	next i
-	player.x = 160:player.y = 224:sprite 0 ink 2 draw 8 to player.x,player.y:player.dx = 0
-	pm.x = -10:pm.y = 0:sprite 1 ink 1 draw 4 to pm.x,pm.y
-	for i = 1 to 2:mx(i) = 0:e.m(i) = 0:sprite i+2 ink 1 draw 4 to -10,0:next i
+	player.x = 120:player.y = 224:sprite 0 ink 2 draw 8 to player.x,player.y:player.dx = 0
+	pm.x = -10:pm.y = 0:sprite 1 ink 1 draw 10 to pm.x,pm.y
+	for i = 1 to 2:mx(i) = -10:e.m(i) = 0:sprite i+2 ink 1 draw 10 to -10,0:next i
 endproc
+
