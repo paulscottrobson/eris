@@ -69,6 +69,7 @@
 		jsr 	#EvaluateInteger 			; address -> R1
 		mov 	r1,r0,#0 
 		mov 	r0,#fixedVariables 			; pass variables in R0 e.g. the address of A-Z block
+		mov 	r8,#tokenBufferEnd-1 		; set up R8 for RPL stack if an RPL function.
 		push 	r11 						; R11 is the program position, don't want that changed.
 		brl 	link,r1,#0 					; call the routine
 		pop 	r11
@@ -189,7 +190,6 @@
 .Dummy116 		;; [endcase] 
 .Dummy117 		;; [connect] 
 .Dummy119 		;; [^] 
-.Dummy122 		;; [+!] 
 ;
 ;		This lot are not commands per se, but are handled in RUN as token values.
 ;
@@ -211,6 +211,5 @@
 ;		This lot are not yet implemented.
 ;
 .Dummy204 		;; [mon]
-.Dummy206 		;; [rpl(] 
 		jmp 	#SyntaxError
 

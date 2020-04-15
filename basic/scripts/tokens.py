@@ -172,7 +172,7 @@ class Tokens(object):
 //		RPL tokens required for syntactic reasons.
 //	
 [Syntax]
-	+!		^
+	^
 //
 //		Structure enter
 //
