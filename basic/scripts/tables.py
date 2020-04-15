@@ -106,9 +106,14 @@ for root,dirs,files in os.walk(".."+os.sep+"src"):
 				m = re.match("^\\.(.*?)\\s+\\;\\;\\s+\\[(.*?)\\]\\s*(\\*?)\\s*$",s)
 				assert m is not None,f+" : "+s
 				word = { "word":m.group(2).lower(),"label":m.group(1),"immediate":(m.group(3) == "*")}
-				word["tokens"] = tokens.encode(word["word"])
+				ti = tokens.getInfo(word["word"])
+				if ti is not None:
+					word["tokens"] = [ti["token"]]
+				else:
+					word["tokens"] = tokens.encode(word["word"])
 				assert word["word"] not in words,"Duplicate "+word["word"]
 				words[word["word"]] = word
+
 h = open(".."+os.sep+"generated"+os.sep+"rpl_dictionary.inc","w")
 h.write(";\n;\tAutomatically generated\n;\n")
 h.write(".RPLDictionary\n")

@@ -15,6 +15,6 @@
 	word	4			; Word '+'
 	word	RPL_Add
 	word	$0001
-	word	$802b
+	word	$282a
 
 	word	0
