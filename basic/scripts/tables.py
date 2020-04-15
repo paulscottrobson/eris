@@ -95,3 +95,32 @@ for i in range(0,16):
 	word = tokens.encode("R{0:X}".format(i))
 	h.write("\tword\t${0:X} ; R{1:X}\n".format(word[0],i))
 h.close()	
+#
+#		Scan source for RPL code
+#
+words = {}
+for root,dirs,files in os.walk(".."+os.sep+"src"):
+	for f in [x for x in files if x.endswith(".rpl")]:
+		for s in open(root+os.sep+f).readlines():
+			if s.find(";;") >= 0:
+				m = re.match("^\\.(.*?)\\s+\\;\\;\\s+\\[(.*?)\\]\\s*(\\*?)\\s*$",s)
+				assert m is not None,f+" : "+s
+				word = { "word":m.group(2).lower(),"label":m.group(1),"immediate":(m.group(3) == "*")}
+				word["tokens"] = tokens.encode(word["word"])
+				assert word["word"] not in words,"Duplicate "+word["word"]
+				words[word["word"]] = word
+h = open(".."+os.sep+"generated"+os.sep+"rpl_dictionary.inc","w")
+h.write(";\n;\tAutomatically generated\n;\n")
+h.write(".RPLDictionary\n")
+wList = [x for x in words.keys()]
+wList.sort(key = lambda x:-len(words[x]["tokens"]))
+for w in wList:
+	wr = words[w]
+	h.write("\tword\t{0}\t\t\t; Word '{1}'\n".format(len(wr["tokens"])+3,wr["word"]))
+	h.write("\tword\t{0}\n".format(wr["label"]))
+	n = len(wr["tokens"])
+	h.write("\tword\t${0:04x}\n".format(n+0x8000 if wr["immediate"] else n))
+	h.write("\tword\t{0}\n\n".format(",".join(["${0:04x}".format(t) for t in wr["tokens"]])))
+
+h.write("\tword\t0\n")
+h.close()
