@@ -60,6 +60,16 @@ stackPosSize = 2
 ;
 indentStep = 2
 ;
+;		Event timers
+;
+evtCount = 8 			; supported # event timers
+evtRecSize = 4			; words per record
+;
+evtCode = 0 			; BASIC code address (0 if timer not in use)
+evtTime = 1 			; time when event fires
+evtRate = 2 			; number of centiseconds between events.
+evtRepeatCount = 3		; repeat count, 0 = run indefinitely
+;
 ;		Colour schemes for listing
 ;
 theme_line = 2 			; green lines

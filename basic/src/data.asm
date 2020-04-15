@@ -76,6 +76,12 @@
 .asmMode 									; assembler mode bit 0 = Pass bit 1 = List
 		fill 	1
 
+.eventSemaphore 							; event semaphore
+		fill 	1
+
+.eventCheckTime 							; time of next event check
+		fill 	1
+		
 ; *****************************************************************************
 ;
 ;		Evaluation stack.
@@ -106,6 +112,15 @@
 		
 .variableHashTable							; hash tables for 4 variable types
 		fill 	hashTableSize*4
+
+; *****************************************************************************
+;
+;								Event table
+;
+; *****************************************************************************
+
+.eventTable 								; sets of event records
+		fill 	evtCount * evtRecSize
 
 ; *****************************************************************************
 ;

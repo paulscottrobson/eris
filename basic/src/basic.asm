@@ -82,6 +82,7 @@
 
 .WarmStart 
 		ldm 	sp,#initialSP 				; reset the stack
+		jsr 	#EventReset 				; stop events.
 		jsr 	#OSLineInput 				; read a line off the screen
 		;
 		jsr 	#TokeniseString 			; try to tokenise and error if failed.

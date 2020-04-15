@@ -188,9 +188,7 @@
 .Dummy115 		;; [case] 
 .Dummy116 		;; [endcase] 
 .Dummy117 		;; [connect] 
-.Dummy119 		;; [@@] 
-.Dummy120 		;; [!!] 
-.Dummy121 		;; [&&] 
+.Dummy119 		;; [^] 
 .Dummy122 		;; [+!] 
 ;
 ;		This lot are not commands per se, but are handled in RUN as token values.
@@ -212,8 +210,6 @@
 ;
 ;		This lot are not yet implemented.
 ;
-.Dummy202 		;; [after]
-.Dummy203 		;; [every]
 .Dummy204 		;; [mon]
 .Dummy206 		;; [rpl(] 
 		jmp 	#SyntaxError

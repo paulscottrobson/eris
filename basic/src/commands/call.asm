@@ -124,6 +124,17 @@
 		mov 	r0,#1+stackPosSize 			; and reclaim that many words off the stack
 		jsr 	#StackPopWords
 		jsr 	#LocalRestoreFrame 			; unpick the stack.
+		;
+		ldm 	r0,#returnStackPtr 			; check top of stack is 'E'
+		ldm 	r0,r0,#0 					
+		xor 	r0,#'E'
+		skz 	r0
+		jmp 	#_CEPNoEvent 				; if so, it is return from event
+		jsr 	#StackPopPosition 			; the actual return address.
+		mov 	r0,#1+stackPosSize 			; and reclaim that many words off the stack
+		jsr 	#StackPopWords
+		stm 	r14,#eventSemaphore 		; clear the semaphore
+._CEPNoEvent		
 		pop 	link
 		ret
 

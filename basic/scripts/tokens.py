@@ -98,7 +98,7 @@ class Tokens(object):
 	#
 	def encodePunctuation(self,s):
 		assert len(s) <= 2 and s != "","Bad "+s 							# rubbish validation but works
-		assert re.match("^[\\#\\.\\!\\+\\-\\*\\>\\<\\=\\/\\(\\)\\:\\,\\;\\&\\%\\'\\?\\@]+$",s) is not None,"Bad "+s
+		assert re.match("^[\\^\\#\\.\\!\\+\\-\\*\\>\\<\\=\\/\\(\\)\\:\\,\\;\\&\\%\\'\\?\\@]+$",s) is not None,"Bad "+s
 		s = s + chr(0)
 		return [ 0x8000 + ord(s[0]) + (ord(s[1]) << 8)]
 	#
@@ -172,7 +172,7 @@ class Tokens(object):
 //		RPL tokens required for syntactic reasons.
 //	
 [Syntax]
-	@@		!!		&& 		+!
+	+!		^
 //
 //		Structure enter
 //
@@ -188,13 +188,13 @@ class Tokens(object):
 //
 [Cmd]
 	' 		:		? 		
-	after 	assert 	blit 	call 	clear 	cls 	connect	crunch 	cursor	
-	curve	default	dim 	dir 	draw	ellipse	else 	end 	every	
-	fkey	flip	frame 	gosub 	goto 	ink 	input 	let 	line	
-	list 	load 	local 	mon		move	new 	old		on 		outport	
-	palette	paper	plot 	poke 	print 	rect 	rem 	renum	return 	
-	run 	save 	screen	slide	sound	sprite 	stop 	sys 	text	
-	tile	wait	when
+	after 	assert 	blit 	call 	cancel 	clear 	cls 	connect	crunch 	
+	cursor	curve	default	dim 	dir 	draw	ellipse	else 	end 	
+	every	fkey	flip	frame 	gosub 	goto 	ink 	input 	let 	
+	line	list 	load 	local 	mon		move	new 	old		on 		
+	outport	palette	paper	plot 	poke 	print 	rect 	rem 	renum	
+	return 	run 	save 	screen	slide	sound	sprite 	stop 	sys 	
+	text	tile	wait	when
 	
 """
 

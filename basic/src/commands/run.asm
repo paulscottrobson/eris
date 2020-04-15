@@ -50,6 +50,11 @@
 		jsr		#OSSystemManager 			; call system manager routine no break
 		skz 	r0 							; exit on break
 		jmp 	#BreakError 				; error if broken.
+		ldm 	r0,#hwTimer 				; check timer event due ?
+		ldm 	r1,#eventCheckTime
+		sub 	r0,r1,#0
+		skm 	r0
+		jsr 	#EventCheck 				; go actually check.
 		;
 		;				New instruction at R11
 		;
