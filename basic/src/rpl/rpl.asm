@@ -117,7 +117,11 @@
 ;
 ;		Evaluate variable, perhaps :)
 ;
-		; TODO: Check its an identifier first.
+		ldm 	r0,r11,#0
+		and 	r0,#$C000
+		xor 	r0,#$4000
+		skz 	r0
+		jmp 	#SyntaxError
 		jsr 	#EvaluateTermInteger 		; get a term.
 		sknz 	r0
 		jmp 	#CallError 					; not zero.
