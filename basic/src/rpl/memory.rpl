@@ -10,3 +10,107 @@
 ;
 ; *****************************************************************************
 ; *****************************************************************************
+
+; *****************************************************************************
+;
+;									@
+;
+; *****************************************************************************
+
+.RPL_Read	;; [@]
+		ldm 	r0,r0,#0
+		ret
+
+; *****************************************************************************
+;
+;									!
+;
+; *****************************************************************************
+
+.RPL_Write ;; [!]
+		ldm 	r1,r8,#0
+		stm 	r1,r0,#0
+		add 	r8,#2
+		ldm 	r0,r8,#0
+		ret
+
+; *****************************************************************************
+;
+;									+!
+;
+; *****************************************************************************
+
+.RPL_AddWrite ;; [+!]
+		ldm 	r1,r8,#0
+		ldm 	r2,r0,#0
+		add 	r1,r2,#0
+		stm 	r1,r0,#0
+		add 	r8,#2
+		ldm 	r0,r8,#0
+		ret
+
+; *****************************************************************************
+;
+;							Variable Read/Write
+;
+; *****************************************************************************
+
+.RPL_VarRead ;; [#] *
+		mov 	r0,#1 						; R0 is 1 for read code, 0 for write code.
+		sknz 	r0
+.RPL_VarWrite ;; [^] *
+		clr 	r0
+		push 	link
+
+		push 	r0 							; save code type.
+		;
+		ldm 	r0,r11,#0 					; check if identifier
+		and 	r0,#$C000
+		xor 	r0,#$4000
+		skz 	r0
+		jmp 	#SyntaxError
+		;
+		mov 	r9,#(TOK_PLING & 0x1E00)-0x400
+		jsr 	#Evaluator 					; get the lhs of the equals.
+		ldm 	r0,r10,#esReference1 		; it *must* be a reference
+		sknz 	r0 							
+		jmp 	#SyntaxError
+		ldm 	r0,r10,#esType1 			; it must be a number reference.
+		skz 	r0
+		jmp 	#TypeMismatchError
+
+		pop 	r1 							; R1 = 0 if write, 1 if read
+		sknz 	r1
+		jmp 	#_RPLVarWriteCode
+		;
+		;		Var Read Code
+		;
+		mov 	r0,#$58E1 					; sub r8,r14,#1 					
+		jsr 	#AsmWord
+		mov 	r0,#$2080  					; stm r0,r8,#0
+		jsr 	#AsmWord
+		mov 	r0,#$10F0 					; ldm r0,#<long>
+		jsr 	#AsmWord
+		ldm 	r0,r10,#esValue1 			; output the reference
+		jsr 	#AsmWord
+		pop 	link
+		ret
+		;
+		;		Var Write code
+		;
+._RPLVarWriteCode
+		mov 	r0,#$20F0 					; stm r0,#<long>
+		jsr 	#AsmWord
+		ldm 	r0,r10,#esValue1 			; output the reference
+		jsr 	#AsmWord
+		mov 	r0,#$1080  					; ldm r0,r8,#0
+		jsr 	#AsmWord
+		mov 	r0,#$48E1 					; add r8,r14,#1 					
+		jsr 	#AsmWord
+		pop 	link
+		ret
+
+
+		break								
+
+

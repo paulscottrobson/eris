@@ -117,7 +117,7 @@
 ;
 ;		Evaluate variable, perhaps :)
 ;
-		ldm 	r0,r11,#0
+		ldm 	r0,r11,#0 					; check if identifier
 		and 	r0,#$C000
 		xor 	r0,#$4000
 		skz 	r0

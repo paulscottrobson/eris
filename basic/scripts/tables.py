@@ -103,6 +103,7 @@ for root,dirs,files in os.walk(".."+os.sep+"src"):
 	for f in [x for x in files if x.endswith(".rpl")]:
 		for s in open(root+os.sep+f).readlines():
 			if s.find(";;") >= 0:
+				print(s,f)
 				m = re.match("^\\.(.*?)\\s+\\;\\;\\s+\\[(.*?)\\]\\s*(\\*?)\\s*$",s)
 				assert m is not None,f+" : "+s
 				word = { "word":m.group(2).lower(),"label":m.group(1),"immediate":(m.group(3) == "*")}
@@ -110,7 +111,11 @@ for root,dirs,files in os.walk(".."+os.sep+"src"):
 				if ti is not None:
 					word["tokens"] = [ti["token"]]
 				else:
-					word["tokens"] = tokens.encode(word["word"])
+					if re.match("^[0-9a-zA-Z\\.]+$",word["word"]):
+						word["tokens"] = tokens.encode(word["word"])
+					else:
+						word["tokens"] = [tokens.getInfo(c)["token"] for c in word["word"]]
+
 				assert word["word"] not in words,"Duplicate "+word["word"]
 				words[word["word"]] = word
 

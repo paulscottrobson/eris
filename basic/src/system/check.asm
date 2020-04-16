@@ -120,7 +120,7 @@
 		mov 	r1,#1 						; return 1 if so.
 		skge
 		jmp 	#_GCTExit
-		mov		r1,#2 						; return 2 for punctuation.
+		clr 	r1							; return 0 for punctuation.
 
 ._GCTExit
 		mov 	r0,r1,#0 					; return type in R1
