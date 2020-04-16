@@ -86,7 +86,9 @@
 		fill 	1
 .rplRepeatLoop 								; loop address for REPEAT
 		fill 	1
-						
+.rplIfBranch 								; branch patch address for IF/ELSE
+		fill 	1
+								
 ; *****************************************************************************
 ;
 ;		Evaluation stack.

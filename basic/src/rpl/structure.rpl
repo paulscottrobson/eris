@@ -25,7 +25,37 @@
 ;
 ; *****************************************************************************
 
+.RPL_If 	;; [if] *
+		push	link
+		mov 	r0,#SyntaxError
+		jsr 	#RPL_TOSCheck
+		ldm 	r0,#asmPointer 				; remember branch vector
+		dec 	r0 							; just gone past
+		stm 	r0,#rplIfBranch
+		pop 	link
+		ret
 
+.RPL_Else 	;; [else] *
+		push 	link
+		mov 	r0,#$AFF0 					; JMP
+		jsr 	#AsmWord
+		mov 	r0,#SyntaxError 			; the new branch address
+		jsr 	#AsmWord
+		;
+		ldm 	r0,#rplIfBranch 			; back patch to come here.
+		ldm 	r1,#asmPointer 				; if IF fails.
+		stm 	r1,r0,#0
+		;
+		dec 	r1							; address of new jump
+		stm 	r1,#rplIfBranch
+		pop 	link
+		ret
+
+.RPL_Then 	;; [then] *
+		ldm 	r0,#rplIfBranch 			; back patch to come here.
+		ldm 	r1,#asmPointer
+		stm 	r1,r0,#0
+		ret
 
 
 ; *****************************************************************************
@@ -101,7 +131,7 @@
 		pop 	link
 		ret
 
-.RPL_Index 	;; [idx] 
+.RPL_Index 	;; [i] 
 		dec 	r8 							; save current TOS on stack
 		stm 	r0,r8,#0
 		ldm 	r0,sp,#0 					; get the index back

@@ -250,7 +250,7 @@ proc new.level()
 	inv.x = 160-inv.width*8:inv.y = 16+3*game.level:inv.dx = 1
 	;tile inv.x,inv.y,0,0,inv.width,inv.height+1,inv.map
 	ink 3:cursor 26-4,0:print "HI-SCORE";:cursor 13-4,0:print "SCORE<1>";:cursor 39-4,0:print "SCORE<2>";
-	ink 1:cursor 26-3,1:print "000000";:cursor 39-3,1:print "001000";
+	ink 1:cursor 26-3,1:print right$("00000"+str$(game.hiScore),5);"0";:cursor 39-3,1:print "000000";
 	sh.y1 = 176:sh.y2 = sh.y1+32
 	for i = 1 to 3
 		x = 80*i-8

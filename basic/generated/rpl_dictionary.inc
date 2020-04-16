@@ -82,11 +82,6 @@
 	word	$0002
 	word	$282b,$282b
 
-	word	5			; Word 'idx'
-	word	RPL_Index
-	word	$0002
-	word	$40a9,$6018
-
 	word	5			; Word '+!'
 	word	RPL_AddWrite
 	word	$0002
@@ -187,6 +182,21 @@
 	word	$0001
 	word	$2628
 
+	word	4			; Word 'if'
+	word	RPL_If
+	word	$8001
+	word	$3e6b
+
+	word	4			; Word 'else'
+	word	RPL_Else
+	word	$8001
+	word	$3c8a
+
+	word	4			; Word 'then'
+	word	RPL_Then
+	word	$8001
+	word	$3a72
+
 	word	4			; Word 'repeat'
 	word	RPL_Repeat
 	word	$8001
@@ -206,6 +216,11 @@
 	word	RPL_Next
 	word	$8001
 	word	$3a71
+
+	word	4			; Word 'i'
+	word	RPL_Index
+	word	$0001
+	word	$6009
 
 	word	4			; Word '@'
 	word	RPL_Read
