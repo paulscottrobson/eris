@@ -1,0 +1,663 @@
+        ********************************************************************************************************************
+        ********************************************************************************************************************
+                                   PET Dungeon by Brian Sawyer. Reverse Engineered by Paul Robson
+        ********************************************************************************************************************
+        ********************************************************************************************************************
+                                                    ---  Display title page  ---
+Start@90
+        programName$ = "dungeon"
+        issue$ = "15"
+        Gosub TitlePage@62000
+100
+        rowSize = 23
+        colSize = 40
+        gameAreaSize = rowSize * colSize
+        topSpace =(25 - rowSize) * 40
+        rowSize = rowSize - 1
+        colSize = colSize - 1
+                                              ---  Create memory for usage by map  ---
+140
+        Dim dg$(24)
+        monsterName$ = "                                        "
+150
+        For i = 0 To 24
+            dg$(i) = monsterName$ + ""
+        Next i
+160
+        clear2$ = "{19}{Down}                                       {19}{Down}"
+170
+        clear1$ = "{19}                                       {19}"
+180
+        Print "{Clr}setting up..."
+190
+        map = Peek(kbd2) + 256 * Peek(kbd2 + 1) - gameAreaSize
+        screen = 32768
+                                                        ---  Clear map  ---
+200
+        For i = map + 40 To map + gameAreaSize - 41
+            Poke i,32
+        Next i
+210
+        hitPoints = 50
+        gold = 0
+        experience = 0
+        lastExperience = 0
+        goldToFind = 0
+        kills = 0
+        searchGold = 0
+        goldFound = 0
+        monster = 0
+        monMoveCount = 0
+        prevContents = 160
+        oldMC = 160
+220
+        clock$ = "000000"
+        time = clock + 3600
+230
+        Gosub CreateMap@380
+240
+        map = map - topSpace
+                                                   ---  Find start position  ---
+250
+        playerPos = Int(Rnd(1) * gameAreaSize + map)
+        If Peek(playerPos) < > 160 Then
+            250
+                                     ---  Open up map area surrounding and enter the game.  ---
+260
+        time = 0
+        Gosub ClearWithDelayIfNeeded@1410
+        playerPos = playerPos + screen - map
+        prevContents = Peek(playerPos)
+        Gosub OpenCheckGold@600
+        Poke playerPos,209
+        prevContents = 160
+        ********************************************************************************************************************
+                                                             Main loop
+        ********************************************************************************************************************
+MainLoop@270
+        Poke kbd1,0
+        Poke kbd3,255
+        Gosub GetCommand@1240
+                                      ---  Lose energy if wall walking, die if too much.  ---
+280
+        hitPoints = hitPoints - .15 - 2 * wallWalking
+        If hitPoints < 0 Then
+            1190
+                                          ---  Convert character to direction offset  ---
+290
+        offset = Val(Mid$("808182404142000102",command * 2 - 1,2)) - 41
+                                                     ---  Walking in wall  ---
+300
+        If(Peek(playerPos + offset) = 32) And(wallWalking < > 1) Then
+            270
+                                              ---  Walked into surrounding frame  ---
+310
+        If Peek(playerPos + offset) = 127 Then
+            270
+                                         ---  Move player then open surrounding space.  ---
+320
+        Poke playerPos,prevContents
+        playerPos = playerPos + offset
+        prevContents = Peek(playerPos)
+        Poke playerPos,209
+        Gosub OpenCheckGold@600
+        Poke playerPos,209
+                                                        ---  Found Gold  ---
+330
+        If prevContents = 135 Then
+            Gosub FoundGold@1200
+                                                   ---  Bumped into Monster  ---
+340
+        If prevContents > = 214 And prevContents < = 219 Then
+            Gosub MonsterAttack@1000
+350
+        If monster > 0 Then
+            monMoveCount = monMoveCount + 1
+360
+        If monMoveCount > 1 Then
+            Gosub 830
+370
+        Goto MainLoop@270
+        ********************************************************************************************************************
+                                                             Create map
+        ********************************************************************************************************************
+CreateMap@380
+        Print Int((time - clock) / 60);"{157}  {145}"
+                     ---  Work out width and height of new room (width = playerPos, height = prevContents)  ---
+400
+        prevContents = Int(Rnd(1) * 9 + 2)
+        playerPos = Int(Rnd(1) * 9 + 2)
+                                        ---  Work out coordinates and screen position.  ---
+410
+        r0 = Int(Rnd(1) *(rowSize - playerPos - 1)) + 1
+        c0 = Int(Rnd(1) *(colSize - prevContents - 1)) + 1
+        p = map + 40 * r0 + c0
+                                                 ---  Loop back if off screen  ---
+420
+        If p + 40 * playerPos + prevContents > = map + gameAreaSize Then
+            530
+                                      ---  Check it doesn't overlap with any othere room  ---
+430
+        For n = 0 To playerPos + 1
+            For n1 = 0 To prevContents + 1
+                If Peek(p +(n * 40) + n1) < > 32 Then
+                    530
+440
+            Next n1,n
+                                            ---  Fill in the room with floor space  ---
+450
+            For n = 1 To playerPos
+                For n1 = 1 To prevContents
+                    Poke p +(n * 40) + n1,160
+                Next n1,n
+                                             ---  Check if can open a path south.  ---
+460
+                For n = p + 42 +(playerPos * 40) To map + 999 Step 40
+470
+                    If Peek(n) = 160 Then
+                        For n1 = p + 42 To n Step 40
+                            Poke n1,160
+                        Next
+                        Poke n1 - 80,102
+                        Goto 490
+480
+                Next n
+                                              ---  Check if can open a path east  ---
+490
+                For n = p + 81 + prevContents To p + 121 + prevContents
+                    If(n - map) / 40 = Int((n - map) / 40) Then
+                        520
+500
+                    If Peek(n) = 160 Then
+                        For n1 = p + 81 To n - 1
+                            Poke n1,160
+                        Next
+                        Poke n1 - 1,102
+                        Goto 520
+510
+                Next
+                                           ---  Put a monster in the room somewhere.  ---
+520
+                monMoveCount = Int(Rnd(1) * playerPos) + 1
+                s1 = Int(Rnd(1) * prevContents + 1)
+                Poke p + s1 + monMoveCount * 40, Int(Rnd(1) * 6 + 214)
+                                            ---  If time available, go do next room  ---
+NextRoom@530
+                If clock < time Then
+                    380
+                                                  ---  Put 11 pieces of gold  ---
+540
+                For n = 1 To 11
+                                                     ---  Find empty slot  ---
+550
+                    u = Int(Rnd(1) * gameAreaSize) + map
+                    If Peek(u) < > 160 Then
+                        550
+                                                       ---  Put it there  ---
+560
+                    Poke u,135
+                    goldToFind = goldToFind + 1
+                Next
+                                               ---  Draw frame around the edges.  ---
+570
+                For r0 = 0 To rowSize
+                    Poke map + 40 * r0,127
+                    Poke map + 40 * r0 + colSize,127
+                Next r0
+580
+                For c0 = 0 To colSize
+                    Poke map + c0,127
+                    Poke map + c0 + 40 * rowSize,127
+                Next c0
+590
+                Return
+        ********************************************************************************************************************
+                                              Open up visuals and check gold if close.
+        ********************************************************************************************************************
+                                                ---  Smaller area to open out.  ---
+OpenCheckGold@600
+                k = - 40
+                j = 3
+                m = 40
+                r = 3
+                goldNear = 0
+                            ---  Wider area if searching, though this appears not to actually work.  ---
+610
+                If searching = 1 Then
+                    k = - 80
+                    j = 5
+                    m = 80
+                    r = 4
+                    searching = 0
+620
+                o = playerPos - 32767 - r
+630
+                If o + 32811 > 33768 Then
+                    m = 0
+                                   ---  Work through horizontally and vertically opening up  ---
+640
+                For n = - 40 To 40 Step 40
+                    For n1 = 1 To 3
+                        If n = 0 And n1 = 2 Then
+                            820
+650
+                        y = o + n + n1
+                        v = Peek(y + map)
+                        Poke y + screen,v
+                                          ---  Exit loop if neither monster nor gold.  ---
+660
+                        If v < 135 Or v = 160 Then
+                            820
+670
+                        v = v - 128
+                        If v < > 7 Then
+                            710
+                                                    ---  Gold found nearby  ---
+680
+                        goldFound = 1 + goldFound + Int((gold + 1) *(Rnd(1)))
+690
+                        goldNear = goldNear + 1
+                        If goldNear > searchGold Then
+                            Gosub ClearWithDelayIfNeeded@1410
+                            Print "gold is near!"
+                            Gosub ClearWith3SDelay@1430
+                            searchGold = goldToFind + 1
+700
+                        Goto EndSearch@820
+                                               ---  Search has revealed monster  ---
+MonsterFound@710
+                        v1 = v + 128
+                        monMoveCount = 0
+                        Poke y + map,160
+                                            ---  Identify monster type and strength  ---
+720
+                        If v = 86 Then
+                            monsterName$ = "spider"
+                            i = 3
+730
+                        If v = 87 Then
+                            monsterName$ = "grue"
+                            i = 7
+740
+                        If v = 88 Then
+                            monsterName$ = "dragon"
+                            i = 1
+750
+                        If v = 89 Then
+                            monsterName$ = "snake"
+                            i = 2
+760
+                        If v = 90 Then
+                            monsterName$ = "nuibus"
+                            i = 9
+770
+                        If v = 91 Then
+                            monsterName$ = "wyvern"
+                            i = 5
+                                                    ---  Calculate strength  ---
+780
+                        i = Int(Rnd(1) * hitPoints +(lastExperience / i) + hitPoints / 4)
+                                     ---  If monster current then send it back to "sleep".  ---
+790
+                        If monster > 0 Then
+                            Poke map + monster,prevMonstCont
+                                                 ---  Wake up current monster  ---
+800
+                        prevMonstCont = v + 128
+                        monster = y
+                                                 ---  Display warning message  ---
+810
+                        Gosub ClearWithDelayIfNeeded@1410
+                        Print "a "monsterName$;" with";i;"points is near."
+                        Gosub ClearWith3SDelay@1430
+                        monsterHP = i
+                                                   ---  End the opening loop  ---
+EndSearch@820
+                    Next n1
+                Next n
+                searchGold = goldNear
+                Return
+                                                       ---  MonsterMove  ---
+        ********************************************************************************************************************
+                                                            Move Monster
+        ********************************************************************************************************************
+                                                 ---  Chase monster vertically  ---
+830
+                o1 = 0
+                command = 0
+                e1 = monster + screen
+                If Abs(e1 + 40 - playerPos) < Abs(e1 - playerPos) Then
+                    command = 40
+840
+                If Abs(e1 - 40 - playerPos) < Abs(e1 - playerPos) Then
+                    command = - 40
+                                        ---  Move vertically, cannot pass through door.  ---
+850
+                If(Peek(monster + command + map) = 209) Or(Peek(monster + command + map) > 128) Then
+                    o1 = o1 + command
+                                                ---  Chase monster horizontally  ---
+860
+                If Abs(e1 - 1 - playerPos) < Abs(e1 - playerPos) Then
+                    command = - 1
+870
+                If Abs(e1 + 1 - playerPos) < Abs(e1 - playerPos) Then
+                    command = 1
+                                       ---  Move horizontally, cannot pass through door.  ---
+880
+                If(Peek(monster + o1 + command + map) = 209) Or(Peek(monster + o1 + command + map) > 128) Then
+                    o1 = o1 + command
+                                                       ---  Hit player ?  ---
+890
+                command = o1
+                If e1 + command = playerPos Then
+                    960
+900
+                If e1 + command < playerPos Then
+                    940
+910
+                If command = 41 Then
+                    command = 39
+920
+                If command = - 39 Then
+                    command = - 41
+930
+                Goto 960
+940
+                If command = 31 Then
+                    command = 41
+950
+                If command = - 41 Then
+                    command = - 39
+                                                      ---  If hit player  ---
+960
+                If Peek(monster + command + map) < 128 Then
+                    Poke e1,v1
+                    Return
+                                             ---  Then wake up monster and attack  ---
+970
+                Poke e1,oldMC
+                monster = monster + command
+                oldMC = Peek(monster + screen)
+                Poke monster + screen,v1
+                If monster + screen = playerPos Then
+                    oldMC = 160
+                    Gosub MonsterAttack@1000
+980
+                Return
+                                                        ---  (not used)  ---
+990
+                prevMonstCont = v + 128
+                monster = y
+        ********************************************************************************************************************
+                                                    Player has attacked monster
+        ********************************************************************************************************************
+MonsterAttack@1000
+                Gosub ClearWithDelayIfNeeded@1410
+                Print "{18}an attack!!!"
+                Gosub ClearWith3SDelay@1430
+                power = hitPoints + experience
+                                          ---  Calculate damage and adjust HP levels  ---
+1010
+                playerDamage = Rnd(1) * monsterHP / 2 + monsterHP / 4
+                monsterDamage = Rnd(1) * power / 2 + power / 4
+                monsterHP = Int(monsterHP - monsterDamage)
+                hitPoints = Int(hitPoints - playerDamage)
+                                                    ---  Check player dead  ---
+1020
+                If hitPoints < 1 Then
+                    1190
+                                      ---  If monster twice as strong it offers a bribe.  ---
+1030
+                If(monsterHP /(hitPoints + 1) < 2) Then
+                    1090
+1040
+                Gosub ClearWithDelayIfNeeded@1410
+                Print "the "monsterName$" will leave.."
+                Gosub ClearWith3SDelay@1430
+1050
+                Gosub ClearWithDelayIfNeeded@1410
+                Print "if you give it half your gold."
+                Gosub ClearWith3SDelay@1430
+1060
+                Gosub ClearWithDelayIfNeeded@1410
+                Print "will you consent to this (y or n) ";
+1070
+                Gosub GetAnswer@1500
+                                                      ---  Accept offer ?  ---
+1080
+                If answer$ = "y" Then
+                    gold = gold - gold / 2
+                    prevContents = 160
+                    monster = 0
+                    monMoveCount = 0
+                    Poke playerPos,209
+                    Return
+                                         ---  If monster still alive display and exit  ---
+1090
+                If monsterHP > 1 Then
+                    1160
+1100
+                Gosub ClearWithDelayIfNeeded@1410
+                prevContents = 160
+                monMoveCount = 0
+                monster = 0
+                Poke playerPos,209
+                Print "the "monsterName$" is dead!"
+                Gosub ClearWith3SDelay@1430
+                                                      ---  Award HP, Exp  ---
+1110
+                experience = experience + i
+                kills = kills + 1
+1120
+                If experience < lastExperience * 2 Then
+                    1180
+                                                        ---  Level up.  ---
+1130
+                lastExperience = experience
+                hitPoints = hitPoints * 3
+1140
+                Gosub ClearWithDelayIfNeeded@1410
+                Print "your hit pts. have been raised."
+                Gosub ClearWith3SDelay@1430
+1150
+                Goto 1180
+                                               ---  Display monster HP and exit.  ---
+DisplayMHP@1160
+                Gosub ClearWithDelayIfNeeded@1410
+                Print "the "monsterName$" has"monsterHP"hit points"
+                Gosub ClearWith3SDelay@1430
+1170
+                Gosub UpdateStatus@1340
+1180
+                Return
+        ********************************************************************************************************************
+                                                          Player has died
+        ********************************************************************************************************************
+PlayerDead@1190
+                Gosub ClearWithDelayIfNeeded@1410
+                Print "you're dead!"
+                Gosub ClearWith3SDelay@1430
+                Goto GameWon@1350
+        ********************************************************************************************************************
+                                                       Player has found gold
+        ********************************************************************************************************************
+FoundGold@1200
+                gold = gold + goldFound
+                Gosub ClearWithDelayIfNeeded@1410
+                Print "you found"goldFound"gold pieces!"
+                Gosub ClearWith3SDelay@1430
+1210
+                Poke playerPos - screen + map,160
+                prevContents = 160
+1220
+                goldToFind = goldToFind - 1
+                If goldToFind > 0 Then
+                    Return
+1230
+                Goto GameWon@1350
+        ********************************************************************************************************************
+                                                            Get Command
+        ********************************************************************************************************************
+                                                     ---  Time for message  ---
+GetCommand@1240
+                If message = 0 Then
+                    Gosub ClearWith3SDelay@1430
+                                                      ---  Update status  ---
+1250
+                Gosub UpdateStatus@1340
+                                        ---  Display you may move if message timed out  ---
+1260
+                If message Then
+                    If clock > time Then
+                        Gosub ClearWithDelayIfNeeded@1410
+                        Print "you may move."
+                                                     ---  Wait for command  ---
+1270
+                Get answer$
+                If answer$ = "" Then
+                    1260
+                                                  ---  Convert to ASCII code   ---
+                                                ---   wall walking on shift key  ---
+1280
+                command = Asc(answer$)
+                wallWalking = Abs(command > 127)
+                command = command And 127
+                                                ---  Recover HP if do nothing.  ---
+1290
+                If command = Asc("5") Then
+                    hitPoints = hitPoints + 1 + Sqr(experience / hitPoints)
+                                                     ---  Directional move  ---
+1300
+                If command > 48 And command < 58 Then
+                    command = command - 48
+                    time = 0
+                    Gosub ClearWithDelayIfNeeded@1410
+                    Return
+                                                        ---  Searching  ---
+1310
+                If answer$ = "s" Then
+                    searching = 1
+                    hitPoints = hitPoints - 2
+1320
+                If answer$ = "q" Then
+                    1350
+1330
+                Goto 1250
+        ********************************************************************************************************************
+                                                      Update the player status
+        ********************************************************************************************************************
+UpdateStatus@1340
+                Print clear1$;"hit pts."; Int(hitPoints + .5);"{157}  exp.";experience;"{157}  gold";gold;"   "
+                Return
+        ********************************************************************************************************************
+                                                           Player has won
+        ********************************************************************************************************************
+GameWon@1350
+                Gosub ClearWithDelayIfNeeded@1410
+                Print clear1$;"gold:";gold;" exp:";experience;" killed";kills;"beasts"
+1360
+                For n = topSpace To gameAreaSize - 1 + topSpace
+                    command = Peek(map + n)
+                    Poke screen + n,command
+                Next
+1375
+                Get answer$
+                If answer$ < > "" Then
+                    1375
+1380
+                Gosub ClearWithDelayIfNeeded@1410
+                Print "want to play again";
+1390
+                Gosub GetAnswer@1500
+                If answer$ < > "n" Then
+                    180
+1400
+                time = 0
+                Gosub ClearWithDelayIfNeeded@1410
+                Print "{145}";
+                End
+                                ---  Clear display, but delay if needed so message can be read  ---
+ClearWithDelayIfNeeded@1410
+                If message Then
+                    If clock < time Then
+                        1410
+1420
+                Print clear2$;
+                message = 0
+                Return
+                                             ---  Clear with a three second delay  ---
+ClearWith3SDelay@1430
+                time = clock + 3 * 60
+                message = 1
+                Return
+1440
+                If Peek(32768) = 0 Then
+                    Stop
+1450
+                Return
+        ********************************************************************************************************************
+                                                           Get yes or no.
+        ********************************************************************************************************************
+GetAnswer@1500
+                zt = 0
+                zc = 1
+1510
+                Get answer$
+                If answer$ < > "" Then
+                    1550
+1520
+                If clock > zt Then
+                    Print Mid$("? ",zc,1);"{157}";
+                    zt = clock + 30
+                    zc = 3 - zc
+1530
+                Goto 1510
+1550
+                Print "? ";answer$
+                Return
+        ********************************************************************************************************************
+                                                       Set up keyboard input.
+        ********************************************************************************************************************
+SetUpKeyboard@60300
+                Print "{Clr}"
+                Clr
+                Gosub 60400
+                Goto 100
+60400
+                kbd1 = 525
+                kbd2 = 134
+                kbd3 = 515
+                cr$ = Chr$(13)
+60410
+                If Peek(50000) = 0 Then
+                    Return
+60420
+                kbd1 = 158
+                kbd2 = 52
+                kbd3 = 151
+60430
+                Return
+60500
+                For i = 1 To 10
+                    Print "{HBar}{HBar}{HBar}{HBar}";
+                Next i
+                Return
+        ********************************************************************************************************************
+                                                         Display title page
+        ********************************************************************************************************************
+TitlePage@62000
+                Print "{Clr}{Down}{Down}"; Tab(9);"cursor #";issue$;"  ";programName$
+62010
+                Print "{Down} copyright (c) 1979  by brian sawyer{Down}"
+62020
+                Gosub 60500
+62030
+                Print "{Down}search for gold in the ancient ruins"
+62080
+                Print "{Down}{Down}{Down}press {18}return{146} to begin"
+62090
+                Get t$
+                If t$ = "" Then
+                    62090
+62100
+                Goto SetUpKeyboard@60300

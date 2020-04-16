@@ -12,6 +12,16 @@
 	word	$0003
 	word	$42fa,$403f,$6010
 
+	word	5			; Word '0='
+	word	RPL_EqualZero
+	word	$0002
+	word	$8000,$2426
+
+	word	5			; Word '0<'
+	word	RPL_LessZero
+	word	$0002
+	word	$8000,$2424
+
 	word	5			; Word 'emit'
 	word	RPL_Emit
 	word	$0002
@@ -57,6 +67,11 @@
 	word	$0002
 	word	$426a,$6014
 
+	word	5			; Word '0-'
+	word	RPL_Negate
+	word	$0002
+	word	$8000,$282b
+
 	word	5			; Word '++'
 	word	RPL_Inc
 	word	$0002
@@ -66,6 +81,11 @@
 	word	RPL_Dec
 	word	$0002
 	word	$282b,$282b
+
+	word	5			; Word 'idx'
+	word	RPL_Index
+	word	$0002
+	word	$40a9,$6018
 
 	word	5			; Word '+!'
 	word	RPL_AddWrite
@@ -166,6 +186,26 @@
 	word	RPL_Shr
 	word	$0001
 	word	$2628
+
+	word	4			; Word 'repeat'
+	word	RPL_Repeat
+	word	$8001
+	word	$3e6c
+
+	word	4			; Word 'until'
+	word	RPL_Until
+	word	$8001
+	word	$3a73
+
+	word	4			; Word 'for'
+	word	RPL_For
+	word	$8001
+	word	$3e6a
+
+	word	4			; Word 'next'
+	word	RPL_Next
+	word	$8001
+	word	$3a71
 
 	word	4			; Word '@'
 	word	RPL_Read

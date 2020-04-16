@@ -11,4 +11,148 @@
 ; *****************************************************************************
 ; *****************************************************************************
 
-; struct:		for i next begin until if else then (destructive, one level)
+; *****************************************************************************
+;
+;								If/Else/Then code
+;
+; *****************************************************************************
+;
+;		mov r1,r0,#0 ; ldm r0,r8,#0 ; inc r8 ; sknz r1
+;		jmp #....
+;			<then code> 
+;		jmp #....
+;			<else code>
+;
+; *****************************************************************************
+
+
+
+
+; *****************************************************************************
+;
+;							    Repeat / Until code
+;
+; *****************************************************************************
+;
+; 		<loop point>
+;			<loop code>
+;			mov r1,r0,#0 ; ldm r0,r8,#0 ; inc r8 ; sknz r1 
+;		jmp #<loop point>
+;
+; *****************************************************************************
+
+.RPL_Repeat 	;; [repeat] *
+		ldm 	r0,#asmPointer 				; remember where we are branching to
+		stm 	r0,#rplRepeatLoop 	
+		ret
+
+.RPL_Until 	;; [until] *
+		push 	link
+		ldm 	r0,#rplRepeatLoop
+		jsr 	#RPL_TOSCheck
+		pop 	link
+		ret
+
+
+; *****************************************************************************
+;
+;							 For/Next code (with idx)
+;
+; *****************************************************************************
+;
+;		dec sp [12] ; dec r0 ; stm r0,sp,#0 ; ldm r0,r8,#0 ; inc r8
+;		<loop point>
+;			<loop code>
+;		ldm r1,sp,#0 ; dec r1 ; stm r1,sp,#0 ; skm r1
+;		jmp #<loop point>
+;		inc sp
+;
+; *****************************************************************************
+
+.RPL_For 	;; [for] *
+		push 	link
+		mov 	r0,#$5CE1 					; dec SP (make space for index)
+		jsr 	#AsmWord
+		mov 	r0,#$50E1 					; dec r0 (counts n-1 to zero)
+		jsr 	#AsmWord
+		mov 	r0,#$20C0 					; stm r0,sp,#0 (save initial value)
+		jsr 	#AsmWord
+		jsr 	#RPL_DropCompile 			; compile loop point
+		ldm 	r0,#asmPointer 				; remember where we are branching to
+		stm 	r0,#rplForLoop 	
+		pop 	link
+		ret
+
+
+.RPL_Next 	;; [next] *
+		push 	link
+		mov 	r0,#$11C0 					; ldm r1,sp,#0 (get index value)
+		jsr 	#ASMWord
+		mov 	r0,#$51E1 					; dec r1 (decrement it
+		jsr 	#AsmWord
+		mov 	r0,#$21C0 					; stm r1,sp,#0 (set index value)
+		jsr 	#ASMWord
+		mov 	r0,#$E1E0 					; skm r1 (if -ve loop over)
+		jsr 	#ASMWord
+		ldm 	r0,#rplForLoop 				; jmp back to loop
+		jsr 	#RPL_JumpCompile
+		mov 	r0,#$4CE1 					; inc SP (remove index)
+		jsr 	#AsmWord
+		pop 	link
+		ret
+
+.RPL_Index 	;; [idx] 
+		dec 	r8 							; save current TOS on stack
+		stm 	r0,r8,#0
+		ldm 	r0,sp,#0 					; get the index back
+		ret
+
+; *****************************************************************************
+;
+;						Routine compiles JMP R0
+;
+; *****************************************************************************
+
+.RPL_JumpCompile
+		push 	r0,r1,link
+		mov 	r1,r0,#0
+		mov 	r0,#$AFF0 					; JMP
+		jsr 	#AsmWord
+		mov 	r0,r1,#0 					; address
+		jsr 	#AsmWord
+		pop 	r0,r1,link 
+		ret
+
+; *****************************************************************************
+;
+;				Routine compiles ldm r0,r8,#0 ; inc r8 (e.g. DROP)
+;
+; *****************************************************************************
+
+.RPL_DropCompile
+		push 	r0,link
+		mov 	r0,#$1080 					; ldm r0,r8,#0 (get new TOS)
+		jsr 	#AsmWord
+		mov 	r0,#$38E1 					; inc r8 (pop off stack)
+		jsr 	#AsmWord
+		pop 	r0,link
+		ret
+
+; *****************************************************************************
+;	
+;		Routine compiles mov r1,r0,#0 ; <DROP> ;sknz r1 ; jmp #<R0>
+;
+; *****************************************************************************
+
+.RPL_TOSCheck
+		push 	r0,r1,link
+		mov 	r1,r0,#0 					; save jump address
+		mov 	r0,#$0100 					; mov r1,r0,#0
+		jsr 	#AsmWord
+		jsr 	#RPL_DropCompile
+		mov 	r0,#$C1E0 					; sknz r1
+		jsr 	#AsmWord
+		mov 	r0,r1,#0 					; do JMP R0
+		jsr 	#RPL_JumpCompile
+		pop 	r0,r1,link
+		ret

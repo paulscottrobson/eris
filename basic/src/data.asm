@@ -81,7 +81,12 @@
 
 .eventCheckTime 							; time of next event check
 		fill 	1
-		
+	
+.rplForLoop 								; loop address for FOR/NEXT
+		fill 	1
+.rplRepeatLoop 								; loop address for REPEAT
+		fill 	1
+						
 ; *****************************************************************************
 ;
 ;		Evaluation stack.
