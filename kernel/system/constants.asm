@@ -16,7 +16,7 @@ ramStart = $4000
 ;
 ;		Kernel ends here and Language/Application ROM starts
 ;
-kernelEnd = $1000
+kernelEnd = $1200
 ;
 ;		Display size in pixels
 ;

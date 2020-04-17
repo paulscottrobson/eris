@@ -83,21 +83,21 @@
 		;
 ._OSPCVectors
 		word 	_OSPCExit 						; 0 null ignored
-		word 	_OSPCMoveLeft 					; 1 left
-		word 	_OSPCMoveRight 					; 2 right
-		word 	_OSPCMoveUp 					; 3 up
-		word 	_OSPCMoveDown 					; 4 down
-		word 	_OSPCExit 						; 5
-		word 	_OSPCExit 						; 6
-		word 	_OSPCExit 						; 7
-		word 	_OSPCBackspace 					; 8 backspace
-		word 	_OSPCTab 						; 9 tab
-		word 	_OSPCExit 						; 10
-		word 	_OSPCHome 						; 11 home cursor
-		word 	_OSPCClear 						; 12 clear screen home cursor
-		word 	_OSPCReturn 					; 13 carriage return
-		word 	_OSPCFreeReturn 				; 14 no-clear carriage return
-		word 	_OSPCSwapColours 				; 15 foreground/background swap
+		word 	_OSPCMoveLeft 					; 1 left A
+		word 	_OSPCMoveRight 					; 2 right B
+		word 	_OSPCMoveUp 					; 3 up C
+		word 	_OSPCMoveDown 					; 4 down D
+		word 	_OSPCExit 						; 5 E
+		word 	_OSPCExit 						; 6 F
+		word 	_OSPCExit 						; 7 G
+		word 	_OSPCBackspace 					; 8 backspace H
+		word 	_OSPCTab 						; 9 tab I
+		word 	_OSPCExit 						; 10 J
+		word 	_OSPCHome 						; 11 home cursor K
+		word 	_OSPCClear 						; 12 clear screen home cursor L
+		word 	_OSPCReturn 					; 13 carriage return M
+		word 	_OSPCFreeReturn 				; 14 no-clear carriage return N
+		word 	_OSPCSwapColours 				; 15 foreground/background swap O
 
 ; *****************************************************************************
 ;
@@ -300,13 +300,30 @@
 		;
 		clr 	r1 								; r1 = current line y graphics position
 		ldm 	r2,#textMemory 					; r2 = text memory source
-		;
-		;		Do line R1 (graphics coord) from the data at R2
-		;
-._OSPCNextLine
+._OSPCRedrawScreen
+		jsr 	#OSIDrawOneLine		
+		add 	r1,#pixelCharHeight 			; one line down
+		mov 	r0,r1,#0 						; check EOS, has vert position reached bottom
+		xor 	r0,#charHeight*pixelCharHeight
+		skz 	r0
+		jmp 	#_OSPCRedrawScreen
+		mov 	r0,#charHeight-1 				; set the vertical cursor pos (text) to
+		stm 	r0,#yTextPos 				 	; the bottom visible line.
+		jmp 	#_OSPCExit
+
+; *****************************************************************************
+;
+;					Do line R1 (graphics coord) from the data at R2
+;
+; *****************************************************************************
+
+.OSIDrawOneLine
+		push 	r0,r1,r2,r3,r4,link
 		mov 	r3,#charWidth 					; r3 = number of characters per line.
 		clr 	r4 								; r4 = current line x graphics position
 		;
+		;		R1 is the Y graphic position
+		;		R2 points to the text data for the line.
 		; 		R3 is the counter, R4 the x position (graphics coord)
 		;
 ._OSPCNextCharacter
@@ -319,12 +336,6 @@
 		dec 	r3 								; do the whole line
 		skz 	r3
 		jmp 	#_OSPCNextCharacter
+		pop 	r0,r1,r2,r3,r4,link
+		ret
 		;
-		add 	r1,#pixelCharHeight 			; one line down
-		mov 	r0,r1,#0 						; check EOS, has vert position reached bottom
-		xor 	r0,#charHeight*pixelCharHeight
-		skz 	r0
-		jmp 	#_OSPCNextLine
-		mov 	r0,#charHeight-1 				; set the vertical cursor pos (text) to
-		stm 	r0,#yTextPos 				 	; the bottom visible line.
-		jmp 	#_OSPCExit
