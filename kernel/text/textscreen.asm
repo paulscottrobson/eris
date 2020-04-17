@@ -87,7 +87,7 @@
 		word 	_OSPCMoveRight 					; 2 right B
 		word 	_OSPCMoveUp 					; 3 up C
 		word 	_OSPCMoveDown 					; 4 down D
-		word 	_OSPCExit 						; 5 E
+		word 	_OSPCInsert 					; 5 insert space E
 		word 	_OSPCExit 						; 6 F
 		word 	_OSPCExit 						; 7 G
 		word 	_OSPCBackspace 					; 8 backspace H
@@ -206,6 +206,62 @@
 		stm 	r1,#fgrColour
 		stm 	r0,#bgrColour
 		ret
+		;
+		;		5 Insert space at cursor, no movement.
+		;
+._OSPCInsert
+		ldm 	r0,#yTextPos					; find address of start of line
+		mult 	r0,#charWidth 					; calculate x + y * width
+		add 	r1,r2,#0
+		ldm 	r1,#textMemory 					; add text memory array base to it.
+		add 	r0,r1,#0
+		mov 	r4,r0,#0 						; that is now in R4.
+		add 	r0,#charWidth-1 				; go to end of that line.
+		ldm 	r3,#yTextPos 					; R3 is index of last line to refresh.
+._OSPCIFindEnd		
+		ldm 	r2,r0,#0 						; get the character at the end of the line
+		and 	r2,#$00FF 						; mask it out
+		sknz 	r2 								; if it is zero, then this is the end of the insert
+		jmp 	#_OSPCIFoundEnd
+		add 	r0,#charWidth 					; down one line
+		inc 	r3
+		mov 	r2,r3,#0 						; check if it has reached the bottom line
+		xor 	r2,#charHeight
+		sknz 	r2
+		jmp 	#_OSPCExit 						; if so, then we cannot insert.
+		jmp 	#_OSPCIFindEnd 					; go round again.
+		;
+._OSPCIFoundEnd		
+		dec 	r0 								; look at the previous character
+		ldm 	r2,r0,#0 	
+		and 	r2,#$00FF
+		skz 	r2 								; if zero, we need to shift everything down, which we 
+		jmp 	#_OSPCExit 						; cannot do as yet.
+		;
+		jsr 	#_OSCurrentTextR1 				; R1 is the insert point
+._OSPCIShift 									; work back shifting everything forward 1 to make space
+		ldm 	r2,r0,#0
+		stm 	r2,r0,#1
+		mov 	r2,r0,#0 		
+		dec 	r0
+		xor 	r2,r1,#0 
+		skz 	r2
+		jmp 	#_OSPCIShift
+		mov 	r2,#$0720 						; write a space here
+		stm 	r2,r1,#0 
+
+		ldm 	r1,#yTextPos 					; calculate end line - start line (one short)
+		sub 	r3,r1,#0 						; number of lines to redraw -1 in R3
+		mult 	r1,#pixelCharHeight 			; R1 is now a data address
+		mov 	r2,r4,#0  						; R2 is start of current line.
+._OSPCIRefresh		
+		jsr 	#OSIDrawOneLine		 			; refresh line
+		add 	r1,#pixelCharHeight 			; one line down
+		add 	r2,#charWidth 					
+		dec 	r3
+		skm 	r3
+		jmp 	#_OSPCIRefresh 					; until done all lines.
+		jmp 	#_OSPCExit
 
 ; *****************************************************************************
 ;
@@ -303,6 +359,7 @@
 ._OSPCRedrawScreen
 		jsr 	#OSIDrawOneLine		
 		add 	r1,#pixelCharHeight 			; one line down
+		add 	r2,#charWidth 					
 		mov 	r0,r1,#0 						; check EOS, has vert position reached bottom
 		xor 	r0,#charHeight*pixelCharHeight
 		skz 	r0

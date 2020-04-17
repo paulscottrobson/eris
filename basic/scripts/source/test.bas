@@ -1,5 +1,18 @@
-a$ = ",,,xbcdef,xx"
-print "Parts:",sub.count(a$,",")
-for i = 1 to 5
-	print i,"<";sub.get$(a$,",",i);">"
-next i
+cls
+print "abdefghijklMNOPQRSTUVWXYZ0123456789ABCDEFGHIJKMNOPQRST"
+print "mnopqrstuvw"
+print "abdefghijklMNOPQRSTUVWXYZ0123456789ABCDEFGHIJKMNOPQRST"
+print "mnopqrstuvw"
+print "abdefghijklMNOPQRSTUVWXYZ0123456789ABCDEFGHIJKMNOPQRST"
+print "mnopqrstuvw"
+print "abdefghijklMNOPQRSTUVWXYZ0123456789ABCDEFGHIJKMNOPQRST"
+print "mnopqrstuvw"
+print "abdefghijklMNOPQRSTUVWXYZ0123456789ABCDEFGHIJKMNOPQRST"
+print "mnopqrstuvw"
+print "abdefghijklMNOPQRSTUVWXYZ0123456789ABCDEFGHIJKMNOPQRST"
+print "mnopqrstuvw"
+print "abdefghijklMNOPQRSTUVWXYZ0123456789ABCDEFGHIJKMNOPQRST"
+print "mnopqrstuvw"
+print "abdefghijklMNOPQRSTUVWXYZ0123456789ABCDEFGHIJKMNOPQRST"
+print "mnopqrstuvw"
+;cursor 4,0:print chr$(5);
