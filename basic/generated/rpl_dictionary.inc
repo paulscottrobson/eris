@@ -127,6 +127,26 @@
 	word	$0001
 	word	$62d3
 
+	word	4			; Word 'sys'
+	word	RPL_Sys
+	word	$0001
+	word	$3cb1
+
+	word	4			; Word ','
+	word	RPL_Dot1
+	word	$8001
+	word	$3267
+
+	word	4			; Word '&'
+	word	RPL_Dot2
+	word	$8001
+	word	$3032
+
+	word	4			; Word '%'
+	word	RPL_Dot3
+	word	$8001
+	word	$3033
+
 	word	4			; Word '+'
 	word	RPL_Add
 	word	$0001

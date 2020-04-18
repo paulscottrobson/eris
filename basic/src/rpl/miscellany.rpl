@@ -66,3 +66,29 @@
 		jsr 	#OSPrintCharacter
 		pop 	r0,link
 		ret
+
+; *****************************************************************************
+;
+;									Sys
+;
+; *****************************************************************************
+
+.RPL_Sys 	;; [sys]
+		push 	link
+		mov 	r7,r0,#0 					; call address in R0
+		ldm 	r6,r8,#0 					; this is the number to drop off the stack
+		ldm 	r0,r8,#1 					; load R0-R4
+		ldm 	r1,r8,#2
+		ldm 	r2,r8,#3
+		ldm 	r3,r8,#4
+		ldm 	r4,r8,#5
+		add 	r8,r6,#1 					; fix up stack, and return result in TOS
+		brl 	link,r7,#0 					; call routine
+		pop 	link
+		ret
+
+.RPL_Dot1 ;; [,] *
+.RPL_Dot2 ;; [&] *
+.RPL_Dot3 ;; [%] *
+		ret
+		

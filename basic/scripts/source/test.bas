@@ -1,18 +1,3 @@
-cls
-print "abdefghijklMNOPQRSTUVWXYZ0123456789ABCDEFGHIJKMNOPQRST"
-print "mnopqrstuvw"
-print "abdefghijklMNOPQRSTUVWXYZ0123456789ABCDEFGHIJKMNOPQRST"
-print "mnopqrstuvw"
-print "abdefghijklMNOPQRSTUVWXYZ0123456789ABCDEFGHIJKMNOPQRST"
-print "mnopqrstuvw"
-print "abdefghijklMNOPQRSTUVWXYZ0123456789ABCDEFGHIJKMNOPQRST"
-print "mnopqrstuvw"
-print "abdefghijklMNOPQRSTUVWXYZ0123456789ABCDEFGHIJKMNOPQRST"
-print "mnopqrstuvw"
-print "abdefghijklMNOPQRSTUVWXYZ0123456789ABCDEFGHIJKMNOPQRST"
-print "mnopqrstuvw"
-print "abdefghijklMNOPQRSTUVWXYZ0123456789ABCDEFGHIJKMNOPQRST"
-print "mnopqrstuvw"
-print "abdefghijklMNOPQRSTUVWXYZ0123456789ABCDEFGHIJKMNOPQRST"
-print "mnopqrstuvw"
-;cursor 4,0:print chr$(5);
+code alloc(256),0
+x = rpl(12345 122 1 2 sys . .)
+sys x
