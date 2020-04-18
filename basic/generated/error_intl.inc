@@ -58,6 +58,9 @@
 .SoundQueueError
 	jsr	#GenErrorHandler
 	string	"Sound Queue Full"
+.StackImbalanceError
+	jsr	#GenErrorHandler
+	string	"RPL Stack imbalance"
 .StructureError
 	jsr	#GenErrorHandler
 	string	"Structures wrong"

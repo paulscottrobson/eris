@@ -59,5 +59,5 @@ proc setup.code()
 		ltop.y = rpl(#p 1 + @ bswap &ff and #p 6 + @ - #p 5 + ,!)
 	rem "(addr - equal) move "		
 		move.1 = rpl(^t #t @ dup #t 2 + @ + #t ! #t @ xor &FF00 and 0= 0=)
-		move.2 = rpl(12345 #p move.1 #p 1 + move.1 or if draw.off ltop.x ltop.y draw.on then)		
+		move.2 = rpl(#p move.1 #p 1 + move.1 or if draw.off ltop.x ltop.y draw.on then)		
 endproc

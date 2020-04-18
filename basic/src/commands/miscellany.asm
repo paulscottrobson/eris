@@ -72,6 +72,9 @@
 		mov 	r8,#tokenBufferEnd-1 		; set up R8 for RPL stack if an RPL function.
 		push 	r11 						; R11 is the program position, don't want that changed.
 		brl 	link,r1,#0 					; call the routine
+		xor 	r8,#tokenBufferEnd-1 		; check the stack is clean
+		skz 	r8
+		jmp 	#StackImbalanceError
 		pop 	r11
 		pop 	link
 		ret
