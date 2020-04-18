@@ -1,3 +1,1 @@
-code alloc(256),0
-x = rpl(12345 122 1 2 sys . .)
-sys x
+code &6666,0:print rpl(#t!)

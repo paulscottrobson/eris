@@ -30,8 +30,8 @@
 .RPL_Write ;; [!]
 		ldm 	r1,r8,#0
 		stm 	r1,r0,#0
+		ldm 	r0,r8,#1
 		add 	r8,#2
-		ldm 	r0,r8,#0
 		ret
 
 ; *****************************************************************************
@@ -45,8 +45,8 @@
 		ldm 	r2,r0,#0
 		add 	r1,r2,#0
 		stm 	r1,r0,#0
+		ldm 	r0,r8,#1
 		add 	r8,#2
-		ldm 	r0,r8,#0
 		ret
 
 ; *****************************************************************************
@@ -70,8 +70,7 @@
 		skz 	r0
 		jmp 	#SyntaxError
 		;
-		mov 	r9,#(TOK_PLING & 0x1E00)-0x400
-		jsr 	#Evaluator 					; get the lhs of the equals.
+		jsr 	#GetVariableReference
 		ldm 	r0,r10,#esReference1 		; it *must* be a reference
 		sknz 	r0 							
 		jmp 	#SyntaxError
@@ -105,7 +104,7 @@
 		jsr 	#AsmWord
 		mov 	r0,#$1080  					; ldm r0,r8,#0
 		jsr 	#AsmWord
-		mov 	r0,#$48E1 					; add r8,r14,#1 					
+		mov 	r0,#$38E1 					; add r8,r14,#1 					
 		jsr 	#AsmWord
 		pop 	link
 		ret
