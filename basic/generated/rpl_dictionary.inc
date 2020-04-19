@@ -22,11 +22,6 @@
 	word	$0002
 	word	$8000,$2424
 
-	word	5			; Word 'emit'
-	word	RPL_Emit
-	word	$0002
-	word	$420d,$6329
-
 	word	5			; Word 'min'
 	word	RPL_Min
 	word	$0002
@@ -36,6 +31,16 @@
 	word	RPL_Max
 	word	$0002
 	word	$4035,$6018
+
+	word	5			; Word '+!'
+	word	RPL_AddWrite
+	word	$0002
+	word	$282a,$2c2f
+
+	word	5			; Word 'emit'
+	word	RPL_Emit
+	word	$0002
+	word	$420d,$6329
 
 	word	5			; Word 'dup'
 	word	RPL_Dup
@@ -82,11 +87,6 @@
 	word	$0002
 	word	$282b,$282b
 
-	word	5			; Word '+!'
-	word	RPL_AddWrite
-	word	$0002
-	word	$282a,$2c2f
-
 	word	4			; Word '='
 	word	RPL_Equal
 	word	$0001
@@ -116,36 +116,6 @@
 	word	RPL_Greater
 	word	$0001
 	word	$2422
-
-	word	4			; Word '.'
-	word	RPL_Dot
-	word	$0001
-	word	$3c20
-
-	word	4			; Word 'cr'
-	word	RPL_Cr
-	word	$0001
-	word	$62d3
-
-	word	4			; Word 'sys'
-	word	RPL_Sys
-	word	$0001
-	word	$3cb1
-
-	word	4			; Word ','
-	word	RPL_Dot1
-	word	$8001
-	word	$3267
-
-	word	4			; Word '&'
-	word	RPL_Dot2
-	word	$8001
-	word	$3032
-
-	word	4			; Word '%'
-	word	RPL_Dot3
-	word	$8001
-	word	$3033
 
 	word	4			; Word '+'
 	word	RPL_Add
@@ -187,20 +157,55 @@
 	word	$0001
 	word	$2221
 
-	word	4			; Word 'not'
-	word	RPL_Not
+	word	4			; Word '@'
+	word	RPL_Read
 	word	$0001
-	word	$304d
+	word	$3030
 
-	word	4			; Word '<<'
-	word	RPL_Shl
+	word	4			; Word '!'
+	word	RPL_Write
 	word	$0001
-	word	$2629
+	word	$2c2f
 
-	word	4			; Word '>>'
-	word	RPL_Shr
+	word	4			; Word '#'
+	word	RPL_VarRead
+	word	$8001
+	word	$3265
+
+	word	4			; Word '^'
+	word	RPL_VarWrite
+	word	$8001
+	word	$326b
+
+	word	4			; Word '.'
+	word	RPL_Dot
 	word	$0001
-	word	$2628
+	word	$3c20
+
+	word	4			; Word 'cr'
+	word	RPL_Cr
+	word	$0001
+	word	$62d3
+
+	word	4			; Word 'sys'
+	word	RPL_Sys
+	word	$0001
+	word	$3cb1
+
+	word	4			; Word ','
+	word	RPL_Dot1
+	word	$8001
+	word	$3267
+
+	word	4			; Word '&'
+	word	RPL_Dot2
+	word	$8001
+	word	$3032
+
+	word	4			; Word '%'
+	word	RPL_Dot3
+	word	$8001
+	word	$3033
 
 	word	4			; Word 'if'
 	word	RPL_If
@@ -242,24 +247,19 @@
 	word	$0001
 	word	$6009
 
-	word	4			; Word '@'
-	word	RPL_Read
+	word	4			; Word 'not'
+	word	RPL_Not
 	word	$0001
-	word	$3030
+	word	$304d
 
-	word	4			; Word '!'
-	word	RPL_Write
+	word	4			; Word '<<'
+	word	RPL_Shl
 	word	$0001
-	word	$2c2f
+	word	$2629
 
-	word	4			; Word '#'
-	word	RPL_VarRead
-	word	$8001
-	word	$3265
-
-	word	4			; Word '^'
-	word	RPL_VarWrite
-	word	$8001
-	word	$326b
+	word	4			; Word '>>'
+	word	RPL_Shr
+	word	$0001
+	word	$2628
 
 	word	0
