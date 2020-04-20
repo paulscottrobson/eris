@@ -3,11 +3,12 @@
 ' ********************************************
 
 call initialise()
-call new.level(13,20)
+call new.level(4,10)
 call new.player()
 call show(0)
 repeat
-	if event(e.move,6) then sys move.all
+	if event(e.move,6) then call check.rotate.move():sys move.all
+	if joyb(1) <> 0 and event(e.shoot,40) <> 0 then stop
 until false
 end
 '
@@ -33,7 +34,7 @@ proc initialise()
 	call setup.code()
 	rem "Set up object data"
 	mCount = 4:aCount = 32:oCount = mCount+aCount+1
-	objects = alloc(16*(mCount+aCount+1)):rem "Memory for objects"
+	objects = alloc(16*oCount):rem "Memory for objects"
 	dim q.mi(4),q.as(32):rem "Queues for missiles and objects"	
 endproc
 '
@@ -41,12 +42,32 @@ endproc
 '
 proc new.level(nAst,speed)
 	local i:level.speed = speed
-	for i = 0 to aCount+mCount+1:!(objects+i*16+6) = 0:next i
+	for i = 0 to oCount:!(objects+i*16+6) = 0:next i
 	for i = 1 to aCount:q.as(i) = i + mCount:next i:qt.as = aCount
 	asteroid.count = 0
 	for i = 1 to nAst
-		call create.asteroid(random(),random(),random(0,23),i mod 3+1)
+		call create.asteroid(random(),random(),random(0,23),1)
 	next i
+endproc
+'
+'		Check rotation
+'
+proc check.rotate.move()
+	local x,p = objects
+	if joyx() <> 0
+		sys draw.off
+		if joyx() < 0 
+			p!11 = (p!11+23) mod 24
+		else
+			p!11 = (p!11+1) mod 24
+		endif
+		p!7 = p.char(p!11):p!9 = p.flip(p!11):sys draw.on
+	endif
+	if joyy() <> 0
+		local s = joyy()
+		p!2 = p!2-sine(p!11)*s/2
+		p!3 = p!3+cosine(p!11)*s/2
+	endif
 endproc
 '
 '		Initialise player
@@ -92,7 +113,7 @@ endproc
 '	Create RPL Code
 '
 proc setup.code()
-	code alloc(1024),0
+	code alloc(2048),0
 	rem "(addr offset - ) copy word to address"
 		blitter.copy = rpl(#p + @ swap !)
 	rem "( - ) wait for blitter"
@@ -111,7 +132,7 @@ proc setup.code()
 	rem "(addr - ) move.check"
 		move.check = rpl(#p 6 + @ if move.it then)
 	rem "( - ) move.all"
-		move.all = rpl(#oCount 1 + for i 16 * #objects + dup ^p 6 + @ if move.check then  next)
+		move.all = rpl(#oCount for i 16 * #objects + dup ^p 6 + @ if move.check then  next)
 endproc
 ;
 ;	Memory Allocation for each element.
