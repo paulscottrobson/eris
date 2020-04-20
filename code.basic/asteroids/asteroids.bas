@@ -3,30 +3,13 @@
 ' ********************************************
 
 call initialise()
-
-count = 45:dim s(count)
-for i = 0 to count-1
-	test = alloc(10):s(i) = test
-	test!0 = (i mod 6) * &1200+&1000:test!1 = (i / 6) * &1200+&1000
-	test!2 = random(100,512)*(random(0,1)*2-1)
-	test!3 = random(100,512)*(random(0,1)*2-1)
-	test!4 = 0:test!5 = 0
-	test!6 = 8
-	test!7 = sysvar(3)+8*16:test!8 = &0303:test!9 = p.flip(i mod 24)
-next i
-
-t1 = timer()
-for i = 1 to 100
-	for j = 0 to count-1
-		p = s(j):sys draw.off:sys ltop.x:sys ltop.y
-		p!7 = p.char((i+j) mod 24)
-		p!9 = p.flip((i+j) mod 24)
-		sys draw.on
-	next j
-next i
-print timer()-t1
+call new.level(13,20)
+call new.player()
+call show(0)
+repeat
+	if event(e.move,6) then sys move.all
+until false
 end
-
 '
 '	Set up game
 '
@@ -48,26 +31,63 @@ proc initialise()
 	for i = 0 to 23:cosine(i) = sine((6+24-i) mod 24):next i
 	rem "Set up the RPL code"
 	call setup.code()
-	objects = alloc(32*16):rem "Memory for objects"
-	dim q.mi(4),q.as(32):rem "Queues for missiles and objects"
+	rem "Set up object data"
+	mCount = 4:aCount = 32:oCount = mCount+aCount+1
+	objects = alloc(16*(mCount+aCount+1)):rem "Memory for objects"
+	dim q.mi(4),q.as(32):rem "Queues for missiles and objects"	
 endproc
-;
-;	Memory Allocation for each element.
-;
-;		0 = Player, 1-4 = Missiles, 5-31 = Asteroids
-;
-;	+0 		X Position (64k)
-;	+1		Y Position (64k)
-;	+2 		X Move (64k)
-;	+3 		Y Move (64k)
-;	+4 		X Current (scaled), centred
-;	+5 		Y Current (scaled), centred
-;' 	+6 		Radius (scaled) (if zero, then not in use)
-; 	+7 		Graphic address
-; 	+8 		Colour word
-; 	+9 		Control word
-;	+10 	Life (missiles only) before self destructing
-;
+'
+'		Set up new level
+'
+proc new.level(nAst,speed)
+	local i:level.speed = speed
+	for i = 0 to aCount+mCount+1:!(objects+i*16+6) = 0:next i
+	for i = 1 to aCount:q.as(i) = i + mCount:next i:qt.as = aCount
+	asteroid.count = 0
+	for i = 1 to nAst
+		call create.asteroid(random(),random(),random(0,23),i mod 3+1)
+	next i
+endproc
+'
+'		Initialise player
+'
+proc new.player()
+	local i:local p = objects:p.angle = 0
+	p!0 = &8000:p!1 = &8000
+	p!2 = 0:p!3 = 0:p!4 = -1:p!5 = -1	
+	p!6 = 9:p!7 = p.char(0):p!8 = &0303:p!9 = p.flip(0)
+	for i = 1 to mCount
+		!(objects+i*16+6) = 0
+		q.mi(i) = i
+	next i:qt.mi = mCount
+endproc
+'
+'		Create an asteroid
+'
+proc create.asteroid(x,y,angle,s)
+	if qt.as > 0
+		local n = q.as(qt.as)
+		local p = n*16+objects
+		rem "print p,q.as(qt.as),qt.as"
+		qt.as = qt.as - 1
+		asteroid.count = asteroid.count+1
+		p!0 = x:p!1 = y
+		p!2 = cosine(angle)*s*level.speed/10
+		p!3 = sine(angle)*s*level.speed/10
+		p!4 = 0:p!5 = 0
+		p!6 = 16:g = 8:p!8 = &0303:p!9 = &1010:p!10 = s:p!11 = angle
+		if s = 2 then p!9 = &10:p!6 = 8
+		if s = 3 then p!9 = &10:p!6 = 4:g = 9
+		p!7 = sysvar(3)+g*16
+		p!9 = p!9 + random(0,3)*&2000
+	endif
+endproc
+'
+'		Show object
+'
+proc show(p)
+	p = p * 16 + objects:sys ltop.x:sys ltop.y:sys draw.on
+endproc
 '
 '	Create RPL Code
 '
@@ -88,4 +108,27 @@ proc setup.code()
 	rem "(addr - equal) move "		
 		move.1 = rpl(^t #t @ dup #t 2 + @ + #t ! #t @ xor &FF00 and 0= 0=)
 		move.it = rpl(#p move.1 #p 1 + move.1 or if draw.off ltop.x ltop.y draw.on then)		
+	rem "(addr - ) move.check"
+		move.check = rpl(#p 6 + @ if move.it then)
+	rem "( - ) move.all"
+		move.all = rpl(#oCount 1 + for i 16 * #objects + dup ^p 6 + @ if move.check then  next)
 endproc
+;
+;	Memory Allocation for each element.
+;
+;		0 = Player, 1+ Missiles, later = Asteroids
+;
+;	+0 		X Position (64k)
+;	+1		Y Position (64k)
+;	+2 		X Move (64k)
+;	+3 		Y Move (64k)
+;	+4 		X Current (scaled), centred
+;	+5 		Y Current (scaled), centred
+;' 	+6 		Radius (scaled) (if zero, then not in use)
+; 	+7 		Graphic address
+; 	+8 		Colour word
+; 	+9 		Control word
+;	+10 	Life (missiles only) before self destructing
+;	+10 	Size (asteroids only)
+;	+11 	Angle (asteroids only)
+;
