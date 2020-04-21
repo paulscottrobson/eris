@@ -2,14 +2,9 @@
 '				Asteroids Game
 ' ********************************************
 
-'
-'	Split asteroids and score
-'	Level end.
-' 	Proper wait renewal
-'
 call initialise()
 call new.game()
-call new.level(4,10)
+call new.level()
 call new.player()
 call wait.safe()
 e.move = 0:e.shoot = 0:e.check = 0
@@ -17,6 +12,7 @@ repeat
 	if event(e.move,6) then call check.rotate.move():sys move.all:call collisions():p = objects:sys draw.on
 	if joyb(1) <> 0 and qt.mi > 0 and event(e.shoot,20) <> 0 then call fire.missile()
 	if event(e.check,30) then call check.missiles()
+	if asteroid.count = 0 then call new.level():call new.player():call wait.safe()
 until game.lives = 0
 end
 '
@@ -65,13 +61,15 @@ proc draw.lives()
 	for i = 0 to 6
 		ink 3:if i >= game.lives then ink 0
 		draw 50+i*8,8,11		
-	next i
+	next i:ink 2
 endproc
 '	
 '		Set up new level
 '
-proc new.level(nAst,speed)
-	local i:level.speed = speed
+proc new.level()
+	local i,nAst
+	level.speed = 9+game.level
+	local nAst = min(2 + game.level,6)
 	cls:call draw.score():call draw.lives()
 	for i = 0 to oCount:!(objects+i*16+6) = 0:next i
 	for i = 1 to aCount:q.as(i) = i + mCount:next i:qt.as = aCount
@@ -82,6 +80,7 @@ proc new.level(nAst,speed)
 	for i = 1 to mCount
 		q.mi(i) = i
 	next i:qt.mi = mCount
+	game.level = game.level + 1	
 endproc
 '
 '		Check rotation
@@ -133,13 +132,16 @@ endproc
 '
 proc collisions()
 	local i,p,h
-	for i = 0 to aCount
+	for i = 0 to mCount
 		p = i * 16 + objects
 		if p!6 <> 0 
 			h = -1:sys check.collide
 			if h >= 0 
 				if i = 0 then call lose.life()
-				if i > 0 then cursor 0,0:ink 2:print i,h:call kill.missile(i)
+				if i > 0 
+					call kill.missile(i)
+					call kill.asteroid(h)
+				endif
 			endif
 		endif
 	next i
@@ -165,9 +167,14 @@ endproc
 '		Wait until player is safe
 '
 proc wait.safe()
-	local t1 = timer()+100
-	while timer() < t1
+	local safe = false
+	local h,p,q,temp
+	sys move.all
+	while not safe
 		if event(e.move,6) then sys move.all
+		h = -1:p = objects
+		temp = p!6:p!6 = 48:sys check.collide:p!6 = temp
+		if h < 0 then safe = true
 	wend
 	call show(0)
 endproc
@@ -175,16 +182,17 @@ endproc
 '		Initialise player
 '
 proc new.player()
-	local i:local p = objects:p.angle = 0
+	local i:local p = objects
 	p!0 = &8000:p!1 = &8000
 	p!2 = 0:p!3 = 0:p!4 = -1:p!5 = -1	
-	p!6 = 9:p!7 = p.char(0):p!8 = &0C0C:p!9 = p.flip(0)
+	p!6 = 9:p!7 = p.char(0):p!8 = &0C0C:p!9 = p.flip(0):p!11 = 0
 endproc
 '
 '		Create an asteroid
 '
 proc create.asteroid(x,y,angle,s)
 	if qt.as > 0
+		angle = angle mod 24
 		local n = q.as(qt.as)
 		local p = n*16+objects
 		rem "print p,q.as(qt.as),qt.as"
@@ -200,6 +208,21 @@ proc create.asteroid(x,y,angle,s)
 		p!7 = sysvar(3)+g*16
 		p!9 = p!9 + random(0,3)*&2000
 	endif
+endproc
+'
+'		Destroy asteroid
+'	
+proc kill.asteroid(n)
+	local p = n * 16 + objects
+	local r = p!10:local s = p!10
+	local a = p!11
+	game.score = game.score+(10 >> r):call draw.score()
+	if s <> 3
+		call create.asteroid(p!0,p!1,p!11+6,s+1)
+		call create.asteroid(p!0,p!1,p!11+18,s+1)
+	endif
+	sys draw.off:p!6 = 0:asteroid.count = asteroid.count-1
+	qt.as = qt.as+1:q.as(qt.as) = n
 endproc
 '
 '		Show object
@@ -255,5 +278,5 @@ endproc
 ; 	+9 		Control word
 ;	+10 	Expire time (missile only)
 ;	+10 	Size (asteroids only)
-;	+11 	Angle (asteroids only)
+;	+11 	Angle (asteroids/player only)
 ;
