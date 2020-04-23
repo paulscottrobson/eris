@@ -187,6 +187,9 @@
 .OSRandom16
 		jmp 	#OSXRandom16
 
+.OSRandomSeed
+		jmp 	#OSXRandomSeed
+		
 .OSStrToInt
 		jmp 	#OSXStrToInt
 

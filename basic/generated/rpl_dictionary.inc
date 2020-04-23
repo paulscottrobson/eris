@@ -140,7 +140,7 @@
 	word	4			; Word 'sys'
 	word	RPL_Sys
 	word	$0001
-	word	$3cb1
+	word	$3cb0
 
 	word	4			; Word ','
 	word	RPL_Dot1
@@ -165,7 +165,7 @@
 	word	4			; Word 'else'
 	word	RPL_Else
 	word	$8001
-	word	$3c8c
+	word	$3c8a
 
 	word	4			; Word 'then'
 	word	RPL_Then

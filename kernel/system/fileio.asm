@@ -15,6 +15,8 @@
 ;						This is handled by emulation.
 ;					(FPGA will require different behaviour)
 ;
+;		On exit, R0 = 0 if okay, non zero is error
+;
 ; *****************************************************************************
 
 .OSXFileOperation

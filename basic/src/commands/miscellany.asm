@@ -150,6 +150,21 @@
 .ColonHandler 	;; [:]
 		ret
 
+; *****************************************************************************
+;
+;					  				Randomise 
+;
+; *****************************************************************************
+
+.SeedHandler 	;; [randomise]
+		push 	link
+		jsr 	#EvaluateInteger
+		sknz 	r0
+		jmp 	#BadNumberError
+		jsr 	#OSRandomSeed
+		pop 	link
+		ret
+
 
 ; *****************************************************************************
 ;
@@ -182,7 +197,6 @@
 .Dummy5 		;; [step]
 .Dummy6 		;; [then]
 .Dummy7 		;; [#]
-.Dummy8 		;; [crunch] 			
 .Dummy9 		;; [flip] 
 .Dummy110 		;; [on] 
 .Dummy111 		;; [when] 
@@ -191,7 +205,6 @@
 .Dummy114 		;; [outport] 
 .Dummy115 		;; [case] 
 .Dummy116 		;; [endcase] 
-.Dummy117 		;; [connect] 
 .Dummy119 		;; [^] 
 ;
 ;		This lot are not commands per se, but are handled in RUN as token values.

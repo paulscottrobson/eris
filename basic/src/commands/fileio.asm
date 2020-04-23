@@ -82,6 +82,7 @@
 		mov 	r0,#4 						; read directory into unused space
 		ldm 	r1,#memAllocBottom
 		jsr 	#OSFileOperation
+		ldm 	r1,#memAllocBottom
 ._CDList
 		ldm 	r0,r1,#0 					; check end 
 		sknz 	r0
