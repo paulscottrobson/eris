@@ -64,6 +64,7 @@ WORD16 HWReadKeyboardColumns(void) {
 WORD16 HWFileOperation(WORD16 R0,WORD16 R1,WORD16 R2,WORD16 R3) {
 	char fileName[32];
 	WORD16 r = 0;
+	WORD16 temp;
 	//printf("Operation %d %d %d %d\n",R0,R1,R2,R3);
 	if (R0 != 0 && R0 != 4) {
 		fileName[0] = 0;
@@ -86,7 +87,13 @@ WORD16 HWFileOperation(WORD16 R0,WORD16 R1,WORD16 R2,WORD16 R3) {
 		HWLoadDirectory(R1);
 	}
 	if (R0 == 5) {
-		r = HWFileExists(fileName) ? 0 : 1;
+		r = HWFileInformation(fileName,&temp,&temp) ? 0 : 1;
+	}
+	if (R0 == 6) {
+		HWFileInformation(fileName,&r,&temp);
+	}
+	if (R0 == 7) {
+		HWFileInformation(fileName,&temp,&r);
 	}
 	return r;
 }

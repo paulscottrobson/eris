@@ -110,13 +110,20 @@ void HWWriteAudio(BYTE8 channel,WORD16 freq) {
 //							  Check file exists
 // ****************************************************************************
 
-WORD16 HWFileExists(char *fileName) {
+WORD16 HWFileInformation(char *fileName,WORD16 *loadAddress,WORD16 *size) {
 	char fullName[128];
 	if (fileName[0] == 0) return 0;
 	MKSTORAGE();
 	sprintf(fullName,"%sstorage%c%s",SDL_GetBasePath(),FILESEP,fileName);
 	FILE *f = fopen(fullName,"rb");
-	if (f != NULL) fclose(f);
+	if (f != NULL) {
+		WORD16 addr = fgetc(f);
+		addr += (fgetc(f) << 8);
+		*loadAddress = addr;
+		fseek(f, 0L, SEEK_END);
+		*size = (WORD16)((ftell(f)-2)/2);
+		fclose(f);
+	}
 	return (f != NULL);
 }
 
