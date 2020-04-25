@@ -62,7 +62,7 @@ WORD16 HWReadKeyboardColumns(void) {
 // ****************************************************************************
 
 WORD16 HWFileOperation(WORD16 R0,WORD16 R1,WORD16 R2,WORD16 R3) {
-	char fileName[32];
+	char *p,fileName[128];
 	WORD16 r = 0;
 	WORD16 temp;
 	//printf("Operation %d %d %d %d\n",R0,R1,R2,R3);
@@ -72,28 +72,43 @@ WORD16 HWFileOperation(WORD16 R0,WORD16 R1,WORD16 R2,WORD16 R3) {
 		if (length > sizeof(fileName)-1) return 1;
 		for (int i = 0;i < length;i++) {
 			int d = CPUReadMemory(R1+1+i/2);
-			fileName[i] = tolower((i & 1) ? (d >> 8) : (d & 0xFF));
+			fileName[i] = (i & 1) ? (d >> 8) : (d & 0xFF);
+			if (R0 != 8) fileName[i] = tolower(fileName[i]);
 			fileName[i+1] = '\0';
 		}
 		//printf("\tFilename [%s]\n",fileName);
 	}
-	if (R0 == 1 || R0 == 2) {
-		r = HWLoadFile(fileName,(R0 == 1) ? 0 : R2);
-	}
-	if (R0 == 3) {
-		r = HWSaveFile(fileName,R2,R3);
-	}
-	if (R0 == 4) {
-		HWLoadDirectory(R1);
-	}
-	if (R0 == 5) {
-		r = HWFileInformation(fileName,&temp,&temp) ? 0 : 1;
-	}
-	if (R0 == 6) {
-		HWFileInformation(fileName,&r,&temp);
-	}
-	if (R0 == 7) {
-		HWFileInformation(fileName,&temp,&r);
+	switch(R0) {
+		case 1:
+			r = HWLoadFile(fileName,0);
+			break;
+		case 2:
+			r = HWLoadFile(fileName,R2);
+			break;
+		case 3:
+			r = HWSaveFile(fileName,R2,R3);
+			break;
+		case 4:
+			HWLoadDirectory(R1);
+			break;
+		case 5:
+			r = HWFileInformation(fileName,&temp,&temp) ? 0 : 1;
+			break;
+		case 6:
+			HWFileInformation(fileName,&r,&temp);
+			break;
+		case 7:
+			HWFileInformation(fileName,&temp,&r);
+			break;
+		case 8:
+			p = fileName;
+			while (*p != '\0' && *p != '/') p++;
+			if (*p == '/') *p++ = '\0';
+			r = HWConnectExternal(fileName,p);
+			break;
+		case 9:
+			r = HWDownloadFile(fileName);
+			break;
 	}
 	return r;
 }
@@ -106,3 +121,4 @@ WORD16 HWFileOperation(WORD16 R0,WORD16 R1,WORD16 R2,WORD16 R3) {
 #include "hardware_esp.cpp"
 #endif
 
+	

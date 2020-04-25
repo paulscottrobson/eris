@@ -202,3 +202,34 @@ void HWLoadDirectory(WORD16 target) {
 	CPUWriteMemory(target,0);
 }
 
+// ****************************************************************************
+//			  External connect (not required for emulation)
+// ****************************************************************************
+
+WORD16 HWConnectExternal(char *SSID,char *password) {
+	printf("Debug: connecting to [%s] using password [%s]\n",SSID,password);
+	return 0;
+}
+
+// ****************************************************************************
+//							External Download
+// ****************************************************************************
+
+WORD16 HWDownloadFile(char *fileName) {
+	FILE *fIn,*fOut;
+	char fullName[128],buffer[256];
+	printf("Debug: downloading [%s]\n",fileName);
+	sprintf(fullName,"%swww%c%s",SDL_GetBasePath(),FILESEP,fileName);
+	fIn = fopen(fullName,"rb");
+	if (fIn != NULL) {
+		sprintf(fullName,"%sstorage%c%s",SDL_GetBasePath(),FILESEP,fileName);
+		fOut = fopen(fullName,"wb");
+		while (!feof(fIn)) {
+			int n = fread(buffer,1,sizeof(buffer),fIn);
+			if (n > 0) fwrite(buffer,1,n,fOut);
+		}
+		fclose(fOut);
+		fclose(fIn);
+	}
+	return (fIn != NULL) ? 0 : 1;
+}

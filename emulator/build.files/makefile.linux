@@ -1,4 +1,6 @@
-SOURCES = framework/main.cpp framework/gfx.cpp framework/debugger.cpp src/sys_processor.cpp src/sys_debug_cpu.cpp src/hardware.cpp src/blitter.cpp
+SOURCES = framework/main.o framework/gfx.o framework/debugger.o \
+		  src/sys_processor.o src/sys_debug_cpu.o src/hardware.o src/blitter.o
+		  
 APPNAME = eris
 
 CC = g++
@@ -6,18 +8,23 @@ CC = g++
 all: $(APPNAME)
 
 clean:
-	rm -f $(APPNAME) *.o
+	rm -f $(APPNAME) src/*.o
 
-.PHONY: all clean
+.PHONY: all clean 
 
 SDL_CFLAGS := $(shell sdl2-config --cflags)
 SDL_LDFLAGS := $(shell sdl2-config --libs)
 
-CFLAGS := $(SDL_CFLAGS) -O2 -DLINUX -DINCLUDE_OS_SUPPORT -I. -I ./include -I./framework -I/usr/include/SDL2 -I./cpu -I./bin
+CXXFLAGS := $(SDL_CFLAGS) -O2 -DLINUX -DINCLUDE_OS_SUPPORT \
+			-I. -I ./include -I./framework -I/usr/include/SDL2 -I./cpu -I./bin
+
 LDFLAGS := $(SDL_LDFLAGS)
 
+src/hardware.o: src/hardware.cpp src/hardware_emu.cpp
+	gcc $(CXXFLAGS) -c -o src/hardware.o src/hardware.cpp
+
 $(APPNAME): $(SOURCES)
-	$(CC) $(SOURCES) $(CFLAGS) $(LDFLAGS) -o $@
+	$(CC) $(SOURCES) $(LDFLAGS) -o $@
 
 
 
