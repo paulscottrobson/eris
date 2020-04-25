@@ -1,5 +1,5 @@
 #OBJS specifies which files to compile as part of the project
-OBJS = framework\main.cpp framework\gfx.cpp framework\debugger.cpp src\sys_processor.cpp src\sys_debug_cpu.cpp src\hardware.cpp src\blitter.cpp
+OBJS = framework\main.o framework\gfx.o framework\debugger.o src\sys_processor.o src\sys_debug_cpu.o src\hardware.o src\blitter.o
 #CC specifies which compiler we're using
 CC = g++
 
@@ -20,10 +20,24 @@ LINKER_FLAGS = -lmingw32 -lSDL2main -lSDL2
 #OBJ_NAME specifies the name of our exectuable
 OBJ_NAME = eris.exe
 
+%.o: %.cpp
+	gcc -c $(COMPILER_FLAGS) $(INCLUDE_PATHS) -o $*.o $<
+
 #This is the target that compiles our executable
 $(OBJ_NAME) : $(OBJS)
 	$(CC) $(OBJS) $(INCLUDE_PATHS) $(LIBRARY_PATHS) $(COMPILER_FLAGS) $(LINKER_FLAGS) -o $(OBJ_NAME)
 
+src\hardware.o: src\hardware.cpp src\hardware_emu.cpp
+	gcc -c $(COMPILER_FLAGS) $(INCLUDE_PATHS) -o $*.o $*.cpp
+
+
 all : ${OBJ_NAME}
+
+clean:
+	del /Q $(OBJ_NAME) 
+	del /q src\*.o
+	del /q framework\*.o
+
+.PHONY: all clean 
 
 	
