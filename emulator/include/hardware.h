@@ -46,6 +46,7 @@ WORD16 HWFileInformation(char *fileName,WORD16 *loadAddress,WORD16 *size);
 WORD16 HWGetLoadSize(void);
 WORD16 HWConnectExternal(char *SSID,char *password);
 WORD16 HWDownloadFile(char *fileName);
+void HWTransmitCharacter(BYTE8 ch);
 
 void HWSyncImplementation(LONG32 iCount);
 void HWWriteAudio(BYTE8 channel,WORD16 freq);

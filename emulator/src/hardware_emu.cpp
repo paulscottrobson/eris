@@ -233,3 +233,11 @@ WORD16 HWDownloadFile(char *fileName) {
 	}
 	return (fIn != NULL) ? 0 : 1;
 }
+
+// ****************************************************************************
+//								Transmit character
+// ****************************************************************************
+
+void HWTransmitCharacter(BYTE8 ch) {
+	printf("%c",ch);
+}
