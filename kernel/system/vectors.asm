@@ -30,7 +30,51 @@
 
 .OSSpriteSelect
 		jmp 	#OSXSpriteSelect
+
+; *****************************************************************************
+;
+;								Utility Group
+;
+; *****************************************************************************
+
+		org 	$0010
+
+.OSFileOperation
+		jmp 	#OSXFileOperation
+
+.OSReadSystemVariable
+		jmp 	#OSXReadSystemVariable
+
+.OSUDivide16
+		jmp 	#OSXUDivide16
+
+.OSSDivide16
+		jmp 	#OSXSDivide16
+
+.OSRandom16
+		jmp 	#OSXRandom16
+
+.OSRandomSeed
+		jmp 	#OSXRandomSeed
 		
+.OSStrToInt
+		jmp 	#OSXStrToInt
+
+.OSIntToStr
+		jmp 	#OSXIntToStr
+
+.OSUpperCase
+		jmp 	#OSXUpperCase
+
+.OSLowerCase
+		jmp 	#OSXLowerCase
+
+.OSWordLength
+		jmp 	#OSXWordLength
+
+.OSSystemManager
+		jmp 	#OSXSystemManager
+				
 ; *****************************************************************************
 ;
 ;								Input Group
@@ -166,44 +210,3 @@
 .OSSoundComplete
 		jmp 	#OSXSoundComplete
 		
-; *****************************************************************************
-;
-;								Utility Group
-;
-; *****************************************************************************
-
-.OSReadSystemVariable
-		jmp 	#OSXReadSystemVariable
-		
-.OSFileOperation
-		jmp 	#OSXFileOperation
-
-.OSUDivide16
-		jmp 	#OSXUDivide16
-
-.OSSDivide16
-		jmp 	#OSXSDivide16
-
-.OSRandom16
-		jmp 	#OSXRandom16
-
-.OSRandomSeed
-		jmp 	#OSXRandomSeed
-		
-.OSStrToInt
-		jmp 	#OSXStrToInt
-
-.OSIntToStr
-		jmp 	#OSXIntToStr
-
-.OSUpperCase
-		jmp 	#OSXUpperCase
-
-.OSLowerCase
-		jmp 	#OSXLowerCase
-
-.OSWordLength
-		jmp 	#OSXWordLength
-
-.OSSystemManager
-		jmp 	#OSXSystemManager

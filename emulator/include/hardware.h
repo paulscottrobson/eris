@@ -23,6 +23,8 @@
 #define FILESEP 	'/'
 #endif
 
+#define WWW_URL_BASE "http://www.studio2.org.uk/studio2.org.uk/paulscottrobson"
+
 #ifdef ESP32
 int HWGetScanCode(void);
 void HWWriteCharacter(BYTE8 x,BYTE8 y,BYTE8 ch);

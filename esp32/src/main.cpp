@@ -24,28 +24,14 @@
 
 #define FORMAT_SPIFFS_IF_FAILED true
 
-// select one color configuration
+// ****************************************************************************
+//
+//								Configuration
+//
+// ****************************************************************************
+
 #define USE_8_COLORS  0
 #define USE_64_COLORS 1
-
-// ****************************************************************************
-//
-//								Static objects
-//
-// ****************************************************************************
-
-fabgl::VGAController VGAController;
-fabgl::Canvas        Canvas(&VGAController);
-fabgl::PS2Controller PS2Controller;
-fabgl::Keyboard  Keyboard;
-
-SoundGenerator soundGen;
-SquareWaveformGenerator square1,square2;
-NoiseWaveformGenerator noise1;
-
-static RGB888 pColours[8];
-static uint8_t rawPixels[8];
-static int fsOpen,size;
 
 // indicate VGA GPIOs to use for selected color configuration
 #if USE_8_COLORS
@@ -68,12 +54,92 @@ static int fsOpen,size;
 #define PS2_PORT0_CLK GPIO_NUM_33
 #define PS2_PORT0_DAT GPIO_NUM_32
 
+// ****************************************************************************
+//
+//								Static objects
+//
+// ****************************************************************************
+
+fabgl::VGAController VGAController;
+fabgl::Canvas        Canvas(&VGAController);
+fabgl::PS2Controller PS2Controller;
+fabgl::Keyboard  Keyboard;
+
+SoundGenerator soundGen;
+SquareWaveformGenerator square1,square2;
+NoiseWaveformGenerator noise1;
+
+static RGB888 pColours[8];
+static uint8_t rawPixels[8];
+static int fsOpen,size;
+
+
+// ****************************************************************************
+//
+//							Attempt to connect to Wifi
+//
+// ****************************************************************************
+
 WORD16 HWConnectExternal(char *SSID,char *password) {
-	return 0;
+	fabgl::suspendInterrupts();										// And doesn't like interrupts
+	WiFi.begin(SSID, password);
+	int timeOut = 20;
+	while (WiFi.status() != WL_CONNECTED && timeOut > 0) {
+		timeOut--;
+	    delay(500);
+	}
+	char buffer[32];
+	int r = (WiFi.status() == WL_CONNECTED) ? 0 : 1;
+	sprintf(buffer,"; Connected to wifi : return %d",r);
+	Serial.println(buffer);
+	sprintf(buffer,"/%s/%s/",SSID,password);
+	Serial.println(buffer);
+	fabgl::resumeInterrupts();
+	return r;
 }
 
+// ****************************************************************************
+//
+//						  Download file via Wifi
+//
+// ****************************************************************************
+
 WORD16 HWDownloadFile(char *fileName) {
-	return 0;
+	char buffer[256];
+  	int r = 1;
+  	HTTPClient http;
+	char fullName[64];
+	sprintf(fullName,"/%s",fileName);								// SPIFFS doesn't do dirs
+	fabgl::suspendInterrupts();										// And doesn't like interrupts
+  	if ((WiFi.status() == WL_CONNECTED)) {
+  		r = 2;
+  		sprintf(buffer,"%s/%s",WWW_URL_BASE,fileName);
+  		Serial.println(buffer);
+ 		http.begin(buffer);
+ 		int httpCode = http.GET();                                  
+ 		if (httpCode > 0) {
+			File file = SPIFFS.open(fullName,FILE_WRITE);			// Open to write
+ 			int len = http.getSize();
+ 			Serial.print("Length:");
+ 		    Serial.println(len);
+			WiFiClient * stream = http.getStreamPtr();
+      		while (http.connected() && len > 0) {
+		        size_t size = stream->available();
+        		if (size != 0) {
+			        int c = stream->readBytes(buffer, (size > sizeof(buffer)) ? sizeof(buffer) : size);
+			        for (int i = 0;i < c;i++) file.write(buffer[i]);
+			        Serial.println(c);
+	          		if (len > 0) len -= c;
+	          	}
+        	}
+        	if (len == 0) r = 0;
+        	file.close();
+        }
+    }
+	sprintf(buffer,"; Downloading %s %d",fileName,r);
+	Serial.println(buffer);
+	fabgl::resumeInterrupts();
+	return r;
 }
 
 // ****************************************************************************
