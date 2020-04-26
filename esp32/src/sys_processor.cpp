@@ -109,6 +109,7 @@ static inline void WRITE(WORD16 a,WORD16 d) {
 			frameCycles = CYCLES_PER_FRAME * ((turbo != 0) ? 10 : 1);
 		}
 		#endif
+		if (a == 0xFFFC) HWTransmitCharacter(d & 0xFF);						// $FFFC = write character out
 	}
 }
 

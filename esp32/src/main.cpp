@@ -68,6 +68,23 @@ static int fsOpen,size;
 #define PS2_PORT0_CLK GPIO_NUM_33
 #define PS2_PORT0_DAT GPIO_NUM_32
 
+WORD16 HWConnectExternal(char *SSID,char *password) {
+	return 0;
+}
+
+WORD16 HWDownloadFile(char *fileName) {
+	return 0;
+}
+
+// ****************************************************************************
+//
+//					Transmit character over serial port
+//
+// ****************************************************************************
+
+void HWTransmitCharacter(BYTE8 ch) {
+	Serial.print(((char)ch));
+}
 
 // ****************************************************************************
 //
@@ -258,6 +275,8 @@ void HWSetAudio(BYTE8 channel,WORD16 freq) {
 
 void setup()
 {
+	Serial.begin(115200);delay(500); Serial.write("\n\n\n");
+
 	#if USE_8_COLORS
 	VGAController.begin(VGA_RED, VGA_GREEN, VGA_BLUE, VGA_HSYNC, VGA_VSYNC);
 	#elif USE_64_COLORS
