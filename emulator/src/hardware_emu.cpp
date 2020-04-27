@@ -215,6 +215,20 @@ void HWTransmitCharacter(BYTE8 ch) {
 // ****************************************************************************
 
 WORD16 HWDownloadHandler(char *url,char *target,char *ssid,char *password) {
+	char buffer[128],fullName[128];
+	FILE *fIn,*fOut;
 	printf("Download %s to %s using %s[%s]\n",url,target,ssid,password);
-	return 0;
+	sprintf(fullName,"%swww%c%s",SDL_GetBasePath(),FILESEP,target);
+	fIn = fopen(fullName,"rb");
+	if (fIn != NULL) {
+		sprintf(fullName,"%sstorage%c%s",SDL_GetBasePath(),FILESEP,target);
+		fOut = fopen(fullName,"wb");
+		while (!feof(fIn)) {
+			int n = fread(buffer,1,sizeof(buffer),fIn);
+			if (n > 0) fwrite(buffer,1,n,fOut);
+		}
+		fclose(fOut);
+		fclose(fIn);
+	}
+	return (fIn != NULL) ? 0 : 1;
 }

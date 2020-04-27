@@ -26,7 +26,7 @@ proc play.game()
 		if event(e.animate,20) then call animate.objects()
 		if event(e.move,6) then call move.objects()
 	until life.lost or dot.count = 0
-	if life.lost then lives = lives-1:call draw.lives():./	.call sound.dead()
+	if life.lost then lives = lives-1:call draw.lives():call sound.dead()
 	if dot.count = 0 then level = level + 1:call reset.Screen()
 endproc
 '

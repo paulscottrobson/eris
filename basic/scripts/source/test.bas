@@ -1,5 +1,5 @@
 code alloc(256),0
-f$ = "wwwfile"
+f$ = "testfile"
 a$ = "http://www.studio2.org.uk/studio2.org.uk/paulscottrobson/"+f$+";EE-Hub-S6sdx;Jane1970"
 test = rpl(#a$ 8 2 &0010 sys . cr)
 sys test

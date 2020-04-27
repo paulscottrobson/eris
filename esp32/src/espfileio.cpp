@@ -27,14 +27,8 @@ WORD16 HWFileInformation(char *fileName,WORD16 *pLoadAddress,WORD16 *pSize) {
 		WORD16 loadAddress = file.read();							// Read in load address
 		loadAddress = loadAddress + file.read()*256;
 		*pLoadAddress = loadAddress;
-		WORD16 size = 0;
-		while (file.available()) {									// Work out size
-			file.read();
-			file.read();
-			size++;
-		}
+		*pSize = file.size()/2-1;
 		file.close();
-		*pSize = size;
 	}
 	fabgl::resumeInterrupts();
 	return exists;

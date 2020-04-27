@@ -13,6 +13,7 @@
 ;
 ;		This comes first, then vectors.asm.
 ;
+.OSReset
 		brl 	r15,r15,#0 					; jump to boot code. 
 		word 	bootCode 	
 	
