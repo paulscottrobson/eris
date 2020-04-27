@@ -1,4 +1,4 @@
-
+run "pacman.prg"
 
 code alloc(256),0
 a$ = "EE-Hub-S6sd/Jane1970"

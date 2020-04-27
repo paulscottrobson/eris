@@ -1,9 +1,9 @@
 // ****************************************************************************
 // ****************************************************************************
 //
-//		Name:		main.cpp
-//		Purpose:	Main Program (esp version)
-//		Created:	8th March 2020
+//		Name:		espmiscellany.cpp
+//		Purpose:	Other Routines
+//		Created:	27th April 2020
 //		Author:		Paul Robson (paul@robsons.org.uk)
 //
 // ****************************************************************************
@@ -11,31 +11,35 @@
 
 #include "espinclude.h"
 
+fabgl::PS2Controller PS2Controller;
+fabgl::Keyboard  Keyboard;
+
 // ****************************************************************************
-//
-//								Set up code
+//		
+//							Initialise Keyboard
 //
 // ****************************************************************************
 
-void setup()
-{
-	Serial.begin(115200);delay(500); Serial.write("\n\n\n");
-	int fsOpen = SPIFFS.begin(FORMAT_SPIFFS_IF_FAILED);
-	CPUReset();
-	ESP32KeyboardInitialise();
-	ESP32VideoInitialise();
-	ESP32SoundInitialise();
+void ESP32KeyboardInitialise(void) {
+	Keyboard.begin(PS2_PORT0_CLK, PS2_PORT0_DAT,false,false);
+}
+
+// ****************************************************************************
+//		
+//							Get keyboard activity
+//
+// ****************************************************************************
+
+int HWGetScanCode(void) {
+	return Keyboard.getNextScancode(0);
 }
 
 // ****************************************************************************
 //
-//									Execution
+//					Transmit character over serial port
 //
 // ****************************************************************************
 
-void loop()
-{
-	while (1) {
-		CPUExecuteInstruction();
-	}
+void HWTransmitCharacter(BYTE8 ch) {
+	Serial.print(((char)ch));
 }

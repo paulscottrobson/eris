@@ -62,7 +62,7 @@ WORD16 HWReadKeyboardColumns(void) {
 // ****************************************************************************
 
 WORD16 HWFileOperation(WORD16 R0,WORD16 R1,WORD16 R2,WORD16 R3) {
-	char *p,fileName[128];
+	char fileName[128];
 	WORD16 r = 0;
 	WORD16 temp;
 	//printf("Operation %d %d %d %d\n",R0,R1,R2,R3);
@@ -99,15 +99,6 @@ WORD16 HWFileOperation(WORD16 R0,WORD16 R1,WORD16 R2,WORD16 R3) {
 			break;
 		case 7:
 			HWFileInformation(fileName,&temp,&r);
-			break;
-		case 8:
-			p = fileName;
-			while (*p != '\0' && *p != '/') p++;
-			if (*p == '/') *p++ = '\0';
-			r = HWConnectExternal(fileName,p);
-			break;
-		case 9:
-			r = HWDownloadFile(fileName);
 			break;
 	}
 	return r;
