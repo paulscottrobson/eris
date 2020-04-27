@@ -90,37 +90,37 @@
 	word	4			; Word 'if'
 	word	RPL_If
 	word	$8001
-	word	$3e6d
+	word	$3e6e
 
 	word	4			; Word 'else'
 	word	RPL_Else
 	word	$8001
-	word	$3c8a
+	word	$3c8b
 
 	word	4			; Word 'then'
 	word	RPL_Then
 	word	$8001
-	word	$3a74
+	word	$3a75
 
 	word	4			; Word 'repeat'
 	word	RPL_Repeat
 	word	$8001
-	word	$3e6e
+	word	$3e6f
 
 	word	4			; Word 'until'
 	word	RPL_Until
 	word	$8001
-	word	$3a75
+	word	$3a76
 
 	word	4			; Word 'for'
 	word	RPL_For
 	word	$8001
-	word	$3e6c
+	word	$3e6d
 
 	word	4			; Word 'next'
 	word	RPL_Next
 	word	$8001
-	word	$3a73
+	word	$3a74
 
 	word	4			; Word 'i'
 	word	RPL_Index
@@ -140,12 +140,12 @@
 	word	4			; Word '#'
 	word	RPL_VarRead
 	word	$8001
-	word	$3265
+	word	$3266
 
 	word	4			; Word '^'
 	word	RPL_VarWrite
 	word	$8001
-	word	$326b
+	word	$326c
 
 	word	4			; Word '.'
 	word	RPL_Dot
@@ -160,12 +160,12 @@
 	word	4			; Word 'sys'
 	word	RPL_Sys
 	word	$0001
-	word	$3cb0
+	word	$3cb1
 
 	word	4			; Word ','
 	word	RPL_Dot1
 	word	$8001
-	word	$3267
+	word	$3268
 
 	word	4			; Word '&'
 	word	RPL_Dot2

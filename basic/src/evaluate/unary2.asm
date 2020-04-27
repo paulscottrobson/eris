@@ -244,8 +244,23 @@
 		ldm 	r0,r10,#esReference1 		; check it's a reference
 		sknz 	r0
 		jmp 	#TypeMismatchError
-		stm 	r14,r10,#esReference1		; return it as a value
+		stm 	r14,r10,#esType1			; return it as a value
 		pop 	r9,link
 		ret
 
 
+; *****************************************************************************
+;
+;								sys() returning R0
+;
+; *****************************************************************************
+
+.Unary_Sys	;; [sys(]
+		push 	link
+		jsr 	#CommandSys 				; SYS code
+		jsr 	#CheckRightBracket 			; check )
+		stm 	r0,r10,#esValue1			; return R0 as integer constant
+		stm 	r14,r10,#esType1 		
+		stm 	r14,r10,#esReference1			
+		pop 	link
+		ret

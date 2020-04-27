@@ -159,7 +159,7 @@ class Tokens(object):
 	key(	left$(	len(	lower$(	mid$(	max( 	min(	not 	page	
 	peek(	quiet(	right$(	rnd(	rpl(	sgn(	sprite.x( 	sprite.y(	
 	sprite.info(	str$(	sub.count(		sub.get$(	
-	sysvar(	timer(	true 	upper$(		val(	
+	sys(	sysvar(	timer(	true 	upper$(	val(	
 //
 //		Synonyms
 //

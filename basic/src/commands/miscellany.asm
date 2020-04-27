@@ -58,26 +58,6 @@
 		pop 	link
 		ret
 
-; *****************************************************************************
-;
-;							Call a M/C Routine
-;
-; *****************************************************************************
-
-.CommandSys 		;; [sys]
-		push 	link
-		jsr 	#EvaluateInteger 			; address -> R1
-		mov 	r1,r0,#0 
-		mov 	r0,#fixedVariables 			; pass variables in R0 e.g. the address of A-Z block
-		mov 	r8,#tokenBufferEnd-1 		; set up R8 for RPL stack if an RPL function.
-		push 	r11 						; R11 is the program position, don't want that changed.
-		brl 	link,r1,#0 					; call the routine
-		xor 	r8,#tokenBufferEnd-1 		; check the stack is clean
-		skz 	r8
-		jmp 	#StackImbalanceError
-		pop 	r11
-		pop 	link
-		ret
 
 ; *****************************************************************************
 ;
@@ -165,6 +145,55 @@
 		pop 	link
 		ret
 
+; *****************************************************************************
+;
+;							Call a M/C Routine
+;
+; *****************************************************************************
+
+.CommandSys 		;; [sys]
+		push 	r1,r2,r3,r4,r5,r6,r7,r8,link
+		jsr 	#EvaluateInteger 			; address -> R6
+		mov 	r6,r0,#0 
+		mov 	r7,#inputBuffer 			; this is where R0,R1 etc .... go
+		mov 	r8,r7,#0 					; copy to R8
+		stm 	r14,r7,#0 					; clear the values
+		stm 	r14,r7,#1
+		stm 	r14,r7,#2
+		stm 	r14,r7,#3
+		stm 	r14,r7,#4
+		stm 	r14,r7,#5
+._CSLoop
+		ldm 	r0,r11,#0 					; is there a comma
+		xor 	r0,#TOK_COMMA
+		skz 	r0
+		jmp 	#_CSCallCode
+		inc 	r11 						; skip comma
+		jsr 	#EvaluateInteger 			; next parameter
+		stm 	r0,r7,#0 					; save in workspace
+		inc 	r7 							; next slot
+		mov 	r0,r7,#0 					; maximum of 6
+		xor 	r0,#inputBuffer+6
+		skz 	r0
+		jmp 	#_CSLoop
+		jmp 	#SyntaxError 				; too many parameters
+		;
+._CSCallCode
+		ldm 	r0,r8,#0 					; get values
+		ldm 	r1,r8,#1
+		ldm 	r2,r8,#2
+		ldm 	r3,r8,#3
+		ldm 	r4,r8,#4
+		ldm 	r5,r8,#5
+		mov 	r8,#tokenBufferEnd-1 		; set up R8 for RPL stack if an RPL function.
+		push 	r11 						; R11 is the program position, don't want that changed.
+		brl 	link,r6,#0 					; call the routine
+		xor 	r8,#tokenBufferEnd-1 		; check the stack is clean
+		skz 	r8
+		jmp 	#StackImbalanceError
+		pop 	r11
+		pop 	r1,r2,r3,r4,r5,r6,r7,r8,link
+		ret
 
 ; *****************************************************************************
 ;
@@ -228,4 +257,3 @@
 ;
 .Dummy204 		;; [mon]
 		jmp 	#SyntaxError
-

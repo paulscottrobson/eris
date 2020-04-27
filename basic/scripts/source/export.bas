@@ -1,18 +1,16 @@
 '
 '		Export data through serial port
 '
-'!&FFFD=1
+!&FFFD=1
 ;
 ;		Allocate workspace
 ;
 work.size = 12000
-machine.code = alloc(256)
 work = alloc(work.size)
 ;
 ;		Call OS to read directory and copy into array
 ;
-code machine.code,0
-sys rpl(#work 4 2 16 sys drop)
+sys 16,4,work
 dim dir$(128)
 p = 0:dir.count = 0
 while work!p <> 0
@@ -29,10 +27,10 @@ for i = 1 to dir.count
 	;	#N: <name>
 	call transmit("#N:"+f$)
 	; 	#L: <load address>
-	code machine.code,0:sys rpl(#f$ 6 2 16 sys ^load.addr)
+	load.addr = sys(&10,6,@f$)
 	call transmit("#L:"+to.string$(load.addr,16))
 	; 	#S: <File size words>
-	code machine.code,0:sys rpl(#f$ 7 2 16 sys ^size)
+	size = sys(&10,7,@f$)
 	call transmit("#S:"+to.string$(size,16))
 	;	Check it fits and load it in
 	assert size <= work.size
