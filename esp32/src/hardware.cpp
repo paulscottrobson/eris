@@ -102,7 +102,7 @@ WORD16 HWFileOperation(WORD16 R0,WORD16 R1,WORD16 R2,WORD16 R3) {
 			HWFileInformation(fileName,&temp,&r);
 			break;
 		case 8:
-			HWDownloadFile(fileName);
+			r = HWDownloadFile(fileName);
 	}
 	return r;
 }
