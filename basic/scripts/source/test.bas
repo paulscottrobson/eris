@@ -1,6 +1,9 @@
 code alloc(256),0
-a$ = "http://github.com/demo;EE-Hub-S6sd;Jane1970"
+f$ = "wwwfile"
+a$ = "http://www.studio2.org.uk/studio2.org.uk/paulscottrobson/"+f$+";EE-Hub-S6sdx;Jane1970"
 test = rpl(#a$ 8 2 &0010 sys . cr)
+sys test
+test = rpl(#f$ 7 2 &0010 sys . cr)
 sys test
 dir
 end
