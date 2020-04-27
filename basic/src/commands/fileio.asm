@@ -83,18 +83,32 @@
 		ldm 	r1,#memAllocBottom
 		jsr 	#OSFileOperation
 		ldm 	r1,#memAllocBottom
+._CDNextLine		
+		mov 	r3,#3 						; CR after every 3 entries
+._CDNext
+		mov	 	r4,#17-1 					; 17 characters per element		
 ._CDList
 		ldm 	r0,r1,#0 					; check end 
 		sknz 	r0
 		jmp 	#_CDExit
-		mov	 	r2,r0,#0 					; space becomes CR
-		xor 	r2,#32
-		sknz 	r2
-		mov 	r0,#13
-		jsr 	#OSLowerCase 				; print in L/C
+		jsr 	#OSLowerCase 			
 		jsr 	#OSPrintCharacter
 		inc 	r1
+		dec 	r4
+		xor 	r0,#' '						; if space done this one.
+		skz 	r0
 		jmp 	#_CDList
+._CDPad mov 	r0,#' '						; pad to 17 chars
+		jsr 	#OSPrintCharacter
+		dec 	r4
+		skm 	r4
+		jmp 	#_CDPad
+		dec 	r3 							; done 3 ?
+		skz 	r3
+		jmp 	#_CDNext
+		mov 	r0,#13 						; CR
+		jsr 	#OSPrintCharacter
+		jmp 	#_CDNextLine		
 ._CDExit		
 		mov 	r0,#13 						; final CR
 		jsr 	#OSPrintCharacter

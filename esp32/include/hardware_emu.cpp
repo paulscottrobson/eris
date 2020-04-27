@@ -209,3 +209,12 @@ void HWLoadDirectory(WORD16 target) {
 void HWTransmitCharacter(BYTE8 ch) {
 	printf("%c",ch);
 }
+
+// ****************************************************************************
+//							  Downloader (dummy at present)
+// ****************************************************************************
+
+WORD16 HWDownloadHandler(char *url,char *target,char *ssid,char *password) {
+	printf("Download %s to %s using %s[%s]\n",url,target,ssid,password);
+	return 0;
+}

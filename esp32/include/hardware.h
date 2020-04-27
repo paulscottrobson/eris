@@ -48,6 +48,7 @@ WORD16 HWFileInformation(char *fileName,WORD16 *loadAddress,WORD16 *size);
 WORD16 HWGetLoadSize(void);
 WORD16 HWConnectExternal(char *SSID,char *password);
 WORD16 HWDownloadFile(char *fileName);
+WORD16 HWDownloadHandler(char *url,char *target,char *ssid,char *password);
 void HWTransmitCharacter(BYTE8 ch);
 
 void HWSyncImplementation(LONG32 iCount);

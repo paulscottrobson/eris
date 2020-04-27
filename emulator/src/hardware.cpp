@@ -14,6 +14,7 @@
 #include "gfxkeys.h"
 #include <stdio.h>
 #include <ctype.h>
+#include <string.h>
 
 static BYTE8 keyboardLatch = 0xFF;
 static WORD16 rowValues[6];
@@ -100,8 +101,32 @@ WORD16 HWFileOperation(WORD16 R0,WORD16 R1,WORD16 R2,WORD16 R3) {
 		case 7:
 			HWFileInformation(fileName,&temp,&r);
 			break;
+		case 8:
+			HWDownloadFile(fileName);
 	}
 	return r;
+}
+
+// ****************************************************************************
+//
+//							File Download handler
+//
+// ****************************************************************************
+
+WORD16 HWDownloadFile(char *download) {
+	char *file,*ssid,*password,url[256],target[64];
+	strcpy(url,download);
+	ssid = strchr(url,';');
+	if (ssid == NULL) return 1;
+	*ssid++ = '\0';
+	password = strchr(ssid,';');
+	if (password == NULL) return 1;
+	*password++ = '\0';
+	file = strrchr(url,'/');
+	strcpy(target,(file == NULL) ? url : file+1);
+	printf("%s %s %s %s\n",url,ssid,password,target);
+	for (int i = 0;i < strlen(target);i++) target[i] = tolower(target[i]);
+	return HWDownloadHandler(url,target,ssid,password);
 }
 
 #if defined(WINDOWS) || defined(LINUX)
