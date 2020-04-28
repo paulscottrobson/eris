@@ -65,6 +65,8 @@
 		ldm 	r0,r11,#1 					; get line number
 		skp 	r0 							; we do not list -ve numbers by default
 		jmp 	#_CLListNextLine
+		sknz 	r0 							; or line zero
+		jmp 	#_CLListNextLine
 		;
 		sub 	r0,r6,#0 					; compare against the lowest line
 		sklt 								; out of range

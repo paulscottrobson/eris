@@ -1,0 +1,1871 @@
+; ***********************************************************************
+;
+;             Sword of Fargoal, by Jeff McCord for the CBM Vic 20
+;
+; ***********************************************************************
+;
+;                     Reverse Engineering by Paul Robson
+;
+1    gosub Initialise_338 
+; ***********************************************************************
+;
+;               Enter a new dungeon level,Empty Keyboard Buffer
+;
+; ***********************************************************************
+2    poke 198,0:
+     hidden.gold.count=0:
+     pit.change=0:
+     light.On=0:
+     autoheal.rate=50:
+     monster.speed=20-level:
+     if monster.speed<1 then 
+                 monster.speed=1
+;
+;                               Display Status
+;
+3    print "{13}{11}{11}{11}experience pts"experience:
+     print "{11} experience lv"exp.level:
+     print "{11}{11}  maximum hits"max.hit.points:
+     print "{11}  battle skill"battle.skill:
+     if deepest.level<level then 
+                 deepest.level=level
+5    print "{11}{11} dungeon level"level:
+     print "{11}monsters slain"total.kills:
+     if sword.found.time=0 then 
+                 print "{11}":
+                 goto 8 
+;
+;                     Display Sword Timer, if appropriate
+;
+6    sword.timer=2000- int((time.60hz-sword.found.time)/60):
+     if sword.timer<0 then YourTimeIsUp_324 
+7    print "{11}timer:"sword.timer:
+     if level=0 then Quest.Complete_81 
+; ***********************************************************************
+;
+;                             Create a new level
+;
+; ***********************************************************************
+;
+;           Blank the map, generate 10 rooms, erase them on the map
+;
+8    for i=4602 to 5113:
+         poke i,36:
+         next :
+     for r=1 to 10:
+         w= int(4* rnd(1)+2):
+         x=21-w:
+         x= int(x* rnd(1)):
+         h= int(4* rnd(1)+2):
+         y=21-h:
+         y= int(y* rnd(1)+1):
+         player.map.pos=4602+x+y*22:
+         room.centre.pos(r)=player.map.pos+ int(h/2)*22+w/2+23:
+         for i=1 to h:
+             for j=1 to w:
+                 poke player.map.pos+i*22+j,32:
+                 next :
+             next :
+         next :
+     print "{11}{11}wait...":
+     z=0:
+     c=32:
+     for i=1 to 10:
+         player.map.pos=room.centre.pos(i):
+         if i=5 then ShowStatus_103 
+;
+;   For each room, when at room 5, show status, start dir 0 (right) [above]
+;
+15       v=z
+;
+;             Find a new direction, *not* reverse dir to current
+;
+16       z= int(4* rnd(1)+1):
+         if z=reverse.dir(v) then 16 
+;
+;                 Work out length of the tunnel being opened.
+;
+17       f=1:
+         y= int(5* rnd(1)+5):
+         j=1
+;
+;             Move in next direction, if wall found set flag to 2
+;
+18       player.map.pos=player.map.pos+direction(z):
+         P= peek(player.map.pos):
+         if P=36 then 
+                     f=2
+;
+;                   If off map then undo, and do next room.
+;
+19       if player.map.pos<4646 or player.map.pos>5085 then Undo.And.Next.Room_24 
+;
+;               Find X and Y, if off X or Y edge undo and exit
+;
+20       gosub SplitUpAddress_107 :
+         if x<1 or x>20 then Undo.And.Next.Room_24 
+;
+;            If gone through a wall to open, then do the next room
+;
+21       if f=2 and P=32 then Next.Room_25 
+;
+;    Draw space there, reached the maximum length, if not try another dir.
+;
+22       poke player.map.pos,c:
+         j=j+1:
+         if j=y then 15 
+23       goto 18 
+;
+;                                  Undo move
+;
+24       player.map.pos=player.map.pos-direction(z):
+         goto 15 
+;
+;                              Do the next room
+;
+25       next :
+     gosub SoundFx.EnterDungeon_125 :
+     if first.time.flag=1 then 
+                 first.time.flag=0:
+                 print "{11}your quest begins!!";:
+                 goto 27 
+26   print "{11}your quest continues!
+;
+;      Find a space, and put a temple (38) or sword (37) if appropriate
+;
+27   gosub FindEmptySpaceInN_110 :
+     poke n,38:
+     if level=sword.level and sword.found=0 then 
+                 poke n,37
+;
+;               2-4 StDown(35) 6-11 Gold(47) 3-3+Lev Traps (0)
+;
+;
+;                 Create monsters (both sets), put stairs up
+;
+28   r=2:
+     d=2:
+     c=35:
+     gosub PutMultipleObjects_147 :
+     r=5:
+     d=6:
+     c=47:
+     gosub PutMultipleObjects_147 :
+     r=level:
+     d=3:
+     c=0:
+     gosub PutMultipleObjects_147 :
+     monster2.count= int(3* rnd(1)):
+     for i=0 to monster2.count:
+         gosub FindEmptySpaceInN_110 :
+         monster2.pos(i)=n:
+         monster2.old(i)=32:
+         gosub CreateMonsterSet2_246 :
+         poke n,monster1.char(i):
+         monster2.damage(i)=1:
+         next :
+     monster1.count= int(3* rnd(1)+1):
+     for i=0 to monster1.count:
+         gosub FindEmptySpaceInN_110 :
+         monster1.pos(i)=n:
+         monster1.old(i)=32:
+         gosub CreateMonsterSet1_236 :
+         poke n,monster1.char(i):
+         next :
+     if level>1 or sword.found=1 then 
+                 gosub FindEmptySpaceInN_110 :
+                 poke n,34
+;
+;     Find player pos, do the spirally thing, open view, player,map check
+;
+33   gosub FindEmptySpaceInN_110 :
+     gosub DrawSpiralScreen_140 :
+     poke n,player.old:
+     player.pos=n-screen.size:
+     poke player.pos,player.graphic:
+     poke player.pos+col.ram.offset,3:
+     gosub OpenView_112 :
+     for i1=1 to no.maps.collected:
+         if map.level.no(i1)=level then 102 
+35       next 
+; ***********************************************************************
+;
+;                     Main Loop, refresh the status first
+;
+; ***********************************************************************
+36   print "{13}                      
+37   print "{13}h:"hit.points"{1d} e:"experience"{1d} g:"gold
+; ***********************************************************************
+;
+;                  Get the Next Key, do the next bit of code
+;
+; ***********************************************************************
+38   get key$:
+     monster.move.counter=monster.move.counter+1:
+     if monster.move.counter>monster.speed then 
+                 monster.move.counter=0:
+                 goto MoveAllMonsters_282 
+39   if key$="" then No.Key.Pressed_55 
+; ***********************************************************************
+;
+;                             Command Key Pressed
+;
+; ***********************************************************************
+40   poke vic.freq.3,245:
+     for i=9 to 0 step -1:
+         poke vic.volume,i:
+         next :
+     poke vic.freq.3,0:
+     if key$="c" then 98 
+41   if key$="h" and heal.potions>0 then 53 
+42   if key$="t" and teleport.spells>0 then 52 
+43   if key$="s" and shield.spells>0 then 
+                 shield.spells=shield.spells-1:
+                 shield.On=1:
+                 s$="{13}shield":
+                 goto CastSpellExit_94 
+44   if key$="l" and light.spells>0 then 
+                 light.spells=light.spells-1:
+                 light.On=1:
+                 gosub SeeWithLight_148 :
+                 s$="{13}light":
+                 goto CastSpellExit_94 
+45   if key$="r" and regen.spells>0 then 
+                 regen.spells=regen.spells-1:
+                 autoheal.rate=autoheal.rate/2:
+                 s$="{13}regenerate":
+                 goto CastSpellExit_94 
+46   if key$="p" then 
+                 pass.this.turn=1
+47   if key$="i" and invis.spells>0 then 
+                 invis.spells=invis.spells-1:
+                 invisible.Now=1:
+                 s$="{13}invis":
+                 goto CastSpellExit_94 
+48   if key$="o" and light.On>0 then 91 
+49   if key$="b" and gold>0 then 95 
+50   if key$="q" then QuitProgram_332 
+51   goto 38 
+; ***********************************************************************
+;
+;                               Teleport Spell
+;
+; ***********************************************************************
+52   teleport.spells=teleport.spells-1:
+     poke player.pos,player.old:
+     poke player.pos+col.ram.offset,1:
+     gosub FindEmptySpaceInN_110 :
+     player.pos=n-screen.size:
+     poke player.pos,player.graphic:
+     poke player.pos+col.ram.offset,3:
+     player.old=32:
+     gosub OpenView_112 :
+     gosub SoundFx.Teleport_115 :
+     goto 38 
+; ***********************************************************************
+;
+;                             Take Healing Potion
+;
+; ***********************************************************************
+53   heal.potions=heal.potions-1:
+     x= int(20* rnd(1)+3*level):
+     hit.points=hit.points+x:
+     if hit.points>max.hit.points then 
+                 hit.points=max.hit.points
+54   gosub BlankTopLine_93 :
+     print "{13}healing potion taken!":
+     gosub SoundFx.Healing_130 :
+     goto Main.Loop.ClrStat_36 
+; ***********************************************************************
+;
+;                               No Key Pressed
+;
+; ***********************************************************************
+55   if hit.points<0 then 83 
+;
+;                           Check for autoheal time
+;
+56   autoheal.counter=autoheal.counter+1:
+     if hit.points<max.hit.points and autoheal.counter>hit.points/max.hit.points*autoheal.rate then 
+                 hit.points=hit.points+1:
+                 print "{13}       ":
+                 autoheal.counter=0
+;
+;                 Read joystick, if no move back round again.
+;
+57   gosub ReadJoystickMove_143 :
+     if joystick.offset=0 then Main.Loop.Stat_37 
+; ***********************************************************************
+;
+;                                 Move Player
+;
+; ***********************************************************************
+;
+;                   Check reached next level of experience
+;
+58   if experience>exp.points.next.level then 
+                 gosub NextExperienceLevel_88 
+;
+;                   If was in temple, fix the autoheal back
+;
+59   if temple.affect.autoheal=1 then 
+                 temple.affect.autoheal=0:
+                 autoheal.rate=autoheal.rate*2
+;
+;             Fix back, read what was there, if space no problem
+;
+60   poke player.pos,player.old:
+     poke player.pos+col.ram.offset,1:
+     q=player.pos:
+     v=player.old:
+     player.pos=player.pos+joystick.offset:
+     player.old= peek(player.pos):
+     if player.old=32 then 63 
+;
+;                           If wall, undo the move
+;
+62   if player.old=36 then 
+                 player.pos=q:
+                 player.old=v
+;
+;       Do the move, open up the surrounding squares,do the light check
+;
+63   poke player.pos,player.graphic:
+     poke player.pos+col.ram.offset,3:
+     player.map.pos=player.pos+screen.size:
+     gosub OpenView_112 :
+     if light.On=1 then 
+                 gosub SeeWithLight_148 
+;
+;           If was space, make a footstep noise, and go round again
+;
+64   if player.old=32 then 
+                 poke vic.volume,5:
+                 poke vic.noise,220:
+                 poke vic.noise,0:
+                 poke vic.volume,0:
+                 goto Main.Loop.Stat_37 
+;
+;                            If skipped,not again
+;
+65   x= fre(0):
+     if pass.this.turn=1 then 
+                 pass.this.turn=0:
+                 goto 38 
+;
+;                                Found Money ?
+;
+66   gosub BlankTopLine_93 :
+     if player.old=47 then FoundGoldBag_153 
+67   if player.old=0 then FoundTrap_165 
+;
+;                             Found Stairs Down ?
+;
+68   if player.old=35 then 
+                 print "{13}stairs going down":
+                 v=200:
+                 w=1:
+                 gosub SoundFx.Stairs_124 :
+                 goto Main.Loop.ClrStat_36 
+;
+;                              Found Stairs Up ?
+;
+69   if player.old=34 then 
+                 print "{13}stairs going up":
+                 v=191:
+                 w=-1:
+                 gosub SoundFx.Stairs_124 :
+                 goto Main.Loop.ClrStat_36 
+;
+;                              Monster in set 1
+;
+70   if player.old>26 and player.old<32 then 
+                 monster.set=1:
+                 goto 256 
+;
+;                              Monster in set 2
+;
+71   if player.old>39 and player.old<44 then 
+                 monster.set=0:
+                 goto 260 
+;
+;                                 In a temple
+;
+72   if player.old=38 then 86 
+;
+;                            Found hidden treasure
+;
+73   if player.old=60 then 160 
+;
+;                          Found hole in the ceiling
+;
+74   if player.old=59 then 85 
+;
+;                                 Found a pit
+;
+75   if player.old=61 then 173 
+;
+;                         Found a climbable pit above
+;
+76   if player.old=62 then 
+                 print "{13}climbable pit above!":
+                 goto Delay.And.Continue.Maybe.Map_205 
+;
+;              Check found the sword, if not go back round again
+;
+77   if player.old=37 then 79 
+78   goto Main.Loop.Stat_37 
+; ***********************************************************************
+;
+;                             Found the sword....
+;
+; ***********************************************************************
+79   print "{13}the sword of fargoal!!":
+     gosub SoundFx.FoundSword_120 :
+     sword.found=1:
+     player.old=32:
+     poke player.map.pos,player.old:
+     if sword.found.time=0 then 
+                 experience=experience*2:
+                 sword.found.time=time.60hz
+80   goto Delay.And.Continue.Maybe.Map_205 
+; ***********************************************************************
+;
+;                               Complete Quest
+;
+; ***********************************************************************
+81   gosub ClearMsgAfterDelay_82 :
+     print "{13}{11}{11}{11}{11}{11}{11}{11}{11}your quest is complete":
+     goto 325 
+; ***********************************************************************
+;
+;                       Delay, then Clear Message Area
+;
+; ***********************************************************************
+82   for i=1 to 999:
+         next :
+     print "{13}                      ":
+     return 
+; ***********************************************************************
+;
+;                              Try to Auto-Heal
+;
+; ***********************************************************************
+83   if heal.potions>0 then 53 
+84   gosub ClearMsgAfterDelay_82 :
+     print "{13}you died!!":
+     goto QuitProgram_332 
+; ***********************************************************************
+;
+;                                Ceiling hole.
+;
+; ***********************************************************************
+85   print "{13}hole in the ceiling!!":
+     goto Delay.And.Continue.Maybe.Map_205 
+; ***********************************************************************
+;
+;                                   Temple
+;
+; ***********************************************************************
+86   autoheal.rate=autoheal.rate/2:
+     temple.affect.autoheal=1:
+     if gold>0 then 
+                 print "{13}sacrifice of gold!":
+                 experience=experience+gold:
+                 gold=0:
+                 gosub SoundFx.GoldSacrifice_123 :
+                 goto Delay.And.Continue.Maybe.Map_205 
+87   print "{13}temple!":
+     gosub ClearMsgAfterDelay_82 :
+     goto 38 
+; ***********************************************************************
+;
+;                        Rise to Next Experience Level
+;
+; ***********************************************************************
+88   exp.points.next.level=exp.points.next.level*2:
+     exp.level=exp.level+1:
+     max.hit.points=max.hit.points+ int(15* rnd(1)+5):
+     battle.skill=battle.skill+ int(10* rnd(1)+1):
+     gosub BlankTopLine_93 :
+     print "{13}level raised to"exp.level:
+     for j=1 to 2000:
+         next :
+     gosub BlankTopLine_93 :
+     return 
+; ***********************************************************************
+;
+;                               Light on or off
+;
+; ***********************************************************************
+91   gosub BlankTopLine_93 :
+     if light.On=1 then 
+                 light.On=2:
+                 print "{13}light off":
+                 gosub ClearMsgAfterDelay_82 :
+                 goto 38 
+92   light.On=1:
+     print "{13}light on":
+     gosub ClearMsgAfterDelay_82 :
+     goto 38 
+; ***********************************************************************
+;
+;                               Blank.Top.Line
+;
+; ***********************************************************************
+93   print "{13}                      ":
+     return 
+; ***********************************************************************
+;
+;                  Make the Cast spell sound, then loop back
+;
+; ***********************************************************************
+94   gosub BlankTopLine_93 :
+     print s$" spell cast!":
+     gosub SoundFx.CastSpell_128 :
+     goto Main.Loop.ClrStat_36 
+; ***********************************************************************
+;
+;                                 Hiding Gold
+;
+; ***********************************************************************
+;
+;               Check not too much hidden, and square is blank
+;
+95   if hidden.gold.count>9 or player.old<>32 then Main.Loop.Stat_37 
+;
+;                           If okay, hide your gold
+;
+96   hidden.gold.count=hidden.gold.count+1:
+     poke player.pos+screen.size,60:
+     hidden.gold.amount(hidden.gold.count)=gold:
+     hidden.gold.pos(hidden.gold.count)=player.pos:
+     gosub BlankTopLine_93 :
+     print "{13}hiding"gold"gold p's":
+     gold=0:
+     gosub ClearMsgAfterDelay_82 :
+     goto 38 
+; ***********************************************************************
+;
+;                                Climb Stairs
+;
+; ***********************************************************************
+;
+;                          If on stairs down, do it
+;
+98   if player.old=35 then 
+                 w=1:
+                 experience=experience+ int(10* rnd(1)+1)*level:
+                 level=level+w:
+                 v=200:
+                 gosub SoundFx.Stairs_124 :
+                 player.old=34:
+                 goto Enter.New.Level_2 
+;
+;                            If on stairs up,do it
+;
+99   if player.old=34 then 
+                 w=-1:
+                 level=level+w:
+                 v=191:
+                 gosub SoundFx.Stairs_124 :
+                 player.old=35:
+                 goto Enter.New.Level_2 
+;
+;                  Climbable pit, set up for it, then do it
+;
+100  if player.old=62 then 
+                 pit.change=-1:
+                 P2=player.old:
+                 player.old=61:
+                 P$="up":
+                 goto 174 
+101  goto 38 
+; ***********************************************************************
+;
+;              Map for this level found,so copy the whole screen
+;
+; ***********************************************************************
+102  map.level.no(i1)=0:
+     gosub BlankTopLine_93 :
+     print "{13}treasure map!!":
+     gosub CopyMapToDisplay_329 :
+     poke player.pos+screen.size,player.old:
+     i1=no.maps.collected:
+     goto 35 
+; ***********************************************************************
+;
+;                             Display your Status
+;
+; ***********************************************************************
+103  print "{13}{11}healing potions"heal.potions:
+     print "{11}magic sacks    "magic.sacks:
+     print "{11}spells:":
+     print "{11}  invisibility "invis.spells:
+     print "{11}  regeneration "regen.spells:
+     print "{11}  teleport     "teleport.spells:
+     print "{11}  shield       "shield.spells:
+     print "{11}  drift        "drift.spells:
+     print "{11}  light        "light.spells:
+     print "{11}enchanted weapon ,"enchanted.weapons:
+     print "{11}wait...":
+     goto 15 
+; ***********************************************************************
+;
+;                      Split Address into X and Y Coords
+;
+; ***********************************************************************
+107  x=player.map.pos-4602:
+     y= int(x/22):
+     x= int(x-y*22):
+     return 
+; ***********************************************************************
+;
+;      Put player coordinates into (X,Y),monster pos coords into (XL,YL)
+;
+; ***********************************************************************
+108  z=player.pos-4096:
+     y= int(z/22):
+     x= int(z-y*22):
+     z=monster.pos-4602:
+     monster.y= int(z/22):
+     monster.x= int(z-monster.y*22):
+     return 
+; ***********************************************************************
+;
+;                       Find an empty space on the map
+;
+; ***********************************************************************
+110  n= int(440* rnd(1)+4646):
+     P= peek(n):
+     if P<>32 then FindEmptySpaceInN_110 
+111  return 
+; ***********************************************************************
+;
+;                   Open the View up at the player position
+;
+; ***********************************************************************
+112  for i=1 to 8:
+         n=player.pos+direction(i):
+         poke n, peek(n+screen.size):
+         poke n+col.ram.offset,1:
+         next :
+     return 
+; ***********************************************************************
+;
+;                       Do the Spiral Screen Overwrite
+;
+; ***********************************************************************
+140  for i=1 to 11:
+         for j=i to 23-i:
+             x=i-j*22:
+             y=4118-x:
+             poke y,0:
+             poke y+col.ram.offset,7:
+             y=4601+x:
+             poke y,0:
+             poke y+col.ram.offset,7:
+             next :
+         for j=i to 21-i:
+             x=i*22+j:
+             y=4096+x:
+             poke y,0:
+             poke y+col.ram.offset,7:
+             y=4623-x:
+             poke y,0:
+             poke y+col.ram.offset,7:
+             next :
+         next :
+     return 
+; ***********************************************************************
+;
+;                         Read the Joystick Direction
+;
+; ***********************************************************************
+143  poke via.ddrb.stickctrl,127:
+     W3=-(( peek(via.portb.stick) and 128)=0):
+     poke via.ddrb.stickctrl,255:
+     P= peek(via.porta.stick):
+     W1=-((P and 8)=0):
+     W2=(P and 16)=0:
+     W0=(P and 4)=0:
+     x=W2+W3+1:
+     y=W0+W1+1:
+     joystick.offset=joystick.conv(x,y):
+     return 
+; ***********************************************************************
+;
+;      Read the Joystick Fire Button, try for a period before giving up
+;
+; ***********************************************************************
+145  poke via.ddrb.stickctrl,255:
+     for i=1 to 99:
+         P= peek(via.porta.stick):
+         joystick.fire=-((P and 32)=0):
+         if joystick.fire=1 then 
+                     i=99
+146      next :
+     return 
+; ***********************************************************************
+;
+;               Put object type C on map, number from D to D+R
+;
+; ***********************************************************************
+147  x= int(r* rnd(1)+d):
+     for i=1 to x:
+         gosub FindEmptySpaceInN_110 :
+         poke n,c:
+         next :
+     return 
+; ***********************************************************************
+;
+;                   See up to 2 squares in all 8 directions
+;
+; ***********************************************************************
+148  for i=1 to 8:
+         W(i)=0:
+         n=player.pos+direction(i):
+         x= peek(n):
+         if x=36 then 150 
+149      n=n+direction(i):
+         poke n, peek(n+screen.size)
+150      next :
+     return :
+     n=player.pos+F(i):
+     poke n, peek(n+screen.size):
+     next :
+     goto 64 
+; ***********************************************************************
+;
+;                              Found a gold bag
+;
+; ***********************************************************************
+;
+;                               Work out amount
+;
+153  x= int(20* rnd(1)+10*level):
+     print "{13}treasure: "x"gp's":
+     gosub SoundFx.Treasure_122 :
+     if gold+x>gold.max then 155 
+;
+;             If not too much, get it, erase and loop round again
+;
+154  gold=gold+x:
+     player.old=32:
+     poke player.map.pos,player.old:
+     gosub ClearMsgAfterDelay_82 :
+     goto 38 
+;
+;       Treasure now too much, try to hide it, maybe too much hidden ?
+;
+155  if hidden.gold.count>9 then Main.Loop.ClrStat_36 
+;
+;                         Hide it for you (helpfully)
+;
+156  hidden.gold.count=hidden.gold.count+1:
+     player.old=60:
+     poke player.map.pos,player.old:
+     hidden.gold.amount(hidden.gold.count)=gold+x-gold.max:
+     hidden.gold.pos(hidden.gold.count)=player.pos:
+     for i=1 to 1500:
+         next :
+     if gold=gold.max then 159 
+;
+;                  Work out how much you can have... if any
+;
+158  gold=gold.max:
+     print "{13}can't carry more gold":
+     goto Delay.And.Continue.Maybe.Map_205 
+159  print "{13}hiding the gold      ":
+     goto Delay.And.Continue.Maybe.Map_205 
+; ***********************************************************************
+;
+;                            Found hidden treasure
+;
+; ***********************************************************************
+;
+;                           Find which cache it was
+;
+160  print "{13}hidden treasure!!":
+     gosub SoundFx.Treasure_122 :
+     for j=1 to hidden.gold.count:
+         if player.pos=hidden.gold.pos(j) then 
+                     v=j:
+                     j=hidden.gold.count
+;
+;                         Check there's not too much
+;
+161      next :
+     z=hidden.gold.amount(v):
+     if gold+z>gold.max then 164 
+;
+;               If there is not too much, grab it and continue
+;
+163  gold=gold+z:
+     player.old=32:
+     poke player.map.pos,player.old:
+     goto Delay.And.Continue.Maybe.Map_205 
+;
+;                   Take as much as you can, then leave it.
+;
+164  hidden.gold.amount(v)=gold+z-gold.max:
+     gold=gold.max:
+     gosub ClearMsgAfterDelay_82 :
+     print "{13}gold too heavy":
+     goto Delay.And.Continue.Maybe.Map_205 
+; ***********************************************************************
+;
+;                                 Hit a Trap
+;
+; ***********************************************************************
+;
+;       Pick one, and go there, 4 in 9 are nasty,the other 5 are items
+;
+165  r= int(9* rnd(1)+1):
+     on r goto 172 ,177,166,178,180,180,180,180,180
+;
+;              Explosion Trap (1 in 9). Do the explosion effect
+;
+166  poke vic.noise,128:
+     print "{13}explosion!!":
+     for j=1 to 20:
+         if j/2= int(j/2) then 
+                     poke player.pos+col.ram.offset,2:
+                     goto 168 
+167      poke player.pos+col.ram.offset,7
+;
+;              If no shield, then major damage, and can lose map
+;
+168      poke vic.volume,14/j+1:
+         for player.old=1 to 4:
+             poke player.pos,explode.pos(player.old):
+             next :
+         next :
+     poke vic.noise,0:
+     poke vic.volume,0:
+     if shield.On=0 then 
+                 hit.points=hit.points- int(15* rnd(1)+level):
+                 can.lose.map=1:
+                 goto 171 
+;
+;                           Shield protected player
+;
+170  shield.On=0:
+     print "{13}shielded from blast!":
+     gosub ClearMsgAfterDelay_82 
+;
+;                                      
+;
+171  player.old=32:
+     poke player.map.pos,player.old:
+     poke player.pos,player.graphic:
+     goto CheckLoseMap_206 
+;
+;                              Pit Trap (1 in 9)
+;
+172  pit.change=0:
+     print "{13}pit!!...you fell!":
+     monster.init.hit.points= int(10* rnd(1)+level):
+     player.old=61:
+     poke player.map.pos,player.old:
+     poke player.pos,player.old:
+     can.lose.map=1:
+     gosub SoundFx.Fall_113 :
+     goto 194 
+; ***********************************************************************
+;
+;                             Climbing a pit down
+;
+; ***********************************************************************
+173  P$="down":
+     pit.change=1:
+     P2=player.old:
+     player.old=62:
+     PT= int(4* rnd(1)+2)
+; ***********************************************************************
+;
+;                               Climbing a pit
+;
+; ***********************************************************************
+;
+;       Work out distance and direction total, evens chance of falling
+;
+174  x=PT*pit.change:
+     level=level+x:
+     gosub BlankTopLine_93 :
+     print "{13}climbing the pit...":
+     y= int(2* rnd(1)):
+     gosub ClearMsgAfterDelay_82 :
+     poke player.pos,P2:
+     if y=1 then 
+                 print "{13}you fell!":
+                 monster.init.hit.points= int(10* rnd(1)+3*PT+level):
+                 gosub SoundFx.Fall_113 :
+                 goto 193 
+176  print "{13}"P$; abs(x)"levels":
+     experience=experience+ int(10* rnd(1)+PT*5):
+     gosub ClearMsgAfterDelay_82 :
+     goto Enter.New.Level_2 
+;
+;                            Ceiling Trap (1 in 9)
+;
+177  print "{13}ceiling trap!":
+     monster.init.hit.points= int(10* rnd(1)+level):
+     player.old=59:
+     poke player.map.pos,player.old:
+     poke player.pos,player.old:
+     gosub SoundFx.Trap_116 :
+     can.lose.map=1:
+     goto 194 
+;
+;                           Teleport Trap (1 in 9)
+;
+178  print "{13}teleport...":
+     player.old=32:
+     poke player.map.pos,player.old:
+     poke player.pos,player.old:
+     gosub FindEmptySpaceInN_110 :
+     player.pos=n-screen.size:
+     poke player.pos,player.graphic:
+     poke player.pos+col.ram.offset,3:
+     gosub OpenView_112 :
+     gosub SoundFx.Teleport_115 :
+     gosub ClearMsgAfterDelay_82 :
+     can.lose.map=1:
+     goto CheckLoseMap_206 
+; ***********************************************************************
+;
+;                                 Got an Item
+;
+; ***********************************************************************
+;
+;             Random amount of experience,pick object, make sound
+;
+180  experience=experience+ int(50* rnd(1)+level):
+     player.old=32:
+     poke player.map.pos,player.old:
+     x= int(14* rnd(1)+1):
+     W1=237:
+     W3=219:
+     gosub SoundFx.GotItem_126 :
+     on x goto 183 ,184,183,182,184,185,190,186,187,188,192,185,190,191
+;
+;                  All fairly simple. Note Enchanted Weapon
+;
+182  print "{13}regeneration spell!!":
+     regen.spells=regen.spells+1:
+     goto Delay.And.Continue.Maybe.Map_205 
+183  print "{13}healing potion!!":
+     heal.potions=heal.potions+1:
+     goto Delay.And.Continue.Maybe.Map_205 
+184  print "{13}magic sack!!":
+     magic.sacks=magic.sacks+1:
+     gold.max=gold.max+100:
+     goto Delay.And.Continue.Maybe.Map_205 
+185  print "{13}shield spell!!":
+     shield.spells=shield.spells+1:
+     goto Delay.And.Continue.Maybe.Map_205 
+186  print "{13}light spell!!":
+     light.spells=light.spells+1:
+     goto Delay.And.Continue.Maybe.Map_205 
+187  print "{13}enchanted weapon!!":
+     enchanted.weapons=enchanted.weapons+1:
+     battle.skill=battle.skill+ int(10* rnd(1)+5):
+     goto Delay.And.Continue.Maybe.Map_205 
+;
+;                            Got a map to a level
+;
+188  x= int(8* rnd(1)+level+3):
+     print "{13}map to"x"th level!!":
+     no.maps.collected=no.maps.collected+1:
+     map.level.no(no.maps.collected)=x:
+     goto Delay.And.Continue.Maybe.Map_205 
+190  print "{13}teleport spell!!":
+     teleport.spells=teleport.spells+1:
+     goto Delay.And.Continue.Maybe.Map_205 
+191  print "{13}drift spell!!":
+     drift.spells=drift.spells+1:
+     goto Delay.And.Continue.Maybe.Map_205 
+192  print "{13}invisibility spell!!":
+     invis.spells=invis.spells+1:
+     goto Delay.And.Continue.Maybe.Map_205 
+; ***********************************************************************
+;
+;                              Pit falling code
+;
+; ***********************************************************************
+;
+;       Tweak for "falling up". Monster init hit points is damage here.
+;
+193  if pit.change<1 then 
+                 level=level-x:
+                 player.old=62
+;
+;                 Wait for escape, if so goto the escape code
+;
+194  gosub ReadFireOverTime_145 :
+     if joystick.fire=1 then 196 
+195  goto 202 
+;
+;         Do a "drift" spell. Can't if you have none, or it's a trap.
+;
+196  F1=0:
+     if r=2 then 200 
+197  if drift.spells=0 then 202 
+;
+;                            Do the trap, continue
+;
+198  drift.spells=drift.spells-1:
+     print "{13}like a feather...":
+     gosub ClearMsgAfterDelay_82 :
+     can.lose.map=0:
+     goto 203 
+;
+;               Check for teleport to safety, need one of those
+;
+200  if teleport.spells=0 then 202 
+201  print "{13}teleport to safety!":
+     gosub ClearMsgAfterDelay_82 :
+     can.lose.map=0:
+     goto 52 
+;
+;            Did not escape falling, does damage, then continues.
+;
+202  hit.points=hit.points-monster.init.hit.points
+203  if pit.change=1 then Enter.New.Level_2 
+204  goto CheckLoseMap_206 
+; ***********************************************************************
+;
+;            Delay, and loop round. *May* cause you to lose a map
+;
+; ***********************************************************************
+205  for j=1 to 1500:
+         next 
+206  if can.lose.map=0 or  int(4* rnd(1))>0 then 208 
+;
+;      You lost a map, redraw the darkness in spiral, open that bit up.
+;
+207  gosub BlankTopLine_93 :
+     print "{13}lost your map!":
+     gosub DrawSpiralScreen_140 :
+     poke player.pos,player.graphic:
+     poke player.pos+col.ram.offset,3:
+     gosub OpenView_112 :
+     gosub ClearMsgAfterDelay_82 
+208  can.lose.map=0:
+     goto Main.Loop.ClrStat_36 
+; ***********************************************************************
+;
+;                           Monster hit the player
+;
+; ***********************************************************************
+;
+;      Generate the sound, recalculate player map pos, decide which set
+;
+209  poke vic.volume,15:
+     for i1=0 to 30:
+         poke vic.freq.2,230-i1:
+         poke vic.freq.3,175+i1:
+         next :
+     for I2=15 to 0 step -1:
+         poke vic.volume,I2:
+         for i1=1 to 10:
+             next :
+         next :
+     gosub SoundFx.Off_139 :
+     player.map.pos=player.pos+screen.size:
+     gosub BlankTopLine_93 :
+     if monster.set=0 then 214 
+;
+;             Get info from set 1,check for really nasty monsters
+;
+212  monster.strength=monster1.strength(j):
+     if monster.strength=0 then DemonTakesExperience_234 
+213  monster.hit.points=monster1.hitpoint(j):
+     d=0:
+     monster.name$=monster1.fullname$(j):
+     goto 216 
+;
+;             Get info from set 2,check for really nasty monsters
+;
+214  monster.strength=monster2.strength(j):
+     if monster.strength=0 then MageTakesSpells_233 
+215  monster.hit.points=monster2.hitpoint(j):
+     d=1:
+     monster.name$=monster2.fullname$(j)
+;
+;               Print attacking monster, check teleport escape
+;
+216  print "{13}you are attacked by":
+     gosub ClearMsgAfterDelay_82 :
+     print "{13}"monster.name$:
+     gosub ReadFireOverTime_145 :
+     if joystick.fire=1 then 230 
+;
+;               Calculate strengths, allowing for battle skill
+;
+217  monster.hit.damage=monster.strength/battle.skill:
+     monster.init.hit.points=monster.hit.points
+; ***********************************************************************
+;
+;                       Fighting Loop (Monster Attacks)
+;
+; ***********************************************************************
+;
+;                        If shield, can't take damage
+;
+218  if shield.On=1 then 220 
+;
+;                           Take appropriate damage
+;
+219  hit.points=hit.points- int(monster.hit.damage*4*level* rnd(1)+1)
+;
+;    If Set 2, and gold, or have sword go to steal code if rogue or strong
+;
+220  if d=1 and gold>0 or sword.found=1 then 
+                 if monster.hit.damage<.5 or monster.hit.damage>1 or c=42 then 225 
+;
+;                   Monster gets clobbered, check for dead
+;
+221  monster.hit.points=monster.hit.points- int(1/monster.hit.damage*4*level* rnd(1)+1+enchanted.weapons):
+     if monster.hit.points<0 then 228 
+;
+;                            Check if we are dead
+;
+222  if hit.points<-5 then 
+                 gosub BlankTopLine_93 :
+                 print "{13}slain by ":
+                 gosub ClearMsgAfterDelay_82 :
+                 print "{13}"monster.name$:
+                 goto QuitProgram_332 
+;
+;        Show info, show attack, teleport check, if not go back round
+;
+223  gosub BlankTopLine_93 :
+     print "{13}hits:"hit.points,:
+     gosub ShowMonsterAttack_291 :
+     gosub ReadFireOverTime_145 :
+     if joystick.fire=1 then 230 
+224  goto 218 
+; ***********************************************************************
+;
+;                                 Steal code
+;
+; ***********************************************************************
+;
+;                Sword stolen if you have it. This is mean :(
+;
+225  if sword.found=1 then 
+                 sword.found=0:
+                 print "{13}the sword is stolen!!":
+                 gosub ClearMsgAfterDelay_82 :
+                 monster.pos=0:
+                 return 
+;
+;    Otherwise steal all your gold ! This is really mean :( 304 moves it.
+;
+226  d=-1:
+     P=player.graphic:
+     gosub BlankTopLine_93 :
+     print "{13}your gold is stolen!!":
+     gosub ClearMsgAfterDelay_82 :
+     monster.gold(j)=gold:
+     gold=0:
+     goto 304 
+;
+;     Monster killed code. Shield down, show some stuff,score,kills etc.
+;
+228  shield.On=0:
+     experience=experience+(monster.strength+monster.init.hit.points)*level:
+     battle.skill=battle.skill+ int(5* rnd(1)+1):
+     total.kills=total.kills+1:
+     player.old=32:
+     monster.pos=0:
+     gosub BlankTopLine_93 :
+     print "{13}you vanquished":
+     gosub ClearMsgAfterDelay_82 :
+     print "{13}"monster.name$:
+     gosub ClearMsgAfterDelay_82 :
+     return
+; ***********************************************************************
+;
+;                            Teleport Escape Code
+;
+; ***********************************************************************
+;
+;                           Check spells remaining
+;
+230  if teleport.spells=0 then 217 
+;
+;                   If set, put the monster where you were
+;
+231  player.old=c:
+     poke player.map.pos,player.old:
+     gosub BlankTopLine_93 :
+     if monster.set=0 then 
+                 monster2.pos(j)=player.map.pos:
+                 teleport.esc.flag=1:
+                 return 
+;
+;               Same for set 1, both return with teleport set.
+;
+232  monster1.pos(j)=player.map.pos:
+     teleport.esc.flag=1:
+     return 
+; ***********************************************************************
+;
+;                       Mage takes away all your spells
+;
+; ***********************************************************************
+233  print "{13}the mage takes your":
+     gosub ClearMsgAfterDelay_82 :
+     print "{13}magic spells!!":
+     invis.spells=0:
+     regen.spells=0:
+     teleport.spells=0:
+     shield.spells=0:
+     drift.spells=0:
+     light.spells=0:
+     goto 235 
+; ***********************************************************************
+;
+;                     Demon reduces experience level by 1
+;
+; ***********************************************************************
+234  print "{13}the demon drains your":
+     gosub ClearMsgAfterDelay_82 :
+     print "{13}experience level!!":
+     experience= int(experience/2):
+     if exp.level>1 then 
+                 exp.level=exp.level-1
+235  monster.pos=0:
+     gosub ClearMsgAfterDelay_82 :
+     return 
+; ***********************************************************************
+;
+;                  Create Monster from the first set of data
+;
+; ***********************************************************************
+;
+;          Init name, create strength/hp, identify weak/strong types
+;
+236  s$="":
+     monster.hit.points=0:
+     monster.strength=0:
+     for j=1 to 2+ int(level*.25):
+         monster.strength=monster.strength+ int(4* rnd(1)+level):
+         monster.hit.points=monster.hit.points+ int(6* rnd(1)+level*1.5):
+         next :
+     x=monster.strength/battle.skill:
+     y= int(x*5):
+     if y>6 then
+                 s$="power ":
+                 goto 240
+239  if y<1 then
+                 s$="weak
+;
+;                          Check for normal monsters
+;
+240  x= int(4* rnd(1)+level/2):
+     if x<10 then 243
+;
+;                        Slightly more nasty monsters
+;
+241  r= int(6* rnd(1)):
+     if r>0 then
+                 x=10-r:
+                 goto 243
+;
+;         The really nasty one... a demon takes all  your experience
+;
+242  monster1.strength(i)=0:
+     monster1.char(i)=28:
+     return
+;
+;                           Set up everything else
+;
+243  monster1.char(i)=monster1.graphic(x):
+     if s$="" then
+                 s$=monster1.prefix$(x)+"
+244  monster1.fullname$(i)=s$+monster1.name$(x):
+     monster.strength=monster.strength+ int(x* rnd(1)+x):
+     monster.hit.points=monster.hit.points+ int(x* rnd(1)+x):
+     monster1.strength(i)=monster.strength:
+     monster1.hitpoint(i)=monster.hit.points:
+     return 
+;
+;          Init name, create strength/hp, identify weak/strong types
+;
+; ***********************************************************************
+;
+;                 Create Monster from the second set of data
+;
+; ***********************************************************************
+246  s$="":
+     monster.hit.points=0:
+     monster.strength=0:
+     for j=1 to 3+ int(level*.25):
+         monster.strength=monster.strength+ int(3* rnd(1)+level*1.5):
+         monster.hit.points=monster.hit.points+ int(4* rnd(1)+level):
+         next :
+     x=monster.strength/battle.skill:
+     y= int(x*5):
+     if y>6 then 
+                 s$="exper ":
+                 goto 250 
+249  if y<1 then 
+                 s$="inferior 
+;
+;                          Check for normal monsters
+;
+250  x= int(4* rnd(1)+level/2):
+     if x<10 then 253 
+;
+;                        Slightly more nasty monsters
+;
+251  r= int(6* rnd(1)):
+     if r>0 then 
+                 x=10-r:
+                 goto 253 
+;
+;            The really nasty one... a mage takes all  your spells
+;
+252  monster2.strength(i)=0:
+     monster1.char(i)=41:
+     return 
+;
+;                           Set up everything else
+;
+253  monster1.char(i)=monster2.graphic(x):
+     if s$="" then 
+                 s$=monster2.prefix$(x)+" 
+254  monster2.fullname$(i)=s$+monster2.name$(x):
+     monster.strength=monster.strength+ int(x* rnd(1)+x):
+     monster.hit.points=monster.hit.points+ int(x* rnd(1)+x):
+     monster2.strength(i)=monster.strength:
+     monster2.hitpoint(i)=monster.hit.points:
+     return 
+;
+;                           Run into Monster, set 1
+;
+256  for j=0 to monster1.count:
+         if player.map.pos=monster1.pos(j) then 
+                     v=j:
+                     j=monster1.count
+257      next :
+     monster.strength=monster1.strength(v):
+     if monster.strength=0 then 
+                 gosub DemonTakesExperience_234 :
+                 player.old=monster1.old(v):
+                 poke player.map.pos,player.old:
+                 monster1.pos(v)=0:
+                 goto Main.Loop.Stat_37 
+259  monster.hit.points=monster1.hitpoint(v):
+     d=0:
+     monster.name$=monster1.fullname$(v):
+     goto 264 
+;
+;                           Run into Monster, set 2
+;
+260  for j=0 to monster2.count:
+         if player.map.pos=monster2.pos(j) then 
+                     v=j:
+                     j=monster2.count
+261      next :
+     monster.strength=monster2.strength(v):
+     if monster.strength=0 then 
+                 gosub MageTakesSpells_233 :
+                 player.old=monster2.old(v):
+                 poke player.map.pos,player.old:
+                 monster2.pos(v)=0:
+                 goto Main.Loop.Stat_37 
+263  monster.hit.points=monster2.hitpoint(v):
+     d=monster2.damage(v):
+     monster.name$=monster2.fullname$(v)
+;
+;        Tell us all about it, if joystick not centred, go round again
+;
+264  print "{13}"monster.name$:
+     gosub SoundFx.EnterDungeon_125 :
+     gosub BlankTopLine_93 :
+     gosub ReadJoystickMove_143 :
+     if joystick.offset<>0 then 281 
+;
+;                              Set up for battle
+;
+265  gosub BlankTopLine_93 :
+     x=monster.strength/battle.skill:
+     monster.init.hit.points=monster.hit.points
+; ***********************************************************************
+;
+;                   Battle loop Number 2 (player aggressor)
+;
+; ***********************************************************************
+;
+;                      Player hits, if monster dead exit
+;
+266  monster.hit.points=monster.hit.points- int(1/x*4*level* rnd(1)+1+enchanted.weapons):
+     if monster.hit.points<0 then 272 
+;
+;                      Skip monster attack if shield on
+;
+267  if shield.On=1 then 270 
+;
+;                               Monster attacks
+;
+268  hit.points=hit.points- int(x*4*level* rnd(1)+1):
+     if hit.points<-5 then 
+                 print "{13}thou art slain!":
+                 goto QuitProgram_332 
+;
+;                                  Set 2 hit
+;
+270  if monster.set=0 then 278 
+;
+;                                  Set 1 hit
+;
+271  monster1.hitpoint(v)=monster.hit.points:
+     goto 279 
+;
+;       Monster was killed. No Invis,No Shield,announce,fix up if set 1
+;
+272  invisible.Now=0:
+     shield.On=0:
+     poke player.pos,player.graphic:
+     experience=experience+(monster.strength+monster.init.hit.points)*level:
+     battle.skill=battle.skill+ int(5* rnd(1)+1):
+     total.kills=total.kills+1:
+     print "{13}you have slain ":
+     W1=231:
+     W3=237:
+     gosub SoundFx.GotItem_126 :
+     gosub BlankTopLine_93 :
+     print "{13}"monster.name$:
+     if monster.set=1 then 
+                 player.old=monster1.old(v):
+                 poke player.map.pos,player.old:
+                 monster1.pos(v)=0:
+                 goto Delay.And.Continue.Maybe.Map_205 
+;
+;                               Fix up if set 2
+;
+275  player.old=monster2.old(v):
+     poke player.map.pos,player.old:
+     monster2.pos(v)=0:
+     if d>0 then Delay.And.Continue.Maybe.Map_205 
+;
+;                             Recover stolen gold
+;
+276  for i=1 to 1500:
+         next :
+     gosub BlankTopLine_93 :
+     print "{13}found your"monster.gold(v)"gold!!":
+     gold=gold+monster.gold(v):
+     goto Delay.And.Continue.Maybe.Map_205 
+;
+;                           Post-hit code for Set 2
+;
+278  monster2.hitpoint(v)=monster.hit.points
+;
+;         Post-hit code both. Display HP, go back if Joystick centred
+;
+279  gosub BlankTopLine_93 :
+     print "{13}hits:"hit.points,:
+     c=player.old:
+     gosub ShowMonsterAttack_291 :
+     gosub ClearMsgAfterDelay_82 :
+     gosub ReadJoystickMove_143 :
+     if joystick.offset=0 then 266 
+;
+;                             Escaped, shield off
+;
+280  shield.On=0
+281  gosub BlankTopLine_93 :
+     goto 39 
+; ***********************************************************************
+;
+;                            Move All the Monsters
+;
+; ***********************************************************************
+;
+;                             Move monster set 1
+;
+282  d=1:
+     monster.set=1:
+     for j=0 to monster1.count:
+         monster.pos=monster1.pos(j):
+         if monster.pos=0 then 
+                     next :
+                 goto 286 
+283  P=monster1.old(j):
+     c=monster1.char(j):
+     teleport.esc.flag=0:
+     gosub MoveMonster_293 :
+     if teleport.esc.flag=1 then 52 
+285  monster1.old(j)=P:
+     monster1.pos(j)=monster.pos:
+     next 
+;
+;                             Move monster set 2
+;
+286  monster.set=0:
+     for j=0 to monster2.count:
+         monster.pos=monster2.pos(j):
+         if monster.pos=0 then 
+                     next :
+                 goto Main.Loop.Stat_37 
+;
+;                     Assassins are invisible in the dark
+;
+287  d=monster2.damage(j):
+     P=monster2.old(j):
+     c=monster1.char(j):
+     if c=40 and light.On=1 then 
+                 c=41
+288  gosub MoveMonster_293 :
+     if teleport.esc.flag=1 then 52 
+290  monster2.damage(j)=d:
+     monster2.old(j)=P:
+     monster2.pos(j)=monster.pos:
+     next :
+     goto Main.Loop.Stat_37 
+; ***********************************************************************
+;
+;           Show the monster attack text, and make the sound effect
+;
+; ***********************************************************************
+291  w= int(7* rnd(1)+1):
+     if monster.set=1 then 
+                 print monster1.attack$(w):
+                 gosub SoundFx.Monster.Set1_131 :
+                 return 
+292  print monster2.attack$(w):
+     gosub SoundFx.Monster.Set2_132 :
+     return 
+; ***********************************************************************
+;
+;                              Move the monster
+;
+; ***********************************************************************
+;
+;                   Calculate distance, not if too far away
+;
+293  monster.move.random.count=0:
+     gosub GetPlayerAndMonsterCoords_108 :
+     xdist= abs(x-monster.x):
+     ydist= abs(y-monster.y):
+     if xdist>9 or ydist>9 then 
+                 return 
+;
+;             If player on temple then monster heads off randomly
+;
+294  if player.old=38 then 296 
+;
+;               If not invisible or the light is on then chase
+;
+295  if invisible.Now=0 or light.On=1 then 297 
+;
+;                                Random target
+;
+296  x= int(23* rnd(1)):
+     y= int(24* rnd(1))
+;
+;             Set up, Dimension Spider (29), handles differently
+;
+297  dir.x=0:
+     dir.y=0:
+     monster.move.retry.count=0:
+     z=0:
+     w=P:
+     monster.map.char=monster.pos-screen.size:
+     if c=29 then 319 
+;
+;                             Calculate direction
+;
+299  if x<monster.x then 
+                 dir.x=-1:
+                 goto 301 
+300  if x>monster.x then 
+                 dir.x=1
+301  if y<monster.y then 
+                 dir.y=-22:
+                 goto 303 
+302  if y>monster.y then 
+                 dir.y=22
+;
+;                 Calculate direction,erase monster,read map
+;
+303  z=dir.x+dir.y:
+     poke monster.pos,P:
+     K2= peek(monster.map.char)
+;
+;                    If map not empty, update the display
+;
+304  if K2<>0 then 
+                 poke monster.map.char,P:
+                 poke monster.map.char+col.ram.offset,1
+;
+;   Read scrn. If Monster (25..31) Player (39..44) or Wall (36) then probs
+;
+305  P= peek(monster.pos+z*d):
+     if P>25 and P<32 or P>39 and P<44 or P=36 or P=28 or P=41 then 307 
+;
+;                               Otherwise move
+;
+306  goto 311 
+;
+;                 There were probs ! If no move, skip retries
+;
+307  if monster.x=x or monster.y=y then 310 
+;
+;                           Try again with vertical
+;
+308  if monster.move.retry.count=0 then 
+                 z=z-dir.x:
+                 monster.move.retry.count=1:
+                 goto 305 
+;
+;                      Then... try again with horizontal
+;
+309  if monster.move.retry.count=1 then 
+                 z=z+dir.x-dir.y:
+                 monster.move.retry.count=2:
+                 goto 305 
+;
+;   Then try up to 5 random directions, calc new pos map pos,check contact
+;
+310  P=w:
+     z=0:
+     if monster.move.random.count<5 then 
+                 monster.move.random.count=monster.move.random.count+1:
+                 goto 296 
+;
+;                              Move the monster
+;
+311  monster.pos=monster.pos+z*d:
+     monster.map.char=monster.map.char+z*d:
+     K1= peek(monster.map.char):
+     if K1=player.graphic then 
+                 P=player.old:
+                 goto 209 
+;
+;                   Have left the money bag, sweep it up :)
+;
+313  if P=47 and monster.set=0 then 
+                 P=32:
+                 goto 317 
+;
+;                             Opened up new areas
+;
+314  if P=0 then 
+                 P=32:
+                 goto 317 
+;
+;                        Kill monster if it stole gold
+;
+315  if d=-1 and K1=0 then 
+                 monster.pos=0:
+                 return 
+;
+;                 Kill if set 2 and stepped on pit down [61]
+;
+316  if P=61 and monster.set=1 then 
+                 monster.pos=0:
+                 return 
+;
+;                   Position it, and update the map if reqd
+;
+317  poke monster.pos,c:
+     poke monster.map.char+col.ram.offset,7:
+     if K1<>0 then 
+                 poke monster.map.char,c
+318  return 
+; ***********************************************************************
+;
+;       Dimension Spider Code. If far enough away then normal behaviour
+;
+; ***********************************************************************
+319  if xdist>3 or ydist>3 or xdist=1 and ydist=1 then 299 
+;
+;                      Look for a space near the player
+;
+320  for i1=1 to 4:
+         r= int(8* rnd(1)+1):
+         M3=player.pos+direction(r):
+         K2= peek(M3):
+         if K2=32 then 
+                     i1=4:
+                     next :
+                 goto 322 
+321  next :
+     goto 299 
+;
+;                       Space found, move the DS there
+;
+322  poke monster.pos,P:
+     monster.pos=M3+screen.size:
+     K2= peek(monster.map.char):
+     if K2<>0 then 
+                 poke monster.map.char,P
+323  P=32:
+     monster.map.char=M3:
+     goto 317 
+; ***********************************************************************
+;
+;                                   Time Up
+;
+; ***********************************************************************
+324  print "{11}out of time!
+325  for i=1 to 2000:
+         next :
+     print "{13}{1d}your scores:":
+     print "{11}{11}{1d}  experience"experience:
+     print "{11}{1d}       level"exp.level:
+     print "{11}{11}{1d}  deepest lv"deepest.level:
+     print "{11}{1d}    monsters"total.kills:
+     print "{11}{11}{1d}  health:"hit.points"hits":
+     print "{11}{1d}   skill:"battle.skill:
+     if sword.timer<0 then 
+                 sword.timer=0
+328  sword.timer= int((time.60hz-start.time)/3600):
+     print "{11}{11}{1d}quest took"sword.timer"min":
+     print "{11}{11}{1d}play again? ";:
+     goto 334 
+; ***********************************************************************
+;
+;                             Copy Map to Screen
+;
+; ***********************************************************************
+329  poke player.pos+screen.size,player.graphic:
+     for i=1 to 11:
+         for j=i to 23-i:
+             x=i-j*22:
+             poke 4118-x, peek(4624-x):
+             poke 4601+x, peek(5107+x):
+             next :
+         for j=i to 21-i:
+             x=i*22+j:
+             poke 4096+x, peek(4602+x):
+             poke 4623-x, peek(5129-x):
+             next :
+         next :
+     return 
+; ***********************************************************************
+;
+;                                Quit.Program
+;
+; ***********************************************************************
+332  gosub ClearMsgAfterDelay_82 :
+     print "{13}experience level:"exp.level:
+     gosub ClearMsgAfterDelay_82 :
+     print "{13}dungeon level:"level:
+     gosub SoundFx.TimeOut_118 :
+     gosub CopyMapToDisplay_329 :
+     gosub BlankTopLine_93 :
+     print "{13}again? ";
+334  get key$:
+     if key$="" then 334 
+335  if key$="y" then 
+                 print "yes":
+                 for i=1 to 200:
+                     next :
+                 run 
+336  if key$="n" then 
+                 print "{13}":
+                 new 
+337  goto 334 
+; ***********************************************************************
+;
+;                             Initialise.Program
+;
+; ***********************************************************************
+;
+;            Set up the system stuff, sound stuff, display title.
+;
+338  col.ram.offset=33792:
+     screen.size=506:
+     vic.volume=36878:
+     vic.freq.1=36874:
+     vic.freq.2=36875:
+     vic.freq.3=36876:
+     vic.noise=36877:
+     for i=0 to 10:
+         read sound.4(i),sound.3(i),sound.1(i),sound.2(i),sound.5(i),sound.6(i):
+         next :
+     print "{13}{05}{11}epyx presents:":
+     print "{11}{11}{11}{11}{11}the sword of fargoal!!":
+     print "{1e}$$$$$$$$$$$$$$$$$$$$$${05}":
+     print "{11}{11}{1d}{1d}{1d}by: jeff mccord{11}         c mcmlxxxii":
+     gosub SoundFx.FoundSword_120 
+;
+;      Dim and read/init arrays,more system, set up HP/BSk,37139 is DDRA
+;
+343  dim monster1.pos(4),monster2.pos(3),monster1.old(4),monster2.old(3),monster1.hitpoint(4),monster2.hitpoint(3),monster2.damage(3),monster2.strength(3),monster1.strength(4),joystick.conv(2,2):
+     poke 37139,0:
+     via.ddrb.stickctrl=37154:
+     via.porta.stick=37137:
+     via.portb.stick=37152:
+     for i=0 to 2:
+         for j=0 to 2:
+             read joystick.conv(j,i):
+             next :
+         next :
+     reverse.dir(1)=2:
+     reverse.dir(2)=1:
+     reverse.dir(3)=4:
+     reverse.dir(4)=3:
+     level=1:
+     exp.level=1:
+     for i=1 to 8:
+         read direction(i):
+         next :
+     x= rnd(-time.60hz):
+     player.graphic=26:
+     start.time=time.60hz:
+     for i=1 to 3:
+         hit.points=hit.points+ int(6* rnd(1)+1):
+         battle.skill=battle.skill+ int(6* rnd(1)+1):
+         next 
+;
+;                     Read more Dirs,inits, read monsters
+;
+347  for i=1 to 4:
+         read explode.pos(i):
+         next :
+     first.time.flag=1:
+     max.hit.points=hit.points:
+     exp.points.next.level=200:
+     player.old=32:
+     heal.potions=1:
+     teleport.spells=1:
+     gold.max=100:
+     sword.level= int(5* rnd(1)+15):
+     for i=0 to 9:
+         read monster1.prefix$(i),monster1.name$(i),monster1.graphic(i),monster2.prefix$(i),monster2.name$(i),monster2.graphic(i):
+         next :
+     for i=1 to 7:
+         read monster1.attack$(i),monster2.attack$(i):
+         next :
+     return :
+     data 6,157,1,219,0,0,4,157,1,231,219,226,2,157,0,226,0,0,
+          6,157,0,231,0,0
+351  data 4,172,1,237,226,231,2,169,0,231,0,0,4,169,0,226,0,0,
+          2,157,1,231,226,219,4,157,0,226,0,0,2,152,0,219,0,0,
+          8,157,4,207,226,219,-23,-22,-21,-1,0,1,21,22,23,1,-1,
+          22,-22,-21,21,-23,23,43,38,61,59,
+
+          a,dire wolf,31,a,rogue,
+          42
+;
+;                      Monsters, 2 on the previous line
+;
+355  data an,ogre,27,a,barbarian,41,a,hobgoblin,27,an,elvin ranger,
+          41,a,werebear,27,a,dwarven guard,43,a,gargoyle,28,a,
+          mercenary,41,a,troll,27,a,swordsman,41,a,wyvern,30,
+          a,monk,41,a,dimension spider,29,a,dark warrior,41,a,
+          shadow dragon,30
+358  data an,assassin,40,a,fyre drake,30,a,war lord,41,
+
+crunch,
+          clang,claw,ouch!,gnarl,slash,ugh!,clink,growl!,chop,
+          shred,thud,thump,shriek!
