@@ -12,16 +12,6 @@
 	word	$0003
 	word	$42fa,$403f,$6010
 
-	word	5			; Word '+!'
-	word	RPL_AddWrite
-	word	$0002
-	word	$282a,$2c2f
-
-	word	5			; Word 'emit'
-	word	RPL_Emit
-	word	$0002
-	word	$420d,$6329
-
 	word	5			; Word '0='
 	word	RPL_EqualZero
 	word	$0002
@@ -31,6 +21,26 @@
 	word	RPL_LessZero
 	word	$0002
 	word	$8000,$2424
+
+	word	5			; Word 'min'
+	word	RPL_Min
+	word	$0002
+	word	$4175,$600e
+
+	word	5			; Word 'max'
+	word	RPL_Max
+	word	$0002
+	word	$4035,$6018
+
+	word	5			; Word '+!'
+	word	RPL_AddWrite
+	word	$0002
+	word	$282a,$2c2f
+
+	word	5			; Word 'emit'
+	word	RPL_Emit
+	word	$0002
+	word	$420d,$6329
 
 	word	5			; Word 'dup'
 	word	RPL_Dup
@@ -62,16 +72,6 @@
 	word	$0002
 	word	$426a,$6014
 
-	word	5			; Word 'min'
-	word	RPL_Min
-	word	$0002
-	word	$4175,$600e
-
-	word	5			; Word 'max'
-	word	RPL_Max
-	word	$0002
-	word	$4035,$6018
-
 	word	5			; Word '0-'
 	word	RPL_Negate
 	word	$0002
@@ -86,96 +86,6 @@
 	word	RPL_Dec
 	word	$0002
 	word	$282b,$282b
-
-	word	4			; Word 'if'
-	word	RPL_If
-	word	$8001
-	word	$3e6e
-
-	word	4			; Word 'else'
-	word	RPL_Else
-	word	$8001
-	word	$3c8b
-
-	word	4			; Word 'then'
-	word	RPL_Then
-	word	$8001
-	word	$3a75
-
-	word	4			; Word 'repeat'
-	word	RPL_Repeat
-	word	$8001
-	word	$3e6f
-
-	word	4			; Word 'until'
-	word	RPL_Until
-	word	$8001
-	word	$3a76
-
-	word	4			; Word 'for'
-	word	RPL_For
-	word	$8001
-	word	$3e6d
-
-	word	4			; Word 'next'
-	word	RPL_Next
-	word	$8001
-	word	$3a74
-
-	word	4			; Word 'i'
-	word	RPL_Index
-	word	$0001
-	word	$6009
-
-	word	4			; Word '@'
-	word	RPL_Read
-	word	$0001
-	word	$3030
-
-	word	4			; Word '!'
-	word	RPL_Write
-	word	$0001
-	word	$2c2f
-
-	word	4			; Word '#'
-	word	RPL_VarRead
-	word	$8001
-	word	$3266
-
-	word	4			; Word '^'
-	word	RPL_VarWrite
-	word	$8001
-	word	$326c
-
-	word	4			; Word '.'
-	word	RPL_Dot
-	word	$0001
-	word	$3c20
-
-	word	4			; Word 'cr'
-	word	RPL_Cr
-	word	$0001
-	word	$62d3
-
-	word	4			; Word 'sys'
-	word	RPL_Sys
-	word	$0001
-	word	$3cb1
-
-	word	4			; Word ','
-	word	RPL_Dot1
-	word	$8001
-	word	$3268
-
-	word	4			; Word '&'
-	word	RPL_Dot2
-	word	$8001
-	word	$3032
-
-	word	4			; Word '%'
-	word	RPL_Dot3
-	word	$8001
-	word	$3033
 
 	word	4			; Word '='
 	word	RPL_Equal
@@ -246,6 +156,96 @@
 	word	RPL_Or
 	word	$0001
 	word	$2221
+
+	word	4			; Word '@'
+	word	RPL_Read
+	word	$0001
+	word	$3030
+
+	word	4			; Word '!'
+	word	RPL_Write
+	word	$0001
+	word	$2c2f
+
+	word	4			; Word '#'
+	word	RPL_VarRead
+	word	$8001
+	word	$3266
+
+	word	4			; Word '^'
+	word	RPL_VarWrite
+	word	$8001
+	word	$326c
+
+	word	4			; Word '.'
+	word	RPL_Dot
+	word	$0001
+	word	$3c20
+
+	word	4			; Word 'cr'
+	word	RPL_Cr
+	word	$0001
+	word	$62d3
+
+	word	4			; Word 'sys'
+	word	RPL_Sys
+	word	$0001
+	word	$3cb1
+
+	word	4			; Word ','
+	word	RPL_Dot1
+	word	$8001
+	word	$3268
+
+	word	4			; Word '&'
+	word	RPL_Dot2
+	word	$8001
+	word	$3032
+
+	word	4			; Word '%'
+	word	RPL_Dot3
+	word	$8001
+	word	$3033
+
+	word	4			; Word 'if'
+	word	RPL_If
+	word	$8001
+	word	$3e6e
+
+	word	4			; Word 'else'
+	word	RPL_Else
+	word	$8001
+	word	$3c8b
+
+	word	4			; Word 'then'
+	word	RPL_Then
+	word	$8001
+	word	$3a75
+
+	word	4			; Word 'repeat'
+	word	RPL_Repeat
+	word	$8001
+	word	$3e6f
+
+	word	4			; Word 'until'
+	word	RPL_Until
+	word	$8001
+	word	$3a76
+
+	word	4			; Word 'for'
+	word	RPL_For
+	word	$8001
+	word	$3e6d
+
+	word	4			; Word 'next'
+	word	RPL_Next
+	word	$8001
+	word	$3a74
+
+	word	4			; Word 'i'
+	word	RPL_Index
+	word	$0001
+	word	$6009
 
 	word	4			; Word 'not'
 	word	RPL_Not
