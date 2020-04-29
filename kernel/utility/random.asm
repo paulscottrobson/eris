@@ -36,8 +36,6 @@
 		and 	r0,#$FF00
 		xor 	r0,r1,#0
 
-		ldm 	r1,#HWTimer
-		xor 	r0,r1,#0
 		stm 	r0,#randomSeed
 
 		pop 	r1

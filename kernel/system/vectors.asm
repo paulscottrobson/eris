@@ -57,6 +57,9 @@
 .OSRandomSeed
 		jmp 	#OSXRandomSeed
 		
+.OSInclusiveOr
+		jmp 	#OSXInclusiveOr		
+
 .OSStrToInt
 		jmp 	#OSXStrToInt
 

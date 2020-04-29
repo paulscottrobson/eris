@@ -3,7 +3,7 @@ rem
 rem		Convert BASIC to programs
 rem
 python ..\basic\scripts\makeprogram.py %1\%1.bas %1\%1.prg
-python ..\basic\scripts\gfxconv.py %1\%1.png
+if exist %1\%1.png python ..\basic\scripts\gfxconv.py %1\%1.png
 rem
 rem		Copy to storage and make it the autoexec.
 rem
