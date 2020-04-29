@@ -2,19 +2,19 @@
 '		Sword of Fargoal
 '
 '	Todo:
-'		Position Monsters (hidden)
-'		Bring to life and move
+'		Player move loop / actions
+'		Monster move loop
 '		Collect things
 '		Fighting
 '
 !&FFFD = 1
-randomise 33
+randomise 6
 screen 2,2:cls
 call initialise()
 call reset.player()
 call create.level.map(level,level = sword.level,sword.found)
 call player.new.level()
-call show.map()
+if has.map(level) or true then call wake.all.monsters():call show.map()
 ;call spiral.draw()
 call player.open()
 end
@@ -22,12 +22,31 @@ end
 ;		Open squares around player
 ;
 proc player.open()
-	local x,y
+	local x,y,m
 	for x = player.x-1 to player.x+1
 		for y = player.y-1 to player.y+1
-			call Draw(x,y,g.!(map+x+y*map.w),true)
+			m = !(map+x+y*map.w)
+			if (m and &FF00) = &0F00 then call wake.monster(m and &FF):m = g.space
+			call Draw(x,y,m,true)
 		next y
 	next x
+endproc
+;
+;		Wake all monsters
+;
+proc wake.all.monsters()
+	local r
+	for r = 0 to monster.count-1
+		if not m.active(r) then call wake.monster(r)
+	next r
+endproc
+;
+;		Wake an individual monster
+;
+proc wake.monster(n)
+	!(map+m.x(n)+m.y(n)*map.w) = g.space
+	m.active(n) = true
+	sprite n to m.x(n)*8,m.y(n)*8+8 ink m.type(n)+1 draw m.graphic(n)-26
 endproc
 ;
 ;		Reset the player
@@ -78,9 +97,14 @@ proc create.level.map(level,isSword,hasSword)
 	call place.object(1,i)
 	call place.object(random(2,4),g.stairs.down)
 	if level > 1 or hasSword then call place.object(1,g.stairs.up)
-
 	call place.object(random(6,11),g.gold)
 	call place.object(random(level,level+3),g.traps)
+	monster.count = random(3,9)
+	for r = 0 to monster.count-1
+		call get.empty():m.x(r) = x:m.y(r) = y
+		m.damage(r) = 1:m.active(r) = false
+		!(map+x+y*map.w) = &0F00+r
+	next r
 endproc
 ;
 ;		Paint the map
@@ -166,15 +190,16 @@ endproc
 ;		Initialise 
 ;
 proc initialise()
+	local i
 	graphic = alloc(512):load "fargoal.dat",graphic:palette 2,0,6
-	palette 1,1,5
+	palette 1,1,5:palette 2,1,7
 	map.w = 40:map.h = 29:map = alloc(map.w * map.h)
 	map.rooms = map.w * map.h / 100
 	dim room.x(map.rooms),room.y(map.rooms)
 	g.wall = &0324:g.space = &0020:g.temple = &0226:g.sword = &0225
 	g.stairs.down = &0123:g.gold = &032F:g.traps = &0200:g.stairs.up = &0122
 	;
-	dim m.prefix$(19),m.name$(19),m.graphic(19),m.type(19),m.active(19):n = 0
+	dim m.prefix$(19),m.name$(19),m.graphic(19),m.type(19):n = 0
 	call loadMonster("an,ogre,27,a,barbarian,41,a,hobgoblin,27,an,elvin ranger,41,a,werebear,27,a,dwarven guard,43,a,gargoyle,28")
 	call loadMonster("a,mercenary,41,a,troll,27,a,swordsman,41,a,wyvern,30,a,monk,41,a,dimension spider,29,a,dark warrior,41")
 	call loadMonster("a,shadow dragon,30,an,assassin,40,a,fyre drake,30,a,war lord,41")
@@ -182,16 +207,19 @@ proc initialise()
 	m.noise.count = sub.count(m.noise$,",")
 	;
 	call sprite.copy(0,26)
+	for i = 27 to 41:call sprite.copy(i-26,i):next i
 	;
-	dim m.x(19),m.y(19),m.hitpoint(19),m.damage(19),m.strength(19)
+	dim m.x(19),m.y(19),m.hitpoint(19),m.damage(19),m.strength(19),m.active(19)
+	dim has.map(25):for i = 0 to 25:has.map(i) = false:next i	
 endproc
 ;
 proc loadMonster(d$)
-	local i
+	local i,r
 	for i = 1 to sub.count(d$,",") step 3
-		m.prefix$(n) = sub.get$(d$,",",i):m.name$(n) = sub.get$(d$,",",i+1)
-		m.graphic(n) = to.number(sub.get$(d$,",",i+2))+(random(1,3)*256)
-		m.type(n) = (n mod 2)+1
+		r = n
+		m.prefix$(r) = sub.get$(d$,",",i):m.name$(r) = sub.get$(d$,",",i+1)
+		m.graphic(r) = to.number(sub.get$(d$,",",i+2))
+		m.type(r) = (n mod 2)+1
 		n = n + 1
 	next i
 endproc
