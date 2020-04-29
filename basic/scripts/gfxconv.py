@@ -16,7 +16,7 @@ from PIL import Image
 fileName = sys.argv[1]
 imageCount = 0
 print("Converting "+fileName)	
-image = Image.open(fileName)
+image = Image.open(fileName).convert('RGB')
 imagePalette = image.getpalette()
 #
 data = [ 0 ]
@@ -28,7 +28,6 @@ for inm in range(0,32):
 		rowData = 0
 		for x in range(0,16):
 			pixel = image.getpixel((xOrigin+x,yOrigin+y))
-			pixel = imagePalette[pixel*3:pixel*3+3]
 			if sum(pixel) > 400:
 				rowData |= (0x8000 >> x)
 		imageData.append(rowData)
