@@ -38,9 +38,13 @@
 		;
 		;		Check sprite is active and one of the new values has changed
 		;
-		ldm 	r4,r1,#spNewStatus			; check status, if zero go to next
-		sknz 	r4
+		ldm 	r4,r1,#spStatus				; check status/newstatus, if zero go to next
+		skz 	r4
+		jmp 	#_SP1Active
+		ldm 	r4,r1,#spNewStatus
+		sknz 	r4		
 		jmp 	#_SP1Next
+._SP1Active		
 		ldm 	r0,r1,#spNewX 				; check if X,Y status has changed from $4000
 		ldm 	r3,r1,#spNewY
 		add 	r0,r3,#0 					; and them together. If the result is changed.
