@@ -2,7 +2,7 @@
 
 There is a blog for this project at http://blog.erisdev.com and 
 an emscripten version which is identical to the hardware version 
-at http://www.studio2.org.uk/studio2.org.uk/paulscottrobson/emu.html
+at http://js.erisdev.com
 
 Eris is an open source 16 bit retrocomputer design which can be built cheaply and easily and has
 low implementation requirements. It can be built for about £10 or so + cost of preferred keyboard. 
