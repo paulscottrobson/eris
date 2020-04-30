@@ -1,6 +1,6 @@
 # eris
 
-There is a blog for this project at https://projecteris.blogspot.com/ and 
+There is a blog for this project at http://blog.erisdev.com and 
 an emscripten version which is identical to the hardware version 
 at http://www.studio2.org.uk/studio2.org.uk/paulscottrobson/emu.html
 
