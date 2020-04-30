@@ -5,9 +5,9 @@ an emscripten version which is identical to the hardware version
 at http://www.studio2.org.uk/studio2.org.uk/paulscottrobson/emu.html
 
 Eris is an open source 16 bit retrocomputer design which can be built cheaply and easily and has
-low implementation requirements. It can be built for about £10 or so + cost of preferred keyboard.
+low implementation requirements. It can be built for about £10 or so + cost of preferred keyboard. 
 
-It's a virtual machine system, so the code that runs on it is written in its own assembler.
+It's a virtual machine system, so the code that runs on it is written in its own assembler, so porting is much more reliable.
 
 Currently it runs on SDL , on Linux, Windows, Javascript via emScripten and Raspbian. 
 
@@ -18,7 +18,7 @@ Future platforms : PiZero, definitely. Possibly others.
 
 This is stuff that actually *works now*. Not planned, theorised, possibilities. 
 
-It is still Alpha at the time of writing, but bugs have been minor. I'm writing a pile of games
+It is Beta at the time of writing, but bugs have been minor. I'm writing a pile of games
 for Retrochallenge April 2020 and the real purpose is to dogfood test it. Though this is cross
 development , but I'm pretty sure the editor works pretty well. I soak tested SPIFFS (the ESP32
 storage system).
@@ -32,6 +32,8 @@ Hardware
 - 2 tone and 1 noise channels.
 - Running on ESP32, Javascript , Raspian and Windows/Linux emulator (only uses SDL)
 - Uses system storage - Local HD, SPIFFS and SDCard dependent on platform.
+- Files can be downloaded from the internet into the platform
+- Files can be uploaded from the platfom for backup
 
 System Software
 
@@ -40,7 +42,7 @@ System Software
 Kernel
 
 - 53 x 30 text display
-- Commodore style screen editor
+- Commodore style screen editor which works like a text editor
 - Line, Rectangle, Ellipse Graphics Text functions.
 - Single colour sprite system supporting 24 at once.
 - Standard joystick interface (it maps onto arrow, shift and ctrl)
@@ -59,10 +61,11 @@ Integer Basic
 - Commands for sound, sprites, joystick, keypress, graphics etc.
 - Indirection operator (like BBC Basic or BCPL)
 - Inline Assembler (like BBC Basic)
+- Built in quasi-Forth programming language (which is much easier than assembler but less efficient)
 - Has GOTO, GOSUB and RETURN but you don't need line numbers except editing.
 - Listing Indents structures and does syntax colouring.
 - Message internationalisation (could internationalise keywords ...)
-- Hidden lines for support code ; you can't edit or list any line no > 32767
+- Hidden lines for support code ; you can't edit or list any line no > 32767 or 0
   (the point of this is that learning materials can hide support routines)
 
 Documentation
