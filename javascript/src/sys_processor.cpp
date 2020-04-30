@@ -100,7 +100,7 @@ static inline void WRITE(WORD16 a,WORD16 d) {
 				HWWriteAudio(a & 0x0F,d);
 				break;
 		}
-		if (a == 0xFFFE) {													// $FFFE = File I/O system
+		if (a == 0xFFFE) {													// $FFFE = File I/O system			
 			R0 = HWFileOperation(R0,R1,R2,R3);
 		}
 		#if defined(WINDOWS) || defined(LINUX)
@@ -109,6 +109,7 @@ static inline void WRITE(WORD16 a,WORD16 d) {
 			frameCycles = CYCLES_PER_FRAME * ((turbo != 0) ? 10 : 1);
 		}
 		#endif
+		if (a == 0xFFFC) HWTransmitCharacter(d & 0xFF);						// $FFFC = write character out
 	}
 }
 

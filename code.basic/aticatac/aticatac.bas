@@ -1,5 +1,7 @@
 map.size = 10:call create.game()
-call do.room()
+repeat
+	call do.room()
+until false
 
 
 proc do.room()

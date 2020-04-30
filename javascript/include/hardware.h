@@ -23,6 +23,8 @@
 #define FILESEP 	'/'
 #endif
 
+#define WWW_URL_BASE "http://www.studio2.org.uk/studio2.org.uk/paulscottrobson"
+
 #ifdef ESP32
 int HWGetScanCode(void);
 void HWWriteCharacter(BYTE8 x,BYTE8 y,BYTE8 ch);
@@ -42,7 +44,12 @@ WORD16 HWReadKeyboardColumns(void);
 WORD16 HWLoadFile(char * fileName,WORD16 override);
 void HWLoadDirectory(WORD16 target);
 WORD16 HWSaveFile(char *fileName,WORD16 start,WORD16 size);
-WORD16 HWFileExists(char *fileName);
+WORD16 HWFileInformation(char *fileName,WORD16 *loadAddress,WORD16 *size);
+WORD16 HWGetLoadSize(void);
+WORD16 HWConnectExternal(char *SSID,char *password);
+WORD16 HWDownloadFile(char *fileName);
+WORD16 HWDownloadHandler(char *url,char *target,char *ssid,char *password);
+void HWTransmitCharacter(BYTE8 ch);
 
 void HWSyncImplementation(LONG32 iCount);
 void HWWriteAudio(BYTE8 channel,WORD16 freq);

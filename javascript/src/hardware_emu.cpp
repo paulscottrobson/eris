@@ -110,13 +110,20 @@ void HWWriteAudio(BYTE8 channel,WORD16 freq) {
 //							  Check file exists
 // ****************************************************************************
 
-WORD16 HWFileExists(char *fileName) {
+WORD16 HWFileInformation(char *fileName,WORD16 *loadAddress,WORD16 *size) {
 	char fullName[128];
 	if (fileName[0] == 0) return 0;
 	MKSTORAGE();
 	sprintf(fullName,"%sstorage%c%s",SDL_GetBasePath(),FILESEP,fileName);
 	FILE *f = fopen(fullName,"rb");
-	if (f != NULL) fclose(f);
+	if (f != NULL) {
+		WORD16 addr = fgetc(f);
+		addr += (fgetc(f) << 8);
+		*loadAddress = addr;
+		fseek(f, 0L, SEEK_END);
+		*size = (WORD16)((ftell(f)-2)/2);
+		fclose(f);
+	}
 	return (f != NULL);
 }
 
@@ -195,3 +202,33 @@ void HWLoadDirectory(WORD16 target) {
 	CPUWriteMemory(target,0);
 }
 
+// ****************************************************************************
+//								Transmit character
+// ****************************************************************************
+
+void HWTransmitCharacter(BYTE8 ch) {
+	printf("%c",ch);
+}
+
+// ****************************************************************************
+//							  Downloader (dummy at present)
+// ****************************************************************************
+
+WORD16 HWDownloadHandler(char *url,char *target,char *ssid,char *password) {
+	char buffer[128],fullName[128];
+	FILE *fIn,*fOut;
+	printf("Download %s to %s using %s[%s]\n",url,target,ssid,password);
+	sprintf(fullName,"%swww%c%s",SDL_GetBasePath(),FILESEP,target);
+	fIn = fopen(fullName,"rb");
+	if (fIn != NULL) {
+		sprintf(fullName,"%sstorage%c%s",SDL_GetBasePath(),FILESEP,target);
+		fOut = fopen(fullName,"wb");
+		while (!feof(fIn)) {
+			int n = fread(buffer,1,sizeof(buffer),fIn);
+			if (n > 0) fwrite(buffer,1,n,fOut);
+		}
+		fclose(fOut);
+		fclose(fIn);
+	}
+	return (fIn != NULL) ? 0 : 1;
+}
