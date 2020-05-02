@@ -1,9 +1,9 @@
-
-'	Shooting monsters (not invulnerable ones)
-' 	Design right side, live strength.
-'	Monster collisions (some invulnerable destroy on impact)
+'
+'	Switch to new rooms
+' 	Potions and jewels
 '
 map.size = 10:call create.game()
+safety.off = true
 repeat
 	call do.room()
 until true
@@ -29,7 +29,9 @@ endproc
 ;
 proc move.player()
 	local x,y,dx,dy,allow = true
-	x = player.x+joyx()*3:y = player.y+joyy()*3
+	x = joyx()*3:y = joyy()*3
+	if x <> 0 or y <> 0 then player.dx = x:player.dy = y
+	x = x + player.x:y = y+player.y
 	dx = abs(x-128):dy = abs(y-120)
 	if dx >= x.width then allow = false:if dy < door.width then call check.exit(x,y)
 	if dy >= y.height then allow = false:if dx < door.width then call check.exit(x,y)
@@ -51,9 +53,9 @@ proc move.missile()
 			call reset.missile()
 		endif
 	else
-		if joyb(1) and (joyx() <> 0 or joyy() <> 0)
+		if joyb(1)
 			m.active = true
-			m.x = player.x:m.y = player.y:m.xi = 5*joyx():m.yi = 5*joyy()
+			m.x = player.x:m.y = player.y:m.xi = player.dx*2:m.yi = player.dy*2
 			m.endTime = timer()+250
 		endif
 	endif
@@ -104,6 +106,21 @@ proc move.monster(n)
 	if random(0,m.tgt(i)) = 0 then call retarget.monster(i)
 	f = 0::if m.xi(i) < 0 then f = 2
 	sprite m.spr(i) to m.x(i),m.y(i) flip f
+	if hit(m.spr(i),1,10) then call reset.missile():if not m.inv(i) then call hit.monster(i)
+	if hit(m.spr(i),0,10) and safety.off
+		energy = energy - 15
+		if not m.inv(i) then call reset.one.monster(i):energy = energy-50
+		energy = max(energy,0)
+		call update.energy()
+	endif
+endproc
+;
+;		Monster hit
+;
+proc hit.monster(i)
+	score = score+10
+	call update.score()
+	call reset.one.monster(i)
 endproc
 ;
 ;		Make sprite 'real'
@@ -119,7 +136,6 @@ proc promote.monster(i)
 	if n = 4 then m.tgt(i) = 10:m.spd(i) = 6
 	if n = 5 then m.inv(i) = 2:m.tgt(i) = 0:m.spd(i) = 16
 	call retarget.monster(i)
-
 endproc
 ;
 ;		Retarget sprite
@@ -132,14 +148,15 @@ endproc
 ;		Initialise the game
 ;
 proc create.game()
-	screen 2,2:palette 1,1,6
+	screen 2,2:palette 1,1,6:ink 3:frame 256,0 to 319,239
 	room.size = 32:door.width = 14
 	sprite load "aticatac.spr"
 	dim door$(map.size,map.size):rem "col/type x 4 NESW"
 	dim size(map.size,map.size):rem "1 = 1x2,2 = 2x1,3 = 2x2"
 	dim type(map.size,map.size):rem "0 = New,1 = Cave, 2 = Room"
 	dim exit(3,1):rem "NSEW exit. 0=exit type (0 = shut),1 = exit colour"	
-	player.x = 128:player.y = 120:room.x = map.size:room.y = map.size/2
+	player.x = 128:player.y = 120:room.x = map.size:room.y = map.size/2:
+	player.dx = 3:player.dy = 0
 	;
 	door$(room.x,room.y) = "14243424":size(room.x,room.y) = 3:type(room.x,room.y) = 2
 	;
@@ -147,6 +164,10 @@ proc create.game()
 	dim m.stat(m):rem "0 not present 1 materialising 2 active"
 	dim m.x(m),m.xi(m),m.y(m),m.yi(m):rem "Position/direction"
 	dim m.spr(m),m.ev(m),m.spd(m),m.tgt(m),m.inv(m):rem "Sprite, next event, speed, retarget chance,invulnerable"
+	;
+	score = 0:lives = 3:energy = 1000
+	ink 2:text 288-16,8,"Score":text 288-20,32,"Energy":ink 3:frame 264,44 to 312,60
+	call update.score():call update.energy()
 endproc
 ;
 ;		Unpack current room doors
@@ -157,7 +178,7 @@ proc unpack.current()
 		a$ = mid$(door$(room.x,room.y),i*2+1,2)
 		exit(i,0) = val(mid$(a$,1,1))
 		exit(i,1) = val(mid$(a$,2,1))
-		ink 2:print exit(i,0),exit(i,1)
+		;ink 2:print exit(i,0),exit(i,1)
 	next i
 	x.Scale = size(room.x,room.y):y.Scale = 3-x.Scale
 	if size(room.x,room.y) >= 3 then x.scale = 2:y.scale = 2
@@ -196,7 +217,7 @@ proc draw.room(type)
 	ink 3:frame 128-room.size*x.scale,120-room.size*y.scale to 128+room.size*x.scale,120+room.size*y.scale
 	;
 	local i
-	for i = 0 to 3:
+	for i = 0 to 3
 		if exit(i,0) <> 0 then call draw.door(i,exit(i,1),exit(i,0) mod 8)
 	next i
 	sprite 0 to player.x,player.y ink 1 draw 0
@@ -225,4 +246,18 @@ proc line(x,y)
 	line cx,cy to x1,y1:line 256-cx,cy to 256-x1,y1
 	line cx,239-cy to x1,239-y1:line 256-cx,239-cy to 256-x1,239-y1
 	cx = x1:cy = y1
+endproc
+;
+;		Update Score
+;
+proc update.score()
+	ink 3:cursor 45,2:print right$("00000"+str$(score),5);"0";
+endproc
+;
+;		Update energy
+;
+proc update.energy()
+	local x = energy/2*46/500
+	ink 0:rect 265+x,45 to 311,59
+	ink 1:rect 265,45 to 265+x,59
 endproc
