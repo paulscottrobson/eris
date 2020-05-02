@@ -1,16 +1,26 @@
+
+'	Shooting monsters (not invulnerable ones)
+' 	Design right side, live strength.
+'	Monster collisions (some invulnerable destroy on impact)
+'
 map.size = 10:call create.game()
 repeat
 	call do.room()
-until false
+until true
+end
 
 
 proc do.room()
-	call unpack.current():call draw.room(1):call reset.missile()
+	!&FFFD=1
+	call unpack.current():call draw.room(1)
+	call reset.monsters():call reset.missile()
+	!&FFFD=0
 	e.pMove = 0:e.mMove = 0
 	left.room = false:life.lost = false
 	repeat
 		if event(e.pMove,7) then call move.player()
 		if event(e.mMove,6) then call move.missile()
+		call move.monsters()
 	until left.room or life.lost
 endproc
 
@@ -68,6 +78,57 @@ proc check.exit(x,y)
 	endif
 endproc
 ;
+;		Move monsters
+;
+proc move.monsters()
+	local i,s
+	for i = 1 to m.count
+		if timer() > m.ev(i) 
+			s = m.stat(i)
+			if s = 0 then m.stat(i) = 1:m.ev(i) = timer()+80:sprite m.spr(i) to m.x(i),m.y(i) ink random(1,3) draw 16
+			if s = 1 then call promote.monster(i):m.stat(i) = 2
+			if s = 2 then call move.monster(i)
+		endif
+		if m.stat(i) = 1 then sprite m.spr(i) draw random(16,17) flip random(0,3)
+	next i
+endproc
+;
+;		Move monster
+;
+proc move.monster(n)
+	local f
+	m.ev(i) = timer()+m.spd(i)
+	m.x(i) = m.x(i)+m.xi(i):m.y(i) = m.y(i)+m.yi(i)
+	if abs(m.x(i)-128) > x.width then m.xi(i) = -m.xi(i)
+	if abs(m.y(i)-120) > y.height then m.yi(i) = -m.yi(i)
+	if random(0,m.tgt(i)) = 0 then call retarget.monster(i)
+	f = 0::if m.xi(i) < 0 then f = 2
+	sprite m.spr(i) to m.x(i),m.y(i) flip f
+endproc
+;
+;		Make sprite 'real'
+;
+proc promote.monster(i)
+	local n = random(1,5)
+	sprite m.spr(i) draw n+20 flip 0
+	m.ev(i) = timer():m.inv(i) = 0:m.tgt(i) = 20:m.spd(i) = 8
+	rem "Wizard, Skeleton, Ghost, Bat Head"
+	if n = 1 then m.tgt(i) = 10
+	if n = 2 then m.tgt(i) = 999:m.spd(i) = 6
+	if n = 3 then m.inv(i) = 1:m.spd(i) = 12
+	if n = 4 then m.tgt(i) = 10:m.spd(i) = 6
+	if n = 5 then m.inv(i) = 2:m.tgt(i) = 0:m.spd(i) = 16
+	call retarget.monster(i)
+
+endproc
+;
+;		Retarget sprite
+;
+proc retarget.monster(i)
+	m.xi(i) = sgn(player.x-m.x(i))
+	m.yi(i) = sgn(player.y-m.y(i))
+endproc
+;
 ;		Initialise the game
 ;
 proc create.game()
@@ -81,6 +142,11 @@ proc create.game()
 	player.x = 128:player.y = 120:room.x = map.size:room.y = map.size/2
 	;
 	door$(room.x,room.y) = "14243424":size(room.x,room.y) = 3:type(room.x,room.y) = 2
+	;
+	m.max = 5:m = 5
+	dim m.stat(m):rem "0 not present 1 materialising 2 active"
+	dim m.x(m),m.xi(m),m.y(m),m.yi(m):rem "Position/direction"
+	dim m.spr(m),m.ev(m),m.spd(m),m.tgt(m),m.inv(m):rem "Sprite, next event, speed, retarget chance,invulnerable"
 endproc
 ;
 ;		Unpack current room doors
@@ -96,6 +162,19 @@ proc unpack.current()
 	x.Scale = size(room.x,room.y):y.Scale = 3-x.Scale
 	if size(room.x,room.y) >= 3 then x.scale = 2:y.scale = 2
 	x.width = room.size*x.scale:y.height = room.size*y.scale
+endproc
+;
+;		Reset monsters
+;
+proc reset.monsters()
+	local i
+	m.count = random(2,3):if size(room.x,room.y) = 3 then m.count = random(3,5)
+	for i = 1 to m.count:call reset.one.monster(i):next i
+endproc
+;
+proc reset.one.monster(i)
+	m.stat(i) = 0:m.x(i) = random(128-x.width,128+x.width):m.y(i) = random(120-y.height,120+y.height)
+	m.spr(i) = i + 4:m.ev(i) = random(10,200)+timer():sprite m.spr(i) end
 endproc
 ;
 ;		Draw a room in current scale and givn style
