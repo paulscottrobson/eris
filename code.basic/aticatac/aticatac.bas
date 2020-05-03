@@ -2,26 +2,25 @@
 '	"(Not) Atic Atac"
 '	"***********************"
 '
-'	Doors pass through or not, must be open, unlocked or solid/open. Unlock both sides
+' 	Positioning on room entrance.
 '	Sound Effects
 '
 map.size = 3:call create.game()
-player.x = 12:player.speed = 3:safety.off = true
+player.speed = 3:safety.off = true
 repeat
 	call do.room()
 until lives = 0 or jewels = 3
-screen 3,0:end
+end
 ;
 ;		Do one room. Exit if life lost or left room
 ;
 proc do.room()
-	!&FFFD=1
+	!&FFFD=0
 	if door$(room.x,room.y) = "" then call initialise.room(room.x,room.y)
 	call unpack.current():call draw.room(1)
 	call reset.monsters():call reset.missile()
 	player.x = max(128-x.width+1,min(player.x,128+x.width-1))
 	player.y = max(120-y.height+1,min(player.y,120+y.height-1))
-	cursor 0,0:ink 2:print room.x;",";room.y;
 	!&FFFD=0
 	e.doorOC = 0:e.pMove = 0:e.mMove = 0:left.room = false:doorOCtime = random(200,400)
 	repeat
@@ -94,7 +93,18 @@ endproc
 ;		Check exit when at x,y
 ;
 proc check.exit(x,y)
-	left.room = True
+	local d
+	if dx >= x.width
+		d = 3:if x > 128 then d = 1
+	else
+		d = 0:if y > 120 then d = 2
+	endif
+	left.room = (exit(d,1) <> 8) and (exit(d,1) <> 0)
+	if exit(d,1) = 2 or exit(d,1) = 5 then left.room = (exit(d,2) = 2)
+	if exit(d,1) = 3 or exit(d,1) = 6
+		left.room = False
+		if keys > 0 then keys = keys-1:call update.keys():call unlock.door(x,y,d):left.room = True
+	endif
 	if left.room
 		if dx >= x.width
 			player.x = 255-player.x
@@ -244,6 +254,16 @@ proc create.game()
 	call update.score():call update.energy():call update.lives():call update.keys():call update.jewels()
 endproc
 ;
+;		Unlock door direction d room x,y
+;
+proc unlock.door(x,y,d)
+	local dx,dy,a$:a$ = str$(val(mid$(door$(room.x,room.y),d*2+2,1))-2)
+	local p = d*2+2
+	door$(room.x,room.y) = left$(door$(room.x,room.y),p-1)+a$+mid$(door$(room.x,room.y),p+1)
+	local p = (d xor 2)*2+2:call get.dxdy(d)
+	door$(room.x+dx,room.y+dy) = left$(door$(room.x+dx,room.y+dy),p-1)+a$+mid$(door$(room.x+dx,room.y+dy),p+1)
+endproc
+;
 ;		Unpack current room doors
 ;
 proc unpack.current()
@@ -268,7 +288,7 @@ proc door.open.close()
 		if exit(i,2) <> 0
 			call draw.door(i,exit(i,1),0)	
 			exit(i,2) = 3 - exit(i,2)
-			if exit(i,2) = 2 then call draw.door(i,exit(i,1),exit(i,0) mod 8)	
+			call draw.door(i,exit(i,1)+1-exit(i,2),exit(i,0) mod 8)	
 		endif
 	next i
 endproc
