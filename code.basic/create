@@ -1,0 +1,18 @@
+#!/bin/bash
+set -e
+#
+#		Convert BASIC to programs, png file to sprites
+#
+if [ -e $1/$1.png ] ; then
+python3 ../basic/scripts/gfxconv.py $1/$1.png
+fi
+python3 ../basic/scripts/makeprogram.py $1/$1.bas $1/$1.prg
+#
+#		Copy to storage and make it the autoexec.
+#
+cp $1/$1.prg $1/$1.spr $1/*.dat storage 2>/dev/null || : 
+cp $1/$1.prg storage/autoexec.prg
+#
+#		Copy all the storage to emulator, where it will go to esp32 and javascript
+#
+cp storage/* ../emulator/storage
