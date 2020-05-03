@@ -1,10 +1,12 @@
+'	"***********************"
+'	"(Not) Atic Atac"
+'	"***********************"
 '
-'	Doors, opening and closing.
-'	Doors pass through or not.
+'	Doors pass through or not, must be open, unlocked or solid/open. Unlock both sides
 '	Sound Effects
 '
 map.size = 3:call create.game()
-player.x = 12:player.speed = 8:safety.off = true
+player.x = 12:player.speed = 3:safety.off = true
 repeat
 	call do.room()
 until lives = 0 or jewels = 3
@@ -21,10 +23,11 @@ proc do.room()
 	player.y = max(120-y.height+1,min(player.y,120+y.height-1))
 	cursor 0,0:ink 2:print room.x;",";room.y;
 	!&FFFD=0
-	e.pMove = 0:e.mMove = 0:left.room = false
+	e.doorOC = 0:e.pMove = 0:e.mMove = 0:left.room = false:doorOCtime = random(200,400)
 	repeat
 		if event(e.pMove,7) then call move.player()
 		if event(e.mMove,6) then call move.missile()
+		if event(e.doorOC,doorOCtime) then call door.open.close()
 		call move.monsters()
 	until left.room or energy = 0 or jewels = 3
 	call reset.monsters()
@@ -46,7 +49,7 @@ proc move.player()
 	if dy > y.height then allow = false:if dx < door.width then call check.exit(x,y)
 	if x<>player.x or y<>player.y then sprite 0 draw timer() and 8
 	if allow then sprite 0 to x,y:player.x = x:player.y = y
-	if joyx() then sprite 0 flip 1-joyx()
+	x = joyx():if x then sprite 0 flip 1-x
 	if hit(0,2) then call collect.object()
 endproc
 ;
@@ -208,7 +211,7 @@ proc create.game()
 	dim size(map.size,map.size):rem "1 = 1x2,2 = 2x1,3 = 2x2"
 	dim type(map.size,map.size):rem "0 = New,1 = Cave, 2 = Room"
 	dim contents$(map.size,map.size):rem "K J P X or ''"
-	dim exit(3,1):rem "NSEW exit. 0=exit type (0 = shut),1 = exit colour"	
+	dim exit(3,2):rem "NSEW exit. 0 = exit colour,1=exit type (0 = shut),2 auto door,0 no 1 open 2 closed"	
 	player.x = 128:player.y = 120:room.x = (map.size+1)/2:room.y = room.x
 	player.dx = 3:player.dy = 0
 	;
@@ -249,10 +252,25 @@ proc unpack.current()
 		a$ = mid$(door$(room.x,room.y),i*2+1,2)
 		exit(i,0) = val(mid$(a$,1,1))
 		exit(i,1) = val(mid$(a$,2,1))
+		exit(i,2) = 0
+		if exit(i,1) = 2 or exit(i,1) = 5 then exit(i,2) = 2
 	next i
 	x.Scale = size(room.x,room.y):y.Scale = 3-x.Scale
 	if size(room.x,room.y) >= 3 then x.scale = 2:y.scale = 2
 	x.width = room.size*x.scale:y.height = room.size*y.scale
+endproc
+;
+;		Toggle open/close doors
+;
+proc door.open.close()
+	local i
+	for i = 0 to 3
+		if exit(i,2) <> 0
+			call draw.door(i,exit(i,1),0)	
+			exit(i,2) = 3 - exit(i,2)
+			if exit(i,2) = 2 then call draw.door(i,exit(i,1),exit(i,0) mod 8)	
+		endif
+	next i
 endproc
 ;
 ;		Reset monsters
@@ -305,8 +323,8 @@ proc draw.door(door,gfx,col)
 	local x = 128-16:local y = 120-16:local bflip = 0
 	if gfx > 7 then gfx=7
 	if door = 0 then y = y - room.size*y.Scale-16
-	if door = 1 then x = room.size*x.Scale+128:gfx = gfx+8
-	if door = 2 then y = room.size*y.Scale+120:bflip = &6000
+	if door = 1 then x = room.size*x.Scale+129:gfx = gfx+8
+	if door = 2 then y = room.size*y.Scale+121:bflip = &6000
 	if door = 3 then x = x - room.size*x.scale-16:gfx = gfx+8:bflip = &6000
 	blit x,y,sysvar(3)+gfx*16,&0300+col,&1010+bflip
 endproc
