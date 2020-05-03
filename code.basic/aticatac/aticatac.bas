@@ -1,43 +1,64 @@
 '
-'	Switch to new rooms
-' 	Potions and jewels
+'	Doors, opening and closing.
+'	Doors pass through or not.
+'	Sound Effects
 '
-map.size = 10:call create.game()
-safety.off = true
+map.size = 3:call create.game()
+player.x = 12:player.speed = 8:safety.off = true
 repeat
 	call do.room()
-until true
-end
-
-
+until lives = 0 or jewels = 3
+screen 3,0:end
+;
+;		Do one room. Exit if life lost or left room
+;
 proc do.room()
 	!&FFFD=1
+	if door$(room.x,room.y) = "" then call initialise.room(room.x,room.y)
 	call unpack.current():call draw.room(1)
 	call reset.monsters():call reset.missile()
+	player.x = max(128-x.width+1,min(player.x,128+x.width-1))
+	player.y = max(120-y.height+1,min(player.y,120+y.height-1))
+	cursor 0,0:ink 2:print room.x;",";room.y;
 	!&FFFD=0
-	e.pMove = 0:e.mMove = 0
-	left.room = false:life.lost = false
+	e.pMove = 0:e.mMove = 0:left.room = false
 	repeat
 		if event(e.pMove,7) then call move.player()
 		if event(e.mMove,6) then call move.missile()
 		call move.monsters()
-	until left.room or life.lost
+	until left.room or energy = 0 or jewels = 3
+	call reset.monsters()
+	if energy = 0
+		 lives = lives-1:energy = 1000:player.x = 128:player.y = 120
+		 call update.energy():call update.lives()
+	endif
 endproc
-
 ;
 ;		Move the Player
 ;
 proc move.player()
 	local x,y,dx,dy,allow = true
-	x = joyx()*3:y = joyy()*3
+	x = joyx()*player.speed:y = joyy()*player.speed
 	if x <> 0 or y <> 0 then player.dx = x:player.dy = y
 	x = x + player.x:y = y+player.y
 	dx = abs(x-128):dy = abs(y-120)
-	if dx >= x.width then allow = false:if dy < door.width then call check.exit(x,y)
-	if dy >= y.height then allow = false:if dx < door.width then call check.exit(x,y)
+	if dx > x.width then allow = false:if dy < door.width then call check.exit(x,y)
+	if dy > y.height then allow = false:if dx < door.width then call check.exit(x,y)
 	if x<>player.x or y<>player.y then sprite 0 draw timer() and 8
 	if allow then sprite 0 to x,y:player.x = x:player.y = y
 	if joyx() then sprite 0 flip 1-joyx()
+	if hit(0,2) then call collect.object()
+endproc
+;
+;		Collect an object
+;
+proc collect.object()
+	if contents$(room.x,room.y) <> "K" or keys <> 3
+		if contents$(room.x,room.y) = "K" then keys = keys+1:call update.keys()
+		if contents$(room.x,room.y) = "J" then jewels = jewels+1:call update.jewels()
+		if contents$(room.x,room.y) = "P" then energy = min(1000,energy+random(200,400)):call update.energy()		
+		contents$(room.x,room.y) = "":sprite 2 end
+	endif
 endproc
 ;
 ;		Move the missile
@@ -71,12 +92,14 @@ endproc
 ;
 proc check.exit(x,y)
 	left.room = True
-	if dx >= x.width
-		player.x = 255-player.x
-		room.x = room.x + sgn(x-128)
-	else
-		player.y = 239-player.y
-		room.y = room.y + sgn(y-120)
+	if left.room
+		if dx >= x.width
+			player.x = 255-player.x
+			room.x = room.x + sgn(x-128)
+		else
+			player.y = 239-player.y
+			room.y = room.y + sgn(y-120)
+		endif
 	endif
 endproc
 ;
@@ -145,17 +168,48 @@ proc retarget.monster(i)
 	m.yi(i) = sgn(player.y-m.y(i))
 endproc
 ;
+;		Initialise a room
+;
+proc initialise.room(x,y)
+	local a$,x1,y1,dx,dy,i,f,n
+	for i = 0 to 3
+		call get.dxdy(i):a$ = "00":x1 = x+dx:y1 = y + dy
+		if x1 > 0 and y1 > 0 and x1 <= map.size and y1 <= map.size 
+			n = random(1,8):if random(0,9) < 4 then n = 0
+			a$ = str$(random(1,3))+str$(n)
+			if door$(x1,y1) <> ""
+				f = i xor 2
+				a$ = mid$(door$(x1,y1),f*2+1,2)
+			endif
+		endif
+		door$(room.x,room.y) = door$(room.x,room.y)+a$
+	next i
+	size(x,y) = random(1,3):type(x,y) = random(1,2)
+endproc
+;
+;		Get dx,dy for direction i
+;
+proc get.dxdy(i)
+	dx = 0:dy = 0
+	if i = 0 then dy = -1
+	if i = 1 then dx = 1
+	if i = 2 then dy = 1
+	if i = 3 then dx = -1
+endproc
+;
 ;		Initialise the game
 ;
 proc create.game()
+	local i,n,x,y
 	screen 2,2:palette 1,1,6:ink 3:frame 256,0 to 319,239
-	room.size = 32:door.width = 14
+	room.size = 32:door.width = 14:player.speed = 3:safety.off = True
 	sprite load "aticatac.spr"
 	dim door$(map.size,map.size):rem "col/type x 4 NESW"
 	dim size(map.size,map.size):rem "1 = 1x2,2 = 2x1,3 = 2x2"
 	dim type(map.size,map.size):rem "0 = New,1 = Cave, 2 = Room"
+	dim contents$(map.size,map.size):rem "K J P X or ''"
 	dim exit(3,1):rem "NSEW exit. 0=exit type (0 = shut),1 = exit colour"	
-	player.x = 128:player.y = 120:room.x = map.size:room.y = map.size/2:
+	player.x = 128:player.y = 120:room.x = (map.size+1)/2:room.y = room.x
 	player.dx = 3:player.dy = 0
 	;
 	door$(room.x,room.y) = "14243424":size(room.x,room.y) = 3:type(room.x,room.y) = 2
@@ -165,9 +219,26 @@ proc create.game()
 	dim m.x(m),m.xi(m),m.y(m),m.yi(m):rem "Position/direction"
 	dim m.spr(m),m.ev(m),m.spd(m),m.tgt(m),m.inv(m):rem "Sprite, next event, speed, retarget chance,invulnerable"
 	;
-	score = 0:lives = 3:energy = 1000
+	contents$(1,1) = "X":contents$(1,map.size) = "X"
+	contents$(map.size,1) = "X":contents$(map.size,map.size) = "X"
+	contents$(room.x,room.y) = "X"
+	for i = 1 to 3
+		repeat
+			x = random(1,map.size):y = random(1,map.size)
+		until contents$(x,y) = ""
+		contents$(x,y) = "J"
+	next i
+	for x = 1 to map.size
+		for y = 1 to map.size
+			if contents$(x,y) <> "J"
+				contents$(x,y) = mid$("PK",random(1,3),1)
+			endif
+		next y
+	next x
+	;
+	score = 0:lives = 3:energy = 1000:keys = 1:jewels = 0
 	ink 2:text 288-16,8,"Score":text 288-20,32,"Energy":ink 3:frame 264,44 to 312,60
-	call update.score():call update.energy()
+	call update.score():call update.energy():call update.lives():call update.keys():call update.jewels()
 endproc
 ;
 ;		Unpack current room doors
@@ -178,7 +249,6 @@ proc unpack.current()
 		a$ = mid$(door$(room.x,room.y),i*2+1,2)
 		exit(i,0) = val(mid$(a$,1,1))
 		exit(i,1) = val(mid$(a$,2,1))
-		;ink 2:print exit(i,0),exit(i,1)
 	next i
 	x.Scale = size(room.x,room.y):y.Scale = 3-x.Scale
 	if size(room.x,room.y) >= 3 then x.scale = 2:y.scale = 2
@@ -218,9 +288,15 @@ proc draw.room(type)
 	;
 	local i
 	for i = 0 to 3
-		if exit(i,0) <> 0 then call draw.door(i,exit(i,1),exit(i,0) mod 8)
+		if exit(i,1) <> 0 then call draw.door(i,exit(i,1),exit(i,0) mod 8)
 	next i
-	sprite 0 to player.x,player.y ink 1 draw 0
+	sprite 0 to player.x,player.y ink 1 draw 0:sprite 2 end
+	if contents$(room.x,room.y) <> ""
+		i = 18:if contents$(room.x,room.y) = "P" then i = 19
+		if contents$(room.x,room.y) = "J" then i = 20
+		sprite 2 to random(128-x.width,128+x.width),random(120-y.height,120+y.height) ink (room.x+room.y*7) mod 3+1 draw i
+	endif
+	call large("Not",170,2):call large("Atic",190,3):call large("Atac",210,1)
 endproc
 ;
 ;		Draw one door
@@ -260,4 +336,22 @@ proc update.energy()
 	local x = energy/2*46/500
 	ink 0:rect 265+x,45 to 311,59
 	ink 1:rect 265,45 to 265+x,59
+endproc
+;
+;		Update lives etc.
+;
+proc update.lives():call update.display(lives,68,0):endproc
+proc update.keys():call update.display(keys,88,18):endproc
+proc update.jewels():call update.display(jewels,108,20):endproc
+;
+proc update.display(n,y,g)
+	local i
+	for i = 1 to 3
+		ink 1:if n >= i then ink 3
+		draw 288+(i-2)*18-8,y,g
+	next i
+endproc
+;
+proc large(a$,y,c)
+	ink c:text 288-len(a$)*6,y,a$,2
 endproc
