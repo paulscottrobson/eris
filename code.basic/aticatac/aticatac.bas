@@ -42,14 +42,17 @@ endproc
 ;		Move the Player
 ;
 proc move.player()
-	local x,y,dx,dy,allow = true
+	local x,y,dx,dy,s:allow = true
 	x = joyx()*player.speed:y = joyy()*player.speed
 	if x <> 0 or y <> 0 then player.dx = x:player.dy = y
 	x = x + player.x:y = y+player.y
 	dx = abs(x-128):dy = abs(y-120)
 	if dx > x.width then allow = false:if dy < door.width then call check.exit(x,y)
 	if dy > y.height then allow = false:if dx < door.width then call check.exit(x,y)
-	if x<>player.x or y<>player.y then sprite 0 draw timer() and 8
+	if x<>player.x or y<>player.y 
+		sprite 0 draw timer() and 8
+		mvc = mvc+1:if (mvc and 3) = 0 then sound 1,20000/((mvc >> 1 and 2)+1),1
+	endif
 	if allow then sprite 0 to x,y:player.x = x:player.y = y
 	x = joyx():if x then sprite 0 flip 1-x
 	if hit(0,2) then call collect.object()
@@ -63,6 +66,7 @@ proc collect.object()
 		if contents$(room.x,room.y) = "J" then jewels = jewels+1:call update.jewels()
 		if contents$(room.x,room.y) = "P" then energy = min(1000,energy+random(200,400)):call update.energy()		
 		contents$(room.x,room.y) = "":sprite 2 end
+		sound 2,22222,0:slide 2,2000,2
 	endif
 endproc
 ;
@@ -83,6 +87,7 @@ proc move.missile()
 			m.active = true
 			m.x = player.x:m.y = player.y:m.xi = player.dx*2:m.yi = player.dy*2
 			m.endTime = timer()+250
+			sound 0,1000,4
 		endif
 	endif
 endproc
@@ -157,6 +162,7 @@ endproc
 ;		Monster hit
 ;
 proc hit.monster(i)
+	sound 2,4444,0:slide 1,-4000,2
 	score = score+10
 	call update.score()
 	call reset.one.monster(i)
