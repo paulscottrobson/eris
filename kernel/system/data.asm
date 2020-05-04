@@ -83,7 +83,10 @@
 .spriteCount 								; sprite count [sysvar(15)]
 		fill 	1		
 
-.soundQueueBase 							; sound queue memory [sysvar(16)]
+.spriteRecordSizeValue 						; bytes reqd/sprite [sysvar(16)]
+		fill 	1
+
+.soundQueueBase 							; sound queue memory [sysvar(17)]
 		fill 	1
 		
 ; *****************************************************************************

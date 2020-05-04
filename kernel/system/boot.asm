@@ -95,6 +95,8 @@
 		stm 	r0,r1,#7
 		mov 	r0,#spriteObjectCount
 		stm 	r0,r1,#15
+		mov 	r0,#spriteRecordSize
+		stm 	r0,#spriteRecordSizeValue
 ;
 ;		Reset the next time event
 ;

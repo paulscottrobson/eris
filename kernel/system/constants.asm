@@ -90,7 +90,7 @@ timerRate = 5
 ;		Sprite constants
 ;
 spriteObjectCount = 32 						; Number of sprites
-spriteRecordSize = 6 						; words per sprite.
+spriteRecordSize = 12 						; words per sprite.
 ;
 spX = 0 									; current settings
 spY = 1
