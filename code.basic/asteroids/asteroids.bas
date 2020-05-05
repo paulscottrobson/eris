@@ -6,8 +6,8 @@ call initialise()
 call new.game()
 call new.level()
 call new.player()
-call wait.safe()
 e.move = 0:e.shoot = 0:e.check = 0
+call wait.safe()
 repeat
 	if event(e.move,6) then call check.rotate.move():sys move.all:call collisions():p = objects:sys draw.on
 	if joyb(1) <> 0 and qt.mi > 0 and event(e.shoot,20) <> 0 then call fire.missile()
@@ -45,7 +45,7 @@ endproc
 '		New game
 '
 proc new.game()
-	game.score = 0:game.lives = 3
+	game.score = 0:game.lives = 3:game.level = 0
 endproc
 '
 '		Refresh score
@@ -234,7 +234,7 @@ endproc
 '	Create RPL Code
 '
 proc setup.code()
-	code alloc(2048),0
+	code alloc(2048),0:ocount = 0:objects=0:acount = 0:mcount = 0:radius=0:qn = 0
 	rem "(addr offset - ) copy word to address"
 		blitter.copy = rpl(#p + @ swap !)
 	rem "( - ) wait for blitter"

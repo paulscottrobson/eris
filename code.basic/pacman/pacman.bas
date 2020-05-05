@@ -208,7 +208,7 @@ endproc
 '						Reset for new game
 '
 proc reset.game()
-	game = 0:lives = 3:level = 1
+	game.score = 0:lives = 3:level = 1
 	call reset.screen()
 endproc
 '
@@ -216,7 +216,7 @@ endproc
 '
 proc reset.objects()
 	game.speed = 4+level/2:if game.speed > 8 then game.speed = 8
-	chase.mode = false:player.graphic = 11:player.graphic.flip = 0
+	chase.mode = false:chase.endtime = 0:player.graphic = 11:player.graphic.flip = 0
 	ox(0) = map.w/2*16:oy(0) = 11*16:oxi(0) = 0:oyi(0) = 0:odist(0) = 16
 	sprite 0 ink 1 draw player.graphic flip 0
 	if ghost.count > 0

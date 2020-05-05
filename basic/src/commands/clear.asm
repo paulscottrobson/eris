@@ -22,6 +22,7 @@
 		sub 	r0,#cpuStackSize			; allocate space for CPU stack
 		stm 	r0,#endMemory 				; record highest point of BASIC RAM
 		stm	 	r0,#memAllocTop 			; reset allocation pointer for temporary strings
+		stm 	r15,#reportUnknownVariable 	; report if unknown
 		;
 		jsr 	#VarEraseHashTables			; erase hash tables, clears all variables except A-Z
 		;

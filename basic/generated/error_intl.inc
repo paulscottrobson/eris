@@ -61,6 +61,9 @@
 .StackImbalanceError
 	jsr	#GenErrorHandler
 	string	"RPL Stack imbalance"
+.UndefinedVariableError
+	jsr	#GenErrorHandler
+	string	"Variable unknown"
 .StructureError
 	jsr	#GenErrorHandler
 	string	"Structures wrong"

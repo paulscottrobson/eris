@@ -56,6 +56,9 @@
 		ror 	r0,#12 						; array bit in R0
 		skp 	r0
 		jmp 	#ArrayAutoError 			; if set, can't autocreate arrays.
+		ldm 	r0,#reportUnknownVariable 	; check if reporting unknown => error
+		skz 	r0
+		jmp 	#UndefinedVariableError
 		;
 		;		Create a new record and put its address in R0.
 		;

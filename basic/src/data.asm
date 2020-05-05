@@ -88,7 +88,10 @@
 		fill 	1
 .rplIfBranch 								; branch patch address for IF/ELSE
 		fill 	1
-								
+
+.reportUnknownVariable 						; non-zero if report unknown variable as error
+		fill 	1								
+		
 ; *****************************************************************************
 ;
 ;		Evaluation stack.

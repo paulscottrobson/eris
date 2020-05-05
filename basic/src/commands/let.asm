@@ -19,8 +19,11 @@
 		;
 		;		This lterm can be a variable , !term or term!term
 		;
+		stm 	r14,#reportUnknownVariable 	; permit definitions
 		mov 	r9,#(TOK_PLING & 0x1E00)-0x400
 		jsr 	#Evaluator 					; get the lhs of the equals.
+		stm 	r15,#reportUnknownVariable 	; turn permission off
+		;
 		ldm 	r0,r10,#esReference1 		; it *must* be a reference
 		sknz 	r0 							; which is a variable/array or a !expression
 		jmp 	#SyntaxError
