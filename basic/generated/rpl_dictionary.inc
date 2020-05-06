@@ -12,6 +12,36 @@
 	word	$0003
 	word	$42fa,$403f,$6010
 
+	word	5			; Word '0='
+	word	RPL_EqualZero
+	word	$0002
+	word	$8000,$2426
+
+	word	5			; Word '0<'
+	word	RPL_LessZero
+	word	$0002
+	word	$8000,$2424
+
+	word	5			; Word 'min'
+	word	RPL_Min
+	word	$0002
+	word	$4175,$600e
+
+	word	5			; Word 'max'
+	word	RPL_Max
+	word	$0002
+	word	$4035,$6018
+
+	word	5			; Word '+!'
+	word	RPL_AddWrite
+	word	$0002
+	word	$282a,$2c2f
+
+	word	5			; Word 'emit'
+	word	RPL_Emit
+	word	$0002
+	word	$420d,$6329
+
 	word	5			; Word 'dup'
 	word	RPL_Dup
 	word	$0002
@@ -42,11 +72,6 @@
 	word	$0002
 	word	$426a,$6014
 
-	word	5			; Word 'emit'
-	word	RPL_Emit
-	word	$0002
-	word	$420d,$6329
-
 	word	5			; Word '0-'
 	word	RPL_Negate
 	word	$0002
@@ -62,75 +87,35 @@
 	word	$0002
 	word	$282b,$282b
 
-	word	5			; Word 'min'
-	word	RPL_Min
-	word	$0002
-	word	$4175,$600e
-
-	word	5			; Word 'max'
-	word	RPL_Max
-	word	$0002
-	word	$4035,$6018
-
-	word	5			; Word '+!'
-	word	RPL_AddWrite
-	word	$0002
-	word	$282a,$2c2f
-
-	word	5			; Word '0='
-	word	RPL_EqualZero
-	word	$0002
-	word	$8000,$2426
-
-	word	5			; Word '0<'
-	word	RPL_LessZero
-	word	$0002
-	word	$8000,$2424
-
-	word	4			; Word '.'
-	word	RPL_Dot
+	word	4			; Word '='
+	word	RPL_Equal
 	word	$0001
-	word	$3c20
+	word	$2426
 
-	word	4			; Word 'cr'
-	word	RPL_Cr
+	word	4			; Word '<>'
+	word	RPL_NotEqual
 	word	$0001
-	word	$62d3
+	word	$2427
 
-	word	4			; Word 'sys'
-	word	RPL_Sys
+	word	4			; Word '>='
+	word	RPL_GreaterEqual
 	word	$0001
-	word	$3cb1
+	word	$2423
 
-	word	4			; Word ','
-	word	RPL_Dot1
-	word	$8001
-	word	$3268
-
-	word	4			; Word '&'
-	word	RPL_Dot2
-	word	$8001
-	word	$3032
-
-	word	4			; Word '%'
-	word	RPL_Dot3
-	word	$8001
-	word	$3033
-
-	word	4			; Word 'not'
-	word	RPL_Not
+	word	4			; Word '<'
+	word	RPL_Less
 	word	$0001
-	word	$304d
+	word	$2424
 
-	word	4			; Word '<<'
-	word	RPL_Shl
+	word	4			; Word '<='
+	word	RPL_LessEqual
 	word	$0001
-	word	$2629
+	word	$2425
 
-	word	4			; Word '>>'
-	word	RPL_Shr
+	word	4			; Word '>'
+	word	RPL_Greater
 	word	$0001
-	word	$2628
+	word	$2422
 
 	word	4			; Word '+'
 	word	RPL_Add
@@ -172,6 +157,56 @@
 	word	$0001
 	word	$2221
 
+	word	4			; Word '@'
+	word	RPL_Read
+	word	$0001
+	word	$3030
+
+	word	4			; Word '!'
+	word	RPL_Write
+	word	$0001
+	word	$2c2f
+
+	word	4			; Word '#'
+	word	RPL_VarRead
+	word	$8001
+	word	$3266
+
+	word	4			; Word '^'
+	word	RPL_VarWrite
+	word	$8001
+	word	$326c
+
+	word	4			; Word '.'
+	word	RPL_Dot
+	word	$0001
+	word	$3c20
+
+	word	4			; Word 'cr'
+	word	RPL_Cr
+	word	$0001
+	word	$62d3
+
+	word	4			; Word 'sys'
+	word	RPL_Sys
+	word	$0001
+	word	$3cb1
+
+	word	4			; Word ','
+	word	RPL_Dot1
+	word	$8001
+	word	$3268
+
+	word	4			; Word '&'
+	word	RPL_Dot2
+	word	$8001
+	word	$3032
+
+	word	4			; Word '%'
+	word	RPL_Dot3
+	word	$8001
+	word	$3033
+
 	word	4			; Word 'if'
 	word	RPL_If
 	word	$8001
@@ -212,54 +247,19 @@
 	word	$0001
 	word	$6009
 
-	word	4			; Word '@'
-	word	RPL_Read
+	word	4			; Word 'not'
+	word	RPL_Not
 	word	$0001
-	word	$3030
+	word	$304d
 
-	word	4			; Word '!'
-	word	RPL_Write
+	word	4			; Word '<<'
+	word	RPL_Shl
 	word	$0001
-	word	$2c2f
+	word	$2629
 
-	word	4			; Word '#'
-	word	RPL_VarRead
-	word	$8001
-	word	$3266
-
-	word	4			; Word '^'
-	word	RPL_VarWrite
-	word	$8001
-	word	$326c
-
-	word	4			; Word '='
-	word	RPL_Equal
+	word	4			; Word '>>'
+	word	RPL_Shr
 	word	$0001
-	word	$2426
-
-	word	4			; Word '<>'
-	word	RPL_NotEqual
-	word	$0001
-	word	$2427
-
-	word	4			; Word '>='
-	word	RPL_GreaterEqual
-	word	$0001
-	word	$2423
-
-	word	4			; Word '<'
-	word	RPL_Less
-	word	$0001
-	word	$2424
-
-	word	4			; Word '<='
-	word	RPL_LessEqual
-	word	$0001
-	word	$2425
-
-	word	4			; Word '>'
-	word	RPL_Greater
-	word	$0001
-	word	$2422
+	word	$2628
 
 	word	0

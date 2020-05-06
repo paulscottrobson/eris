@@ -9,6 +9,7 @@ del ..\emulator\storage\autoexec.prg >NUL
 pushd scripts >NUL
 del prg\autoexec.prg >NUL
 python tables.py
+python3 rpldoc.py >..\..\documents\rpl.html
 
 python makeprogram.py source\sed.bas prg\sed
 python makeprogram.py source\bgr.bas prg\bgr.prg

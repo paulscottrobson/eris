@@ -69,6 +69,12 @@
 		xor 	r0,#TOK_DIM^TOK_END 		; sprite end
 		sknz 	r0
 		jmp 	#_CSpriteEnd
+		xor 	r0,#TOK_END^TOK_RUN 		; sprite run
+		sknz 	r0
+		jmp 	#_CSpriteRun
+		xor 	r0,#TOK_RUN^TOK_STOP 		; sprite stop
+		sknz 	r0
+		jmp 	#_CSpriteStop
 		jmp 	#SyntaxError
 		;
 		;		MOVE x,y
@@ -124,6 +130,34 @@
 		;
 ._CSpriteEnd
 		jsr 	#OSSpriteKill
+		jmp 	#_CSpriteCheckExit
+		;
+		;		RUN
+		;
+._CSpriteRun
+		jsr 	#EvaluateString				; get string
+		;
+		mov 	r1,r0,#0
+		break
+		ldm 	r2,#memAllocBottom 			; if < memAllocBottom then in program
+		sub 	r1,r2,#0
+		skge
+		jmp 	#_CSpriteRunOkay
+		;
+		mov 	r1,r0,#0
+		ldm 	r2,#memAllocTop 			; if >= memAllocTop then concreted
+		sub 	r1,r2,#0
+		skge
+		jmp 	#TypeMismatchError 			; if in the middle, it is workspace string.
+._CSpriteRunOkay		
+		skz 	r14
+		;
+		;		STOP
+		;		
+._CSpriteStop
+		clr 	r0
+		jsr 	#OSSpriteScript
+		clr 	r0
 		jmp 	#_CSpriteCheckExit
 
 ;SPRITE LOAD "" 		- load sprite data
