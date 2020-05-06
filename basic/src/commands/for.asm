@@ -25,8 +25,11 @@
 
 .Command_FOR		;; 	[for]
 		push 	link
+		stm 	r14,#reportUnknownVariable 	; permit definitions
 		mov 	r9,#(TOK_PLING & 0x1E00)-0x400
 		jsr 	#Evaluator 					; get the lhs, which should be a reference
+		stm 	r15,#reportUnknownVariable 	; turn permission off
+		;
 		ldm 	r0,r10,#esReference1 		; check it is a reference
 		sknz 	r0
 		jmp	 	#TypeMismatchError

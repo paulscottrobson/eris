@@ -90,7 +90,7 @@ timerRate = 5
 ;		Sprite constants
 ;
 spriteObjectCount = 32 						; Number of sprites
-spriteRecordSize = 12 						; words per sprite.
+spriteRecordSize = 10 						; words per sprite.
 ;
 spX = 0 									; current settings
 spY = 1
@@ -98,6 +98,10 @@ spStatus = 2
 spNewX = 3									; New values
 spNewY = 4
 spNewStatus = 5
+spScriptPtr = 6
+spScriptOffset = 7
+spCycleDelay = 8
+spVelocity = 9
 
 spNoChange = $0800 							; value in new values indicating unchanged.
 ;

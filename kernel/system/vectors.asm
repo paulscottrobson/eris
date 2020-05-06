@@ -189,6 +189,9 @@
 .OSSpriteKill
 		jmp 	#OSXSpriteKill
 
+.OSSpriteScript
+		jmp 	#OSXSpriteScript
+		
 .OSGetSpriteInfo		
 		jmp 	#OSXGetSpriteInfo
 
