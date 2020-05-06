@@ -24,7 +24,11 @@
 ;			<else code>
 ;
 ; *****************************************************************************
-
+;;
+;;	(test - )
+;;	If the top of the stack is true execute the code that is between here and
+;;	either ELSE or THEN. These cannot be nested <test> IF ... ELSE ... THEN
+;;
 .RPL_If 	;; [if] *
 		push	link
 		mov 	r0,#SyntaxError
@@ -34,7 +38,11 @@
 		stm 	r0,#rplIfBranch
 		pop 	link
 		ret
-
+;;
+;;	( - )
+;;	Marks the start of the else code, which is executed if the IF test failed.
+;;	This is optional
+;;
 .RPL_Else 	;; [else] *
 		push 	link
 		mov 	r0,#$AFF0 					; JMP
@@ -50,7 +58,10 @@
 		stm 	r1,#rplIfBranch
 		pop 	link
 		ret
-
+;;
+;;	( - )
+;;	Marks the end of the if structure.
+;;
 .RPL_Then 	;; [then] *
 		ldm 	r0,#rplIfBranch 			; back patch to come here.
 		ldm 	r1,#asmPointer
@@ -70,12 +81,20 @@
 ;		jmp #<loop point>
 ;
 ; *****************************************************************************
-
+;;
+;;	( - )
+;;	Marks the start of the conditional loop. REPEAT ...... <test> UNTIL. These 
+;;	cannot be nested.
+;;
 .RPL_Repeat 	;; [repeat] *
 		ldm 	r0,#asmPointer 				; remember where we are branching to
 		stm 	r0,#rplRepeatLoop 	
 		ret
-
+;;
+;;	(test - )
+;;	Marks the end of the conditional loop, using the top of the stack as a test,
+;;	loops back to the top if the test is zero
+;;
 .RPL_Until 	;; [until] *
 		push 	link
 		ldm 	r0,#rplRepeatLoop
@@ -98,7 +117,11 @@
 ;		inc sp
 ;
 ; *****************************************************************************
-
+;;
+;;	(n - )
+;;	Starts a loop which executes a fixed number of times, counting down from n-1
+;;	to zero. Cannot be nested 10 FOR ...... NEXT executes the code for 9 8 7 ... 0
+;;
 .RPL_For 	;; [for] *
 		push 	link
 		mov 	r0,#$5CE1 					; dec SP (make space for index)
@@ -113,7 +136,10 @@
 		pop 	link
 		ret
 
-
+;;
+;;	( - )
+;;	Next marks the end of the loop.
+;;
 .RPL_Next 	;; [next] *
 		push 	link
 		mov 	r0,#$11C0 					; ldm r1,sp,#0 (get index value)
@@ -130,7 +156,11 @@
 		jsr 	#AsmWord
 		pop 	link
 		ret
-
+;;
+;;	( - n)
+;;	Get the current index value to the top of the stack. This value is held on the return stack
+;;	so cannot be accessed inside another method.
+;;
 .RPL_Index 	;; [i] 
 		dec 	r8 							; save current TOS on stack
 		stm 	r0,r8,#0

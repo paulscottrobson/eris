@@ -102,7 +102,7 @@ words = {}
 for root,dirs,files in os.walk(".."+os.sep+"src"):
 	for f in [x for x in files if x.endswith(".rpl")]:
 		for s in open(root+os.sep+f).readlines():
-			if s.find(";;") >= 0:
+			if s.find(";;") >= 0 and not s.startswith(";;"):
 				m = re.match("^\\.(.*?)\\s+\\;\\;\\s+\\[(.*?)\\]\\s*(\\*?)\\s*$",s)
 				assert m is not None,f+" : "+s
 				word = { "word":m.group(2).lower(),"label":m.group(1),"immediate":(m.group(3) == "*")}

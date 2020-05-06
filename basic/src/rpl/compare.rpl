@@ -16,6 +16,10 @@
 ;									0=
 ;
 ; *****************************************************************************
+;;
+;; 	(n - t)
+;;	Check the top of the stack ; drop the value ; if zero push -1 , if non zero push false
+;;
 
 .RPL_EqualZero 	;; [0=]
 		break
@@ -30,7 +34,11 @@
 ;									0<
 ;
 ; *****************************************************************************
-
+;;
+;; 	(n - t)
+;;	Check the top of the stack ; drop the value ; 
+;;	if less than zero push -1 , if non zero push false
+;;
 .RPL_LessZero 	;; [0<]
 		mov 	r1,r0,#0
 		clr 	r0
@@ -43,7 +51,11 @@
 ;									=
 ;
 ; *****************************************************************************
-
+;;
+;; 	(n1 n2 - t)
+;;	Compare the top two stack values and drop both, replacing them with -1
+;; 	if the second value on the stack is equal to the first
+;;
 .RPL_Equal ;; [=]
 		ldm 	r1,r8,#0
 		inc 	r8
@@ -62,6 +74,11 @@
 ;
 ; *****************************************************************************
 
+;;
+;; 	(n1 n2 - t)
+;;	Compare the top two stack values and drop both, replacing them with -1
+;; 	if the second value on the stack is not equal to the first
+;;
 .RPL_NotEqual ;; [<>]
 		ldm 	r1,r8,#0
 		inc 	r8
@@ -75,10 +92,20 @@
 ;								< >= handler
 ;
 ; *****************************************************************************
+;;
+;; 	(n1 n2 - t)
+;;	Compare the top two stack values and drop both, replacing them with -1
+;; 	if the second value on the stack is greater than or equal to the first
+;;
 
 .RPL_GreaterEqual ;; [>=]
 		mov 	r2,#-1
 		sknz 	r2
+;;
+;; 	(n1 n2 - t)
+;;	Compare the top two stack values and drop both, replacing them with -1
+;; 	if the second value on the stack is less than the first
+;;
 .RPL_Less ;; [<]	
 		clr 	r2	
 		mov 	r1,r0,#0
@@ -102,10 +129,19 @@
 ;								> <= handler
 ;
 ; *****************************************************************************
-
+;;
+;; 	(n1 n2 - t)
+;;	Compare the top two stack values and drop both, replacing them with -1
+;; 	if the second value on the stack is less than or equal to the first
+;;
 .RPL_LessEqual ;; [<=]
 		mov 	r2,#-1
 		sknz 	r2
+;;
+;; 	(n1 n2 - t)
+;;	Compare the top two stack values and drop both, replacing them with -1
+;; 	if the second value on the stack is greater than the first
+;;
 .RPL_Greater ;; [>]
 		clr 	r2
 		ldm 	r1,r8,#0

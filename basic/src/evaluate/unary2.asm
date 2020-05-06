@@ -50,10 +50,14 @@
 		jsr 	#OSReadJoystick 			; read and shift joystick
 		ror 	r0,r2,#0	 				; now in bits 0..1
 		and 	r0,#3 						; 0 no press. 1 left 2 right
+		mov 	r2,r0,#0 					; save in R2 as can be 3.
+		xor 	r2,#3 						; if 3 (both pressed) return 0
+		sknz 	r2
+		clr 	r0 
 		add 	r0,r0,#0 					; 0 no press 2 left 4 right
 		sknz 	r0
 		mov 	r0,#3 						; now 2 3 4
-		sub 	r0,#3 						; now -1 0 1
+		sub 	r0,#3 						; now -1 0 1 
 ._JoyExit		
 		stm 	r0,r10,#esValue1 			; update value
 		stm 	r14,r10,#esType1 			; make integer constant

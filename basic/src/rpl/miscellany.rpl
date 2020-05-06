@@ -16,7 +16,10 @@
 ;							Compile a break to debugger
 ;
 ; *****************************************************************************
-
+;;
+;;	(-)
+;;	Compiles a break into the code.
+;;
 .RPL_Break  ;; [break] *
 		push 	link
 		clr 	r0
@@ -29,7 +32,10 @@
 ;									Print TOS
 ;
 ; *****************************************************************************
-
+;;
+;;	(n - )
+;;	Print the top value of the stack in signed decimal
+;;
 .RPL_Dot ;; [.]
 		push 	link
 		mov 	r1,r0,#0
@@ -47,7 +53,10 @@
 ;									Emit
 ;
 ; *****************************************************************************
-
+;;
+;;	(n - )
+;;	Output the top of the stack are a character
+;;
 .RPL_Emit 	;; [emit]
 		push 	link
 		jsr 	#OSPrintCharacter
@@ -56,10 +65,13 @@
 
 ; *****************************************************************************
 ;
-;									Emit
+;									CR
 ;
 ; *****************************************************************************
-
+;;
+;;	( - )
+;;	Print a carriage return 
+;;
 .RPL_Cr 	;; [cr]
 		push 	r0,link
 		mov 	r0,#13
@@ -72,7 +84,12 @@
 ;									Sys
 ;
 ; *****************************************************************************
-
+;;
+;;	(<params> count address - r0)
+;;	Calls routine address, with count parameters which are pushed on the stack 
+;;	backwards (e.g. R3v R2v R1v R0v 4 code.address SYS) ; these are loaded into
+;;	R0-R4. The value in R0 on return is put on the top of the stack
+;;
 .RPL_Sys 	;; [sys]
 		push 	link
 		mov 	r7,r0,#0 					; call address in R0

@@ -16,7 +16,10 @@
 ;									@
 ;
 ; *****************************************************************************
-
+;;
+;;	(addr - data)
+;;	Read the word at the given address
+;;
 .RPL_Read	;; [@]
 		ldm 	r0,r0,#0
 		ret
@@ -26,7 +29,10 @@
 ;									!
 ;
 ; *****************************************************************************
-
+;;
+;;	(data addr - )
+;;	Write the data second on the stack to the address on the top of the stack
+;;
 .RPL_Write ;; [!]
 		ldm 	r1,r8,#0
 		stm 	r1,r0,#0
@@ -39,7 +45,10 @@
 ;									+!
 ;
 ; *****************************************************************************
-
+;;
+;;	(data addr - )
+;;	Add the data second on the stack to the address on the top of the stack
+;;
 .RPL_AddWrite ;; [+!]
 		ldm 	r1,r8,#0
 		ldm 	r2,r0,#0
@@ -54,10 +63,19 @@
 ;							Variable Read/Write
 ;
 ; *****************************************************************************
-
+;;
+;;	( - data)
+;;	# accesses basic variables ; it compiles code to push the variable following it in
+;;	the source on top of the stack. #test is the equivalent of test @ in FORTH.
+;;
 .RPL_VarRead ;; [#] *
 		mov 	r0,#1 						; R0 is 1 for read code, 0 for write code.
 		sknz 	r0
+;;
+;;	(data - )
+;;	# accesses basic variables ; it compiles code to store the top of the stack in the 
+;;	variable following it in the source. ^test is the equivalent of test ! in FORTH.
+;;
 .RPL_VarWrite ;; [^] *
 		clr 	r0
 		push 	link
