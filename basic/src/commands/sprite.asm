@@ -138,7 +138,6 @@
 		jsr 	#EvaluateString				; get string
 		;
 		mov 	r1,r0,#0
-		break
 		ldm 	r2,#memAllocBottom 			; if < memAllocBottom then in program
 		sub 	r1,r2,#0
 		skge
@@ -160,16 +159,9 @@
 		clr 	r0
 		jmp 	#_CSpriteCheckExit
 
-;SPRITE LOAD "" 		- load sprite data
-;SPRITE 1 TO x,y 		- move sprite
-;SPRITE 1 DRAW 12 		- set graphic #
-;SPRITE 1 INK 4 		- set colour #
-;SPRITE 1 FLIP n 		- set sprite flip bits
-;SPRITE 1 DIM n 		- set size 1/2
-
 ; *****************************************************************************
 ;
-;								Hit (n1,n2)
+;								Hit (n1,n2,<range>)
 ;
 ; *****************************************************************************
 

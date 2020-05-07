@@ -166,9 +166,12 @@
 
 .OSXSpriteKill
 		push 	r1,link
-		clr 	r0
+		clr 	r0 							; 0 value and mask
 		clr 	r1
-		jsr 	#OSIUpdateStatus 
+		jsr 	#OSIUpdateStatus  			; update status
+		ldm 	r1,#spriteSelect 			; get currently selected sprite
+		stm 	r14,#spScriptPtr 			; zero the script pointer so no more script runs.
+		stm 	r14,#spCycleDelay 			; zero the delay counter so it won't try to move it.
 		pop 	r1,link
 		ret
 
