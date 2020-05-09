@@ -42,11 +42,13 @@
 		skz 	r4
 		jmp 	#_SP1Active
 		ldm 	r4,r1,#spNewStatus
+		xor 	r4,#spNoChange
 		sknz 	r4		
 		jmp 	#_SP1Next
 ._SP1Active		
 		ldm 	r0,r1,#spNewX 				; check if X,Y status has changed from $4000
 		ldm 	r3,r1,#spNewY
+		ldm 	r4,r1,#spNewStatus
 		add 	r0,r3,#0 					; and them together. If the result is changed.
 		add 	r0,r4,#0
 		xor 	r0,#spNoChange*3 			; will be zero if 3 lots of unchanged.

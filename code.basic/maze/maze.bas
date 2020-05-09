@@ -10,9 +10,6 @@ call create.Maze()
 call draw.Maze(10)
 end
 
-
-
-
 proc initialise.Maze(w,h)
 	maze.width = w:maze.height = h
 	dim maze(w+1,h+1):dim maze.dir(4,3)

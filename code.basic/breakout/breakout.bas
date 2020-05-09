@@ -4,7 +4,7 @@
 '
 ' **************************************************************************************************
 
-screen 3,1:palette 4,0,6:palette 1,1,7
+cls:screen 3,1:palette 4,0,6:palette 1,1,7
 call centretext(60,3,4,"Breakout")
 call centretext(180,2,1,"Press 1 for Breakout, 2 for Breakthru")
 repeat

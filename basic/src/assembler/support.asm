@@ -18,7 +18,9 @@
 
 .Command_Label 		;; [.]
 		push 	link
+		stm 	r14,#reportUnknownVariable 	; permit definitions
 		jsr 	#EvaluateExpression 		; get a reference.
+		stm 	r15,#reportUnknownVariable 	; turn permission off
 		ldm 	r0,r10,#esReference1 		; check reference
 		sknz 	r0
 		jmp		#BadLabelError

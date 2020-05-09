@@ -4,7 +4,7 @@
 '
 ' **************************************************************************************************
 '
-screen 2,2
+cls:screen 2,2
 palette 1,0,4:palette 2,0,3:palette 3,0,6
 palette 1,1,3:palette 2,1,1:palette 3,1,6
 call setup.data(4)

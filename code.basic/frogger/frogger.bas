@@ -4,9 +4,8 @@
 '
 ' **************************************************************************************************
 '
-'	Sound effects : jump, home, dead.
 '
-screen 3,1:palette 1,1,2
+cls:screen 3,1:palette 1,1,2
 !&FFFD = true:call initialise():!&FFFD = false
 game.score = 0:call add.score(0)
 game.lives = 3:game.level = 1:call draw.lives()

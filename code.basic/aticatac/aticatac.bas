@@ -2,8 +2,6 @@
 '	"(Not) Atic Atac"
 '	"***********************"
 '
-'	Sound Effects
-'
 map.size = 10:call create.game()
 player.speed = 3:safety.off = true
 repeat
@@ -223,7 +221,7 @@ endproc
 ;
 proc create.game()
 	local i,n,x,y
-	screen 2,2:palette 1,1,6:ink 3:frame 256,0 to 319,239
+	cls:screen 2,2:palette 1,1,6:ink 3:frame 256,0 to 319,239
 	room.size = 32:door.width = 14:player.speed = 3:safety.off = True
 	sprite load "aticatac.spr"
 	dim door$(map.size,map.size):rem "col/type x 4 NESW"

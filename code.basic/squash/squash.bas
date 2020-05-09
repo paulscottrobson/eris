@@ -1,7 +1,7 @@
 '
 '			Simple Squash Game. *Very* rough and ready, more testing than anything.
 '
-screen 2,2
+cls:screen 2,2
 '
 '			Manually create sprites by poking image memory. Not good practice normally :)
 '

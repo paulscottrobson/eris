@@ -4,7 +4,7 @@
 '
 ' **************************************************************************************************
 '
-screen 2,2:palette 1,1,5
+cls:screen 2,2:palette 1,1,5
 call initialise()
 call new.game()
 call new.level()

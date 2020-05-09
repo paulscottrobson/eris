@@ -4,7 +4,7 @@
 '
 ' **************************************************************************************************
 
-screen 3,1
+cls:screen 3,1
 call centretext(60,3,4,"Dodge'Em")
 call centretext(180,2,1,"1 for One Chaser, 2 for Two chasers")
 repeat
