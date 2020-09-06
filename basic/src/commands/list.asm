@@ -56,11 +56,11 @@
 		jsr 	#OSGetTextPos 				; get text position
 		sub 	r1,#CharHeight-4 			; check off the bottom
 		sklt
-		jmp 	#WarmStart
+		jmp 	#WarmStartNoReady
 		;
 		ldm 	r0,r11,#0 					; get the offset, if zero, warm start.
 		sknz 	r0
-		jmp 	#WarmStart					
+		jmp 	#WarmStartNoReady					
 		;
 		ldm 	r0,r11,#1 					; get line number
 		skp 	r0 							; we do not list -ve numbers by default

@@ -190,12 +190,12 @@ class Tokens(object):
 [Cmd]
 	' 		:		? 		
 	after 	assert 	blit 	call 	cancel 	clear 	cls 	cursor	curve	
-	default	dim 	dir 	draw	ellipse	else 	end 	every	fkey	
-	flip	frame 	gosub 	goto 	ink 	input 	let 	line	list 	
-	load 	local 	mon		move	new 	old		on 		outport	palette	
-	paper	plot 	poke 	print 	randomise		rect 	rem 	renum	
-	return 	run 	save 	screen	slide	sound	sprite 	stop 	sys 	
-	text	tile	wait	when
+	default	delete 	dim 	dir 	draw	ellipse	else 	end 	every	
+	fkey	flip	frame 	gosub 	goto 	ink 	input 	let 	line	
+	list 	load 	local 	mon		move	new 	old		on 		outport	
+	palette	paper	plot 	poke 	print 	randomise		rect 	rem 	
+	renum	return 	run 	save 	screen	slide	sound	sprite 	stop 	
+	sys 	text	tile	wait	when
 	
 """
 
