@@ -137,7 +137,7 @@
 	word	Command_Cursor           ; $3c84 CURSOR
 	word	Command_Curve            ; $3c85 CURVE
 	word	Dummy112                 ; $3c86 DEFAULT
-	word	SyntaxError              ; $3c87 DELETE
+	word	Command_Delete           ; $3c87 DELETE
 	word	Command_DIM              ; $3c88 DIM
 	word	Command_Dir              ; $3c89 DIR
 	word	Command_Draw             ; $3c8a DRAW

@@ -87,6 +87,20 @@ WORD16 HWSaveFile(char *fName,WORD16 start,WORD16 size) {
 	fabgl::resumeInterrupts();
 	return r;
 }
+
+// ****************************************************************************
+//								Delete file
+// ****************************************************************************
+
+WORD16 HWDeleteFile(char *fileName) {
+	char fullName[64];
+	sprintf(fullName,"/%s",fileName);								// No directories or interrupts
+	fabgl::suspendInterrupts();
+	SPIFFS.remove(fullName);
+	fabgl::resumeInterrupts();
+	return 0;
+}
+
 // ****************************************************************************
 //
 //						Directory of SPIFFS root

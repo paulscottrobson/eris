@@ -117,6 +117,28 @@
 
 ; *****************************************************************************
 ;
+;								Delete file
+;
+; *****************************************************************************
+
+.Command_Delete ;; [delete]
+		push 	link
+		jsr 	#EvaluateString 			; get delete name 
+		push 	r0 							; save it
+		mov 	r1,r0,#0 					
+		mov 	r0,#5 						; check exists.
+		jsr 	#OSFileOperation 			; do load
+		skz 	r0 
+		jmp 	#DeleteFileError
+		pop 	r1 							; restore name to r1
+		mov 	r0,#9
+		jsr 	#OSFileOperation 			; do it
+		pop 	link
+		ret
+
+
+; *****************************************************************************
+;
 ;								Save program
 ;
 ; *****************************************************************************
