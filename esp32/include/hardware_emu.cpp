@@ -232,3 +232,15 @@ WORD16 HWDownloadHandler(char *url,char *target,char *ssid,char *password) {
 	}
 	return (fIn != NULL) ? 0 : 1;
 }
+
+// ****************************************************************************
+//								Delete file
+// ****************************************************************************
+
+WORD16 HWDeleteFile(char *fileName) {
+	char fullName[128];
+	printf("Deleting %s\n",fileName);
+	sprintf(fullName,"%sstorage%c%s",SDL_GetBasePath(),FILESEP,fileName);
+	remove(fullName);
+	return 0;
+}

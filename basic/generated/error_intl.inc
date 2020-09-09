@@ -115,3 +115,6 @@
 .SaveNameError
 	jsr	#GenErrorHandler
 	string	"Bad file name"
+.DeleteFileError
+	jsr	#GenErrorHandler
+	string	"No such file"

@@ -58,7 +58,7 @@
 		;
 ._EPCDone	
 		jsr 	#Command_Clear 			; do clear code 
-		jmp 	#WarmStart 				; and warm start	
+		jmp 	#WarmStartNoReady 		; and warm start	
 
 ; *****************************************************************************
 ;

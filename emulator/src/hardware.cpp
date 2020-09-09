@@ -103,6 +103,10 @@ WORD16 HWFileOperation(WORD16 R0,WORD16 R1,WORD16 R2,WORD16 R3) {
 			break;
 		case 8:
 			r = HWDownloadFile(fileName);
+			break;
+		case 9:
+			HWDeleteFile(fileName);
+			break;
 	}
 	return r;
 }

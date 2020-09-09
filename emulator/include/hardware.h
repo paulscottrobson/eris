@@ -45,6 +45,7 @@ WORD16 HWLoadFile(char * fileName,WORD16 override);
 void HWLoadDirectory(WORD16 target);
 WORD16 HWSaveFile(char *fileName,WORD16 start,WORD16 size);
 WORD16 HWFileInformation(char *fileName,WORD16 *loadAddress,WORD16 *size);
+WORD16 HWDeleteFile(char *fileName);
 WORD16 HWGetLoadSize(void);
 WORD16 HWConnectExternal(char *SSID,char *password);
 WORD16 HWDownloadFile(char *fileName);

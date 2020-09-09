@@ -20,7 +20,7 @@
 
 		jmp 	#ColdStart
 .basicPrompt
-		string "Basic[3A]  0.94[0D,0D,12]"
+		string "Basic[3A]  0.95[0D,0D,12]"
 
 ; *****************************************************************************
 ;
@@ -80,7 +80,10 @@
 ;
 ; *****************************************************************************
 
-.WarmStart 
+.WarmStart
+		jsr 	#OSPrintInline 				; print Ready message as a seperator
+		string 	"[13]Ready.[0D][12]"
+.WarmStartNoReady
 		ldm 	sp,#initialSP 				; reset the stack
 		jsr 	#EventReset 				; stop events.
 		jsr 	#OSLineInput 				; read a line off the screen
@@ -95,5 +98,3 @@
 		skm 	r2 							; skip if it isn't (that's 8000-FFFF => 0-32767)
 		jmp 	#RunProgramR11 				; run program from R11 as a command
 		jmp 	#EditProgram 				; else edit
-
-
