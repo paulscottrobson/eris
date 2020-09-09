@@ -30,6 +30,7 @@ def _decode(c):
 #		Keyboard map file to build with.
 #
 keyMapFile = "uk.keyboard"
+#keyMapFile = "us.keyboard"
 #
 #		Create data structures.
 #
