@@ -2,119 +2,164 @@
 ;	Automatically generated
 ;
 .SyntaxError
-	jsr	#GenErrorHandler
-	string	"Syntax"
+jsr	#GenErrorHandler
+.SyntaxErrorText
+	string "Syntax"
 .AssertError
-	jsr	#GenErrorHandler
-	string	"Assert"
+jsr	#GenErrorHandler
+.AssertErrorText
+	string "Assert"
 .MissingBracketError
-	jsr	#GenErrorHandler
-	string	"Missing )"
+jsr	#GenErrorHandler
+.MissingBracketErrorText
+	string "Missing )"
 .MissingCommaError
-	jsr	#GenErrorHandler
-	string	"Missing ,"
+jsr	#GenErrorHandler
+.MissingCommaErrorText
+	string "Missing ,"
 .MissingHashError
-	jsr	#GenErrorHandler
-	string	"Missing #"
+jsr	#GenErrorHandler
+.MissingHashErrorText
+	string "Missing #"
 .TypeMismatchError
-	jsr	#GenErrorHandler
-	string	"Wrong type"
+jsr	#GenErrorHandler
+.TypeMismatchErrorText
+	string "Wrong type"
 .DivideZeroError
-	jsr	#GenErrorHandler
-	string	"Division by Zero"
+jsr	#GenErrorHandler
+.DivideZeroErrorText
+	string "Division by Zero"
 .BadNumberError
-	jsr	#GenErrorHandler
-	string	"Bad Number"
+jsr	#GenErrorHandler
+.BadNumberErrorText
+	string "Bad Number"
 .BadIndexError
-	jsr	#GenErrorHandler
-	string	"Bad Index"
+jsr	#GenErrorHandler
+.BadIndexErrorText
+	string "Bad Index"
 .ArrayAutoError
-	jsr	#GenErrorHandler
-	string	"Unknown Array"
+jsr	#GenErrorHandler
+.ArrayAutoErrorText
+	string "Unknown Array"
 .ArrayExistsError
-	jsr	#GenErrorHandler
-	string	"Array exists"
+jsr	#GenErrorHandler
+.ArrayExistsErrorText
+	string "Array exists"
 .CallError
-	jsr	#GenErrorHandler
-	string	"Unknown Procedure"
+jsr	#GenErrorHandler
+.CallErrorText
+	string "Unknown Procedure"
 .StrlenError
-	jsr	#GenErrorHandler
-	string	"String Size"
+jsr	#GenErrorHandler
+.StrlenErrorText
+	string "String Size"
 .LocalParamError
-	jsr	#GenErrorHandler
-	string	"Parameters or Locals"
+jsr	#GenErrorHandler
+.LocalParamErrorText
+	string "Parameters or Locals"
 .NoAddressError
-	jsr	#GenErrorHandler
-	string	"Assembler not initialised"
+jsr	#GenErrorHandler
+.NoAddressErrorText
+	string "Assembler not initialised"
 .BadRegisterError
-	jsr	#GenErrorHandler
-	string	"Bad CPU Register"
+jsr	#GenErrorHandler
+.BadRegisterErrorText
+	string "Bad CPU Register"
 .BadLabelError
-	jsr	#GenErrorHandler
-	string	"Bad Label"
+jsr	#GenErrorHandler
+.BadLabelErrorText
+	string "Bad Label"
 .NoSpritePlaneError
-	jsr	#GenErrorHandler
-	string	"No Sprite Plane"
+jsr	#GenErrorHandler
+.NoSpritePlaneErrorText
+	string "No Sprite Plane"
 .SoundQueueError
-	jsr	#GenErrorHandler
-	string	"Sound Queue Full"
+jsr	#GenErrorHandler
+.SoundQueueErrorText
+	string "Sound Queue Full"
 .StackImbalanceError
-	jsr	#GenErrorHandler
-	string	"RPL Stack imbalance"
+jsr	#GenErrorHandler
+.StackImbalanceErrorText
+	string "RPL Stack imbalance"
 .UndefinedVariableError
-	jsr	#GenErrorHandler
-	string	"Variable unknown"
+jsr	#GenErrorHandler
+.UndefinedVariableErrorText
+	string "Variable unknown"
 .StructureError
-	jsr	#GenErrorHandler
-	string	"Structures wrong"
+jsr	#GenErrorHandler
+.StructureErrorText
+	string "Structures wrong"
 .ReturnError
-	jsr	#GenErrorHandler
-	string	"Return without Gosub"
+jsr	#GenErrorHandler
+.ReturnErrorText
+	string "Return without Gosub"
 .UntilError
-	jsr	#GenErrorHandler
-	string	"Until without Repeat"
+jsr	#GenErrorHandler
+.UntilErrorText
+	string "Until without Repeat"
 .WendError
-	jsr	#GenErrorHandler
-	string	"Wend without While"
+jsr	#GenErrorHandler
+.WendErrorText
+	string "Wend without While"
 .ElseError
-	jsr	#GenErrorHandler
-	string	"Else without If"
+jsr	#GenErrorHandler
+.ElseErrorText
+	string "Else without If"
 .EndIfError
-	jsr	#GenErrorHandler
-	string	"Endif without If"
+jsr	#GenErrorHandler
+.EndIfErrorText
+	string "Endif without If"
 .EndProcError
-	jsr	#GenErrorHandler
-	string	"EndProc without Proc"
+jsr	#GenErrorHandler
+.EndProcErrorText
+	string "EndProc without Proc"
 .NextError
-	jsr	#GenErrorHandler
-	string	"Next without For"
+jsr	#GenErrorHandler
+.NextErrorText
+	string "Next without For"
 .ReturnStackError
-	jsr	#GenErrorHandler
-	string	"Structure too deep"
+jsr	#GenErrorHandler
+.ReturnStackErrorText
+	string "Structure too deep"
 .LineError
-	jsr	#GenErrorHandler
-	string	"Line unknown"
+jsr	#GenErrorHandler
+.LineErrorText
+	string "Line unknown"
 .MemoryError
-	jsr	#GenErrorHandler
-	string	"Out of Memory"
+jsr	#GenErrorHandler
+.MemoryErrorText
+	string "Out of Memory"
 .StopError
-	jsr	#GenErrorHandler
-	string	"Stop"
+jsr	#GenErrorHandler
+.StopErrorText
+	string "Stop"
 .TokeniseError
-	jsr	#GenErrorHandler
-	string	"Cannot process line"
+jsr	#GenErrorHandler
+.TokeniseErrorText
+	string "Cannot process line"
 .BreakError
-	jsr	#GenErrorHandler
-	string	"Break"
+jsr	#GenErrorHandler
+.BreakErrorText
+	string "Break"
 .LoadError
-	jsr	#GenErrorHandler
-	string	"No such file"
+jsr	#GenErrorHandler
+.LoadErrorText
+	string "No such file"
 .SaveError
-	jsr	#GenErrorHandler
-	string	"Cannot save"
+jsr	#GenErrorHandler
+.SaveErrorText
+	string "Cannot save"
 .SaveNameError
-	jsr	#GenErrorHandler
-	string	"Bad file name"
+jsr	#GenErrorHandler
+.SaveNameErrorText
+	string "Bad file name"
 .DeleteFileError
-	jsr	#GenErrorHandler
-	string	"No such file"
+jsr	#GenErrorHandler
+.DeleteFileErrorText
+	string "No such file"
+.ReadyWarmStart
+jsr	#GenErrorHandler
+.ReadyWarmStartText
+	string "Ready![0D]"
+.BasicLanguage
+	string "-uk[0D,0D,12]"

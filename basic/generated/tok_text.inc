@@ -185,4 +185,5 @@
 	word	$0e02,$417c,$60d4                ; $3cb4 TILE
 	word	$0e02,$403f,$6329                ; $3cb5 WAIT
 	word	$0e02,$4157,$6235                ; $3cb6 WHEN
+	word	$0802,$4ad6,$68cd                ; $30b7 FREE(
 	word	$0000

@@ -20,7 +20,7 @@
 
 		jmp 	#ColdStart
 .basicPrompt
-		string "Basic[3A]  0.95[0D,0D,12]"
+		string "Basic[3A]  0.96"
 
 ; *****************************************************************************
 ;
@@ -47,6 +47,8 @@
 		stm 	r0,#programCode 			; to the space allocate for BASIC programs
 		;
 		mov 	r0,#basicPrompt 			; display the prompt
+		jsr 	#OSPrintString
+		mov 	r0,#basicLanguage
 		jsr 	#OSPrintString
 		;
 		;		Uncomment this to test the tokeniser
@@ -81,8 +83,8 @@
 ; *****************************************************************************
 
 .WarmStart
-		jsr 	#OSPrintInline 				; print Ready message as a seperator
-		string 	"[13]Ready.[0D][12]"
+		mov 	r0,#ReadyWarmStartText
+		jsr 	#OSPrintString 				; print Ready message as a seperator
 .WarmStartNoReady
 		ldm 	sp,#initialSP 				; reset the stack
 		jsr 	#EventReset 				; stop events.

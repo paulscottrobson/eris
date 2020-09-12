@@ -241,4 +241,20 @@
 		ret
 
 
+; *****************************************************************************
+;
+;								Free()
+;
+; *****************************************************************************
+
+.Unary_Free		;; [free(]
+		push 	link
+		ldm 	r0,#memAllocTop 			; calculate allocation difference.
+		ldm 	r1,#memAllocBottom
+		sub 	r0,r1,#0	
+		stm 	r0,r10,#esValue1 			; update value
+		stm 	r14,r10,#esType1 			; convert to integer
+		jsr 	#CheckRightBracket 			; check there's a right bracket
+		pop 	link
+		ret
 

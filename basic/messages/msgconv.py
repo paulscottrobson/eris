@@ -11,33 +11,25 @@
 # *****************************************************************************
 
 import os,sys
+language = sys.argv[1] if len(sys.argv) == 2 else "uk"
 #
 #		This is the message file to use
 #
-msgFile = "messages.uk"
+msgFile = language.strip().lower()+".messages"
 
-
-#
-#		Convert non blank/comment line to label or string.
-#
-def process(x):
-	if x.startswith('"') and x.endswith('"'):
-		return "\tjsr\t#GenErrorHandler\n\tstring\t"+x
-	else:
-		return "."+x	
-
-#
-#		Read and pre-process
-#
-src = [x.strip() for x in open(msgFile).readlines() if not x.startswith(";")]
-src = [process(x) for x in src if x != ""]
-src = "\n".join(src)
-#
-#		Write out code
-#
 h = open(".."+os.sep+"generated"+os.sep+"error_intl.inc","w")
 h.write(";\n;\tAutomatically generated\n;\n")
-h.write(src)
+#
+#		Read and process
+#
+for x in [x.strip() for x in open(msgFile).readlines() if not x.startswith(";")]:
+	if x.startswith('"'):
+		h.write('\tstring {0}\n'.format(x))
+	else:
+		h.write(".{0}\njsr\t#GenErrorHandler\n.{0}Text\n".format(x))
+
+h.write(".BasicLanguage\n")
+h.write('\tstring "-{0}[0D,0D,12]"\n'.format(language))		
 h.close()
 
 

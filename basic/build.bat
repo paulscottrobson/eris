@@ -26,7 +26,7 @@ copy prg\*.* ..\..\emulator\storage >NUL
 popd
 
 pushd messages >NUL
-python msgconv.py
+python msgconv.py %1
 popd messages
 
 copy ..\kernel\bin\a.lbl generated\kernel.labels >NUL

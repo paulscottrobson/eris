@@ -185,3 +185,4 @@
 	word	Command_Tile             ; $3cb4 TILE
 	word	CommandWait              ; $3cb5 WAIT
 	word	Dummy111                 ; $3cb6 WHEN
+	word	Unary_Free               ; $30b7 FREE(

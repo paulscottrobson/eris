@@ -196,7 +196,11 @@ class Tokens(object):
 	palette	paper	plot 	poke 	print 	randomise		rect 	rem 	
 	renum	return 	run 	save 	screen	slide	sound	sprite 	stop 	
 	sys 	text	tile	wait	when
-	
+//
+//		Additions, reintegrate later.
+//	
+[Unary]
+	free(
 """
 
 Tokens.TOKENS = None		

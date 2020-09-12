@@ -29,8 +29,8 @@ def _decode(c):
 #
 #		Keyboard map file to build with.
 #
-keyMapFile = "uk.keyboard"
-#keyMapFile = "us.keyboard"
+language = sys.argv[1] if len(sys.argv) == 2 else "uk"
+keyMapFile = language.strip().lower()+".keyboard"
 #
 #		Create data structures.
 #
@@ -80,4 +80,7 @@ h.write(".ShiftTable\n")
 for k in keys:
 	h.write("\tbyte\t{1:3},{0:3} ; {2} -> {3}\n".format(k,shiftMap[k],chr(k),chr(shiftMap[k])))
 h.write("\tbyte\t 0,0\n\n")
+
+h.write(".KernelLanguage\n")
+h.write('\tstring "-{0}[0D]"\n'.format(language))
 h.close()	

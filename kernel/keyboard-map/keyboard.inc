@@ -31,3 +31,5 @@
 	byte	125, 93 ; ] -> }
 	byte	 0,0
 
+.KernelLanguage
+	string "-uk[0D]"

@@ -3,7 +3,7 @@ pushd fonts
 python font5x7.py
 popd
 pushd keyboard-map 
-python keyconv.py
+python keyconv.py %1
 popd 
 python ..\assembler\easm.zip 
 if errorlevel 1 goto exit

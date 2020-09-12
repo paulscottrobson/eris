@@ -13,7 +13,7 @@
 .bootPrompt
 	string "[10,0F,16,0C]*** Eris RetroComputer ***[0D,0D,13]Written by Paul Robson 2020[0D,0D]"
 .kernelPrompt
-	string "Kernel[3A] 0.94[0D]"
+	string "Kernel[3A] 0.96"
 
 ; *****************************************************************************
 ;
@@ -121,6 +121,8 @@
 		jsr 	#OSPrintInline
 		string	" words RAM[0D,0D,12]"
 		mov 	r0,#kernelPrompt			; display kernel version
+		jsr 	#OSPrintString
+		mov 	r0,#KernelLanguage
 		jsr 	#OSPrintString
 ;
 ;		Turn the audio off.
