@@ -18,7 +18,7 @@ tokens = Tokens()
 #
 #		Generate table of constants
 #
-h = open(".."+os.sep+"generated"+os.sep+"tok_const.inc","w")
+h = open("obj"+os.sep+"tok_const.inc","w")
 h.write(";\n;\tAutomatically generated\n;\n")
 for t in tokens.getList():
 	id = tokens.getInfo(t)["token"]
@@ -36,7 +36,7 @@ h.close()
 #
 #		Generate the tokenisation encode/decode table.
 #
-h = open(".."+os.sep+"generated"+os.sep+"tok_text.inc","w")
+h = open("obj"+os.sep+"tok_text.inc","w")
 h.write(";\n;\tAutomatically generated\n;\n")
 h.write(".TokeniserWords\n")
 for t in tokens.getList():
@@ -67,7 +67,7 @@ for root,dirs,files in os.walk(".."+os.sep+"src"):
 				assert tokens.getInfo(keyword) is not None,"Unknown keyword "+keyword
 				handlers[keyword] = m.group(1).strip()
 
-h = open(".."+os.sep+"generated"+os.sep+"tok_vectors.inc","w")
+h = open("obj"+os.sep+"tok_vectors.inc","w")
 h.write(";\n;\tAutomatically generated\n;\n")
 h.write(".TokenVectors\n")
 undefined = []
@@ -88,7 +88,7 @@ if len(undefined) > 0:
 #
 #		Generate tables for tokenised R0-RF for the assembler as a look up.
 #				
-h = open(".."+os.sep+"generated"+os.sep+"tok_asmreg.inc","w")
+h = open("obj"+os.sep+"tok_asmreg.inc","w")
 h.write(";\n;\tAutomatically generated\n;\n")
 h.write(".AsmRegisters\n")
 for i in range(0,16):
@@ -118,7 +118,7 @@ for root,dirs,files in os.walk(".."+os.sep+"src"):
 				assert word["word"] not in words,"Duplicate "+word["word"]
 				words[word["word"]] = word
 
-h = open(".."+os.sep+"generated"+os.sep+"rpl_dictionary.inc","w")
+h = open("obj"+os.sep+"rpl_dictionary.inc","w")
 h.write(";\n;\tAutomatically generated\n;\n")
 h.write(".RPLDictionary\n")
 wList = [x for x in words.keys()]

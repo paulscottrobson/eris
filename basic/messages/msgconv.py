@@ -17,7 +17,7 @@ language = sys.argv[1] if len(sys.argv) == 2 else "uk"
 #
 msgFile = language.strip().lower()+".messages"
 
-h = open(".."+os.sep+"generated"+os.sep+"error_intl.inc","w")
+h = open("error_intl.inc","w")
 h.write(";\n;\tAutomatically generated\n;\n")
 #
 #		Read and process
