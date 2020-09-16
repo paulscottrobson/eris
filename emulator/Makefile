@@ -13,17 +13,27 @@ LDFLAGS := $(SDL_LDFLAGS)
 
 CC = g++
 
-.PHONY: all clean emulator prebuild
-
+.PHONY: all clean emulator prebuild final
+#
+#		Basic, Kernel and Emulator
+#
 all: prebuild emulator
-
+#
+#		Emulator only
+#
 emulator: cpu/_instructions.h $(APPNAME)
+#
+#		Basic Kernel Emulator DemoGames
+#
+final : prebuild emulator
+	make -B -C ../code.basic
 
 prebuild:
+	make clean
 	make -C ../assembler
 	make -C ../kernel
 	make -C ../basic
-
+	
 clean:
 	rm -f $(APPNAME) src/*.o bin/*
 
