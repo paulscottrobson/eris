@@ -71,8 +71,16 @@
 ; *****************************************************************************
 		
 .OSXReadSystemVariable
+		push 	link
+		skp 	r0
+		jmp 	#_OSXRSVBase
 		add 	r0,#systemVariables 		; make address
 		ldm 	r0,r0,#0 					; read it
+		jmp 	#_OSXRSVExit
+._OSXRSVBase
+		mov 	r0,#systemVariables	
+._OSXRSVExit		
+		pop 	link
 		ret
 		
 ; *****************************************************************************

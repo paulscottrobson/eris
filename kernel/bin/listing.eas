@@ -76,7 +76,7 @@
 001a :                               .osrandomseed
 001a : aff0 0fb9                     jmp  #osxrandomseed
 001c :                               .osinclusiveor
-001c : aff0 1071                     jmp  #osxinclusiveor
+001c : aff0 107c                     jmp  #osxinclusiveor
 001e :                               .osstrtoint
 001e : aff0 0fbc                     jmp  #osxstrtoint
 0020 :                               .osinttostr
@@ -2507,17 +2507,25 @@
 106a : 60f0 7fff                     and  r0,#$7fff
 106c : afd0                          ret
 106d :                               .osxreadsystemvariable
-106d : 30f0 4000                     add  r0,#systemvariables
-106f : 1000                          ldm  r0,r0,#0
-1070 : afd0                          ret
-1071 :                               .osxinclusiveor
-1071 : 5ce1 21c0                     push  r1
-1073 : 70f0 ffff                     xor  r0,#$ffff
-1075 : 71f0 ffff                     xor  r1,#$ffff
-1077 : 6010                          and  r0,r1,#0
-1078 : 70f0 ffff                     xor  r0,#$ffff
-107a : 11c0 3ce1                     pop  r1
-107c : afd0                          ret
+106d : 5ce1 2dc0                     push  link
+106f : d0e0                          skp  r0
+1070 : aff0 1077                     jmp  #_osxrsvbase
+1072 : 30f0 4000                     add  r0,#systemvariables
+1074 : 1000                          ldm  r0,r0,#0
+1075 : aff0 1079                     jmp  #_osxrsvexit
+1077 :                               ._osxrsvbase
+1077 : 00f0 4001                     mov  r0,#systemvariables+1
+1079 :                               ._osxrsvexit
+1079 : 1dc0 3ce1                     pop  link
+107b : afd0                          ret
+107c :                               .osxinclusiveor
+107c : 5ce1 21c0                     push  r1
+107e : 70f0 ffff                     xor  r0,#$ffff
+1080 : 71f0 ffff                     xor  r1,#$ffff
+1082 : 6010                          and  r0,r1,#0
+1083 : 70f0 ffff                     xor  r0,#$ffff
+1085 : 11c0 3ce1                     pop  r1
+1087 : afd0                          ret
 11ff : 0000                          word  0
 4000 :                               .initialisedstart
 4000 :                               .systemvariables
