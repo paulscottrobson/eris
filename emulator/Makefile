@@ -1,16 +1,43 @@
-SOURCES = framework/main.o framework/gfx.o framework/debugger.o \
-		  src/sys_processor.o src/sys_debug_cpu.o src/hardware.o src/blitter.o
-		  
+ifeq ($(OS),Windows_NT)
+# ***********************************************************************************
+#
+#										Windows Build
+#
+# ***********************************************************************************
+CCOPY = copy
+CMAKE = mingw32-make
+CDEL = del /Q
+APPNAME = eris.exe
+S = \\
+CXXFLAGS = -IC:\sdl2\include\SDL2 -Iframework -I .\include -I .\bin -I .\cpu -DINCLUDE_OS_SUPPORT -DWINDOWS
+LDFLAGS = -LC:\sdl2\lib -lmingw32 -lSDL2main -lSDL2
+else
+# ***********************************************************************************
+#
+#											Linux Build
+#
+# ***********************************************************************************
+CCOPY = cp
+CDEL = rm -f
+CMAKE = make
 APPNAME = eris
-
+S = $(S)
 SDL_CFLAGS := $(shell sdl2-config --cflags)
 SDL_LDFLAGS := $(shell sdl2-config --libs)
-
 CXXFLAGS := $(SDL_CFLAGS) -O2 -DLINUX -DINCLUDE_OS_SUPPORT \
-			-I. -I ./include -I./framework -I/usr/include/SDL2 -I./cpu -I./bin
-
+			-I. -I .$(S)include -I.$(S)framework -I$(S)usr$(S)include$(S)SDL2 -I.$(S)cpu -I.$(S)bin
 LDFLAGS := $(SDL_LDFLAGS)
+endif
 
+# ***********************************************************************************
+#
+#											Common Build
+#
+# ***********************************************************************************
+
+SOURCES = framework$(S)main.o framework$(S)gfx.o framework$(S)debugger.o \
+		  src$(S)sys_processor.o src$(S)sys_debug_cpu.o src$(S)hardware.o src$(S)blitter.o
+		  
 CC = g++
 
 .PHONY: all clean emulator prebuild final
@@ -21,30 +48,29 @@ all: prebuild emulator
 #
 #		Emulator only
 #
-emulator: cpu/_instructions.h $(APPNAME)
+emulator: cpu$(S)_instructions.h $(APPNAME)
 #
 #		Basic Kernel Emulator DemoGames
 #
-final : prebuild emulator
-	make -B -C ../code.basic
+final : clean prebuild emulator
+	$(CMAKE) -B -C ..$(S)code.basic
 
 prebuild:
-	make clean
-	make -C ../assembler
-	make -C ../kernel
-	make -C ../basic
+	$(CMAKE) -C ..$(S)assembler
+	$(CMAKE) -C ..$(S)kernel
+	$(CMAKE) -C ..$(S)basic
 	
 clean:
-	rm -f $(APPNAME) src/*.o bin/*
+	$(CDEL) $(APPNAME) 
+	$(CDEL) src$(S)*.o 
+	$(CDEL) bin$(S)*
 
-src/hardware.o: src/hardware.cpp src/hardware_emu.cpp
-	gcc $(CXXFLAGS) -c -o src/hardware.o src/hardware.cpp
+src$(S)hardware.o: src$(S)hardware.cpp src$(S)hardware_emu.cpp
+	gcc $(CXXFLAGS) -c -o src$(S)hardware.o src$(S)hardware.cpp
 
-cpu/_instructions.h : 
-	make -C ../processor
+cpu$(S)_instructions.h : 
+	$(CMAKE) -C ..$(S)processor
 
 $(APPNAME): $(SOURCES)
 	$(CC) $(SOURCES) $(LDFLAGS) -o $@
-
-
-
+	

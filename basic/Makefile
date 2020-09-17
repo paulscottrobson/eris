@@ -1,11 +1,22 @@
+ifeq ($(OS),Windows_NT)
+CCOPY = copy
+CCOPYQ = >NUL
+CMAKE = mingw32-make
+S = \\
+else
+CCOPY = cp
+CCOPYQ = 
+CMAKE = make
+S = /
+endif
 
 .PHONY : all
 
 all :
-	make -C messages
-	make -C scripts
-	cp ../kernel/bin/a.lbl generated/kernel.labels 
-	python3 ../assembler/easm.zip
-	cp bin/a.prg ../emulator/bin/basic.prg 
-	cp bin/_binary.h ../emulator/bin/_basic.h 
+	$(CMAKE) -C messages
+	$(CMAKE) -C scripts
+	$(CCOPY) ..$(S)kernel$(S)bin$(S)a.lbl generated$(S)kernel.labels $(CCOPYQ)
+	python ..$(S)assembler$(S)easm.zip
+	$(CCOPY) bin$(S)a.prg ..$(S)emulator$(S)bin$(S)basic.prg  $(CCOPYQ)
+	$(CCOPY) bin$(S)_binary.h ..$(S)emulator$(S)bin$(S)_basic.h $(CCOPYQ)
 

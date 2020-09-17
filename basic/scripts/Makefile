@@ -1,30 +1,41 @@
+ifeq ($(OS),Windows_NT)
+CCOPY = copy
+CCOPYQ = >NUL
+CMAKE = mingw32-make
+S = \\
+else
+CCOPY = cp
+CCOPYQ = 
+CMAKE = make
+S = /
+endif
 #
 #	Convert basic source to .prg
 #
-CONVERT = python3 makeprogram.py $^ prg/$(notdir $@)
+CONVERT = python makeprogram.py $^ prg$(S)$(notdir $@)
 #
 #	Test programs to convert
 #
-BASTEST = prg/bgr.prg prg/test.prg prg/sprites.prg prg/spritecoll.prg prg/tilemap.prg
+BASTEST = prg$(S)bgr.prg prg$(S)test.prg prg$(S)sprites.prg prg$(S)spritecoll.prg prg$(S)tilemap.prg
 
 .PHONY : all
 
-all : obj/tok_const.inc $(BASTEST) prg/sed
-	python3 rpldoc.py >../../documents/rpl.html
-	cp obj/* ../generated
-	cp prg/test.prg prg/autoexec.prg
-	cp prg/test.prg ../../emulator/bin 
-	cp prg/* ../../emulator/storage 
+all : obj$(S)tok_const.inc $(BASTEST) prg$(S)sed
+	python rpldoc.py >..$(S)..$(S)documents$(S)rpl.html
+	$(CCOPY) obj$(S)* ..$(S)generated $(CCOPYQ)
+	$(CCOPY) prg$(S)test.prg prg$(S)autoexec.prg $(CCOPYQ)
+	$(CCOPY) prg$(S)test.prg ..$(S)..$(S)emulator$(S)bin  $(CCOPYQ)
+	$(CCOPY) prg$(S)* ..$(S)..$(S)emulator$(S)storage  $(CCOPYQ)
 
-obj/tok_const.inc : tables.py
-	python3 tables.py
+obj$(S)tok_const.inc : tables.py
+	python tables.py
 
-prg/sed : source/sed.bas
+prg$(S)sed : source$(S)sed.bas
 	$(CONVERT)
 
-prg/export : source/export.bas
+prg$(S)export : source$(S)export.bas
 	$(CONVERT)
 
-prg/%.prg : source/%.bas
-	$(CONVERT) $^  prg/$(notdir $@)
+prg$(S)%.prg : source$(S)%.bas
+	$(CONVERT) $^  prg$(S)$(notdir $@)
 

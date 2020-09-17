@@ -1,5 +1,15 @@
 LANGUAGE = uk
 
+ifeq ($(OS),Windows_NT)
+CCOPY = copy
+CMAKE = mingw32-make
+S = \\
+else
+CCOPY = cp
+CMAKE = make
+S = /
+endif
+
 error_intl.inc : $(LANGUAGE).messages
-	python3 msgconv.py $(LANGUAGE)
-	cp error_intl.inc ../generated
+	python msgconv.py $(LANGUAGE)
+	$(CCOPY) error_intl.inc ..$(S)generated

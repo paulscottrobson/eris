@@ -1,34 +1,44 @@
-
+ifeq ($(OS),Windows_NT)
+CCOPY = copy
+CCOPYQ = >NUL
+CMAKE = mingw32-make
+S = \\
+else
+CCOPY = cp
+CCOPYQ = 
+CMAKE = make
+S = /
+endif
 
 %.prg : %.bas
-	python3 ../basic/scripts/makeprogram.py $^ $@
-	cp $@ storage
-	cp $@ storage/autoexec.prg
+	python ..$(S)basic$(S)scripts$(S)makeprogram.py $^ $@
+	$(CCOPY) $@ storage 
+	$(CCOPY) $@ storage$(S)autoexec.prg
 
 %.spr : %.png
-	python3 ../basic/scripts/gfxconv.py $^
-	cp $@ storage
+	python ..$(S)basic$(S)scripts$(S)gfxconv.py $^
+	$(CCOPY) $@ storage
 
 .PHONY : all
 	
 all : asteroids aticatac breakout dodge frogger invaders maze pacman squash
-	cp storage/* ../emulator/storage
+	$(CCOPY) storage$(S)* ..$(S)emulator$(S)storage  $(CCOPYQ)
 
-asteroids: asteroids/asteroids.prg asteroids/asteroids.spr
+asteroids: asteroids$(S)asteroids.prg asteroids$(S)asteroids.spr
 
-aticatac: aticatac/aticatac.prg aticatac/aticatac.spr	
+aticatac: aticatac$(S)aticatac.prg aticatac$(S)aticatac.spr	
 
-breakout: breakout/breakout.prg breakout/breakout.spr	
+breakout: breakout$(S)breakout.prg breakout$(S)breakout.spr	
 
-dodge: dodge/dodge.prg dodge/dodge.spr	
+dodge: dodge$(S)dodge.prg dodge$(S)dodge.spr	
 
-frogger: frogger/frogger.prg frogger/frogger.spr	
+frogger: frogger$(S)frogger.prg frogger$(S)frogger.spr	
 
-invaders: invaders/invaders.prg invaders/invaders.spr	
+invaders: invaders$(S)invaders.prg invaders$(S)invaders.spr	
 
-maze: maze/maze.prg maze/maze.spr		
+maze: maze$(S)maze.prg maze$(S)maze.spr		
 
-pacman: pacman/pacman.prg pacman/pacman.spr		
-	cp pacman/pacman.dat storage
+pacman: pacman$(S)pacman.prg pacman$(S)pacman.spr		
+	$(CCOPY) pacman$(S)pacman.dat storage
 
-squash: squash/squash.prg squash/squash.spr		
+squash: squash$(S)squash.prg squash$(S)squash.spr		
