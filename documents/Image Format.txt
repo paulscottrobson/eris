@@ -1,0 +1,47 @@
+Image Format
+============
+
+Image is built up of bands of multiple colour strips, each 16 pixels wide.
+These are built of bands of one colour known as "pixel bands"
+Each bands width is a multiple of 16.
+
+This is uncompressed.
+
+Image:
+		1 Word : Type ID 	"EI"
+		1 Word : Number of horizontal bands overall (e.g. the width is this value x 16)
+
+Band:
+		1 Word : Number of pixel bands in this horizontal band (can be zero)
+		1 Word : Height of this band (non zero)
+
+Pixel Band:
+		1 Word : BGR in bits 0-2, others are zero.
+		h Words : 1 word for each row of the band, 16 pixels.
+
+When building a pixel band the following considerations should be made :
+
+	If there are no set pixels at all, (e.g. everything is transparent) then do not generate any
+	pixel bands.
+
+	If the pixel band is all the same colour, then generate it for that value of BGR.
+
+	If the pixel band is multi colour, generate it for bits B, G and R if present in the band.
+
+Compressed Format
+=================
+
+In the compressed format, bit 15 of the control word of the pixel band indicates compressed data,
+which has to be decompressed before being blitted to the screen.
+
+The format is as follows :-
+
+$0000 		End of compressed data.
+$01nn 		Repeat the following word nn times
+$02nn		Copy the following nn words verbatim
+
+The image drawing routines, which should be capable of scaling x 2 and flipping are in the kernel.
+
+The converter has support for transparency, and allows the scaling and centering of the converted image, 
+it takes a class which returns size and pixels/transparency to represent its source object.
+
