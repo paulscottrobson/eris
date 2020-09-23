@@ -19,22 +19,30 @@ from imwrapper import *
 
 class ErisPixelImageBand(object):
 	def __init__(self,src,options,xStart):
-		self.bandYOffset = 0
-		self.bandHeight = src.getHeight()
-		self.control = 0
-		self.bitData = [ 0 ] * self.bandHeight
-		for y in range(0,self.bandHeight):
+		self.bitData = [ 0 ] * src.getHeight()
+		for y in range(0,src.getHeight()):
 			for x in range(0,16):
 				pixel = src.get(x+xStart,y)
 				if self.isShown(pixel):
 					self.bitData[y] |= (0x8000 >> x)
 			#print("{0} {1:04x}".format(y,self.bitData[y]))
+		self.noCompress()
+	#
+	#		Convert to word stream
 	#
 	def render(self):
-		return [ self.control,self.getColourMask(),self.bandYOffset,self.bandHeight ] + self.bitData
+		return [self.getColourMask(),(ord("P")<<8)+ord("0") ] + self.bitData
+	#
+	#		Check any write bits are set - without it there is no point drawing it.
 	#
 	def isUsed(self):
 		return sum(self.bitData) > 0
+	#
+	#		Output without compression - prefix with $02xx and end with $0000
+	#
+	def noCompress(self):
+		self.bitData.insert(0,0x0200+len(self.bitData))
+		self.bitData.append(0)
 
 # *****************************************************************************
 #
@@ -108,7 +116,9 @@ class ErisImageBand(object):
 			if background.isUsed():
 				self.pixelBandCount += 1
 				self.pixelBands.append(background)
-
+			#
+			#	Do all three bits which may or may not need redrawing.
+			#
 			for b in range(0,3):
 				bitMask = 1 << b
 				pBand = ErisPixelImageBandBit(src,options,xStart,bitMask)
@@ -116,8 +126,10 @@ class ErisImageBand(object):
 					self.pixelBandCount += 1
 					self.pixelBands.append(pBand)
 	#
+	#		Render image band
+	#
 	def render(self):
-		data = [self.pixelBandCount]
+		data = [(ord("B")<<8)+ord("0"),self.pixelBandCount]
 		for b in self.pixelBands:
 			data += b.render()
 		return data 
@@ -150,27 +162,23 @@ class ErisImage(object):
 			self.bands.append(ErisImageBand(src,options,b*16))
 	#
 	def render(self):
-		data = [ (ord("E")<<8)+ord("I"),self.width,self.height,self.bandCount]
+		data = [ (ord("I")<<8)+ord("0"),self.width,self.height,self.bandCount]
 		for b in self.bands:
 			data += b.render()
 		return data
 
 
 if __name__ == "__main__":	
-	image = SourceImageStripped("test/j.png")
+	image = SourceImageStripped("test/small.png")
 	print("Width :  ",image.getWidth())
 	print("Height : ",image.getHeight())
-#	for y in range(0,image.getHeight()):
-#		l = [image.get(x,y) for x in range(0,image.getWidth())]
-#		print("".join(["{0:3} ".format(c) for c in l]))
 	newImg = ErisImage(image)
 	render = newImg.render()
 	print(" ".join(["{0:x}".format(n) for n in render]))
-	print(len(render))
+	print("Words:",len(render))
 
 # successfully decode small
-# successfully decode 10h/jpg and 10hx.png
-# strip top and bottom (the bandYOffset/bandHeight)
+# successfully encode/decode 10h/jpg and 10hx.png
 # check all
-# compress.
+# compression code decode/encode.
 

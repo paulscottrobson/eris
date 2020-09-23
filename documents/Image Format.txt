@@ -4,39 +4,26 @@ Image Format
 Image is built up of bands of multiple colour strips, each 16 pixels wide.
 These are built of bands of one colour known as "pixel bands"
 Each bands width is a multiple of 16.
-
-This is uncompressed.
+It can handle alpha in images, < 96 is transparent. Colours will be mapped to RGB digital.
+Output formats are .eim (Eris Image)
 
 Image:
-		1 Word : Type ID 	"E" << 8 | "I"
+		1 Word : Type ID 	"I" << 8 | "0"
 		1 Word : Overall height of image (pixels)
 		1 Word : Overall width of image (pixels)
 		1 Word : Number of horizontal bands overall (e.g. the width is this value x 16)
 
 Band:
+		1 Word : Type ID 	"B" << 8 | "0"
 		1 Word : Number of pixel bands in this horizontal band (can be zero)
 
-Pixel Band: (uncompressed)
-		1 Word : Control (defaults to zero)
+Pixel Band: 
+		1 Word : Type ID 	"P" << 8 | "0"
 		1 Word : Colour/Mask word for this pixel band.
-		1 Word : vertical offset, start of pixel band (0 = top)
-		1 Word : total height of pixel band in pixels
-		h Words : 1 word for each row of the band, 16 pixels.
-
-When building a pixel band the following considerations should be made :
-
-	If there are no set pixels at all, (e.g. everything is transparent) then do not generate any
-	pixel bands.
-
-	If the pixel band is all the same colour, then generate it for that value of BGR.
-
-	If the pixel band is multi colour, generate it for bits B, G and R if present in the band.
+		x Words : Compressed data.
 
 Compressed Format
 =================
-
-In the compressed format, bit 15 of the control word of the pixel band indicates compressed data,
-which has to be decompressed before being blitted to the screen.
 
 The format is as follows :-
 
@@ -49,3 +36,4 @@ The image drawing routines, which should be capable of scaling x 2 and flipping 
 The converter has support for transparency, and allows the scaling and centering of the converted image, 
 it takes a class which returns size and pixels/transparency to represent its source object.
 
+Image drawing is in the Kernel.
