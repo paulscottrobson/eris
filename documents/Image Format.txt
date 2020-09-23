@@ -8,15 +8,19 @@ Each bands width is a multiple of 16.
 This is uncompressed.
 
 Image:
-		1 Word : Type ID 	"EI"
+		1 Word : Type ID 	"E" << 8 | "I"
+		1 Word : Overall height of image (pixels)
+		1 Word : Overall width of image (pixels)
 		1 Word : Number of horizontal bands overall (e.g. the width is this value x 16)
 
 Band:
 		1 Word : Number of pixel bands in this horizontal band (can be zero)
-		1 Word : Height of this band (non zero)
 
-Pixel Band:
-		1 Word : BGR in bits 0-2, others are zero.
+Pixel Band: (uncompressed)
+		1 Word : Control (defaults to zero)
+		1 Word : Colour/Mask word for this pixel band.
+		1 Word : vertical offset, start of pixel band (0 = top)
+		1 Word : total height of pixel band in pixels
 		h Words : 1 word for each row of the band, 16 pixels.
 
 When building a pixel band the following considerations should be made :
