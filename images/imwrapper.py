@@ -20,7 +20,7 @@ from PIL import Image
 class SourceImage(object):
 	def __init__(self,source,level = 0):
 		self.image = Image.open(source)
-		self.level = level if level > 0 else 96
+		self.level = level if level > 0 else 160
 	#
 	def getWidth(self):
 		return self.image.size[0]
@@ -86,9 +86,9 @@ class SourceImageStripped(SourceImage):
 
 
 if __name__ == "__main__":	
-	image = SourceImageStripped("test/small.png")
+	image = SourceImageStripped("test/j.png")
 	print("Width :  ",image.getWidth())
 	print("Height : ",image.getHeight())
 	for y in range(0,image.getHeight()):
 		l = [image.get(x,y) for x in range(0,image.getWidth())]
-		print("".join(["{0:3} ".format(c) for c in l]))
+		#print("".join(["{0:3} ".format(c) for c in l]))

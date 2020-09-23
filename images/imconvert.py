@@ -10,6 +10,7 @@
 # *****************************************************************************
 
 from imwrapper import *
+from imdecode import *
 
 # *****************************************************************************
 #
@@ -31,7 +32,7 @@ class ErisPixelImageBand(object):
 	#		Convert to word stream
 	#
 	def render(self):
-		return [self.getColourMask(),(ord("P")<<8)+ord("0") ] + self.bitData
+		return [(ord("P")<<8)+ord("0"),self.getColourMask()] + self.bitData
 	#
 	#		Check any write bits are set - without it there is no point drawing it.
 	#
@@ -169,16 +170,16 @@ class ErisImage(object):
 
 
 if __name__ == "__main__":	
-	image = SourceImageStripped("test/small.png")
+	image = SourceImageStripped("test/j2.png")
 	print("Width :  ",image.getWidth())
 	print("Height : ",image.getHeight())
 	newImg = ErisImage(image)
 	render = newImg.render()
 	print(" ".join(["{0:x}".format(n) for n in render]))
 	print("Words:",len(render))
-
-# successfully decode small
-# successfully encode/decode 10h/jpg and 10hx.png
-# check all
+	#
+	decImg = ImageDecoder(render)
+	decImg.save()
+	
 # compression code decode/encode.
 
