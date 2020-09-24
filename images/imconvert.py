@@ -27,7 +27,8 @@ class ErisPixelImageBand(object):
 				if self.isShown(pixel):
 					self.bitData[y] |= (0x8000 >> x)
 			#print("{0} {1:04x}".format(y,self.bitData[y]))
-		self.noCompress()
+		#self.noCompress()
+		self.compress()
 	#
 	#		Convert to word stream
 	#
@@ -44,6 +45,30 @@ class ErisPixelImageBand(object):
 	def noCompress(self):
 		self.bitData.insert(0,0x0200+len(self.bitData))
 		self.bitData.append(0)
+	#
+	#		Output with compression
+	#
+	def compress(self):
+		sd = [x for x in self.bitData]					# copy bit data as is.
+		sd.append(0x123456)								# terminates any repeat at the end.
+		sd.append(0x123457) 							# stop overflow.
+		sd.append(0x123458)
+		self.bitData = []								# clear the input.
+		while sd[0] < 0x10000:							# while not reached the end.
+			p = 0 										# scan forward for three in a row.
+			while sd[p] < 0x10000 and not ((sd[p] == sd[p+1]) and (sd[p+1] == sd[p+2])):				
+				p+=1
+			self.bitData.append(0x200+p)				# output data to here.
+			self.bitData += sd[:p]						# as non-repeat so far.
+			sd = sd[p:]
+			if sd[0] < 0x10000:							# repeat stopped the loop ?
+				p = 0 									# count the repeats
+				while sd[0] == sd[p]:
+					p += 1
+				self.bitData.append(0x100+p) 			# repeat p times
+				self.bitData.append(sd[0])				# whatever the data was.
+				sd = sd[p:]								# chuck the repeats.
+		self.bitData.append(0)							# end marker
 
 # *****************************************************************************
 #
@@ -170,16 +195,15 @@ class ErisImage(object):
 
 
 if __name__ == "__main__":	
-	image = SourceImageStripped("test/j2.png")
+	image = SourceImageStripped("test/tux2.png")
 	print("Width :  ",image.getWidth())
 	print("Height : ",image.getHeight())
 	newImg = ErisImage(image)
 	render = newImg.render()
-	print(" ".join(["{0:x}".format(n) for n in render]))
+	#print(" ".join(["{0:x}".format(n) for n in render]))
 	print("Words:",len(render))
 	#
 	decImg = ImageDecoder(render)
 	decImg.save()
 	
-# compression code decode/encode.
 

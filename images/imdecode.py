@@ -52,6 +52,13 @@ class ImageDecoder(object):
 					self.plotLine(x,y,self.img[p],cMask)
 					p = p + 1
 					y = y + 1
+			elif (cmd >> 8) == 0x01:
+				for i in range(0,cmd & 0xFF):
+					self.plotLine(x,y,self.img[p],cMask)
+					y = y + 1			
+				p = p + 1
+			else:
+				assert False,"Bad command"
 		return p+1
 	#
 	def plotLine(self,x,y,bitData,colourMask):

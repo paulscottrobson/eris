@@ -59,6 +59,7 @@ prebuild:
 	$(CMAKE) -C ..$(S)assembler
 	$(CMAKE) -C ..$(S)kernel
 	$(CMAKE) -C ..$(S)basic
+	$(CMAKE) -C ..$(S)images
 	
 clean:
 	$(CDEL) $(APPNAME) 
