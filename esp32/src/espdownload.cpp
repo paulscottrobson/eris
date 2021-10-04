@@ -24,7 +24,7 @@ static WORD16 _HWConnectWifi(char *ssid,char *password);
 WORD16 HWDownloadHandler(char *url,char *target,char *ssid,char *password) {
 	WORD16 errorCode = 3;
 	HTTPClient http;
-	fabgl::suspendInterrupts();
+	//fabgl::suspendInterrupts();
 	if (_HWConnectWifi(ssid,password)) {
 		Serial.print("Accessing ");Serial.println(url);
 		http.begin(url);
@@ -34,7 +34,7 @@ WORD16 HWDownloadHandler(char *url,char *target,char *ssid,char *password) {
 			errorCode = _HWDownloadCopyFile(http,target);
 		}
 	}	
-	fabgl::resumeInterrupts();
+	//fabgl::resumeInterrupts();
 	Serial.print("Return code ");Serial.println(errorCode);
 	return errorCode;
 }

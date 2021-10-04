@@ -20,7 +20,7 @@
 WORD16 HWFileInformation(char *fileName,WORD16 *pLoadAddress,WORD16 *pSize) {
 	char fullName[64];
 	sprintf(fullName,"/%s",fileName);								// SPIFFS doesn't do dirs
-	fabgl::suspendInterrupts();										// And doesn't like interrupts
+	//fabgl::suspendInterrupts();										// And doesn't like interrupts
 	WORD16 exists = SPIFFS.exists(fullName);						// If file exitst
 	if (exists != 0) {
 		File file = SPIFFS.open(fullName);							// Open it
@@ -30,7 +30,7 @@ WORD16 HWFileInformation(char *fileName,WORD16 *pLoadAddress,WORD16 *pSize) {
 		*pSize = file.size()/2-1;
 		file.close();
 	}
-	fabgl::resumeInterrupts();
+	//fabgl::resumeInterrupts();
 	return exists;
 }
 
@@ -43,7 +43,7 @@ WORD16 HWFileInformation(char *fileName,WORD16 *pLoadAddress,WORD16 *pSize) {
 WORD16 HWLoadFile(char *fName,WORD16 override) {
 	char fullName[64];
 	sprintf(fullName,"/%s",fName);									// SPIFFS doesn't do dirs
-	fabgl::suspendInterrupts();										// And doesn't like interrupts
+	//fabgl::suspendInterrupts();										// And doesn't like interrupts
 	WORD16 exists = SPIFFS.exists(fullName);						// If file exitst
 	if (exists != 0) {
 		File file = SPIFFS.open(fullName);							// Open it
@@ -57,7 +57,7 @@ WORD16 HWLoadFile(char *fName,WORD16 override) {
 		}
 		file.close();
 	}
-	fabgl::resumeInterrupts();
+	//fabgl::resumeInterrupts();
 	return exists == 0;
 }
 
@@ -70,7 +70,7 @@ WORD16 HWLoadFile(char *fName,WORD16 override) {
 WORD16 HWSaveFile(char *fName,WORD16 start,WORD16 size) {
 	char fullName[64];
 	sprintf(fullName,"/%s",fName);									// No directories or interrupts
-	fabgl::suspendInterrupts();
+	//fabgl::suspendInterrupts();
 	File file = SPIFFS.open(fullName,FILE_WRITE);					// Open to write
 	WORD16 r = (file != 0) ? 0 : 1;
 	if (file != 0) {
@@ -84,7 +84,7 @@ WORD16 HWSaveFile(char *fName,WORD16 start,WORD16 size) {
 		}
 		file.close();
 	}
-	fabgl::resumeInterrupts();
+	//fabgl::resumeInterrupts();
 	return r;
 }
 
@@ -95,9 +95,9 @@ WORD16 HWSaveFile(char *fName,WORD16 start,WORD16 size) {
 WORD16 HWDeleteFile(char *fileName) {
 	char fullName[64];
 	sprintf(fullName,"/%s",fileName);								// No directories or interrupts
-	fabgl::suspendInterrupts();
+	//fabgl::suspendInterrupts();
 	SPIFFS.remove(fullName);
-	fabgl::resumeInterrupts();
+	//fabgl::resumeInterrupts();
 	return 0;
 }
 
@@ -108,7 +108,7 @@ WORD16 HWDeleteFile(char *fileName) {
 // ****************************************************************************
 
 void HWLoadDirectory(WORD16 target) {
-	fabgl::suspendInterrupts();
+	//fabgl::suspendInterrupts();
   	File root = SPIFFS.open("/");									// Open directory
     int count = 0;
    	File file = root.openNextFile();								// Work throughfiles
@@ -127,6 +127,6 @@ void HWLoadDirectory(WORD16 target) {
    	}
     CPUWriteMemory(target,0);										// Trailing NULL
     root.close();
-	fabgl::resumeInterrupts();
+	//fabgl::resumeInterrupts();
 }
 
